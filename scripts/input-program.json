@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Recomp 5j",
+      "days": [
+        {
+          "name": "Lower A - Quadriceps",
+          "exercises": [
+            { "exerciseName": "Leg Press pieds hauts - alt Belt Squat", "sets": [ { "reps": 12, "weight": 120, "restSeconds": 120 }, { "reps": 12, "weight": 120, "restSeconds": 120 }, { "reps": 10, "weight": 130, "restSeconds": 120 }, { "reps": 10, "weight": 130, "restSeconds": 120 } ] },
+            { "exerciseName": "Bulgarian Split Squat DB - alt Reverse Lunge", "sets": [ { "reps": 10, "weight": 12, "restSeconds": 90 }, { "reps": 10, "weight": 12, "restSeconds": 90 }, { "reps": 10, "weight": 12, "restSeconds": 90 } ] },
+            { "exerciseName": "Leg Extension partiel - virer si douleur genou", "sets": [ { "reps": 15, "weight": 35, "restSeconds": 75 }, { "reps": 15, "weight": 35, "restSeconds": 75 }, { "reps": 15, "weight": 35, "restSeconds": 75 } ] },
+            { "exerciseName": "Seated Leg Curl", "sets": [ { "reps": 12, "weight": 40, "restSeconds": 75 }, { "reps": 12, "weight": 40, "restSeconds": 75 }, { "reps": 12, "weight": 40, "restSeconds": 75 } ] },
+            { "exerciseName": "Standing Calf Raise", "sets": [ { "reps": 15, "weight": 60, "restSeconds": 60 }, { "reps": 15, "weight": 60, "restSeconds": 60 }, { "reps": 15, "weight": 60, "restSeconds": 60 }, { "reps": 15, "weight": 60, "restSeconds": 60 } ] },
+            { "exerciseName": "Pallof Press - respi continue", "sets": [ { "reps": 12, "weight": 15, "restSeconds": 45 }, { "reps": 12, "weight": 15, "restSeconds": 45 }, { "reps": 12, "weight": 15, "restSeconds": 45 } ] }
+          ]
+        },
+        {
+          "name": "Push - Haut pecs epaules",
+          "exercises": [
+            { "exerciseName": "Incline DB Press 30deg - alt Incline Machine", "sets": [ { "reps": 10, "weight": 28, "restSeconds": 120 }, { "reps": 10, "weight": 28, "restSeconds": 120 }, { "reps": 8, "weight": 30, "restSeconds": 120 }, { "reps": 8, "weight": 30, "restSeconds": 120 } ] },
+            { "exerciseName": "Low to High Cable Fly", "sets": [ { "reps": 12, "weight": 12, "restSeconds": 75 }, { "reps": 12, "weight": 12, "restSeconds": 75 }, { "reps": 12, "weight": 12, "restSeconds": 75 } ] },
+            { "exerciseName": "Seated DB Shoulder Press dossier", "sets": [ { "reps": 10, "weight": 20, "restSeconds": 120 }, { "reps": 10, "weight": 20, "restSeconds": 120 }, { "reps": 10, "weight": 20, "restSeconds": 120 } ] },
+            { "exerciseName": "Cable Lateral Raise", "sets": [ { "reps": 15, "weight": 7, "restSeconds": 60 }, { "reps": 15, "weight": 7, "restSeconds": 60 }, { "reps": 15, "weight": 7, "restSeconds": 60 }, { "reps": 15, "weight": 7, "restSeconds": 60 } ] },
+            { "exerciseName": "Pec Deck", "sets": [ { "reps": 12, "weight": 45, "restSeconds": 75 }, { "reps": 12, "weight": 45, "restSeconds": 75 }, { "reps": 12, "weight": 45, "restSeconds": 75 } ] },
+            { "exerciseName": "Triceps Pushdown corde", "sets": [ { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 12, "weight": 30, "restSeconds": 60 } ] }
+          ]
+        },
+        {
+          "name": "Lower B - Chaine posterieure",
+          "exercises": [
+            { "exerciseName": "Hip Thrust modere - expirer en poussant", "sets": [ { "reps": 12, "weight": 60, "restSeconds": 120 }, { "reps": 12, "weight": 60, "restSeconds": 120 }, { "reps": 10, "weight": 70, "restSeconds": 120 }, { "reps": 10, "weight": 70, "restSeconds": 120 } ] },
+            { "exerciseName": "RDL modere sans apnee - alt Cable Pull-through", "sets": [ { "reps": 12, "weight": 50, "restSeconds": 120 }, { "reps": 12, "weight": 50, "restSeconds": 120 }, { "reps": 10, "weight": 55, "restSeconds": 120 } ] },
+            { "exerciseName": "Lying Leg Curl", "sets": [ { "reps": 12, "weight": 35, "restSeconds": 75 }, { "reps": 12, "weight": 35, "restSeconds": 75 }, { "reps": 12, "weight": 35, "restSeconds": 75 }, { "reps": 12, "weight": 35, "restSeconds": 75 } ] },
+            { "exerciseName": "Hip Abduction machine", "sets": [ { "reps": 15, "weight": 50, "restSeconds": 60 }, { "reps": 15, "weight": 50, "restSeconds": 60 }, { "reps": 15, "weight": 50, "restSeconds": 60 } ] },
+            { "exerciseName": "Seated Calf Raise", "sets": [ { "reps": 15, "weight": 40, "restSeconds": 60 }, { "reps": 15, "weight": 40, "restSeconds": 60 }, { "reps": 15, "weight": 40, "restSeconds": 60 }, { "reps": 15, "weight": 40, "restSeconds": 60 } ] },
+            { "exerciseName": "Bird Dog - respi continue", "sets": [ { "reps": 10, "weight": 5, "restSeconds": 45 }, { "reps": 10, "weight": 5, "restSeconds": 45 }, { "reps": 10, "weight": 5, "restSeconds": 45 } ] }
+          ]
+        },
+        {
+          "name": "Pull - Dos arriere epaule",
+          "exercises": [
+            { "exerciseName": "Lat Pulldown prise large", "sets": [ { "reps": 12, "weight": 55, "restSeconds": 120 }, { "reps": 10, "weight": 60, "restSeconds": 120 }, { "reps": 10, "weight": 60, "restSeconds": 120 }, { "reps": 10, "weight": 60, "restSeconds": 120 } ] },
+            { "exerciseName": "Chest Supported Row buste cale", "sets": [ { "reps": 12, "weight": 50, "restSeconds": 120 }, { "reps": 10, "weight": 55, "restSeconds": 120 }, { "reps": 10, "weight": 55, "restSeconds": 120 } ] },
+            { "exerciseName": "Seated Cable Row prise neutre", "sets": [ { "reps": 12, "weight": 55, "restSeconds": 90 }, { "reps": 12, "weight": 55, "restSeconds": 90 }, { "reps": 12, "weight": 55, "restSeconds": 90 } ] },
+            { "exerciseName": "Reverse Pec Deck - arriere epaule", "sets": [ { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 } ] },
+            { "exerciseName": "Face Pull poulie haute", "sets": [ { "reps": 15, "weight": 20, "restSeconds": 60 }, { "reps": 15, "weight": 20, "restSeconds": 60 }, { "reps": 15, "weight": 20, "restSeconds": 60 } ] },
+            { "exerciseName": "Incline DB Curl", "sets": [ { "reps": 12, "weight": 12, "restSeconds": 60 }, { "reps": 12, "weight": 12, "restSeconds": 60 }, { "reps": 10, "weight": 14, "restSeconds": 60 } ] }
+          ]
+        },
+        {
+          "name": "Epaules Bras Core",
+          "exercises": [
+            { "exerciseName": "Machine Shoulder Press", "sets": [ { "reps": 12, "weight": 30, "restSeconds": 90 }, { "reps": 10, "weight": 35, "restSeconds": 90 }, { "reps": 10, "weight": 35, "restSeconds": 90 } ] },
+            { "exerciseName": "Cable Lateral Raise unilateral", "sets": [ { "reps": 18, "weight": 6, "restSeconds": 50 }, { "reps": 18, "weight": 6, "restSeconds": 50 }, { "reps": 15, "weight": 7, "restSeconds": 50 }, { "reps": 15, "weight": 7, "restSeconds": 50 } ] },
+            { "exerciseName": "Reverse Pec Deck", "sets": [ { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 }, { "reps": 15, "weight": 25, "restSeconds": 60 } ] },
+            { "exerciseName": "EZ Bar Curl", "sets": [ { "reps": 12, "weight": 25, "restSeconds": 75 }, { "reps": 12, "weight": 25, "restSeconds": 75 }, { "reps": 12, "weight": 25, "restSeconds": 75 } ] },
+            { "exerciseName": "Rope Pushdown", "sets": [ { "reps": 15, "weight": 30, "restSeconds": 60 }, { "reps": 15, "weight": 30, "restSeconds": 60 }, { "reps": 15, "weight": 30, "restSeconds": 60 } ] },
+            { "exerciseName": "Dead Bug lent - expirer sans apnee", "sets": [ { "reps": 10, "weight": 5, "restSeconds": 45 }, { "reps": 10, "weight": 5, "restSeconds": 45 }, { "reps": 10, "weight": 5, "restSeconds": 45 } ] },
+            { "exerciseName": "Suitcase Carry 30s par cote", "sets": [ { "reps": 1, "weight": 20, "restSeconds": 60 }, { "reps": 1, "weight": 20, "restSeconds": 60 }, { "reps": 1, "weight": 20, "restSeconds": 60 } ] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { renderHook, act, cleanup } from '@testing-library/react-native';
+import { AppState, type AppStateStatus } from 'react-native';
 import { useRestTimer } from '../useRestTimer';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 import type { Program, ProgramDay } from '../../types';
@@ -16,13 +17,18 @@ const makeDay = (): ProgramDay => ({
   }],
 });
 
+const now = new Date('2026-03-01T12:00:00.000Z');
+
 beforeEach(() => {
+  jest.useFakeTimers({ now });
   useActiveSessionStore.setState({ active: null });
 });
 
 afterEach(async () => {
   useActiveSessionStore.setState({ active: null });
   await cleanup();
+  jest.useRealTimers();
+  jest.restoreAllMocks();
 });
 
 it('startTimer calls setRestTimer on the store', async () => {
@@ -34,7 +40,9 @@ it('startTimer calls setRestTimer on the store', async () => {
   await act(async () => {
     result.current!.startTimer(60);
   });
-  expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(60);
+  expect(useActiveSessionStore.getState().active!.restEndsAt).toBe(
+    new Date(now.getTime() + 60_000).toISOString()
+  );
 });
 
 it('clearTimer calls clearRestTimer on the store', async () => {
@@ -48,7 +56,7 @@ it('clearTimer calls clearRestTimer on the store', async () => {
   await act(async () => {
     result.current!.clearTimer();
   });
-  expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(0);
+  expect(useActiveSessionStore.getState().active!.restEndsAt).toBeNull();
 });
 
 it('startTimer and clearTimer are wired to store actions', async () => {
@@ -67,4 +75,49 @@ it('startTimer and clearTimer are wired to store actions', async () => {
     result.current!.clearTimer();
   });
   expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(false);
+});
+
+it('syncs expired rest timer on the interval', async () => {
+  useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+  useActiveSessionStore.getState().setRestTimer(1);
+  renderHook(() => useRestTimer());
+  await act(async () => {});
+
+  await act(async () => {
+    jest.advanceTimersByTime(1000);
+  });
+
+  const active = useActiveSessionStore.getState().active!;
+  expect(active.restTimerActive).toBe(false);
+  expect(active.restEndsAt).toBeNull();
+});
+
+it('syncs immediately when the app returns to the foreground', async () => {
+  const remove = jest.fn();
+  let listener: ((state: AppStateStatus) => void) | undefined;
+  const addEventListenerSpy = jest
+    .spyOn(AppState, 'addEventListener')
+    .mockImplementation((_eventType, callback) => {
+      listener = callback;
+      return { remove } as ReturnType<typeof AppState.addEventListener>;
+    });
+
+  useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+  useActiveSessionStore.getState().setRestTimer(1);
+  const { unmount } = renderHook(() => useRestTimer());
+  await act(async () => {});
+
+  expect(addEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function));
+
+  jest.setSystemTime(new Date(now.getTime() + 1000));
+  await act(async () => {
+    listener?.('active');
+  });
+
+  const active = useActiveSessionStore.getState().active!;
+  expect(active.restTimerActive).toBe(false);
+  expect(active.restEndsAt).toBeNull();
+
+  unmount();
+  expect(remove).toHaveBeenCalled();
 });

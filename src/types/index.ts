@@ -4,6 +4,18 @@ export interface Exercise {
   muscleGroup?: string;
 }
 
+export interface CatalogExercise {
+  id: string;
+  name: string;
+  nameFr?: string;
+  bodyPart: string;
+  target: string;
+  secondaryMuscles: string[];
+  equipment: string;
+  instructions: string[];
+  gif: { a: string; b: string };
+}
+
 export interface ProgramSet {
   reps: number;
   weight: number;
@@ -12,10 +24,19 @@ export interface ProgramSet {
 
 export interface ProgramExercise {
   id: string;
-  exerciseId: string;
-  exerciseName: string;
+  exerciseId: string; // References CatalogExercise.id
+  exerciseName: string; // Compatibility field, derived from the catalog on selection/import
+  alternativeExerciseIds?: string[]; // References CatalogExercise.id
   sets: ProgramSet[];
   order: number;
+}
+
+export interface ImportResult {
+  importedPrograms: number;
+  importedExercises: number;
+  unknownExercises: string[];
+  skipped: number;
+  errors: string[];
 }
 
 export interface ProgramDay {
@@ -46,6 +67,7 @@ export interface LoggedSet {
 export interface SessionExercise {
   exerciseId: string;
   exerciseName: string;
+  alternativeExerciseIds?: string[];
   sets: LoggedSet[];
 }
 
@@ -71,5 +93,5 @@ export interface ActiveSession {
   currentSetIndex: number;
   exercises: SessionExercise[];
   restTimerActive: boolean;
-  restSecondsRemaining: number;
+  restEndsAt: string | null;
 }

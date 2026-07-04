@@ -131,7 +131,7 @@ export default function ProgramDetailScreen() {
             />
           }
           ListHeaderComponent={
-            <Text style={styles.sectionLabel}>Jours d'entraînement</Text>
+            <Text style={styles.sectionLabel}>Jours d&apos;entraînement</Text>
           }
           contentContainerStyle={program.days.length === 0 ? styles.emptyContainer : styles.list}
         />

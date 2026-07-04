@@ -1,14 +1,10 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
-import type { Program, Exercise, ProgramDay, ProgramExercise, ProgramSet } from '../types';
+import type { Program, Exercise, ProgramDay, ProgramExercise, ImportResult } from '../types';
+import { findCatalogExerciseByName, getCatalogExercise } from './exerciseCatalogStore';
 
 const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
-
-interface ImportResult {
-  success: number;
-  errors: string[];
-}
 
 interface ImportPayloadProgram {
   name?: string;
@@ -21,7 +17,10 @@ interface ImportPayloadDay {
 }
 
 interface ImportPayloadExercise {
+  exerciseId?: string;
   exerciseName?: string;
+  alternativeExerciseIds?: string[];
+  alternativeExerciseNames?: string[];
   sets?: ImportPayloadSet[];
 }
 
@@ -43,6 +42,10 @@ function parseAndValidateImport(jsonString: string): ImportPayloadProgram[] | st
     return 'Format de fichier invalide.';
   }
 
+  if (Array.isArray(parsed)) {
+    return parsed as ImportPayloadProgram[];
+  }
+
   const root = parsed as Record<string, unknown>;
   if (!root.version || typeof root.version !== 'number') {
     return 'Version du fichier manquante.';
@@ -57,6 +60,16 @@ function parseAndValidateImport(jsonString: string): ImportPayloadProgram[] | st
   }
 
   return programs as ImportPayloadProgram[];
+}
+
+function emptyImportResult(errors: string[] = []): ImportResult {
+  return {
+    importedPrograms: 0,
+    importedExercises: 0,
+    unknownExercises: [],
+    skipped: 0,
+    errors,
+  };
 }
 
 interface ProgramState {
@@ -78,7 +91,7 @@ interface ProgramState {
   addExercise: (name: string, muscleGroup?: string) => Exercise;
   updateExercise: (id: string, patch: Partial<Omit<Exercise, 'id'>>) => void;
 
-  importPrograms: (jsonString: string) => ImportResult;
+  importPrograms: (jsonString: string, options?: { commit?: boolean }) => ImportResult;
 }
 
 export const useProgramStore = create<ProgramState>()(
@@ -223,38 +236,89 @@ export const useProgramStore = create<ProgramState>()(
         }));
       },
 
-      importPrograms: (jsonString) => {
+      importPrograms: (jsonString, options) => {
+        const commit = options?.commit ?? true;
         const result = parseAndValidateImport(jsonString);
         if (typeof result === 'string') {
-          return { success: 0, errors: [result] };
+          return emptyImportResult([result]);
         }
 
         const imported: Program[] = [];
         const errors: string[] = [];
+        const unknownExercises = new Set<string>();
+        let importedExercises = 0;
+        let skipped = 0;
 
         for (let i = 0; i < result.length; i++) {
           const p = result[i];
           if (!p.name || !p.name.trim()) {
             errors.push(`Programme #${i + 1} : nom manquant.`);
+            skipped += 1;
             continue;
           }
 
-          const days: ProgramDay[] = (p.days ?? []).map((d, di) => ({
-            id: uid(),
-            name: d.name ?? `Jour ${di + 1}`,
-            exercises: (d.exercises ?? []).map((ex, ei) => ({
+          const days: ProgramDay[] = (p.days ?? []).map((d, di) => {
+            const exercises: ProgramExercise[] = [];
+
+            for (const ex of d.exercises ?? []) {
+              const catalogExercise =
+                (ex.exerciseId ? getCatalogExercise(ex.exerciseId) : undefined) ??
+                (ex.exerciseName ? findCatalogExerciseByName(ex.exerciseName) : undefined);
+
+              if (!catalogExercise) {
+                unknownExercises.add(ex.exerciseName ?? ex.exerciseId ?? `Exercice inconnu #${exercises.length + 1}`);
+                skipped += 1;
+                continue;
+              }
+
+              const alternativeExerciseIds = new Set<string>();
+              const importedAlternativeIds = Array.isArray(ex.alternativeExerciseIds)
+                ? ex.alternativeExerciseIds
+                : [];
+              const importedAlternativeNames = Array.isArray(ex.alternativeExerciseNames)
+                ? ex.alternativeExerciseNames
+                : [];
+
+              for (const alternativeId of importedAlternativeIds) {
+                if (typeof alternativeId !== 'string') continue;
+                const alternative = getCatalogExercise(alternativeId);
+                if (alternative && alternative.id !== catalogExercise.id) {
+                  alternativeExerciseIds.add(alternative.id);
+                }
+              }
+
+              for (const alternativeName of importedAlternativeNames) {
+                if (typeof alternativeName !== 'string') continue;
+                const alternative = findCatalogExerciseByName(alternativeName);
+                if (alternative && alternative.id !== catalogExercise.id) {
+                  alternativeExerciseIds.add(alternative.id);
+                }
+              }
+
+              exercises.push({
+                id: uid(),
+                exerciseId: catalogExercise.id,
+                exerciseName: catalogExercise.name,
+                ...(alternativeExerciseIds.size > 0
+                  ? { alternativeExerciseIds: [...alternativeExerciseIds] }
+                  : {}),
+                sets: (ex.sets ?? []).map((s) => ({
+                  reps: s.reps ?? 10,
+                  weight: s.weight ?? 0,
+                  restSeconds: s.restSeconds ?? 90,
+                })),
+                order: exercises.length,
+              });
+              importedExercises += 1;
+            }
+
+            return {
               id: uid(),
-              exerciseId: uid(),
-              exerciseName: ex.exerciseName ?? `Exercice ${ei + 1}`,
-              sets: (ex.sets ?? []).map((s) => ({
-                reps: s.reps ?? 10,
-                weight: s.weight ?? 0,
-                restSeconds: s.restSeconds ?? 90,
-              })),
-              order: ei,
-            })),
-            order: di,
-          }));
+              name: d.name ?? `Jour ${di + 1}`,
+              exercises,
+              order: di,
+            };
+          });
 
           imported.push({
             id: uid(),
@@ -265,11 +329,17 @@ export const useProgramStore = create<ProgramState>()(
           });
         }
 
-        if (imported.length > 0) {
+        if (commit && imported.length > 0) {
           set((s) => ({ programs: [...s.programs, ...imported] }));
         }
 
-        return { success: imported.length, errors };
+        return {
+          importedPrograms: imported.length,
+          importedExercises,
+          unknownExercises: [...unknownExercises],
+          skipped,
+          errors,
+        };
       },
     }),
     {

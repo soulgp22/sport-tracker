@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useActiveSessionStore } from '../../store/activeSessionStore';
+import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
 
 interface RestTimerModalProps {
   visible: boolean;
@@ -12,9 +13,20 @@ function pad(n: number) {
 }
 
 export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
-  const seconds = useActiveSessionStore((s) => s.active?.restSecondsRemaining ?? 0);
+  const active = useActiveSessionStore((s) => s.active);
   const clearTimer = useActiveSessionStore((s) => s.clearRestTimer);
+  const [, setTick] = useState(0);
 
+  useEffect(() => {
+    if (!visible || !active?.restTimerActive) {
+      return undefined;
+    }
+
+    const timer = setInterval(() => setTick((tick) => tick + 1), 1000);
+    return () => clearInterval(timer);
+  }, [visible, active?.restTimerActive]);
+
+  const seconds = getRemainingRestSeconds(active);
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
 

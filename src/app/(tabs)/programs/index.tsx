@@ -1,7 +1,6 @@
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
 import { useProgramStore } from '../../../store/programStore';
 import { ProgramCard } from '../../../components/programs/ProgramCard';
@@ -20,17 +19,7 @@ export default function ProgramsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>Programmes</Text>
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => router.push('/(tabs)/programs/new')}
-          activeOpacity={0.7}>
-          <Ionicons name="add" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={programs}
         keyExtractor={(p) => p.id}
@@ -56,22 +45,6 @@ export default function ProgramsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#f9fafb' },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  heading: { fontSize: 28, fontWeight: '700', color: '#111827' },
-  addBtn: {
-    backgroundColor: '#2563eb',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
 });

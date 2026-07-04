@@ -1,74 +1,49 @@
-import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useColorScheme, type ColorValue } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
-type IoniconsName = React.ComponentProps<typeof Ionicons>['name'];
+function BackToHomeButton() {
+  const router = useRouter();
 
-interface TabIconProps {
-  name: IoniconsName;
-  color: ColorValue;
-  size: number;
-}
+  const handlePress = () => {
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
 
-function TabIcon({ name, color, size }: TabIconProps) {
-  return <Ionicons name={name} size={size} color={color as string} />;
+    router.replace('/(tabs)' as never);
+  };
+
+  return (
+    <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
+      <Ionicons name="arrow-back" size={24} color="#111827" />
+    </TouchableOpacity>
+  );
 }
 
 export default function TabLayout() {
-  const scheme = useColorScheme();
-  const tint = scheme === 'dark' ? '#60a5fa' : '#2563eb';
-
   return (
-    <Tabs
+    <Stack
       screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: tint,
+        headerStyle: { backgroundColor: '#f9fafb' },
+        headerTintColor: '#111827',
+        headerTitleStyle: { fontWeight: '700' },
+        headerShadowVisible: false,
+        contentStyle: { backgroundColor: '#f9fafb' },
       }}>
-      <Tabs.Screen
-        name="programs"
-        options={{
-          title: 'Programmes',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="barbell-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="session"
-        options={{
-          title: 'Séance',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="play-circle-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="history"
-        options={{
-          title: 'Historique',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="time-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="progress"
-        options={{
-          title: 'Progression',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="trending-up-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="programs" options={{ headerShown: false }} />
+      <Stack.Screen name="session" options={{ headerShown: false }} />
+      <Stack.Screen name="exercises" options={{ headerShown: false }} />
+      <Stack.Screen name="history" options={{ headerShown: false }} />
+      <Stack.Screen name="progress" options={{ headerShown: false }} />
+      <Stack.Screen
         name="settings"
         options={{
           title: 'Paramètres',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="settings-outline" color={color} size={size} />
-          ),
+          headerLeft: () => <BackToHomeButton />,
         }}
       />
-    </Tabs>
+    </Stack>
   );
 }

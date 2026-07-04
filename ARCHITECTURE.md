@@ -6,7 +6,7 @@
 |---|---|---|
 | Framework | Expo SDK 56 + React Native 0.85 | Compatible Expo Go, OTA updates |
 | Langage | TypeScript strict | Typage bout-en-bout |
-| Routage | expo-router v56 (file-based) | 4 onglets natifs, deep links gratuits |
+| Routage | expo-router v56 (file-based) | 5 onglets natifs, deep links gratuits |
 | Etat global | Zustand + middleware `persist` | Leger, TS-first, pas de boilerplate |
 | Persistance | @react-native-async-storage/async-storage | Hors-ligne, aucun backend |
 | Graphiques | react-native-gifted-charts + react-native-svg | Expo Go compatible, API declarative |
@@ -34,6 +34,9 @@ sport-tracker/
 │   │       ├── session/
 │   │       │   ├── index.tsx             # Selection programme -> demarrer seance
 │   │       │   └── active.tsx            # Seance live (series + timer repos)
+│   │       ├── exercises/
+│   │       │   ├── index.tsx             # Catalogue offline recherche + filtres
+│   │       │   └── [id].tsx              # Detail exercice + GIF + instructions
 │   │       ├── history/
 │   │       │   ├── index.tsx             # Liste des seances passees
 │   │       │   └── [id].tsx              # Detail seance
@@ -43,8 +46,12 @@ sport-tracker/
 │   │   └── index.ts                      # Tous les types TS (voir ci-dessous)
 │   ├── store/
 │   │   ├── programStore.ts               # CRUD programmes (Zustand + persist)
+│   │   ├── exerciseCatalogStore.ts       # Catalogue offline read-only
 │   │   ├── sessionStore.ts               # Historique seances (Zustand + persist)
 │   │   └── activeSessionStore.ts         # Seance en cours (Zustand, non persiste)
+│   ├── data/
+│   │   ├── exercises.catalog.json        # Catalogue embarque
+│   │   └── exercises.gifs.ts             # Map statique require() pour Metro/RN
 │   ├── storage/
 │   │   └── storageAdapter.ts             # Wrapper AsyncStorage pour Zustand persist
 │   ├── hooks/
@@ -81,11 +88,24 @@ sport-tracker/
 ```typescript
 // src/types/index.ts
 
-// --- Catalogue d'exercices (reference partagee) ---
+// --- Ancienne bibliotheque compatibilite ---
 export interface Exercise {
   id: string;
   name: string;
   muscleGroup?: string;
+}
+
+// --- Catalogue d'exercices offline (reference partagee) ---
+export interface CatalogExercise {
+  id: string;
+  name: string;
+  nameFr?: string;
+  bodyPart: string;
+  target: string;
+  secondaryMuscles: string[];
+  equipment: string;
+  instructions: string[];
+  gif: string;
 }
 
 // --- Programme ---
@@ -98,7 +118,7 @@ export interface ProgramSet {
 export interface ProgramExercise {
   id: string;
   exerciseId: string;
-  exerciseName: string; // denormalise pour eviter les jointures
+  exerciseName: string; // compatibilite, derive du catalogue
   sets: ProgramSet[];
   order: number;
 }
@@ -171,6 +191,15 @@ actions: addProgram · updateProgram · deleteProgram
 persist: AsyncStorage, cle "programs-store"
 ```
 
+`importPrograms(json, { commit?: boolean })` parse les exports version 1, valide les exercices par `exerciseId` puis par nom normalise dans le catalogue, importe les exercices connus et ignore les inconnus. Le resultat est structure : `importedPrograms`, `importedExercises`, `unknownExercises`, `skipped`, `errors`.
+
+### `exerciseCatalogStore`
+```
+state  : { exercises: CatalogExercise[]; bodyParts: string[]; equipments: string[] }
+actions: all · getById · findByName · search · filterByMuscle
+persist: NON (donnees statiques embarquees)
+```
+
 ### `sessionStore`
 ```
 state  : { sessions: Session[] }
@@ -211,11 +240,22 @@ persist: NON (perte acceptable si l'app est tuee)
 
 ---
 
+## Catalogue offline
+
+- Source principale du script : ExerciseDB v1 free tier (`https://oss.exercisedb.dev/api/v1/exercises`) avec GIFs 180p.
+- Generation : `node scripts/build-exercise-catalog.mjs`.
+- Sorties : `assets/exercises/gifs/*.gif`, `src/data/exercises.catalog.json`, `src/data/exercises.gifs.ts`.
+- Budget media vise : environ 80 Mo maximum ; le script reduit le nombre d'exercices si necessaire.
+- Fallback : `CATALOG_FALLBACK=1 node scripts/build-exercise-catalog.mjs` genere un catalogue offline local et des GIFs placeholder lorsque l'API est indisponible.
+
 ## Navigation (expo-router tabs)
 
 | Onglet | Route | Icone |
 |---|---|---|
 | Programmes | `/(tabs)/programs` | dumbbell |
 | Seance | `/(tabs)/session` | play-circle |
-| Historique | `/(tabs)/history` | clock |
+| Exercices | `/(tabs)/exercises` | body |
 | Progression | `/(tabs)/progress` | trending-up |
+| Parametres | `/(tabs)/settings` | settings |
+
+Historique reste routable via `/(tabs)/history` et `/(tabs)/history/[id]`, mais n'est plus dans la TabBar (`href: null`). L'acces principal est le lien "Voir l'historique" dans Progression.

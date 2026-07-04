@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react-native';
 import { RestTimerModal } from '../RestTimerModal';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
 import type { Program, ProgramDay } from '../../../types';
@@ -17,8 +17,16 @@ const makeDay = (): ProgramDay => ({
   }],
 });
 
+const now = new Date('2026-03-01T12:00:00.000Z');
+
 beforeEach(() => {
+  jest.useFakeTimers({ now });
   useActiveSessionStore.setState({ active: null });
+});
+
+afterEach(() => {
+  cleanup();
+  jest.useRealTimers();
 });
 
 describe('RestTimerModal', () => {

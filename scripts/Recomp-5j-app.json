@@ -1,0 +1,735 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Recomp 5j",
+      "days": [
+        {
+          "name": "Lower A - Quadriceps",
+          "exercises": [
+            {
+              "exerciseName": "Leg Press",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 120,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 120,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 130,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 130,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-574"
+            },
+            {
+              "exerciseName": "Split Squat with Dumbbells",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 12,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 12,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 12,
+                  "restSeconds": 90
+                }
+              ],
+              "exerciseId": "offline-637"
+            },
+            {
+              "exerciseName": "Leg Extensions",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 35,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 35,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 35,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-573"
+            },
+            {
+              "exerciseName": "Seated Leg Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 40,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 40,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 40,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-386"
+            },
+            {
+              "exerciseName": "Rocking Standing Calf Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 60,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 60,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 60,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 60,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-186"
+            },
+            {
+              "exerciseName": "Pallof Press",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 15,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 15,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 15,
+                  "restSeconds": 45
+                }
+              ],
+              "exerciseId": "offline-058"
+            }
+          ]
+        },
+        {
+          "name": "Push - Haut pecs epaules",
+          "exercises": [
+            {
+              "exerciseName": "Incline Dumbbell Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 28,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 28,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 30,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 30,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-241"
+            },
+            {
+              "exerciseName": "Cable Crossover",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 12,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 12,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 12,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-207"
+            },
+            {
+              "exerciseName": "Dumbbell Shoulder Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 20,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 20,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 20,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-699"
+            },
+            {
+              "exerciseName": "Cable Seated Lateral Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-680"
+            },
+            {
+              "exerciseName": "Butterfly",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 45,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 45,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 45,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-205"
+            },
+            {
+              "exerciseName": "Triceps Pushdown",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 30,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-869"
+            }
+          ]
+        },
+        {
+          "name": "Lower B - Chaine posterieure",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Hip Thrust",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 60,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 60,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 70,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 70,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-307"
+            },
+            {
+              "exerciseName": "Romanian Deadlift",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 50,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 50,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 55,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-379"
+            },
+            {
+              "exerciseName": "Lying Leg Curls",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 35,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 35,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 35,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 35,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-362"
+            },
+            {
+              "exerciseName": "Thigh Abductor",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 50,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 50,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 50,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-100"
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 40,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 40,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 40,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 40,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-187"
+            },
+            {
+              "exerciseName": "Bird Dog - respi continue",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pull - Dos arriere epaule",
+          "exercises": [
+            {
+              "exerciseName": "Wide-Grip Lat Pulldown",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 55,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 60,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 60,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 60,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-441"
+            },
+            {
+              "exerciseName": "Lying T-Bar Row",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 50,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 55,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 55,
+                  "restSeconds": 120
+                }
+              ],
+              "exerciseId": "offline-485"
+            },
+            {
+              "exerciseName": "Seated Cable Rows",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 55,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 55,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 55,
+                  "restSeconds": 90
+                }
+              ],
+              "exerciseId": "offline-495"
+            },
+            {
+              "exerciseName": "Reverse Machine Flyes",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-748"
+            },
+            {
+              "exerciseName": "Face Pull",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 20,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 20,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 20,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-704"
+            },
+            {
+              "exerciseName": "Incline Dumbbell Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 12,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 12,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 14,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-135"
+            }
+          ]
+        },
+        {
+          "name": "Epaules Bras Core",
+          "exercises": [
+            {
+              "exerciseName": "Machine Shoulder (Military) Press",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 30,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 35,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 35,
+                  "restSeconds": 90
+                }
+              ],
+              "exerciseId": "offline-729"
+            },
+            {
+              "exerciseName": "Cable Seated Lateral Raise",
+              "sets": [
+                {
+                  "reps": 18,
+                  "weight": 6,
+                  "restSeconds": 50
+                },
+                {
+                  "reps": 18,
+                  "weight": 6,
+                  "restSeconds": 50
+                },
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 50
+                },
+                {
+                  "reps": 15,
+                  "weight": 7,
+                  "restSeconds": 50
+                }
+              ],
+              "exerciseId": "offline-680"
+            },
+            {
+              "exerciseName": "Reverse Machine Flyes",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 25,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-748"
+            },
+            {
+              "exerciseName": "EZ-Bar Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 25,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 25,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 25,
+                  "restSeconds": 75
+                }
+              ],
+              "exerciseId": "offline-131"
+            },
+            {
+              "exerciseName": "Triceps Pushdown",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 30,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 30,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 30,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-869"
+            },
+            {
+              "exerciseName": "Dead Bug",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 10,
+                  "weight": 5,
+                  "restSeconds": 45
+                }
+              ],
+              "exerciseId": "offline-026"
+            },
+            {
+              "exerciseName": "Farmer's Walk",
+              "sets": [
+                {
+                  "reps": 1,
+                  "weight": 20,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 1,
+                  "weight": 20,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 1,
+                  "weight": 20,
+                  "restSeconds": 60
+                }
+              ],
+              "exerciseId": "offline-284"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

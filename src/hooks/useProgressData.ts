@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useSessionStore } from '../store/sessionStore';
+import { getCatalogExerciseName } from '../store/exerciseCatalogStore';
 
 export interface DataPoint {
   date: string;    // ISO date string (YYYY-MM-DD)
@@ -61,7 +62,11 @@ export function useExercisesWithHistory() {
         if (existing) {
           existing.sessionCount += 1;
         } else {
-          map.set(ex.exerciseId, { id: ex.exerciseId, name: ex.exerciseName, sessionCount: 1 });
+          map.set(ex.exerciseId, {
+            id: ex.exerciseId,
+            name: getCatalogExerciseName(ex.exerciseId, ex.exerciseName),
+            sessionCount: 1,
+          });
         }
       }
     }

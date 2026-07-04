@@ -3,8 +3,8 @@ import {
   Alert,
   FlatList,
   KeyboardAvoidingView,
+  Modal,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,7 +18,11 @@ import { useProgramStore } from '../../../../../store/programStore';
 import { Button } from '../../../../../components/ui/Button';
 import { TextInput } from '../../../../../components/ui/TextInput';
 import { EmptyState } from '../../../../../components/ui/EmptyState';
-import type { ProgramExercise, ProgramSet } from '../../../../../types';
+import { ExerciseCatalogList } from '../../../../../components/exercises/ExerciseCatalogList';
+import { ExerciseThumbnail } from '../../../../../components/exercises/ExerciseThumbnail';
+import { ExerciseDetailView } from '../../../../../components/exercises/ExerciseDetailView';
+import { useExerciseCatalogStore } from '../../../../../store/exerciseCatalogStore';
+import type { CatalogExercise, ProgramExercise, ProgramSet } from '../../../../../types';
 
 const DEFAULT_SET: ProgramSet = { reps: 10, weight: 0, restSeconds: 90 };
 
@@ -74,11 +78,21 @@ function ExerciseCard({
   exercise,
   onUpdate,
   onDelete,
+  onSelectExercise,
+  onAddAlternative,
+  onOpenDetail,
 }: {
   exercise: ProgramExercise;
   onUpdate: (patch: Partial<ProgramExercise>) => void;
   onDelete: () => void;
+  onSelectExercise: () => void;
+  onAddAlternative: () => void;
+  onOpenDetail: () => void;
 }) {
+  const getCatalogExercise = useExerciseCatalogStore((s) => s.getById);
+  const catalogExercise = getCatalogExercise(exercise.exerciseId);
+  const alternativeExerciseIds = exercise.alternativeExerciseIds ?? [];
+
   const updateSet = (setIndex: number, patch: Partial<ProgramSet>) => {
     const sets = exercise.sets.map((s, i) => (i === setIndex ? { ...s, ...patch } : s));
     onUpdate({ sets });
@@ -94,18 +108,65 @@ function ExerciseCard({
     onUpdate({ sets: exercise.sets.filter((_, i) => i !== setIndex) });
   };
 
+  const removeAlternative = (alternativeId: string) => {
+    onUpdate({
+      alternativeExerciseIds: alternativeExerciseIds.filter((id) => id !== alternativeId),
+    });
+  };
+
   return (
     <View style={styles.exerciseCard}>
       <View style={styles.exerciseHeader}>
-        <TextInput
-          value={exercise.exerciseName}
-          onChangeText={(v) => onUpdate({ exerciseName: v })}
-          placeholder="Nom de l'exercice"
-          style={styles.exerciseNameInput}
-        />
+        <TouchableOpacity
+          style={styles.exercisePicker}
+          onPress={catalogExercise ? onOpenDetail : onSelectExercise}
+          activeOpacity={0.75}>
+          {catalogExercise ? <ExerciseThumbnail id={catalogExercise.id} size={44} /> : null}
+          <View style={styles.exercisePickerBody}>
+            <Text style={styles.exercisePickerName} numberOfLines={1}>
+              {catalogExercise?.name ?? exercise.exerciseName ?? 'Choisir un exercice'}
+            </Text>
+            <Text style={styles.exercisePickerMeta} numberOfLines={1}>
+              {catalogExercise
+                ? `${catalogExercise.target} · ${catalogExercise.equipment}`
+                : 'Appuyer pour choisir'}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color="#9ca3af" />
+        </TouchableOpacity>
         <TouchableOpacity onPress={onDelete} hitSlop={8}>
           <Ionicons name="trash-outline" size={20} color="#ef4444" />
         </TouchableOpacity>
+      </View>
+
+      {catalogExercise ? (
+        <TouchableOpacity style={styles.changeBtn} onPress={onSelectExercise} activeOpacity={0.7}>
+          <Ionicons name="swap-horizontal" size={15} color="#2563eb" />
+          <Text style={styles.changeLabel}>Changer l&apos;exercice</Text>
+        </TouchableOpacity>
+      ) : null}
+
+      <View style={styles.alternativesBlock}>
+        <Text style={styles.alternativesTitle}>Alternatives</Text>
+        <View style={styles.alternativesRow}>
+          {alternativeExerciseIds.map((alternativeId) => {
+            const alternative = getCatalogExercise(alternativeId);
+            return (
+              <View key={alternativeId} style={styles.alternativeChip}>
+                <Text style={styles.alternativeChipText} numberOfLines={1}>
+                  {alternative?.name ?? 'Exercice inconnu'}
+                </Text>
+                <TouchableOpacity onPress={() => removeAlternative(alternativeId)} hitSlop={8}>
+                  <Ionicons name="close" size={14} color="#2563eb" />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+          <TouchableOpacity style={styles.addAlternativeBtn} onPress={onAddAlternative}>
+            <Ionicons name="add" size={15} color="#2563eb" />
+            <Text style={styles.addAlternativeLabel}>Ajouter une alternative</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {exercise.sets.map((set, i) => (
@@ -139,6 +200,10 @@ export default function DayEditScreen() {
   const day = program?.days.find((d) => d.id === dayId);
   const [editingDayName, setEditingDayName] = useState(false);
   const [dayNameValue, setDayNameValue] = useState(day?.name ?? '');
+  const [selectorOpen, setSelectorOpen] = useState(false);
+  const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
+  const [alternativesTargetId, setAlternativesTargetId] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
 
   if (!program || !day) {
     return (
@@ -153,12 +218,61 @@ export default function DayEditScreen() {
     setEditingDayName(false);
   };
 
-  const handleAddExercise = () => {
-    addExerciseToDay(id, dayId, {
-      exerciseId: Math.random().toString(36).slice(2),
-      exerciseName: '',
-      sets: [{ ...DEFAULT_SET }],
-    });
+  const openSelector = (programExerciseId: string | null) => {
+    setEditingExerciseId(programExerciseId);
+    setAlternativesTargetId(null);
+    setSelectorOpen(true);
+  };
+
+  const openAlternativeSelector = (programExerciseId: string) => {
+    setEditingExerciseId(null);
+    setAlternativesTargetId(programExerciseId);
+    setSelectorOpen(true);
+  };
+
+  const closeSelector = () => {
+    setSelectorOpen(false);
+    setEditingExerciseId(null);
+    setAlternativesTargetId(null);
+  };
+
+  const handleSelectCatalogExercise = (catalogExercise: CatalogExercise) => {
+    if (alternativesTargetId) {
+      const targetExercise = day.exercises.find((exercise) => exercise.id === alternativesTargetId);
+      if (!targetExercise) {
+        closeSelector();
+        return;
+      }
+
+      if (catalogExercise.id === targetExercise.exerciseId) {
+        Alert.alert('Alternative invalide', 'Choisis un exercice différent de l\'exercice principal.');
+        return;
+      }
+
+      const currentAlternatives = targetExercise.alternativeExerciseIds ?? [];
+      if (!currentAlternatives.includes(catalogExercise.id)) {
+        updateExerciseInDay(id, dayId, alternativesTargetId, {
+          alternativeExerciseIds: [...currentAlternatives, catalogExercise.id],
+        });
+      }
+    } else if (editingExerciseId) {
+      const targetExercise = day.exercises.find((exercise) => exercise.id === editingExerciseId);
+      const currentAlternatives = targetExercise?.alternativeExerciseIds ?? [];
+      updateExerciseInDay(id, dayId, editingExerciseId, {
+        exerciseId: catalogExercise.id,
+        exerciseName: catalogExercise.name,
+        ...(currentAlternatives.length > 0
+          ? { alternativeExerciseIds: currentAlternatives.filter((alternativeId) => alternativeId !== catalogExercise.id) }
+          : {}),
+      });
+    } else {
+      addExerciseToDay(id, dayId, {
+        exerciseId: catalogExercise.id,
+        exerciseName: catalogExercise.name,
+        sets: [{ ...DEFAULT_SET }],
+      });
+    }
+    closeSelector();
   };
 
   const handleDeleteExercise = (exId: string, exName: string) => {
@@ -204,6 +318,9 @@ export default function DayEditScreen() {
               exercise={item}
               onUpdate={(patch) => updateExerciseInDay(id, dayId, item.id, patch)}
               onDelete={() => handleDeleteExercise(item.id, item.exerciseName)}
+              onSelectExercise={() => openSelector(item.id)}
+              onAddAlternative={() => openAlternativeSelector(item.id)}
+              onOpenDetail={() => setDetailId(item.exerciseId)}
             />
           )}
           ListEmptyComponent={
@@ -218,8 +335,36 @@ export default function DayEditScreen() {
         />
 
         <View style={styles.footer}>
-          <Button title="+ Ajouter un exercice" variant="secondary" onPress={handleAddExercise} />
+          <Button title="+ Ajouter un exercice" variant="secondary" onPress={() => openSelector(null)} />
         </View>
+
+        <Modal visible={selectorOpen} animationType="slide" onRequestClose={closeSelector}>
+          <SafeAreaView style={styles.selectorSafe} edges={['top', 'bottom']}>
+            <View style={styles.selectorHeader}>
+              <TouchableOpacity onPress={closeSelector} hitSlop={8}>
+                <Ionicons name="close" size={24} color="#111827" />
+              </TouchableOpacity>
+              <Text style={styles.selectorTitle}>
+                {alternativesTargetId ? 'Ajouter une alternative' : 'Choisir un exercice'}
+              </Text>
+              <View style={{ width: 24 }} />
+            </View>
+            <ExerciseCatalogList
+              selectedId={
+                alternativesTargetId
+                  ? day.exercises.find((exercise) => exercise.id === alternativesTargetId)?.exerciseId
+                  : editingExerciseId
+                  ? day.exercises.find((exercise) => exercise.id === editingExerciseId)?.exerciseId
+                  : undefined
+              }
+              onSelect={handleSelectCatalogExercise}
+            />
+          </SafeAreaView>
+        </Modal>
+
+        <Modal visible={!!detailId} animationType="slide" onRequestClose={() => setDetailId(null)}>
+          {detailId ? <ExerciseDetailView id={detailId} onClose={() => setDetailId(null)} /> : null}
+        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -253,7 +398,44 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   exerciseHeader: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  exerciseNameInput: { flex: 1 },
+  exercisePicker: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1.5,
+    borderColor: '#d1d5db',
+    borderRadius: 10,
+    padding: 8,
+    backgroundColor: '#fff',
+  },
+  exercisePickerBody: { flex: 1, gap: 2 },
+  exercisePickerName: { fontSize: 15, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
+  exercisePickerMeta: { fontSize: 12, color: '#6b7280', textTransform: 'capitalize' },
+  changeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', paddingVertical: 2 },
+  changeLabel: { color: '#2563eb', fontSize: 13, fontWeight: '600' },
+  alternativesBlock: { gap: 6, paddingVertical: 2 },
+  alternativesTitle: { fontSize: 11, fontWeight: '700', color: '#6b7280', textTransform: 'uppercase' },
+  alternativesRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
+  alternativeChip: {
+    maxWidth: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    backgroundColor: '#eff6ff',
+  },
+  alternativeChipText: { color: '#1d4ed8', fontSize: 12, fontWeight: '600', textTransform: 'capitalize' },
+  addAlternativeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: 5,
+    paddingHorizontal: 2,
+  },
+  addAlternativeLabel: { color: '#2563eb', fontSize: 12, fontWeight: '600' },
   setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   setIndex: { fontSize: 13, fontWeight: '600', color: '#6b7280', width: 22 },
   setField: { flex: 1, gap: 2 },
@@ -267,4 +449,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   addSetLabel: { color: '#2563eb', fontSize: 14, fontWeight: '500' },
+  selectorSafe: { flex: 1, backgroundColor: '#f9fafb' },
+  selectorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  selectorTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: '#111827', textAlign: 'center' },
 });

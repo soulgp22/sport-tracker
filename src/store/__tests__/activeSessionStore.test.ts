@@ -1,5 +1,12 @@
-import { useActiveSessionStore } from '../activeSessionStore';
-import type { Program, ProgramDay } from '../../types';
+import { getRemainingRestSeconds, useActiveSessionStore } from '../activeSessionStore';
+import { useSessionStore } from '../sessionStore';
+import { useExerciseCatalogStore } from '../exerciseCatalogStore';
+import type { Program, ProgramDay, Session } from '../../types';
+
+const CATALOG = useExerciseCatalogStore.getState().all();
+const SWAP_FROM = CATALOG[0];
+const SWAP_TO_WITH_HISTORY = CATALOG[1];
+const SWAP_TO_WITHOUT_HISTORY = CATALOG[2];
 
 const makeProgram = (): Program => ({
   id: 'prog1',
@@ -18,6 +25,7 @@ const makeDay = (): ProgramDay => ({
       id: 'pe1',
       exerciseId: 'ex1',
       exerciseName: 'Bench Press',
+      alternativeExerciseIds: ['ex3'],
       order: 0,
       sets: [
         { reps: 10, weight: 60, restSeconds: 90 },
@@ -34,12 +42,57 @@ const makeDay = (): ProgramDay => ({
   ],
 });
 
+const makeSwapDay = (): ProgramDay => ({
+  id: 'day-swap',
+  name: 'Swap',
+  order: 0,
+  exercises: [
+    {
+      id: 'pe-swap',
+      exerciseId: SWAP_FROM.id,
+      exerciseName: SWAP_FROM.name,
+      alternativeExerciseIds: [SWAP_TO_WITH_HISTORY.id, SWAP_TO_WITHOUT_HISTORY.id],
+      order: 0,
+      sets: [
+        { reps: 10, weight: 60, restSeconds: 90 },
+        { reps: 8, weight: 70, restSeconds: 120 },
+      ],
+    },
+  ],
+});
+
+const makeSession = (id: string, exerciseId: string, weights: number[], date: string): Session => ({
+  id,
+  programId: 'prog1',
+  programDayId: 'day1',
+  programName: 'PPL',
+  dayName: 'Push',
+  date,
+  durationSeconds: 3600,
+  exercises: [
+    {
+      exerciseId,
+      exerciseName: 'Bench Press',
+      sets: weights.map((weight) => ({
+        targetReps: 10,
+        targetWeight: weight,
+        targetRestSeconds: 90,
+        actualReps: 10,
+        actualWeight: weight,
+        completed: true,
+        completedAt: date,
+      })),
+    },
+  ],
+});
+
 beforeEach(() => {
   useActiveSessionStore.setState({ active: null });
+  useSessionStore.setState({ sessions: [] });
 });
 
 describe('startSession', () => {
-  it('initializes active session with correct structure', () => {
+  it('initializes active session with correct structure and falls back to program weights without history', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
     const active = useActiveSessionStore.getState().active!;
     expect(active.programName).toBe('PPL');
@@ -49,10 +102,94 @@ describe('startSession', () => {
     expect(active.exercises).toHaveLength(2);
     expect(active.exercises[0].sets).toHaveLength(2);
     expect(active.exercises[0].sets[0].completed).toBe(false);
+    expect(active.exercises[0].alternativeExerciseIds).toEqual(['ex3']);
     // Pre-filled with targets
     expect(active.exercises[0].sets[0].actualReps).toBe(10);
+    expect(active.exercises[0].sets[0].targetWeight).toBe(60);
     expect(active.exercises[0].sets[0].actualWeight).toBe(60);
+    expect(active.exercises[0].sets[1].targetWeight).toBe(70);
+    expect(active.exercises[0].sets[1].actualWeight).toBe(70);
+    expect(active.exercises[1].sets[0].targetWeight).toBe(40);
+    expect(active.exercises[1].sets[0].actualWeight).toBe(40);
     expect(active.restTimerActive).toBe(false);
+  });
+
+  it('uses the latest logged weights for the same exercise', () => {
+    useSessionStore.setState({
+      sessions: [
+        makeSession('newer', 'ex1', [82.5, 87.5], '2026-02-02T00:00:00.000Z'),
+        makeSession('older', 'ex1', [75, 80], '2026-02-01T00:00:00.000Z'),
+      ],
+    });
+
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+
+    const sets = useActiveSessionStore.getState().active!.exercises[0].sets;
+    expect(sets[0].targetWeight).toBe(82.5);
+    expect(sets[0].actualWeight).toBe(82.5);
+    expect(sets[1].targetWeight).toBe(87.5);
+    expect(sets[1].actualWeight).toBe(87.5);
+  });
+
+  it('uses the last available logged set when history has fewer sets than the current program', () => {
+    useSessionStore.setState({
+      sessions: [makeSession('previous', 'ex1', [77.5], '2026-02-02T00:00:00.000Z')],
+    });
+
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+
+    const sets = useActiveSessionStore.getState().active!.exercises[0].sets;
+    expect(sets[0].targetWeight).toBe(77.5);
+    expect(sets[0].actualWeight).toBe(77.5);
+    expect(sets[1].targetWeight).toBe(77.5);
+    expect(sets[1].actualWeight).toBe(77.5);
+  });
+});
+
+describe('swapExercise', () => {
+  it('swaps exercise id and name, keeps alternatives, preserves completed sets, and uses history for pending sets', () => {
+    useSessionStore.setState({
+      sessions: [
+        makeSession(
+          'previous',
+          SWAP_TO_WITH_HISTORY.id,
+          [42.5, 47.5],
+          '2026-02-02T00:00:00.000Z'
+        ),
+      ],
+    });
+
+    useActiveSessionStore.getState().startSession(makeProgram(), makeSwapDay());
+    useActiveSessionStore.getState().logSet(0, 0, 12, 61);
+    useActiveSessionStore.getState().swapExercise(0, SWAP_TO_WITH_HISTORY.id);
+
+    const exercise = useActiveSessionStore.getState().active!.exercises[0];
+    expect(exercise.exerciseId).toBe(SWAP_TO_WITH_HISTORY.id);
+    expect(exercise.exerciseName).toBe(SWAP_TO_WITH_HISTORY.name);
+    expect(exercise.alternativeExerciseIds).toEqual([
+      SWAP_TO_WITH_HISTORY.id,
+      SWAP_TO_WITHOUT_HISTORY.id,
+    ]);
+    expect(exercise.sets[0].completed).toBe(true);
+    expect(exercise.sets[0].actualReps).toBe(12);
+    expect(exercise.sets[0].targetWeight).toBe(60);
+    expect(exercise.sets[0].actualWeight).toBe(61);
+    expect(exercise.sets[1].completed).toBe(false);
+    expect(exercise.sets[1].targetWeight).toBe(47.5);
+    expect(exercise.sets[1].actualWeight).toBe(47.5);
+  });
+
+  it('keeps current pending weights when the replacement exercise has no history', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeSwapDay());
+    useActiveSessionStore.getState().swapExercise(0, SWAP_TO_WITHOUT_HISTORY.id);
+
+    const exercise = useActiveSessionStore.getState().active!.exercises[0];
+    expect(exercise.exerciseId).toBe(SWAP_TO_WITHOUT_HISTORY.id);
+    expect(exercise.exerciseName).toBe(SWAP_TO_WITHOUT_HISTORY.name);
+    expect(exercise.sets[0].targetWeight).toBe(60);
+    expect(exercise.sets[0].actualWeight).toBe(60);
+    expect(exercise.sets[1].targetWeight).toBe(70);
+    expect(exercise.sets[1].actualWeight).toBe(70);
   });
 });
 
@@ -100,39 +237,58 @@ describe('logSet', () => {
 });
 
 describe('rest timer', () => {
-  it('sets rest timer', () => {
+  const now = new Date('2026-03-01T12:00:00.000Z');
+
+  beforeEach(() => {
+    jest.useFakeTimers({ now });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('sets rest timer with a future deadline', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
     useActiveSessionStore.getState().setRestTimer(90);
-    expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(true);
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(90);
+    const active = useActiveSessionStore.getState().active!;
+
+    expect(active.restTimerActive).toBe(true);
+    expect(active.restEndsAt).toBe(new Date(now.getTime() + 90_000).toISOString());
   });
 
-  it('ticks rest timer down', () => {
+  it('returns remaining rest seconds from the deadline', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
-    useActiveSessionStore.getState().setRestTimer(3);
-    useActiveSessionStore.getState().tickRestTimer();
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(2);
+    useActiveSessionStore.getState().setRestTimer(90);
+
+    jest.setSystemTime(new Date(now.getTime() + 30_000));
+
+    expect(getRemainingRestSeconds(useActiveSessionStore.getState().active)).toBe(60);
   });
 
-  it('deactivates timer when it reaches 0', () => {
+  it('keeps timer active when syncing before the deadline', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
-    useActiveSessionStore.getState().setRestTimer(1);
-    useActiveSessionStore.getState().tickRestTimer();
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(0);
-    expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(false);
+    useActiveSessionStore.getState().setRestTimer(90);
+    const restEndsAt = useActiveSessionStore.getState().active!.restEndsAt;
+
+    jest.setSystemTime(new Date(now.getTime() + 30_000));
+    useActiveSessionStore.getState().syncRestTimer();
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(true);
+    expect(active.restEndsAt).toBe(restEndsAt);
   });
 
-  it('does not go below 0', () => {
+  it('deactivates timer when syncing once the deadline has passed', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
-    useActiveSessionStore.getState().setRestTimer(0);
-    useActiveSessionStore.getState().tickRestTimer();
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(0);
-  });
+    useActiveSessionStore.getState().setRestTimer(90);
 
-  it('does not tick when timer is not active', () => {
-    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
-    useActiveSessionStore.getState().tickRestTimer();
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(0);
+    jest.setSystemTime(new Date(now.getTime() + 90_000));
+    useActiveSessionStore.getState().syncRestTimer();
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(false);
+    expect(active.restEndsAt).toBeNull();
+    expect(getRemainingRestSeconds(active)).toBe(0);
   });
 
   it('clears rest timer', () => {
@@ -140,11 +296,15 @@ describe('rest timer', () => {
     useActiveSessionStore.getState().setRestTimer(90);
     useActiveSessionStore.getState().clearRestTimer();
     expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(false);
-    expect(useActiveSessionStore.getState().active!.restSecondsRemaining).toBe(0);
+    expect(useActiveSessionStore.getState().active!.restEndsAt).toBeNull();
   });
 
   it('does nothing when clearing timer with no active session', () => {
     expect(() => useActiveSessionStore.getState().clearRestTimer()).not.toThrow();
+  });
+
+  it('does nothing when syncing timer with no active session', () => {
+    expect(() => useActiveSessionStore.getState().syncRestTimer()).not.toThrow();
   });
 });
 

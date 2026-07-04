@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen } from '@testing-library/react-native';
 import { ProgramCard } from '../ProgramCard';
 import type { Program } from '../../../types';
 

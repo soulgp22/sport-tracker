@@ -22,10 +22,7 @@ export default function SessionScreen() {
   // If there is already an active session, show resume button
   if (active) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
-        <View style={styles.header}>
-          <Text style={styles.heading}>Séance</Text>
-        </View>
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.resumeContainer}>
           <Ionicons name="play-circle" size={64} color="#2563eb" />
           <Text style={styles.resumeTitle}>Séance en cours</Text>
@@ -43,11 +40,7 @@ export default function SessionScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>Séance</Text>
-      </View>
-
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       {programs.length === 0 ? (
         <EmptyState
           icon="barbell-outline"
@@ -108,8 +101,6 @@ export default function SessionScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { paddingHorizontal: 16, paddingVertical: 12 },
-  heading: { fontSize: 28, fontWeight: '700', color: '#111827' },
   list: { paddingBottom: 100 },
   programRow: {
     flexDirection: 'row',

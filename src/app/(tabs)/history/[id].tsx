@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
+import { getCatalogExerciseName } from '../../../store/exerciseCatalogStore';
 
 function fmt(secs: number) {
   const m = Math.floor(secs / 60);
@@ -69,7 +71,12 @@ export default function SessionDetailScreen() {
           const doneSets = ex.sets.filter((s) => s.completed);
           return (
             <View key={i} style={styles.exCard}>
-              <Text style={styles.exName}>{ex.exerciseName || `Exercice ${i + 1}`}</Text>
+              <View style={styles.exHeader}>
+                <ExerciseThumbnail id={ex.exerciseId} size={40} />
+                <Text style={styles.exName} numberOfLines={1}>
+                  {getCatalogExerciseName(ex.exerciseId, ex.exerciseName || `Exercice ${i + 1}`)}
+                </Text>
+              </View>
               <View style={styles.tableHeader}>
                 <Text style={[styles.tableCell, styles.tableCellSm]}>Série</Text>
                 <Text style={styles.tableCell}>Reps</Text>
@@ -122,7 +129,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 1,
   },
-  exName: { fontSize: 16, fontWeight: '700', color: '#111827', marginBottom: 10 },
+  exHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
+  exName: { flex: 1, fontSize: 16, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
   tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#e5e7eb', paddingBottom: 6, marginBottom: 4 },
   tableRow: { flexDirection: 'row', paddingVertical: 5 },
   tableRowAlt: { backgroundColor: '#f9fafb' },

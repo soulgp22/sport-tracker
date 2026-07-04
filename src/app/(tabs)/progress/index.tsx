@@ -14,10 +14,7 @@ export default function ProgressScreen() {
 
   if (exercises.length === 0) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
-        <View style={styles.header}>
-          <Text style={styles.heading}>Progression</Text>
-        </View>
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
         <EmptyState
           icon="trending-up-outline"
           title="Aucune donnée"
@@ -28,15 +25,12 @@ export default function ProgressScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>Progression</Text>
-      </View>
-
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       {/* Exercise selector */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={styles.selectorScroll}
         contentContainerStyle={styles.selectorRow}>
         {exercises.map((ex) => (
           <TouchableOpacity
@@ -74,13 +68,13 @@ export default function ProgressScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { paddingHorizontal: 16, paddingVertical: 12 },
-  heading: { fontSize: 28, fontWeight: '700', color: '#111827' },
-  selectorRow: { paddingHorizontal: 16, paddingBottom: 8, gap: 8 },
+  selectorScroll: { flexGrow: 0, flexShrink: 0 },
+  selectorRow: { paddingHorizontal: 16, paddingBottom: 8, gap: 8, alignItems: 'center' },
   chip: {
+    height: 34,
+    justifyContent: 'center',
     paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 20,
+    borderRadius: 17,
     backgroundColor: '#e5e7eb',
   },
   chipSelected: { backgroundColor: '#2563eb' },

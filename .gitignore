@@ -21,6 +21,10 @@ expo-env.d.ts
 # Metro
 .metro-health-check*
 
+# Android build artifacts (ne jamais committer les binaires de build)
+*.apk
+*.aab
+
 # debug
 npm-debug.*
 yarn-debug.*

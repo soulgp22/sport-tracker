@@ -1,49 +1,54 @@
-# Welcome to your Expo app 👋
+# Sport Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Application Expo / React Native de suivi de programmes, séances, historique et progression.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Développement
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Vérifications principales :
 
-### Other setup steps
+```bash
+npx tsc --noEmit
+npm test
+npx expo export --platform android
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Catalogue d'exercices offline
 
-## Learn more
+L'app embarque un catalogue read-only dans `src/data/exercises.catalog.json` et des GIFs statiques référencés par `src/data/exercises.gifs.ts`. Les programmes doivent référencer un `exerciseId` du catalogue ; le nom affiché est dérivé du catalogue avec un fallback vers le champ compatibilité `exerciseName`.
 
-To learn more about developing your project with Expo, look at the following resources:
+Le script de génération est :
+
+```bash
+node scripts/build-exercise-catalog.mjs
+```
+
+Source prévue : ExerciseDB v1 free tier (`https://oss.exercisedb.dev/api/v1/exercises`) avec GIFs 180p servis par leur CDN. Ces données et médias sont destinés à un usage personnel/offline dans cette app sideloadée ; ne pas republier les assets générés séparément.
+
+Si l'API ExerciseDB renvoie des limites réseau pendant le build, le script supporte un fallback local :
+
+```bash
+CATALOG_FALLBACK=1 node scripts/build-exercise-catalog.mjs
+```
+
+Ce fallback garde l'app buildable hors réseau avec un catalogue offline et des GIFs placeholder. Relancer le script sans fallback remplacera les données par le catalogue ExerciseDB quand l'API est disponible.
+
+## Import / export
+
+Les paramètres permettent d'importer/exporter un JSON versionné :
+
+```json
+{
+  "version": 1,
+  "programs": []
+}
+```
+
+Pendant l'import, chaque exercice est validé par `exerciseId`, puis par nom normalisé. Les exercices inconnus sont ignorés après confirmation utilisateur ; les exercices connus sont importés avec leur nom catalogue.
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.

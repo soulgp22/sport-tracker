@@ -38,10 +38,7 @@ export default function HistoryScreen() {
   const sessions = useSessionStore((s) => s.sessions);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>Historique</Text>
-      </View>
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
       <FlatList
         data={sessions}
         keyExtractor={(s) => s.id}
@@ -63,8 +60,6 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#f9fafb' },
-  header: { paddingHorizontal: 16, paddingVertical: 12 },
-  heading: { fontSize: 28, fontWeight: '700', color: '#111827' },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
   card: {

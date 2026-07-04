@@ -1,4 +1,11 @@
 import { useProgramStore } from '../programStore';
+import { useExerciseCatalogStore } from '../exerciseCatalogStore';
+
+// Exercice réel du catalogue (pour des fixtures d'import robustes au contenu)
+const CATALOG = useExerciseCatalogStore.getState().all();
+const KNOWN = CATALOG[0];
+const ALT_BY_ID = CATALOG[1];
+const ALT_BY_NAME = CATALOG[2];
 
 beforeEach(() => {
   useProgramStore.setState({ programs: [], exercises: [] });
@@ -136,7 +143,7 @@ describe('importPrograms', () => {
             name: 'Push',
             exercises: [
               {
-                exerciseName: 'Bench Press',
+                exerciseName: KNOWN.name,
                 sets: [{ reps: 10, weight: 60, restSeconds: 90 }],
               },
             ],
@@ -148,13 +155,15 @@ describe('importPrograms', () => {
 
   it('imports a valid program', () => {
     const result = useProgramStore.getState().importPrograms(validJson());
-    expect(result.success).toBe(1);
+    expect(result.importedPrograms).toBe(1);
+    expect(result.importedExercises).toBe(1);
     expect(result.errors).toEqual([]);
+    expect(result.unknownExercises).toEqual([]);
     expect(useProgramStore.getState().programs).toHaveLength(1);
     expect(useProgramStore.getState().programs[0].name).toBe('PPL');
     expect(useProgramStore.getState().programs[0].days).toHaveLength(1);
     expect(useProgramStore.getState().programs[0].days[0].exercises).toHaveLength(1);
-    expect(useProgramStore.getState().programs[0].days[0].exercises[0].exerciseName).toBe('Bench Press');
+    expect(useProgramStore.getState().programs[0].days[0].exercises[0].exerciseName).toBe(KNOWN.name);
   });
 
   it('imports multiple programs', () => {
@@ -166,31 +175,31 @@ describe('importPrograms', () => {
       ],
     });
     const result = useProgramStore.getState().importPrograms(json);
-    expect(result.success).toBe(2);
+    expect(result.importedPrograms).toBe(2);
     expect(useProgramStore.getState().programs).toHaveLength(2);
   });
 
   it('rejects invalid JSON', () => {
     const result = useProgramStore.getState().importPrograms('not json');
-    expect(result.success).toBe(0);
+    expect(result.importedPrograms).toBe(0);
     expect(result.errors.length).toBeGreaterThan(0);
   });
 
   it('rejects missing version', () => {
     const result = useProgramStore.getState().importPrograms(JSON.stringify({ programs: [] }));
-    expect(result.success).toBe(0);
+    expect(result.importedPrograms).toBe(0);
     expect(result.errors[0]).toContain('Version');
   });
 
   it('rejects future version', () => {
     const result = useProgramStore.getState().importPrograms(JSON.stringify({ version: 99, programs: [] }));
-    expect(result.success).toBe(0);
+    expect(result.importedPrograms).toBe(0);
     expect(result.errors[0]).toContain('non supportée');
   });
 
   it('rejects empty programs array', () => {
     const result = useProgramStore.getState().importPrograms(JSON.stringify({ version: 1, programs: [] }));
-    expect(result.success).toBe(0);
+    expect(result.importedPrograms).toBe(0);
     expect(result.errors[0]).toContain('Aucun programme');
   });
 
@@ -203,7 +212,7 @@ describe('importPrograms', () => {
       ],
     });
     const result = useProgramStore.getState().importPrograms(json);
-    expect(result.success).toBe(1);
+    expect(result.importedPrograms).toBe(1);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]).toContain('nom manquant');
   });
@@ -233,19 +242,94 @@ describe('importPrograms', () => {
       ],
     });
     const result = useProgramStore.getState().importPrograms(json);
-    expect(result.success).toBe(1);
+    expect(result.importedPrograms).toBe(1);
     const program = useProgramStore.getState().programs[0];
     expect(program.days[0].name).toBe('Jour 1');
-    expect(program.days[0].exercises[0].exerciseName).toBe('Bench');
-    expect(program.days[0].exercises[0].sets[0].reps).toBe(10);
-    expect(program.days[0].exercises[0].sets[0].weight).toBe(0);
-    expect(program.days[0].exercises[0].sets[0].restSeconds).toBe(90);
+    expect(program.days[0].exercises).toHaveLength(0);
+    expect(result.unknownExercises).toEqual(['Bench']);
   });
 
   it('appends to existing programs without removing them', () => {
     useProgramStore.getState().addProgram('Existing');
     useProgramStore.getState().importPrograms(validJson());
     expect(useProgramStore.getState().programs).toHaveLength(2);
+  });
+
+  it('previews imports without mutating state', () => {
+    const result = useProgramStore.getState().importPrograms(validJson(), { commit: false });
+    expect(result.importedPrograms).toBe(1);
+    expect(result.importedExercises).toBe(1);
+    expect(useProgramStore.getState().programs).toHaveLength(0);
+  });
+
+  it('imports known exercises by catalog id and skips unknown exercises', () => {
+    const json = JSON.stringify({
+      version: 1,
+      programs: [
+        {
+          name: 'Mixed',
+          days: [
+            {
+              name: 'A',
+              exercises: [
+                {
+                  exerciseId: KNOWN.id,
+                  exerciseName: 'Ignored stale name',
+                  sets: [{ reps: 8, weight: 70, restSeconds: 120 }],
+                },
+                {
+                  exerciseName: 'Made Up Lift',
+                  sets: [{ reps: 10, weight: 10, restSeconds: 60 }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = useProgramStore.getState().importPrograms(json);
+    expect(result.importedPrograms).toBe(1);
+    expect(result.importedExercises).toBe(1);
+    expect(result.unknownExercises).toEqual(['Made Up Lift']);
+    expect(result.skipped).toBe(1);
+    const exercise = useProgramStore.getState().programs[0].days[0].exercises[0];
+    expect(exercise.exerciseId).toBe(KNOWN.id);
+    expect(exercise.exerciseName).toBe(KNOWN.name);
+  });
+
+  it('imports valid alternatives by id and name while ignoring unresolved alternatives', () => {
+    const json = JSON.stringify({
+      version: 1,
+      programs: [
+        {
+          name: 'Alternatives',
+          days: [
+            {
+              name: 'A',
+              exercises: [
+                {
+                  exerciseName: KNOWN.name,
+                  alternativeExerciseIds: [ALT_BY_ID.id, 'missing-alternative-id'],
+                  alternativeExerciseNames: [ALT_BY_NAME.name, 'Missing Alternative'],
+                  sets: [{ reps: 10, weight: 60, restSeconds: 90 }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const result = useProgramStore.getState().importPrograms(json);
+
+    expect(result.importedPrograms).toBe(1);
+    expect(result.importedExercises).toBe(1);
+    expect(result.unknownExercises).toEqual([]);
+    expect(result.skipped).toBe(0);
+    const exercise = useProgramStore.getState().programs[0].days[0].exercises[0];
+    expect(exercise.exerciseId).toBe(KNOWN.id);
+    expect(exercise.alternativeExerciseIds).toEqual([ALT_BY_ID.id, ALT_BY_NAME.id]);
   });
 });
 
