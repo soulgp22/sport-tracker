@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { colors } from '../../../constants/colors';
 
 function BackToHomeButton() {
   const router = useRouter();
@@ -23,27 +23,22 @@ function BackToHomeButton() {
   );
 }
 
-export default function TabLayout() {
+export default function CommunityLayout() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerStyle: { backgroundColor: colors.bg },
         headerTintColor: colors.textPrimary,
         headerTitleStyle: { fontWeight: '700' },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: colors.bg },
       }}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="programs" options={{ headerShown: false }} />
-      <Stack.Screen name="community" options={{ headerShown: false }} />
-      <Stack.Screen name="session" options={{ headerShown: false }} />
-      <Stack.Screen name="exercises" options={{ headerShown: false }} />
-      <Stack.Screen name="history" options={{ headerShown: false }} />
-      <Stack.Screen name="progress" options={{ headerShown: false }} />
       <Stack.Screen
-        name="settings"
+        name="index"
         options={{
-          title: 'Paramètres',
+          headerShown: true,
+          title: 'Communautaires',
           headerLeft: () => <BackToHomeButton />,
         }}
       />

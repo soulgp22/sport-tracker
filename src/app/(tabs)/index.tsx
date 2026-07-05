@@ -12,12 +12,20 @@ type IoniconsName = ComponentProps<typeof Ionicons>['name'];
 interface HomeTile {
   label: string;
   icon: IoniconsName;
-  href: '/(tabs)/programs' | '/(tabs)/session' | '/(tabs)/exercises' | '/(tabs)/history' | '/(tabs)/progress' | '/(tabs)/settings';
+  href:
+    | '/(tabs)/programs'
+    | '/(tabs)/community'
+    | '/(tabs)/session'
+    | '/(tabs)/exercises'
+    | '/(tabs)/history'
+    | '/(tabs)/progress'
+    | '/(tabs)/settings';
   key: string;
 }
 
 const HOME_TILES: HomeTile[] = [
   { key: 'programs', label: 'Programmes', icon: 'barbell-outline', href: '/(tabs)/programs' },
+  { key: 'community', label: 'Communautaires', icon: 'cloud-download-outline', href: '/(tabs)/community' },
   { key: 'session', label: 'Séance', icon: 'play-circle-outline', href: '/(tabs)/session' },
   { key: 'exercises', label: 'Exercices', icon: 'body-outline', href: '/(tabs)/exercises' },
   { key: 'history', label: 'Historique', icon: 'time-outline', href: '/(tabs)/history' },
