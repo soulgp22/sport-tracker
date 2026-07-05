@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Upper / Lower",
+      "days": [
+        {
+          "name": "Upper A",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Bench Press - Medium Grip",
+              "alternativeExerciseNames": [
+                "Dumbbell Bench Press"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Barbell Row",
+              "alternativeExerciseNames": [
+                "Seated Cable Rows"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Shoulder Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Wide-Grip Lat Pulldown",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Triceps Pushdown",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lower A",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Full Squat",
+              "alternativeExerciseNames": [
+                "Leg Press"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Romanian Deadlift",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leg Press",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Lying Leg Curls",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Upper B",
+          "exercises": [
+            {
+              "exerciseName": "Incline Dumbbell Press",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Pullups",
+              "alternativeExerciseNames": [
+                "Wide-Grip Lat Pulldown"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Side Lateral Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Bench Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lower B",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Deadlift",
+              "alternativeExerciseNames": [
+                "Romanian Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Hip Thrust",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leg Extensions",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Lying Leg Curls",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

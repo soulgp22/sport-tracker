@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "id": "full-body-3",
+      "name": "Full Body Débutant",
+      "description": "Programme corps entier 3 séances/semaine, idéal pour démarrer la muscu sur les mouvements de base.",
+      "author": "Sport Tracker",
+      "level": "Débutant",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "full-body-3.json"
+    },
+    {
+      "id": "ppl-3",
+      "name": "Push Pull Legs",
+      "description": "Le grand classique : Poussée / Tirage / Jambes. À enchaîner 3 à 6 jours/semaine selon ta récup.",
+      "author": "Sport Tracker",
+      "level": "Intermédiaire",
+      "daysCount": 3,
+      "exercisesCount": 16,
+      "file": "ppl-3.json"
+    },
+    {
+      "id": "upper-lower-4",
+      "name": "Upper / Lower",
+      "description": "Haut / Bas sur 4 séances : bon équilibre volume et récupération pour progresser en force.",
+      "author": "Sport Tracker",
+      "level": "Intermédiaire",
+      "daysCount": 4,
+      "exercisesCount": 21,
+      "file": "upper-lower-4.json"
+    }
+  ]
+}

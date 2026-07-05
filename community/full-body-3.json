@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Full Body Débutant",
+      "days": [
+        {
+          "name": "Séance A",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Full Squat",
+              "alternativeExerciseNames": [
+                "Leg Press"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Bench Press - Medium Grip",
+              "alternativeExerciseNames": [
+                "Dumbbell Bench Press"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Barbell Row",
+              "alternativeExerciseNames": [
+                "Seated Cable Rows"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Shoulder Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Séance B",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Deadlift",
+              "alternativeExerciseNames": [
+                "Romanian Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Incline Dumbbell Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Wide-Grip Lat Pulldown",
+              "alternativeExerciseNames": [
+                "Pullups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Side Lateral Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Triceps Pushdown",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Séance C",
+          "exercises": [
+            {
+              "exerciseName": "Leg Press",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Bench Press",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Chin-Up",
+              "alternativeExerciseNames": [
+                "Wide-Grip Lat Pulldown"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "Crunches",
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
