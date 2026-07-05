@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   Platform,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   View,
@@ -14,8 +15,66 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
 import { colors } from '../../constants/colors';
+import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
+
+function getAuthorizedExerciseNames() {
+  const namesByKey = new Map<string, string>();
+
+  useExerciseCatalogStore.getState().all().forEach((exercise) => {
+    const displayName = (exercise.nameFr ?? exercise.name).trim();
+    if (!displayName) return;
+
+    namesByKey.set(displayName.toLocaleLowerCase('fr-FR'), displayName);
+  });
+
+  return [...namesByKey.values()].sort((a, b) =>
+    a.localeCompare(b, 'fr', { sensitivity: 'base' })
+  );
+}
+
+function buildAiProgramPrompt() {
+  const fixedPromptLines = [
+    'Génère-moi un programme de musculation au format JSON EXACT ci-dessous, importable dans mon application.',
+    '',
+    'FORMAT (respecte-le à la lettre, réponds UNIQUEMENT le JSON, sans texte autour) :',
+    '{',
+    '  "version": 1,',
+    '  "programs": [',
+    '    {',
+    '      "name": "Nom du programme",',
+    '      "days": [',
+    '        {',
+    '          "name": "Nom de la séance (ex: Push, Jour 1)",',
+    '          "exercises": [',
+    '            {',
+    '              "exerciseName": "<nom EXACT de la liste autorisée ci-dessous>",',
+    '              "sets": [',
+    '                { "reps": 10, "weight": 0, "restSeconds": 90 }',
+    '              ],',
+    '              "alternativeExerciseNames": ["<nom exact optionnel>"]',
+    '            }',
+    '          ]',
+    '        }',
+    '      ]',
+    '    }',
+    '  ]',
+    '}',
+    '',
+    'RÈGLES :',
+    '- "exerciseName" et chaque "alternativeExerciseNames" DOIVENT être un nom EXACT de la liste autorisée ci-dessous (tout nom hors liste est ignoré à l\'import).',
+    '- "reps" = répétitions, "weight" = charge en kg (mets 0 si à définir), "restSeconds" = temps de repos en secondes.',
+    '- Mets autant d\'objets dans "sets" qu\'il y a de séries.',
+    '- "alternativeExerciseNames" est optionnel (exercices de repli si le matériel est occupé).',
+    '- N\'invente AUCUN exercice hors de la liste.',
+    '',
+    'EXERCICES AUTORISÉS :',
+  ];
+  const exerciseLines = getAuthorizedExerciseNames().map((name) => `- ${name}`);
+
+  return [...fixedPromptLines, ...exerciseLines].join('\n');
+}
 
 export default function SettingsScreen() {
   const importPrograms = useProgramStore((s) => s.importPrograms);
@@ -24,6 +83,7 @@ export default function SettingsScreen() {
   const sessionsCount = useSessionStore((s) => s.sessions.length);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const aiProgramPrompt = useMemo(buildAiProgramPrompt, []);
 
   const showImportResult = (result: ReturnType<typeof importPrograms>) => {
     if (result.errors.length > 0 && result.importedPrograms === 0) {
@@ -138,6 +198,14 @@ export default function SettingsScreen() {
     }
   };
 
+  const handleShareAiPrompt = async () => {
+    try {
+      await Share.share({ message: aiProgramPrompt });
+    } catch {
+      Alert.alert('Erreur', 'Impossible d\'ouvrir le partage du prompt.');
+    }
+  };
+
   const handleDeleteAll = () => {
     Alert.alert(
       'Tout supprimer',
@@ -189,6 +257,31 @@ export default function SettingsScreen() {
             disabled={programsCount === 0 && sessionsCount === 0}
             style={styles.actionBtn}
           />
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Générer un programme avec une IA</Text>
+          <Text style={styles.helpText}>
+            Copie ce prompt et donne-le à ChatGPT/Claude pour générer un programme, puis importe le JSON obtenu.
+          </Text>
+
+          <Button
+            title="Copier le prompt"
+            variant="secondary"
+            onPress={handleShareAiPrompt}
+            style={styles.actionBtn}
+          />
+
+          <View style={styles.promptPreview}>
+            <ScrollView
+              style={styles.promptScroll}
+              contentContainerStyle={styles.promptPreviewContent}
+              nestedScrollEnabled>
+              <Text selectable style={styles.promptText}>
+                {aiProgramPrompt}
+              </Text>
+            </ScrollView>
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -252,6 +345,21 @@ const styles = StyleSheet.create({
   },
   actionBtn: { marginTop: 4 },
   helpText: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
+  promptPreview: {
+    maxHeight: 220,
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  promptScroll: { maxHeight: 220 },
+  promptPreviewContent: { padding: 12 },
+  promptText: {
+    fontSize: 11,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    color: colors.textPrimary,
+    lineHeight: 16,
+  },
   codeBlock: {
     backgroundColor: colors.surfaceAlt,
     borderRadius: 8,
