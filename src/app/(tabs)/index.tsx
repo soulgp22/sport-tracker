@@ -16,6 +16,7 @@ interface HomeTile {
     | '/(tabs)/programs'
     | '/(tabs)/session'
     | '/(tabs)/exercises'
+    | '/(tabs)/foods'
     | '/(tabs)/history'
     | '/(tabs)/progress'
     | '/(tabs)/settings';
@@ -26,6 +27,7 @@ const HOME_TILES: HomeTile[] = [
   { key: 'programs', label: 'Programmes', icon: 'barbell-outline', href: '/(tabs)/programs' },
   { key: 'session', label: 'Séance', icon: 'play-circle-outline', href: '/(tabs)/session' },
   { key: 'exercises', label: 'Exercices', icon: 'body-outline', href: '/(tabs)/exercises' },
+  { key: 'foods', label: 'Aliments', icon: 'restaurant-outline', href: '/(tabs)/foods' },
   { key: 'history', label: 'Historique', icon: 'time-outline', href: '/(tabs)/history' },
   { key: 'progress', label: 'Progression', icon: 'trending-up-outline', href: '/(tabs)/progress' },
   { key: 'settings', label: 'Paramètres', icon: 'settings-outline', href: '/(tabs)/settings' },

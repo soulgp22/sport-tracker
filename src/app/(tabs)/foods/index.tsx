@@ -1,0 +1,137 @@
+import { useMemo, useState } from 'react';
+import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { CategoryChips } from '../../../components/foods/CategoryChips';
+import { FoodRow } from '../../../components/foods/FoodRow';
+import { Button } from '../../../components/ui/Button';
+import { EmptyState } from '../../../components/ui/EmptyState';
+import { TextInput } from '../../../components/ui/TextInput';
+import { colors } from '../../../constants/colors';
+import { useFoodStore } from '../../../store/foodStore';
+import type { Food } from '../../../types';
+
+interface FoodSection {
+  title: string;
+  data: Food[];
+}
+
+export default function FoodsScreen() {
+  const router = useRouter();
+  const searchFoods = useFoodStore((s) => s.searchFoods);
+  const getCategories = useFoodStore((s) => s.getCategories);
+  const customFoods = useFoodStore((s) => s.customFoods);
+
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('');
+
+  const categories = useMemo(() => getCategories(), [customFoods, getCategories]);
+
+  const filteredFoods = useMemo(() => {
+    const searched = searchFoods(query);
+    if (!category) return searched;
+
+    return searched.filter((food) => food.category === category);
+  }, [category, customFoods, query, searchFoods]);
+
+  const sections = useMemo<FoodSection[]>(() => {
+    const custom = filteredFoods.filter((food) => food.isCustom);
+    const defaults = filteredFoods.filter((food) => !food.isCustom);
+    const nextSections: FoodSection[] = [];
+
+    if (custom.length > 0) {
+      nextSections.push({ title: `Mes aliments (${custom.length})`, data: custom });
+    }
+
+    if (defaults.length > 0) {
+      nextSections.push({ title: `Par défaut (${defaults.length})`, data: defaults });
+    }
+
+    return nextSections;
+  }, [filteredFoods]);
+
+  const hasResults = sections.length > 0;
+
+  return (
+    <SafeAreaView style={styles.safe} edges={['bottom']}>
+      <View style={styles.wrapper}>
+        <View style={styles.searchBox}>
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Rechercher un aliment"
+            autoCapitalize="none"
+          />
+        </View>
+
+        <CategoryChips
+          categories={categories}
+          selectedCategory={category}
+          onSelect={setCategory}
+        />
+
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <FoodRow
+              food={item}
+              onPress={() =>
+                router.push({
+                  pathname: '/(tabs)/foods/[id]' as never,
+                  params: { id: item.id },
+                })
+              }
+            />
+          )}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.sectionHeader}>{section.title}</Text>
+          )}
+          ListEmptyComponent={
+            <EmptyState
+              icon="search-outline"
+              title="Aucun aliment"
+              subtitle="Essayez une autre recherche ou un autre filtre"
+            />
+          }
+          contentContainerStyle={hasResults ? styles.list : styles.empty}
+          stickySectionHeadersEnabled={false}
+          keyboardShouldPersistTaps="handled"
+        />
+
+        <View style={styles.footer}>
+          <Button
+            title="+ Ajouter un aliment"
+            variant="secondary"
+            onPress={() => router.push('/(tabs)/foods/new' as never)}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: colors.bg },
+  wrapper: { flex: 1 },
+  searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
+  list: { paddingBottom: 16 },
+  empty: { flexGrow: 1 },
+  sectionHeader: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.textSecondary,
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    backgroundColor: colors.bg,
+  },
+  footer: {
+    padding: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
+});
