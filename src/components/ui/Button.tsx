@@ -6,6 +6,8 @@ import {
   type TouchableOpacityProps,
 } from 'react-native';
 
+import { colors } from '../../constants/colors';
+
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
   variant?: 'primary' | 'secondary' | 'danger';
@@ -20,7 +22,7 @@ export function Button({ title, variant = 'primary', loading, style, disabled, .
       activeOpacity={0.7}
       {...rest}>
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' ? '#2563eb' : '#fff'} size="small" />
+        <ActivityIndicator color={variant === 'secondary' ? colors.primary : colors.primaryText} size="small" />
       ) : (
         <Text style={[styles.label, variant === 'secondary' ? styles.labelSecondary : null]}>
           {title}
@@ -39,10 +41,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 48,
   },
-  primary: { backgroundColor: '#2563eb' },
-  secondary: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: '#2563eb' },
-  danger: { backgroundColor: '#dc2626' },
+  primary: { backgroundColor: colors.primary },
+  secondary: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.primary },
+  danger: { backgroundColor: colors.danger },
   disabled: { opacity: 0.5 },
-  label: { color: '#fff', fontWeight: '600', fontSize: 16 },
-  labelSecondary: { color: '#2563eb' },
+  label: { color: colors.primaryText, fontWeight: '600', fontSize: 16 },
+  labelSecondary: { color: colors.primary },
 });

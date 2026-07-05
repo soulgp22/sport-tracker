@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { colors } from '../../constants/colors';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 
 type IoniconsName = ComponentProps<typeof Ionicons>['name'];
@@ -47,11 +48,11 @@ export default function HomeScreen() {
                 </View>
               ) : null}
               <View style={styles.iconBox}>
-                <Ionicons name={tile.icon} size={30} color="#2563eb" />
+                <Ionicons name={tile.icon} size={30} color={colors.primary} />
               </View>
               <View style={styles.tileFooter}>
                 <Text style={styles.tileLabel}>{tile.label}</Text>
-                <Ionicons name="chevron-forward" size={18} color="#6b7280" />
+                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
               </View>
             </TouchableOpacity>
           ))}
@@ -62,7 +63,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   content: {
     flex: 1,
     paddingHorizontal: 16,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.textPrimary,
     marginBottom: 24,
   },
   grid: {
@@ -84,13 +85,13 @@ const styles = StyleSheet.create({
   tile: {
     width: '48%',
     aspectRatio: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: colors.border,
     padding: 16,
     justifyContent: 'space-between',
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -113,13 +114,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.textPrimary,
   },
   badge: {
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -127,6 +128,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.primaryText,
   },
 });

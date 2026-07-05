@@ -2,7 +2,11 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 import type { Program, Exercise, ProgramDay, ProgramExercise, ImportResult } from '../types';
-import { findCatalogExerciseByName, getCatalogExercise } from './exerciseCatalogStore';
+import {
+  findCatalogExerciseByName,
+  getCatalogExercise,
+  getCatalogExerciseName,
+} from './exerciseCatalogStore';
 
 const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
@@ -298,7 +302,7 @@ export const useProgramStore = create<ProgramState>()(
               exercises.push({
                 id: uid(),
                 exerciseId: catalogExercise.id,
-                exerciseName: catalogExercise.name,
+                exerciseName: getCatalogExerciseName(catalogExercise.id, catalogExercise.name),
                 ...(alternativeExerciseIds.size > 0
                   ? { alternativeExerciseIds: [...alternativeExerciseIds] }
                   : {}),

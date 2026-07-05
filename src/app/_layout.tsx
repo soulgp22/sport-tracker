@@ -1,11 +1,35 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { useEffect } from 'react';
+import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+
+import { colors } from '../constants/colors';
+import { configureNotifications, requestNotificationPermission } from '../lib/restTimerNotifications';
+
+const navigationTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: colors.primary,
+    background: colors.bg,
+    card: colors.bg,
+    text: colors.textPrimary,
+    border: colors.border,
+    notification: colors.secondary,
+  },
+};
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    void (async () => {
+      await configureNotifications();
+      await requestNotificationPermission();
+    })();
+  }, []);
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={navigationTheme}>
       <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style="light" />
     </ThemeProvider>
   );
 }

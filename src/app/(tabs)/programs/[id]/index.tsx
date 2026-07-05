@@ -3,7 +3,6 @@ import {
   Alert,
   FlatList,
   KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,6 +16,8 @@ import { useProgramStore } from '../../../../store/programStore';
 import { Button } from '../../../../components/ui/Button';
 import { TextInput } from '../../../../components/ui/TextInput';
 import { EmptyState } from '../../../../components/ui/EmptyState';
+import { colors } from '../../../../constants/colors';
+import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../constants/keyboard';
 import type { ProgramDay } from '../../../../types';
 
 function DayRow({
@@ -37,9 +38,9 @@ function DayRow({
         </Text>
       </View>
       <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.deleteBtn}>
-        <Ionicons name="trash-outline" size={18} color="#ef4444" />
+        <Ionicons name="trash-outline" size={18} color={colors.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={16} color="#9ca3af" />
+      <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -88,11 +89,14 @@ export default function ProgramDetailScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoiding}
+        behavior={keyboardAvoidingBehavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-            <Ionicons name="arrow-back" size={24} color="#111827" />
+            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
           {editingName ? (
             <TextInput
@@ -107,7 +111,7 @@ export default function ProgramDetailScreen() {
           ) : (
             <TouchableOpacity onPress={() => { setNameValue(program.name); setEditingName(true); }} style={styles.nameBtn}>
               <Text style={styles.heading} numberOfLines={1}>{program.name}</Text>
-              <Ionicons name="pencil-outline" size={16} color="#6b7280" />
+              <Ionicons name="pencil-outline" size={16} color={colors.textSecondary} />
             </TouchableOpacity>
           )}
           <View style={{ width: 24 }} />
@@ -168,7 +172,8 @@ export default function ProgramDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
+  keyboardAvoiding: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -178,28 +183,28 @@ const styles = StyleSheet.create({
   },
   nameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   nameInput: { flex: 1 },
-  heading: { fontSize: 20, fontWeight: '700', color: '#111827', flex: 1 },
-  sectionLabel: { fontSize: 13, fontWeight: '600', color: '#6b7280', paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
+  heading: { fontSize: 20, fontWeight: '700', color: colors.textPrimary, flex: 1 },
+  sectionLabel: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 10,
     padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   dayBody: { flex: 1, gap: 2 },
-  dayName: { fontSize: 16, fontWeight: '600', color: '#111827' },
-  dayMeta: { fontSize: 13, color: '#6b7280' },
+  dayName: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
+  dayMeta: { fontSize: 13, color: colors.textSecondary },
   deleteBtn: { paddingHorizontal: 8 },
   list: { paddingBottom: 16 },
   emptyContainer: { flex: 1 },
-  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#e5e7eb' },
+  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   addDayForm: { gap: 10 },
   addDayInput: {},
   addDayBtns: { flexDirection: 'row', gap: 8 },

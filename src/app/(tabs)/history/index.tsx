@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { colors } from '../../../constants/colors';
 import type { Session } from '../../../types';
 
 function fmt(secs: number) {
@@ -28,7 +29,7 @@ function SessionCard({ session, onPress }: { session: Session; onPress: () => vo
           {session.exercises.length} exercice{session.exercises.length !== 1 ? 's' : ''} · {totalSets} série{totalSets !== 1 ? 's' : ''} · {fmt(session.durationSeconds)}
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={18} color="#9ca3af" />
+      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -59,25 +60,25 @@ export default function HistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 5,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   cardLeft: { flex: 1, gap: 2 },
-  cardDate: { fontSize: 12, color: '#9ca3af', textTransform: 'capitalize' },
-  cardTitle: { fontSize: 17, fontWeight: '700', color: '#111827' },
-  cardSub: { fontSize: 14, color: '#2563eb', fontWeight: '500' },
-  cardMeta: { fontSize: 13, color: '#6b7280', marginTop: 2 },
+  cardDate: { fontSize: 12, color: colors.textMuted, textTransform: 'capitalize' },
+  cardTitle: { fontSize: 17, fontWeight: '700', color: colors.textPrimary },
+  cardSub: { fontSize: 14, color: colors.primary, fontWeight: '500' },
+  cardMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
 });

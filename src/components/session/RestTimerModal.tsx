@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
+import { colors } from '../../constants/colors';
 
 interface RestTimerModalProps {
   visible: boolean;
@@ -39,7 +40,7 @@ export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
     <Modal visible={visible} transparent animationType="fade" onRequestClose={skip}>
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <Ionicons name="timer-outline" size={36} color="#2563eb" />
+          <Ionicons name="timer-outline" size={36} color={colors.primary} />
           <Text style={styles.label}>Repos</Text>
           <Text style={styles.timer}>
             {pad(mins)}:{pad(secs)}
@@ -56,26 +57,26 @@ export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: colors.overlay,
     alignItems: 'center',
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 40,
     alignItems: 'center',
     gap: 12,
     width: 260,
   },
-  label: { fontSize: 16, color: '#6b7280', fontWeight: '500' },
-  timer: { fontSize: 56, fontWeight: '700', color: '#111827', letterSpacing: -1 },
+  label: { fontSize: 16, color: colors.textSecondary, fontWeight: '500' },
+  timer: { fontSize: 56, fontWeight: '700', color: colors.textPrimary, letterSpacing: -1 },
   skipBtn: {
     marginTop: 8,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.surfaceAlt,
     paddingVertical: 10,
     paddingHorizontal: 28,
     borderRadius: 10,
   },
-  skipLabel: { fontSize: 16, fontWeight: '600', color: '#374151' },
+  skipLabel: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
 });

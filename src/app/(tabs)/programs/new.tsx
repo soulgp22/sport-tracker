@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useProgramStore } from '../../../store/programStore';
 import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
+import { colors } from '../../../constants/colors';
+import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 
 export default function NewProgramScreen() {
   const router = useRouter();
@@ -27,15 +29,16 @@ export default function NewProgramScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Nouveau programme</Text>
         <View style={{ width: 24 }} />
       </View>
 
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        style={styles.keyboardAvoiding}
+        behavior={keyboardAvoidingBehavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}>
         <ScrollView contentContainerStyle={styles.content}>
           <TextInput
             label="Nom du programme"
@@ -56,7 +59,8 @@ export default function NewProgramScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
+  keyboardAvoiding: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: '#111827' },
+  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
   content: { padding: 16, gap: 24 },
   btn: { marginTop: 8 },
 });

@@ -3,9 +3,15 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
+import {
+  getExerciseDisplayName,
+  translateEquipment,
+  translateMuscle,
+} from '../../constants/exerciseI18n';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { TextInput } from '../ui/TextInput';
 import { EmptyState } from '../ui/EmptyState';
+import { colors } from '../../constants/colors';
 import type { CatalogExercise } from '../../types';
 
 interface ExerciseCatalogListProps {
@@ -22,6 +28,8 @@ function ExerciseRow({
   selected: boolean;
   onPress: () => void;
 }) {
+  const displayName = getExerciseDisplayName(exercise);
+
   return (
     <TouchableOpacity
       style={[styles.card, selected && styles.cardSelected]}
@@ -31,15 +39,15 @@ function ExerciseRow({
         id={exercise.id}
         style={styles.thumb}
         animate={false}
-        accessibilityLabel={exercise.name}
+        accessibilityLabel={displayName}
       />
       <View style={styles.cardBody}>
-        <Text style={styles.name} numberOfLines={2}>{exercise.name}</Text>
+        <Text style={styles.name} numberOfLines={2}>{displayName}</Text>
         <Text style={styles.meta} numberOfLines={1}>
-          {exercise.target} · {exercise.equipment}
+          {translateMuscle(exercise.target)} · {translateEquipment(exercise.equipment)}
         </Text>
       </View>
-      {selected ? <Ionicons name="checkmark-circle" size={22} color="#2563eb" /> : null}
+      {selected ? <Ionicons name="checkmark-circle" size={22} color={colors.primary} /> : null}
     </TouchableOpacity>
   );
 }
@@ -82,7 +90,7 @@ export function ExerciseCatalogList({ onSelect, selectedId }: ExerciseCatalogLis
               onPress={() => setBodyPart(item)}
               activeOpacity={0.75}>
               <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                {item || 'Tous'}
+                {item ? translateMuscle(item) : 'Tous'}
               </Text>
             </TouchableOpacity>
           );
@@ -123,28 +131,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 17,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.surfaceAlt,
   },
-  chipSelected: { backgroundColor: '#2563eb' },
-  chipText: { fontSize: 13, fontWeight: '600', color: '#374151', textTransform: 'capitalize' },
-  chipTextSelected: { color: '#fff' },
+  chipSelected: { backgroundColor: colors.primary },
+  chipText: { fontSize: 13, fontWeight: '600', color: colors.textPrimary },
+  chipTextSelected: { color: colors.primaryText },
   list: { paddingHorizontal: 16, paddingBottom: 24, gap: 8 },
   empty: { flexGrow: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 10,
     padding: 10,
     gap: 10,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  cardSelected: { borderWidth: 2, borderColor: '#2563eb' },
-  thumb: { width: 58, height: 58, borderRadius: 8, backgroundColor: '#f3f4f6' },
+  cardSelected: { borderWidth: 2, borderColor: colors.primary },
+  thumb: { width: 58, height: 58, borderRadius: 8, backgroundColor: colors.surfaceAlt },
   cardBody: { flex: 1, gap: 3 },
-  name: { fontSize: 15, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
-  meta: { fontSize: 12, color: '#6b7280', textTransform: 'capitalize' },
+  name: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
+  meta: { fontSize: 12, color: colors.textSecondary },
 });

@@ -4,7 +4,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,6 +21,13 @@ import { ExerciseCatalogList } from '../../../../../components/exercises/Exercis
 import { ExerciseThumbnail } from '../../../../../components/exercises/ExerciseThumbnail';
 import { ExerciseDetailView } from '../../../../../components/exercises/ExerciseDetailView';
 import { useExerciseCatalogStore } from '../../../../../store/exerciseCatalogStore';
+import {
+  getExerciseDisplayName,
+  translateEquipment,
+  translateMuscle,
+} from '../../../../../constants/exerciseI18n';
+import { colors } from '../../../../../constants/colors';
+import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../../constants/keyboard';
 import type { CatalogExercise, ProgramExercise, ProgramSet } from '../../../../../types';
 
 const DEFAULT_SET: ProgramSet = { reps: 10, weight: 0, restSeconds: 90 };
@@ -68,7 +74,7 @@ function SetRow({
         />
       </View>
       <TouchableOpacity onPress={onDelete} hitSlop={8}>
-        <Ionicons name="close-circle" size={20} color="#ef4444" />
+        <Ionicons name="close-circle" size={20} color={colors.danger} />
       </TouchableOpacity>
     </View>
   );
@@ -92,6 +98,9 @@ function ExerciseCard({
   const getCatalogExercise = useExerciseCatalogStore((s) => s.getById);
   const catalogExercise = getCatalogExercise(exercise.exerciseId);
   const alternativeExerciseIds = exercise.alternativeExerciseIds ?? [];
+  const exerciseName = catalogExercise
+    ? getExerciseDisplayName(catalogExercise)
+    : exercise.exerciseName;
 
   const updateSet = (setIndex: number, patch: Partial<ProgramSet>) => {
     const sets = exercise.sets.map((s, i) => (i === setIndex ? { ...s, ...patch } : s));
@@ -124,24 +133,24 @@ function ExerciseCard({
           {catalogExercise ? <ExerciseThumbnail id={catalogExercise.id} size={44} /> : null}
           <View style={styles.exercisePickerBody}>
             <Text style={styles.exercisePickerName} numberOfLines={1}>
-              {catalogExercise?.name ?? exercise.exerciseName ?? 'Choisir un exercice'}
+              {exerciseName ?? 'Choisir un exercice'}
             </Text>
             <Text style={styles.exercisePickerMeta} numberOfLines={1}>
               {catalogExercise
-                ? `${catalogExercise.target} · ${catalogExercise.equipment}`
+                ? `${translateMuscle(catalogExercise.target)} · ${translateEquipment(catalogExercise.equipment)}`
                 : 'Appuyer pour choisir'}
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={18} color="#9ca3af" />
+          <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
         </TouchableOpacity>
         <TouchableOpacity onPress={onDelete} hitSlop={8}>
-          <Ionicons name="trash-outline" size={20} color="#ef4444" />
+          <Ionicons name="trash-outline" size={20} color={colors.danger} />
         </TouchableOpacity>
       </View>
 
       {catalogExercise ? (
         <TouchableOpacity style={styles.changeBtn} onPress={onSelectExercise} activeOpacity={0.7}>
-          <Ionicons name="swap-horizontal" size={15} color="#2563eb" />
+          <Ionicons name="swap-horizontal" size={15} color={colors.primary} />
           <Text style={styles.changeLabel}>Changer l&apos;exercice</Text>
         </TouchableOpacity>
       ) : null}
@@ -154,16 +163,16 @@ function ExerciseCard({
             return (
               <View key={alternativeId} style={styles.alternativeChip}>
                 <Text style={styles.alternativeChipText} numberOfLines={1}>
-                  {alternative?.name ?? 'Exercice inconnu'}
+                  {alternative ? getExerciseDisplayName(alternative) : 'Exercice inconnu'}
                 </Text>
                 <TouchableOpacity onPress={() => removeAlternative(alternativeId)} hitSlop={8}>
-                  <Ionicons name="close" size={14} color="#2563eb" />
+                  <Ionicons name="close" size={14} color={colors.primary} />
                 </TouchableOpacity>
               </View>
             );
           })}
           <TouchableOpacity style={styles.addAlternativeBtn} onPress={onAddAlternative}>
-            <Ionicons name="add" size={15} color="#2563eb" />
+            <Ionicons name="add" size={15} color={colors.primary} />
             <Text style={styles.addAlternativeLabel}>Ajouter une alternative</Text>
           </TouchableOpacity>
         </View>
@@ -180,7 +189,7 @@ function ExerciseCard({
       ))}
 
       <TouchableOpacity style={styles.addSetBtn} onPress={addSet}>
-        <Ionicons name="add" size={16} color="#2563eb" />
+        <Ionicons name="add" size={16} color={colors.primary} />
         <Text style={styles.addSetLabel}>Ajouter une série</Text>
       </TouchableOpacity>
     </View>
@@ -260,7 +269,7 @@ export default function DayEditScreen() {
       const currentAlternatives = targetExercise?.alternativeExerciseIds ?? [];
       updateExerciseInDay(id, dayId, editingExerciseId, {
         exerciseId: catalogExercise.id,
-        exerciseName: catalogExercise.name,
+        exerciseName: getExerciseDisplayName(catalogExercise),
         ...(currentAlternatives.length > 0
           ? { alternativeExerciseIds: currentAlternatives.filter((alternativeId) => alternativeId !== catalogExercise.id) }
           : {}),
@@ -268,7 +277,7 @@ export default function DayEditScreen() {
     } else {
       addExerciseToDay(id, dayId, {
         exerciseId: catalogExercise.id,
-        exerciseName: catalogExercise.name,
+        exerciseName: getExerciseDisplayName(catalogExercise),
         sets: [{ ...DEFAULT_SET }],
       });
     }
@@ -284,10 +293,13 @@ export default function DayEditScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoiding}
+        behavior={keyboardAvoidingBehavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-            <Ionicons name="arrow-back" size={24} color="#111827" />
+            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
           {editingDayName ? (
             <TextInput
@@ -304,7 +316,7 @@ export default function DayEditScreen() {
               onPress={() => { setDayNameValue(day.name); setEditingDayName(true); }}
               style={styles.dayNameBtn}>
               <Text style={styles.heading} numberOfLines={1}>{day.name}</Text>
-              <Ionicons name="pencil-outline" size={15} color="#6b7280" />
+              <Ionicons name="pencil-outline" size={15} color={colors.textSecondary} />
             </TouchableOpacity>
           )}
           <View style={{ width: 24 }} />
@@ -342,7 +354,7 @@ export default function DayEditScreen() {
           <SafeAreaView style={styles.selectorSafe} edges={['top', 'bottom']}>
             <View style={styles.selectorHeader}>
               <TouchableOpacity onPress={closeSelector} hitSlop={8}>
-                <Ionicons name="close" size={24} color="#111827" />
+                <Ionicons name="close" size={24} color={colors.textPrimary} />
               </TouchableOpacity>
               <Text style={styles.selectorTitle}>
                 {alternativesTargetId ? 'Ajouter une alternative' : 'Choisir un exercice'}
@@ -371,7 +383,8 @@ export default function DayEditScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
+  keyboardAvoiding: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -381,18 +394,18 @@ const styles = StyleSheet.create({
   },
   dayNameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   dayNameInput: { flex: 1 },
-  heading: { fontSize: 20, fontWeight: '700', color: '#111827', flex: 1 },
+  heading: { fontSize: 20, fontWeight: '700', color: colors.textPrimary, flex: 1 },
   list: { paddingBottom: 16 },
   emptyContainer: { flex: 1 },
-  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: '#e5e7eb' },
+  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   exerciseCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     marginHorizontal: 16,
     marginVertical: 6,
     padding: 14,
     gap: 8,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
@@ -404,18 +417,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     borderWidth: 1.5,
-    borderColor: '#d1d5db',
+    borderColor: colors.border,
     borderRadius: 10,
     padding: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceAlt,
   },
   exercisePickerBody: { flex: 1, gap: 2 },
-  exercisePickerName: { fontSize: 15, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
-  exercisePickerMeta: { fontSize: 12, color: '#6b7280', textTransform: 'capitalize' },
+  exercisePickerName: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
+  exercisePickerMeta: { fontSize: 12, color: colors.textSecondary },
   changeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', paddingVertical: 2 },
-  changeLabel: { color: '#2563eb', fontSize: 13, fontWeight: '600' },
+  changeLabel: { color: colors.primary, fontSize: 13, fontWeight: '600' },
   alternativesBlock: { gap: 6, paddingVertical: 2 },
-  alternativesTitle: { fontSize: 11, fontWeight: '700', color: '#6b7280', textTransform: 'uppercase' },
+  alternativesTitle: { fontSize: 11, fontWeight: '700', color: colors.textSecondary, textTransform: 'uppercase' },
   alternativesRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
   alternativeChip: {
     maxWidth: '100%',
@@ -425,9 +438,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.accentSoft,
   },
-  alternativeChipText: { color: '#1d4ed8', fontSize: 12, fontWeight: '600', textTransform: 'capitalize' },
+  alternativeChipText: { color: colors.primary, fontSize: 12, fontWeight: '600' },
   addAlternativeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -435,11 +448,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 2,
   },
-  addAlternativeLabel: { color: '#2563eb', fontSize: 12, fontWeight: '600' },
+  addAlternativeLabel: { color: colors.primary, fontSize: 12, fontWeight: '600' },
   setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  setIndex: { fontSize: 13, fontWeight: '600', color: '#6b7280', width: 22 },
+  setIndex: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, width: 22 },
   setField: { flex: 1, gap: 2 },
-  setFieldLabel: { fontSize: 10, color: '#9ca3af', textTransform: 'uppercase' },
+  setFieldLabel: { fontSize: 10, color: colors.textMuted, textTransform: 'uppercase' },
   setInput: { paddingVertical: 6, paddingHorizontal: 8, minHeight: 36, fontSize: 14 },
   addSetBtn: {
     flexDirection: 'row',
@@ -448,8 +461,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     alignSelf: 'flex-start',
   },
-  addSetLabel: { color: '#2563eb', fontSize: 14, fontWeight: '500' },
-  selectorSafe: { flex: 1, backgroundColor: '#f9fafb' },
+  addSetLabel: { color: colors.primary, fontSize: 14, fontWeight: '500' },
+  selectorSafe: { flex: 1, backgroundColor: colors.bg },
   selectorHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -457,5 +470,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  selectorTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: '#111827', textAlign: 'center' },
+  selectorTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary, textAlign: 'center' },
 });

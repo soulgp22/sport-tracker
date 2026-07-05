@@ -163,7 +163,7 @@ describe('importPrograms', () => {
     expect(useProgramStore.getState().programs[0].name).toBe('PPL');
     expect(useProgramStore.getState().programs[0].days).toHaveLength(1);
     expect(useProgramStore.getState().programs[0].days[0].exercises).toHaveLength(1);
-    expect(useProgramStore.getState().programs[0].days[0].exercises[0].exerciseName).toBe(KNOWN.name);
+    expect(useProgramStore.getState().programs[0].days[0].exercises[0].exerciseName).toBe(KNOWN.nameFr ?? KNOWN.name);
   });
 
   it('imports multiple programs', () => {
@@ -295,7 +295,7 @@ describe('importPrograms', () => {
     expect(result.skipped).toBe(1);
     const exercise = useProgramStore.getState().programs[0].days[0].exercises[0];
     expect(exercise.exerciseId).toBe(KNOWN.id);
-    expect(exercise.exerciseName).toBe(KNOWN.name);
+    expect(exercise.exerciseName).toBe(KNOWN.nameFr ?? KNOWN.name);
   });
 
   it('imports valid alternatives by id and name while ignoring unresolved alternatives', () => {

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
+import { colors } from '../../constants/colors';
 
 interface WeightChartProps {
   data: DataPoint[];
@@ -24,18 +25,18 @@ export function WeightChart({ data }: WeightChartProps) {
         data={chartData}
         height={180}
         spacing={52}
-        color="#2563eb"
+        color={colors.primary}
         thickness={2}
-        dataPointsColor="#2563eb"
+        dataPointsColor={colors.primary}
         dataPointsRadius={4}
-        startFillColor="#2563eb"
+        startFillColor={colors.primary}
         startOpacity={0.2}
         endOpacity={0.02}
         areaChart
         hideRules={false}
-        rulesColor="#f3f4f6"
+        rulesColor={colors.border}
         yAxisColor="transparent"
-        xAxisColor="#e5e7eb"
+        xAxisColor={colors.border}
         yAxisTextStyle={styles.axisLabel}
         xAxisLabelTextStyle={styles.axisLabel}
         hideYAxisText={false}
@@ -47,8 +48,8 @@ export function WeightChart({ data }: WeightChartProps) {
 
 const styles = StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: '#374151' },
+  title: { fontSize: 14, fontWeight: '600', color: colors.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
-  emptyText: { color: '#9ca3af', fontSize: 13 },
-  axisLabel: { fontSize: 10, color: '#9ca3af' },
+  emptyText: { color: colors.textMuted, fontSize: 13 },
+  axisLabel: { fontSize: 10, color: colors.textSecondary },
 });

@@ -7,6 +7,7 @@ import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
 import { getCatalogExerciseName } from '../../../store/exerciseCatalogStore';
+import { colors } from '../../../constants/colors';
 
 function fmt(secs: number) {
   const m = Math.floor(secs / 60);
@@ -48,13 +49,13 @@ export default function SessionDetailScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
           {session.programName ?? 'Séance libre'}
         </Text>
         <TouchableOpacity onPress={handleDelete} hitSlop={8}>
-          <Ionicons name="trash-outline" size={22} color="#ef4444" />
+          <Ionicons name="trash-outline" size={22} color={colors.danger} />
         </TouchableOpacity>
       </View>
 
@@ -101,7 +102,7 @@ export default function SessionDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -109,32 +110,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: '#111827' },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary },
   content: { padding: 16, gap: 12 },
   metaCard: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.accentSoft,
     borderRadius: 12,
     padding: 16,
     gap: 4,
   },
-  metaDate: { fontSize: 15, fontWeight: '600', color: '#1d4ed8', textTransform: 'capitalize' },
-  metaDay: { fontSize: 14, color: '#2563eb' },
-  metaDuration: { fontSize: 13, color: '#3b82f6', marginTop: 4 },
+  metaDate: { fontSize: 15, fontWeight: '600', color: colors.primary, textTransform: 'capitalize' },
+  metaDay: { fontSize: 14, color: colors.primary },
+  metaDuration: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
   exCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 14,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   exHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
-  exName: { flex: 1, fontSize: 16, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
-  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#e5e7eb', paddingBottom: 6, marginBottom: 4 },
+  exName: { flex: 1, fontSize: 16, fontWeight: '700', color: colors.textPrimary },
+  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.border, paddingBottom: 6, marginBottom: 4 },
   tableRow: { flexDirection: 'row', paddingVertical: 5 },
-  tableRowAlt: { backgroundColor: '#f9fafb' },
-  tableCell: { flex: 1, fontSize: 14, color: '#374151', textAlign: 'center' },
-  tableCellSm: { flex: 0.5, color: '#6b7280' },
-  noSets: { fontSize: 13, color: '#9ca3af', fontStyle: 'italic' },
+  tableRowAlt: { backgroundColor: colors.surfaceAlt },
+  tableCell: { flex: 1, fontSize: 14, color: colors.textPrimary, textAlign: 'center' },
+  tableCellSm: { flex: 0.5, color: colors.textSecondary },
+  noSets: { fontSize: 13, color: colors.textMuted, fontStyle: 'italic' },
 });

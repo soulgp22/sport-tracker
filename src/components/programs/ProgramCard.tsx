@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { Program } from '../../types';
+import { colors } from '../../constants/colors';
 
 interface ProgramCardProps {
   program: Program;
@@ -20,9 +21,9 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
         </Text>
       </View>
       <TouchableOpacity style={styles.deleteBtn} onPress={onDelete} hitSlop={8}>
-        <Ionicons name="trash-outline" size={20} color="#ef4444" />
+        <Ionicons name="trash-outline" size={20} color={colors.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={18} color="#9ca3af" />
+      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -31,19 +32,19 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 6,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   body: { flex: 1, gap: 4 },
-  name: { fontSize: 17, fontWeight: '600', color: '#111827' },
-  meta: { fontSize: 13, color: '#6b7280' },
+  name: { fontSize: 17, fontWeight: '600', color: colors.textPrimary },
+  meta: { fontSize: 13, color: colors.textSecondary },
   deleteBtn: { paddingHorizontal: 8 },
 });

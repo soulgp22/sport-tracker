@@ -13,6 +13,7 @@ export interface CatalogExercise {
   secondaryMuscles: string[];
   equipment: string;
   instructions: string[];
+  instructionsFr?: string[];
   gif: { a: string; b: string };
 }
 

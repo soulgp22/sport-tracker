@@ -6,6 +6,7 @@ import { useProgressData, useExercisesWithHistory } from '../../../hooks/useProg
 import { WeightChart } from '../../../components/progress/WeightChart';
 import { VolumeChart } from '../../../components/progress/VolumeChart';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { colors } from '../../../constants/colors';
 
 export default function ProgressScreen() {
   const exercises = useExercisesWithHistory();
@@ -67,7 +68,7 @@ export default function ProgressScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   selectorScroll: { flexGrow: 0, flexShrink: 0 },
   selectorRow: { paddingHorizontal: 16, paddingBottom: 8, gap: 8, alignItems: 'center' },
   chip: {
@@ -75,21 +76,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 17,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.surfaceAlt,
   },
-  chipSelected: { backgroundColor: '#2563eb' },
-  chipText: { fontSize: 14, fontWeight: '500', color: '#374151' },
-  chipTextSelected: { color: '#fff' },
+  chipSelected: { backgroundColor: colors.primary },
+  chipText: { fontSize: 14, fontWeight: '500', color: colors.textPrimary },
+  chipTextSelected: { color: colors.primaryText },
   content: { padding: 16, gap: 16, paddingBottom: 32 },
   chartCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 6,
     elevation: 2,
     overflow: 'hidden',
   },
-  hint: { fontSize: 13, color: '#9ca3af', textAlign: 'center' },
+  hint: { fontSize: 13, color: colors.textMuted, textAlign: 'center' },
 });

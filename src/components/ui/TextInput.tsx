@@ -6,6 +6,8 @@ import {
   type TextInputProps as RNTextInputProps,
 } from 'react-native';
 
+import { colors } from '../../constants/colors';
+
 interface TextInputProps extends RNTextInputProps {
   label?: string;
   error?: string;
@@ -17,7 +19,7 @@ export function TextInput({ label, error, style, ...rest }: TextInputProps) {
       {label ? <Text style={styles.label}>{label}</Text> : null}
       <RNTextInput
         style={[styles.input, error ? styles.inputError : null, style]}
-        placeholderTextColor="#9ca3af"
+        placeholderTextColor={colors.textMuted}
         {...rest}
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -27,18 +29,18 @@ export function TextInput({ label, error, style, ...rest }: TextInputProps) {
 
 const styles = StyleSheet.create({
   wrapper: { gap: 4 },
-  label: { fontSize: 14, fontWeight: '500', color: '#374151' },
+  label: { fontSize: 14, fontWeight: '500', color: colors.textPrimary },
   input: {
     borderWidth: 1.5,
-    borderColor: '#d1d5db',
+    borderColor: colors.border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    color: '#111827',
-    backgroundColor: '#fff',
+    color: colors.textPrimary,
+    backgroundColor: colors.surfaceAlt,
     minHeight: 44,
   },
-  inputError: { borderColor: '#dc2626' },
-  error: { fontSize: 12, color: '#dc2626' },
+  inputError: { borderColor: colors.danger },
+  error: { fontSize: 12, color: colors.danger },
 });

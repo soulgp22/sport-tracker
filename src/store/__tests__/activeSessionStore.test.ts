@@ -165,7 +165,7 @@ describe('swapExercise', () => {
 
     const exercise = useActiveSessionStore.getState().active!.exercises[0];
     expect(exercise.exerciseId).toBe(SWAP_TO_WITH_HISTORY.id);
-    expect(exercise.exerciseName).toBe(SWAP_TO_WITH_HISTORY.name);
+    expect(exercise.exerciseName).toBe(SWAP_TO_WITH_HISTORY.nameFr ?? SWAP_TO_WITH_HISTORY.name);
     expect(exercise.alternativeExerciseIds).toEqual([
       SWAP_TO_WITH_HISTORY.id,
       SWAP_TO_WITHOUT_HISTORY.id,

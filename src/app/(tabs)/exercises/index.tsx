@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ExerciseCatalogList } from '../../../components/exercises/ExerciseCatalogList';
+import { colors } from '../../../constants/colors';
 
 export default function ExercisesScreen() {
   const router = useRouter();
@@ -19,5 +20,5 @@ export default function ExercisesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
 });

@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { colors } from '../../constants/colors';
+
 interface EmptyStateProps {
   icon?: React.ComponentProps<typeof Ionicons>['name'];
   title: string;
@@ -10,7 +12,7 @@ interface EmptyStateProps {
 export function EmptyState({ icon = 'archive-outline', title, subtitle }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      <Ionicons name={icon} size={48} color="#9ca3af" />
+      <Ionicons name={icon} size={48} color={colors.textMuted} />
       <Text style={styles.title}>{title}</Text>
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     </View>
@@ -19,6 +21,6 @@ export function EmptyState({ icon = 'archive-outline', title, subtitle }: EmptyS
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
-  title: { fontSize: 18, fontWeight: '600', color: '#374151', textAlign: 'center' },
-  subtitle: { fontSize: 14, color: '#6b7280', textAlign: 'center' },
+  title: { fontSize: 18, fontWeight: '600', color: colors.textPrimary, textAlign: 'center' },
+  subtitle: { fontSize: 14, color: colors.textSecondary, textAlign: 'center' },
 });

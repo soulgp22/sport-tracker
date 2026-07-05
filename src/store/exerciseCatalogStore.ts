@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import { getExerciseDisplayName } from '../constants/exerciseI18n';
 import catalogJson from '../data/exercises.catalog.json';
 import type { CatalogExercise } from '../types';
 
@@ -16,7 +17,11 @@ function normalize(value: string) {
 }
 
 const byId = new Map(catalog.map((exercise) => [exercise.id, exercise]));
-const byName = new Map(catalog.map((exercise) => [normalize(exercise.name), exercise]));
+const byName = new Map<string, CatalogExercise>();
+for (const exercise of catalog) {
+  byName.set(normalize(exercise.name), exercise);
+  if (exercise.nameFr) byName.set(normalize(exercise.nameFr), exercise);
+}
 const bodyParts = [...new Set(catalog.map((exercise) => exercise.bodyPart))].sort();
 const equipments = [...new Set(catalog.map((exercise) => exercise.equipment))].sort();
 
@@ -72,7 +77,8 @@ export function findCatalogExerciseByName(name: string) {
 }
 
 export function getCatalogExerciseName(id: string, fallback = 'Exercice') {
-  return byId.get(id)?.name ?? fallback;
+  const exercise = byId.get(id);
+  return exercise ? getExerciseDisplayName(exercise) : fallback;
 }
 
 export function normalizeExerciseName(name: string) {

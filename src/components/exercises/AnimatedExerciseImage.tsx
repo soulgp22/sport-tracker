@@ -10,6 +10,7 @@ import {
 import { Image } from 'expo-image';
 
 import { exerciseGifs } from '../../data/exercises.gifs';
+import { colors } from '../../constants/colors';
 
 interface AnimatedExerciseImageProps {
   id: string;
@@ -100,5 +101,5 @@ export function AnimatedExerciseImage({
 }
 
 const styles = StyleSheet.create({
-  image: { borderRadius: 8, backgroundColor: '#f3f4f6', overflow: 'hidden' },
+  image: { borderRadius: 8, backgroundColor: colors.surfaceAlt, overflow: 'hidden' },
 });

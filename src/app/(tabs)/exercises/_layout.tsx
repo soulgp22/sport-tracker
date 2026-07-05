@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
+import { colors } from '../../../constants/colors';
+
 function BackToHomeButton() {
   const router = useRouter();
 
@@ -16,7 +18,7 @@ function BackToHomeButton() {
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color="#111827" />
+      <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
     </TouchableOpacity>
   );
 }
@@ -26,11 +28,11 @@ export default function ExercisesLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: '#f9fafb' },
-        headerTintColor: '#111827',
+        headerStyle: { backgroundColor: colors.bg },
+        headerTintColor: colors.textPrimary,
         headerTitleStyle: { fontWeight: '700' },
         headerShadowVisible: false,
-        contentStyle: { backgroundColor: '#f9fafb' },
+        contentStyle: { backgroundColor: colors.bg },
       }}>
       <Stack.Screen
         name="index"

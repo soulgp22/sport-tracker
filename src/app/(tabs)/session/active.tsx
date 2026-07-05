@@ -3,7 +3,6 @@ import {
   Alert,
   KeyboardAvoidingView,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +22,13 @@ import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbna
 import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useExerciseCatalogStore } from '../../../store/exerciseCatalogStore';
+import {
+  getExerciseDisplayName,
+  translateEquipment,
+  translateMuscle,
+} from '../../../constants/exerciseI18n';
+import { colors } from '../../../constants/colors';
+import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import type { LoggedSet, SessionExercise } from '../../../types';
 
 function fmt(secs: number) {
@@ -48,6 +54,10 @@ function SessionLogBar({
   const [weight, setWeight] = useState(() =>
     String(loggedSet.completed ? loggedSet.actualWeight : loggedSet.targetWeight)
   );
+  const catalogExercise = useExerciseCatalogStore((s) => s.getById(exercise.exerciseId));
+  const exerciseName = catalogExercise
+    ? getExerciseDisplayName(catalogExercise)
+    : exercise.exerciseName;
 
   const handleSubmit = () => {
     onSubmit(parseInt(reps, 10) || 0, parseFloat(weight) || 0);
@@ -56,7 +66,7 @@ function SessionLogBar({
   return (
     <View style={styles.logBar}>
       <Text style={styles.logTitle} numberOfLines={1}>
-        {exercise.exerciseName} — Série {setIndex + 1}/{exercise.sets.length}
+        {exerciseName} — Série {setIndex + 1}/{exercise.sets.length}
       </Text>
       <View style={styles.logRow}>
         <View style={styles.logField}>
@@ -184,11 +194,14 @@ export default function ActiveSessionScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoiding}
+        behavior={keyboardAvoidingBehavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}>
         {/* Top bar */}
         <View style={styles.topBar}>
           <TouchableOpacity onPress={handleCancel} hitSlop={8}>
-            <Ionicons name="close" size={24} color="#6b7280" />
+            <Ionicons name="close" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
           <View style={styles.topCenter}>
             <Text style={styles.topTitle} numberOfLines={1}>{active.programName}</Text>
@@ -208,6 +221,10 @@ export default function ActiveSessionScreen() {
         {/* Exercise list (ordre libre : tape un exo ou une série) */}
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           {active.exercises.map((ex, ei) => {
+            const catalogExercise = getCatalogExercise(ex.exerciseId);
+            const exerciseName = catalogExercise
+              ? getExerciseDisplayName(catalogExercise)
+              : ex.exerciseName;
             const exDone = ex.sets.every((s) => s.completed);
             const isCurrentEx = ei === exIdx;
             const hasAlternatives = (ex.alternativeExerciseIds?.length ?? 0) > 0;
@@ -219,9 +236,9 @@ export default function ActiveSessionScreen() {
                 style={[styles.exSection, isCurrentEx && styles.exSectionActive]}>
                 <View style={styles.exRow}>
                   <Text style={[styles.exName, isCurrentEx && styles.exNameActive]} numberOfLines={1}>
-                    {ex.exerciseName || `Exercice ${ei + 1}`}
+                    {exerciseName || `Exercice ${ei + 1}`}
                   </Text>
-                  {exDone ? <Ionicons name="checkmark-circle" size={18} color="#16a34a" /> : null}
+                  {exDone ? <Ionicons name="checkmark-circle" size={18} color={colors.success} /> : null}
                   {hasAlternatives ? (
                     <TouchableOpacity
                       onPress={(event) => {
@@ -230,12 +247,12 @@ export default function ActiveSessionScreen() {
                       }}
                       hitSlop={8}
                       style={styles.replaceBtn}>
-                      <Ionicons name="swap-horizontal" size={16} color="#2563eb" />
+                      <Ionicons name="swap-horizontal" size={16} color={colors.primary} />
                       <Text style={styles.replaceLabel}>Remplacer</Text>
                     </TouchableOpacity>
                   ) : null}
                   <TouchableOpacity onPress={() => setDetailId(ex.exerciseId)} hitSlop={8} style={styles.infoBtn}>
-                    <Ionicons name="information-circle-outline" size={20} color="#2563eb" />
+                    <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.setsRow}>
@@ -281,7 +298,7 @@ export default function ActiveSessionScreen() {
         <SafeAreaView style={styles.replacementSafe} edges={['top', 'bottom']}>
           <View style={styles.replacementHeader}>
             <TouchableOpacity onPress={closeReplacementModal} hitSlop={8}>
-              <Ionicons name="close" size={24} color="#111827" />
+              <Ionicons name="close" size={24} color={colors.textPrimary} />
             </TouchableOpacity>
             <Text style={styles.replacementTitle}>Remplacer l&apos;exercice</Text>
             <View style={{ width: 24 }} />
@@ -290,6 +307,9 @@ export default function ActiveSessionScreen() {
             {replacementAlternatives.map((alternativeId) => {
               const alternative = getCatalogExercise(alternativeId);
               const selected = alternativeId === replacementExercise?.exerciseId;
+              const alternativeName = alternative
+                ? getExerciseDisplayName(alternative)
+                : 'Exercice inconnu';
               return (
                 <TouchableOpacity
                   key={alternativeId}
@@ -299,18 +319,18 @@ export default function ActiveSessionScreen() {
                   <ExerciseThumbnail id={alternativeId} size={54} />
                   <View style={styles.replacementBody}>
                     <Text style={styles.replacementName} numberOfLines={2}>
-                      {alternative?.name ?? 'Exercice inconnu'}
+                      {alternativeName}
                     </Text>
                     {alternative ? (
                       <Text style={styles.replacementMeta} numberOfLines={1}>
-                        {alternative.target} · {alternative.equipment}
+                        {translateMuscle(alternative.target)} · {translateEquipment(alternative.equipment)}
                       </Text>
                     ) : null}
                   </View>
                   <Ionicons
                     name={selected ? 'checkmark-circle' : 'chevron-forward'}
                     size={20}
-                    color={selected ? '#2563eb' : '#9ca3af'}
+                    color={selected ? colors.primary : colors.textMuted}
                   />
                 </TouchableOpacity>
               );
@@ -323,18 +343,19 @@ export default function ActiveSessionScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
+  keyboardAvoiding: { flex: 1 },
   topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
   topCenter: { flex: 1, alignItems: 'center' },
-  topTitle: { fontSize: 15, fontWeight: '700', color: '#111827' },
-  topSub: { fontSize: 13, color: '#6b7280' },
-  finishLink: { fontSize: 15, fontWeight: '600', color: '#2563eb' },
-  progressTrack: { height: 4, backgroundColor: '#e5e7eb', marginHorizontal: 16, borderRadius: 2 },
-  progressFill: { height: 4, backgroundColor: '#2563eb', borderRadius: 2 },
-  progressLabel: { fontSize: 11, color: '#9ca3af', paddingHorizontal: 16, marginTop: 4 },
+  topTitle: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
+  topSub: { fontSize: 13, color: colors.textSecondary },
+  finishLink: { fontSize: 15, fontWeight: '600', color: colors.primary },
+  progressTrack: { height: 4, backgroundColor: colors.border, marginHorizontal: 16, borderRadius: 2 },
+  progressFill: { height: 4, backgroundColor: colors.primary, borderRadius: 2 },
+  progressLabel: { fontSize: 11, color: colors.textMuted, paddingHorizontal: 16, marginTop: 4 },
   content: { padding: 16, gap: 8, paddingBottom: 16 },
-  exSection: { backgroundColor: '#fff', borderRadius: 10, padding: 12, opacity: 0.65 },
-  exSectionActive: { opacity: 1, borderWidth: 2, borderColor: '#2563eb' },
+  exSection: { backgroundColor: colors.surface, borderRadius: 10, padding: 12, opacity: 0.65 },
+  exSectionActive: { opacity: 1, borderWidth: 2, borderColor: colors.primary },
   exRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
   infoBtn: { padding: 2 },
   replaceBtn: {
@@ -344,34 +365,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 12,
-    backgroundColor: '#eff6ff',
+    backgroundColor: colors.accentSoft,
   },
-  replaceLabel: { fontSize: 12, fontWeight: '600', color: '#2563eb' },
-  exName: { fontSize: 15, fontWeight: '600', color: '#374151', flex: 1, textTransform: 'capitalize' },
-  exNameActive: { color: '#111827' },
+  replaceLabel: { fontSize: 12, fontWeight: '600', color: colors.primary },
+  exName: { fontSize: 15, fontWeight: '600', color: colors.textPrimary, flex: 1 },
+  exNameActive: { color: colors.textPrimary },
   setsRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  setBubble: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#f3f4f6', alignItems: 'center', justifyContent: 'center' },
-  setBubbleDone: { backgroundColor: '#16a34a' },
-  setBubbleActive: { backgroundColor: '#eff6ff', borderWidth: 2, borderColor: '#2563eb' },
-  setBubbleText: { fontSize: 13, fontWeight: '600', color: '#6b7280' },
-  setBubbleTextDone: { color: '#fff' },
-  setBubbleTextActive: { color: '#2563eb' },
+  setBubble: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
+  setBubbleDone: { backgroundColor: colors.success },
+  setBubbleActive: { backgroundColor: colors.accentSoft, borderWidth: 2, borderColor: colors.primary },
+  setBubbleText: { fontSize: 13, fontWeight: '600', color: colors.textSecondary },
+  setBubbleTextDone: { color: colors.primaryText },
+  setBubbleTextActive: { color: colors.primary },
   logBar: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingHorizontal: 16,
     paddingTop: 10,
     paddingBottom: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: colors.border,
     gap: 8,
   },
-  logTitle: { fontSize: 14, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
+  logTitle: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
   logRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
   logField: { flex: 1, gap: 3 },
-  logFieldLabel: { fontSize: 11, fontWeight: '600', color: '#6b7280', textTransform: 'uppercase' },
+  logFieldLabel: { fontSize: 11, fontWeight: '600', color: colors.textSecondary, textTransform: 'uppercase' },
   logInput: { textAlign: 'center', fontSize: 18, fontWeight: '700' },
   logBtn: { paddingHorizontal: 18 },
-  replacementSafe: { flex: 1, backgroundColor: '#f9fafb' },
+  replacementSafe: { flex: 1, backgroundColor: colors.bg },
   replacementHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -379,22 +400,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  replacementTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: '#111827', textAlign: 'center' },
+  replacementTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary, textAlign: 'center' },
   replacementList: { padding: 16, gap: 8 },
   replacementRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 10,
     padding: 10,
-    shadowColor: '#000',
+    shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  replacementRowSelected: { borderWidth: 2, borderColor: '#2563eb' },
+  replacementRowSelected: { borderWidth: 2, borderColor: colors.primary },
   replacementBody: { flex: 1, gap: 3 },
-  replacementName: { fontSize: 15, fontWeight: '700', color: '#111827', textTransform: 'capitalize' },
-  replacementMeta: { fontSize: 12, color: '#6b7280', textTransform: 'capitalize' },
+  replacementName: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
+  replacementMeta: { fontSize: 12, color: colors.textSecondary },
 });

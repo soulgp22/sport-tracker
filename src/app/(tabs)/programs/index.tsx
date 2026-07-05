@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProgramStore } from '../../../store/programStore';
 import { ProgramCard } from '../../../components/programs/ProgramCard';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { colors } from '../../../constants/colors';
 
 export default function ProgramsScreen() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function ProgramsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
 });

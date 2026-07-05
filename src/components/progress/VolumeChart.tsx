@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
+import { colors } from '../../constants/colors';
 
 interface VolumeChartProps {
   data: DataPoint[];
@@ -18,7 +19,7 @@ export function VolumeChart({ data }: VolumeChartProps) {
   const chartData = data.map((d) => ({
     value: d.value,
     label: d.label,
-    frontColor: '#2563eb',
+    frontColor: colors.primary,
   }));
 
   return (
@@ -31,9 +32,9 @@ export function VolumeChart({ data }: VolumeChartProps) {
         barWidth={32}
         barBorderRadius={4}
         hideRules={false}
-        rulesColor="#f3f4f6"
+        rulesColor={colors.border}
         yAxisColor="transparent"
-        xAxisColor="#e5e7eb"
+        xAxisColor={colors.border}
         yAxisTextStyle={styles.axisLabel}
         xAxisLabelTextStyle={styles.axisLabel}
         hideYAxisText={false}
@@ -44,8 +45,8 @@ export function VolumeChart({ data }: VolumeChartProps) {
 
 const styles = StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: '#374151' },
+  title: { fontSize: 14, fontWeight: '600', color: colors.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
-  emptyText: { color: '#9ca3af', fontSize: 13 },
-  axisLabel: { fontSize: 10, color: '#9ca3af' },
+  emptyText: { color: colors.textMuted, fontSize: 13 },
+  axisLabel: { fontSize: 10, color: colors.textSecondary },
 });

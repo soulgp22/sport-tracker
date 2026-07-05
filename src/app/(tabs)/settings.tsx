@@ -13,6 +13,7 @@ import * as FileSystemLegacy from 'expo-file-system/legacy';
 import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
+import { colors } from '../../constants/colors';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
 
@@ -238,25 +239,25 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#f9fafb' },
+  safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 16, gap: 32, paddingBottom: 40 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.textPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: colors.border,
     paddingBottom: 8,
   },
   actionBtn: { marginTop: 4 },
-  helpText: { fontSize: 13, color: '#6b7280', lineHeight: 18 },
+  helpText: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
   codeBlock: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.surfaceAlt,
     borderRadius: 8,
     padding: 12,
   },
-  code: { fontSize: 11, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', color: '#374151' },
-  aboutText: { fontSize: 15, fontWeight: '500', color: '#374151' },
-  aboutSubtext: { fontSize: 13, color: '#6b7280' },
+  code: { fontSize: 11, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', color: colors.textPrimary },
+  aboutText: { fontSize: 15, fontWeight: '500', color: colors.textPrimary },
+  aboutSubtext: { fontSize: 13, color: colors.textSecondary },
 });
