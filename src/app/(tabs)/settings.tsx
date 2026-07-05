@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Platform,
@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystemLegacy from 'expo-file-system/legacy';
 import { File as ExpoFile, Paths } from 'expo-file-system';
@@ -83,7 +84,19 @@ export default function SettingsScreen() {
   const sessionsCount = useSessionStore((s) => s.sessions.length);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
   const aiProgramPrompt = useMemo(buildAiProgramPrompt, []);
+  const aiPromptCopied = aiPromptCopyFeedback > 0;
+
+  useEffect(() => {
+    if (aiPromptCopyFeedback === 0) return;
+
+    const timeout = setTimeout(() => {
+      setAiPromptCopyFeedback(0);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [aiPromptCopyFeedback]);
 
   const showImportResult = (result: ReturnType<typeof importPrograms>) => {
     if (result.errors.length > 0 && result.importedPrograms === 0) {
@@ -198,11 +211,16 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleShareAiPrompt = async () => {
+  const handleCopyAiPrompt = async () => {
     try {
-      await Share.share({ message: aiProgramPrompt });
+      await Clipboard.setStringAsync(aiProgramPrompt);
+      setAiPromptCopyFeedback((current) => current + 1);
     } catch {
-      Alert.alert('Erreur', 'Impossible d\'ouvrir le partage du prompt.');
+      try {
+        await Share.share({ message: aiProgramPrompt });
+      } catch {
+        Alert.alert('Erreur', 'Impossible de copier ou partager le prompt.');
+      }
     }
   };
 
@@ -266,9 +284,9 @@ export default function SettingsScreen() {
           </Text>
 
           <Button
-            title="Copier le prompt"
+            title={aiPromptCopied ? 'Copié ✓' : 'Copier le prompt'}
             variant="secondary"
-            onPress={handleShareAiPrompt}
+            onPress={handleCopyAiPrompt}
             style={styles.actionBtn}
           />
 
