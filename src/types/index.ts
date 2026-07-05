@@ -85,6 +85,7 @@ export interface Session {
 }
 
 export interface ActiveSession {
+  id: string;
   programId: string;
   programDayId: string;
   programName: string;

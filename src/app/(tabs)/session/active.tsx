@@ -14,7 +14,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
-import { useSessionStore } from '../../../store/sessionStore';
 import { useRestTimer } from '../../../hooks/useRestTimer';
 import { RestTimerModal } from '../../../components/session/RestTimerModal';
 import { ExerciseDetailView } from '../../../components/exercises/ExerciseDetailView';
@@ -109,7 +108,6 @@ export default function ActiveSessionScreen() {
   const restTimerActive = useActiveSessionStore((s) => s.active?.restTimerActive ?? false);
   const finishSession = useActiveSessionStore((s) => s.finishSession);
   const cancelSession = useActiveSessionStore((s) => s.cancelSession);
-  const addSession = useSessionStore((s) => s.addSession);
   const getCatalogExercise = useExerciseCatalogStore((s) => s.getById);
 
   useRestTimer();
@@ -164,8 +162,9 @@ export default function ActiveSessionScreen() {
         style: 'destructive',
         onPress: () => {
           const session = finishSession();
-          if (session) addSession(session);
-          router.replace('/(tabs)/history');
+          if (session) {
+            router.replace('/(tabs)/history');
+          }
         },
       },
     ]);

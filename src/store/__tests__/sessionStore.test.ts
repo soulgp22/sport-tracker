@@ -37,6 +37,29 @@ describe('sessions', () => {
     expect(useSessionStore.getState().sessions).toHaveLength(0);
   });
 
+  it('upserts a new session at the beginning of the list', () => {
+    const session = makeSession({ id: 's2' });
+
+    useSessionStore.getState().upsertSession(session);
+
+    expect(useSessionStore.getState().sessions).toEqual([session]);
+  });
+
+  it('replaces an existing session without moving it', () => {
+    const first = makeSession({ id: 's1', date: '2026-01-01T00:00:00.000Z' });
+    const existing = makeSession({ id: 's2', date: '2026-02-01T00:00:00.000Z' });
+    const updated = makeSession({
+      id: 's2',
+      date: '2026-03-01T00:00:00.000Z',
+      durationSeconds: 120,
+    });
+
+    useSessionStore.setState({ sessions: [first, existing] });
+    useSessionStore.getState().upsertSession(updated);
+
+    expect(useSessionStore.getState().sessions).toEqual([first, updated]);
+  });
+
   it('handles delete of non-existent session without error', () => {
     useSessionStore.getState().deleteSession('nonexistent');
     expect(useSessionStore.getState().sessions).toHaveLength(0);

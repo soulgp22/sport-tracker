@@ -7,6 +7,7 @@ interface SessionState {
   sessions: Session[];
 
   addSession: (session: Session) => void;
+  upsertSession: (session: Session) => void;
   deleteSession: (id: string) => void;
   getSessionsForExercise: (exerciseId: string) => Session[];
 }
@@ -18,6 +19,20 @@ export const useSessionStore = create<SessionState>()(
 
       addSession: (session) => {
         set((s) => ({ sessions: [session, ...s.sessions] }));
+      },
+
+      upsertSession: (session) => {
+        set((s) => {
+          const index = s.sessions.findIndex((existing) => existing.id === session.id);
+
+          if (index === -1) {
+            return { sessions: [session, ...s.sessions] };
+          }
+
+          const sessions = [...s.sessions];
+          sessions[index] = session;
+          return { sessions };
+        });
       },
 
       deleteSession: (id) => {

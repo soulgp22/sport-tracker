@@ -5,6 +5,17 @@ import { useSessionStore } from './sessionStore';
 
 const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
+const buildSessionFromActive = (active: ActiveSession): Session => ({
+  id: active.id,
+  programId: active.programId,
+  programDayId: active.programDayId,
+  programName: active.programName,
+  dayName: active.dayName,
+  date: active.startedAt,
+  durationSeconds: Math.round((Date.now() - new Date(active.startedAt).getTime()) / 1000),
+  exercises: active.exercises,
+});
+
 export const getLastLoggedWeight = (exerciseId: string, setIndex: number): number | null => {
   const lastSession = useSessionStore.getState().getSessionsForExercise(exerciseId)[0];
   const lastExercise = lastSession?.exercises.find((exercise) => exercise.exerciseId === exerciseId);
@@ -65,6 +76,7 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
 
     set({
       active: {
+        id: uid(),
         programId: program.id,
         programDayId: day.id,
         programName: program.name,
@@ -125,6 +137,11 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
         currentSetIndex: nextSet,
       },
     });
+
+    const updatedActive = get().active;
+    if (updatedActive) {
+      useSessionStore.getState().upsertSession(buildSessionFromActive(updatedActive));
+    }
   },
 
   swapExercise: (exerciseIndex, newExerciseId) => {
@@ -201,26 +218,19 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
     const { active } = get();
     if (!active) return null;
 
-    const durationSeconds = Math.round(
-      (Date.now() - new Date(active.startedAt).getTime()) / 1000
-    );
+    const session = buildSessionFromActive(active);
 
-    const session: Session = {
-      id: uid(),
-      programId: active.programId,
-      programDayId: active.programDayId,
-      programName: active.programName,
-      dayName: active.dayName,
-      date: active.startedAt,
-      durationSeconds,
-      exercises: active.exercises,
-    };
-
+    useSessionStore.getState().upsertSession(session);
     set({ active: null });
     return session;
   },
 
   cancelSession: () => {
+    const { active } = get();
+    if (active) {
+      useSessionStore.getState().deleteSession(active.id);
+    }
+
     set({ active: null });
   },
 }));

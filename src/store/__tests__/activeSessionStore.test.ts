@@ -204,6 +204,33 @@ describe('logSet', () => {
     expect(active.exercises[0].sets[0].completedAt).toBeDefined();
   });
 
+  it('upserts the active session into history without duplicating it and removes it on cancel', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    const activeId = useActiveSessionStore.getState().active!.id;
+
+    useActiveSessionStore.getState().logSet(0, 0, 12, 65);
+
+    let sessions = useSessionStore.getState().sessions;
+    expect(sessions).toHaveLength(1);
+    expect(sessions[0].id).toBe(activeId);
+    expect(sessions[0].exercises[0].sets[0].actualReps).toBe(12);
+    expect(sessions[0].exercises[0].sets[0].actualWeight).toBe(65);
+    expect(sessions[0].exercises[0].sets[0].completed).toBe(true);
+
+    useActiveSessionStore.getState().logSet(0, 1, 8, 70);
+
+    sessions = useSessionStore.getState().sessions;
+    expect(sessions).toHaveLength(1);
+    expect(sessions[0].id).toBe(activeId);
+    expect(sessions[0].exercises[0].sets[1].actualReps).toBe(8);
+    expect(sessions[0].exercises[0].sets[1].actualWeight).toBe(70);
+    expect(sessions[0].exercises[0].sets[1].completed).toBe(true);
+
+    useActiveSessionStore.getState().cancelSession();
+
+    expect(useSessionStore.getState().sessions).toEqual([]);
+  });
+
   it('advances to next set within same exercise', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
     useActiveSessionStore.getState().logSet(0, 0, 10, 60);
@@ -311,15 +338,19 @@ describe('rest timer', () => {
 describe('finishSession', () => {
   it('creates a Session and clears active', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    const activeId = useActiveSessionStore.getState().active!.id;
     useActiveSessionStore.getState().logSet(0, 0, 10, 60);
     const session = useActiveSessionStore.getState().finishSession();
     expect(session).not.toBeNull();
+    expect(session!.id).toBe(activeId);
     expect(session!.programId).toBe('prog1');
     expect(session!.dayName).toBe('Push');
     expect(session!.durationSeconds).toBeGreaterThanOrEqual(0);
     expect(session!.exercises).toHaveLength(2);
     expect(session!.exercises[0].sets[0].completed).toBe(true);
     expect(useActiveSessionStore.getState().active).toBeNull();
+    expect(useSessionStore.getState().sessions).toHaveLength(1);
+    expect(useSessionStore.getState().sessions[0]).toEqual(session);
   });
 
   it('returns null when no active session', () => {
@@ -330,8 +361,13 @@ describe('finishSession', () => {
 describe('cancelSession', () => {
   it('clears active session', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().logSet(0, 0, 10, 60);
+    expect(useSessionStore.getState().sessions).toHaveLength(1);
+
     useActiveSessionStore.getState().cancelSession();
+
     expect(useActiveSessionStore.getState().active).toBeNull();
+    expect(useSessionStore.getState().sessions).toEqual([]);
   });
 
   it('does nothing when no active session', () => {
