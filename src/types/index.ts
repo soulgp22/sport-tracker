@@ -97,3 +97,14 @@ export interface ActiveSession {
   restTimerActive: boolean;
   restEndsAt: string | null;
 }
+
+export type {
+  CalculatedNutrition,
+  Food,
+  FoodEntry,
+  FoodNutrition,
+  FoodUnit,
+  GoalType,
+  MealType,
+  NutritionGoals,
+} from './nutrition';

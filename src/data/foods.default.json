@@ -1,0 +1,1138 @@
+[
+  {
+    "id": "blanc_poulet",
+    "name": "Blanc de poulet",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 165, "protein": 31, "carbs": 0, "fat": 3.6 },
+    "isCustom": false
+  },
+  {
+    "id": "cuisse_poulet",
+    "name": "Cuisse de poulet",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 209, "protein": 26, "carbs": 0, "fat": 10.9 },
+    "isCustom": false
+  },
+  {
+    "id": "escalope_dinde",
+    "name": "Escalope de dinde",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 135, "protein": 29, "carbs": 0, "fat": 1.7 },
+    "isCustom": false
+  },
+  {
+    "id": "boeuf_hache_5",
+    "name": "Boeuf haché 5%",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 137, "protein": 21, "carbs": 0, "fat": 5 },
+    "isCustom": false
+  },
+  {
+    "id": "steak_boeuf",
+    "name": "Steak de boeuf",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 190, "protein": 27, "carbs": 0, "fat": 8 },
+    "isCustom": false
+  },
+  {
+    "id": "jambon_blanc",
+    "name": "Jambon blanc",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 115, "protein": 20, "carbs": 1, "fat": 3, "salt": 2 },
+    "isCustom": false
+  },
+  {
+    "id": "filet_porc",
+    "name": "Filet de porc",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 143, "protein": 26, "carbs": 0, "fat": 3.5 },
+    "isCustom": false
+  },
+  {
+    "id": "lardons",
+    "name": "Lardons",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 325, "protein": 16, "carbs": 1, "fat": 29, "salt": 2.8 },
+    "isCustom": false
+  },
+  {
+    "id": "merguez",
+    "name": "Merguez",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 280, "protein": 17, "carbs": 1.5, "fat": 23, "salt": 1.8 },
+    "isCustom": false
+  },
+  {
+    "id": "saucisse_toulouse",
+    "name": "Saucisse de Toulouse",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 310, "protein": 15, "carbs": 1, "fat": 28, "salt": 1.7 },
+    "isCustom": false
+  },
+  {
+    "id": "escalope_veau",
+    "name": "Escalope de veau",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 150, "protein": 28, "carbs": 0, "fat": 4 },
+    "isCustom": false
+  },
+  {
+    "id": "magret_canard",
+    "name": "Magret de canard",
+    "category": "Viande",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 337, "protein": 19, "carbs": 0, "fat": 29 },
+    "isCustom": false
+  },
+  {
+    "id": "saumon",
+    "name": "Saumon",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 208, "protein": 20, "carbs": 0, "fat": 13 },
+    "isCustom": false
+  },
+  {
+    "id": "thon_nature",
+    "name": "Thon au naturel",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 116, "protein": 26, "carbs": 0, "fat": 1 },
+    "isCustom": false
+  },
+  {
+    "id": "cabillaud",
+    "name": "Cabillaud",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 82, "protein": 18, "carbs": 0, "fat": 0.7 },
+    "isCustom": false
+  },
+  {
+    "id": "sardines_huile",
+    "name": "Sardines à l'huile",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 208, "protein": 24, "carbs": 0, "fat": 12, "salt": 1 },
+    "isCustom": false
+  },
+  {
+    "id": "maquereau",
+    "name": "Maquereau",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 205, "protein": 19, "carbs": 0, "fat": 14 },
+    "isCustom": false
+  },
+  {
+    "id": "crevettes",
+    "name": "Crevettes",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 99, "protein": 24, "carbs": 0.2, "fat": 0.3, "salt": 1.2 },
+    "isCustom": false
+  },
+  {
+    "id": "truite",
+    "name": "Truite",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 148, "protein": 20, "carbs": 0, "fat": 7 },
+    "isCustom": false
+  },
+  {
+    "id": "colin",
+    "name": "Colin",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 74, "protein": 17, "carbs": 0, "fat": 0.5 },
+    "isCustom": false
+  },
+  {
+    "id": "moules",
+    "name": "Moules",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 86, "protein": 12, "carbs": 3.7, "fat": 2.2 },
+    "isCustom": false
+  },
+  {
+    "id": "saumon_fume",
+    "name": "Saumon fumé",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 117, "protein": 18, "carbs": 0, "fat": 4.3, "salt": 3 },
+    "isCustom": false
+  },
+  {
+    "id": "poisson_pane",
+    "name": "Poisson pané",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 230, "protein": 13, "carbs": 18, "fat": 12 },
+    "isCustom": false
+  },
+  {
+    "id": "merlu",
+    "name": "Merlu",
+    "category": "Poisson",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 78, "protein": 17, "carbs": 0, "fat": 0.8 },
+    "isCustom": false
+  },
+  {
+    "id": "oeuf_entier",
+    "name": "Oeuf entier",
+    "category": "Œufs",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 143, "protein": 13, "carbs": 1.1, "fat": 10 },
+    "isCustom": false
+  },
+  {
+    "id": "blanc_oeuf",
+    "name": "Blanc d'oeuf",
+    "category": "Œufs",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 52, "protein": 11, "carbs": 0.7, "fat": 0.2 },
+    "isCustom": false
+  },
+  {
+    "id": "jaune_oeuf",
+    "name": "Jaune d'oeuf",
+    "category": "Œufs",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 322, "protein": 16, "carbs": 3.6, "fat": 27 },
+    "isCustom": false
+  },
+  {
+    "id": "omelette_nature",
+    "name": "Omelette nature",
+    "category": "Œufs",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 154, "protein": 11, "carbs": 1.5, "fat": 12 },
+    "isCustom": false
+  },
+  {
+    "id": "oeuf_dur",
+    "name": "Oeuf dur",
+    "category": "Œufs",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 155, "protein": 13, "carbs": 1.1, "fat": 11 },
+    "isCustom": false
+  },
+  {
+    "id": "lait_demi_ecreme",
+    "name": "Lait demi-écrémé",
+    "category": "Produits laitiers",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 47, "protein": 3.4, "carbs": 4.8, "fat": 1.6, "sugar": 4.8 },
+    "isCustom": false
+  },
+  {
+    "id": "lait_entier",
+    "name": "Lait entier",
+    "category": "Produits laitiers",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 64, "protein": 3.3, "carbs": 4.8, "fat": 3.6, "sugar": 4.8 },
+    "isCustom": false
+  },
+  {
+    "id": "yaourt_nature",
+    "name": "Yaourt nature",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 61, "protein": 3.5, "carbs": 4.7, "fat": 3.3, "sugar": 4.7 },
+    "isCustom": false
+  },
+  {
+    "id": "fromage_blanc_0",
+    "name": "Fromage blanc 0%",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 46, "protein": 8, "carbs": 4, "fat": 0.2, "sugar": 4 },
+    "isCustom": false
+  },
+  {
+    "id": "fromage_blanc_3",
+    "name": "Fromage blanc 3%",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 77, "protein": 7.5, "carbs": 4, "fat": 3.3, "sugar": 4 },
+    "isCustom": false
+  },
+  {
+    "id": "skyr_nature",
+    "name": "Skyr nature",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 60, "protein": 10, "carbs": 3.6, "fat": 0.2, "sugar": 3.6 },
+    "isCustom": false
+  },
+  {
+    "id": "yaourt_grec",
+    "name": "Yaourt grec",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 133, "protein": 5.5, "carbs": 3.8, "fat": 10, "sugar": 3.8 },
+    "isCustom": false
+  },
+  {
+    "id": "emmental",
+    "name": "Emmental",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 380, "protein": 28, "carbs": 0.5, "fat": 29, "salt": 0.7 },
+    "isCustom": false
+  },
+  {
+    "id": "comte",
+    "name": "Comté",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 410, "protein": 27, "carbs": 0.1, "fat": 33, "salt": 0.8 },
+    "isCustom": false
+  },
+  {
+    "id": "mozzarella",
+    "name": "Mozzarella",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 250, "protein": 18, "carbs": 2, "fat": 19, "salt": 0.6 },
+    "isCustom": false
+  },
+  {
+    "id": "camembert",
+    "name": "Camembert",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 300, "protein": 20, "carbs": 0.5, "fat": 24, "salt": 1.5 },
+    "isCustom": false
+  },
+  {
+    "id": "feta",
+    "name": "Feta",
+    "category": "Produits laitiers",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 264, "protein": 14, "carbs": 4, "fat": 21, "salt": 2.5 },
+    "isCustom": false
+  },
+  {
+    "id": "riz_cuit",
+    "name": "Riz cuit",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 130, "protein": 2.7, "carbs": 28.2, "fat": 0.3 },
+    "isCustom": false
+  },
+  {
+    "id": "riz_basmati_cru",
+    "name": "Riz basmati cru",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 350, "protein": 8, "carbs": 77, "fat": 0.8, "fiber": 1.2 },
+    "isCustom": false
+  },
+  {
+    "id": "pates_cuites",
+    "name": "Pâtes cuites",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 158, "protein": 5.8, "carbs": 30.9, "fat": 0.9, "fiber": 1.8 },
+    "isCustom": false
+  },
+  {
+    "id": "pates_crues",
+    "name": "Pâtes crues",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 360, "protein": 12, "carbs": 72, "fat": 1.5, "fiber": 3.5 },
+    "isCustom": false
+  },
+  {
+    "id": "pain_complet",
+    "name": "Pain complet",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 247, "protein": 9, "carbs": 41, "fat": 3.5, "fiber": 7 },
+    "isCustom": false
+  },
+  {
+    "id": "baguette",
+    "name": "Baguette",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 285, "protein": 8.7, "carbs": 56, "fat": 1.7, "fiber": 3 },
+    "isCustom": false
+  },
+  {
+    "id": "pommes_terre_cuites",
+    "name": "Pommes de terre cuites",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 87, "protein": 1.9, "carbs": 20, "fat": 0.1, "fiber": 1.8 },
+    "isCustom": false
+  },
+  {
+    "id": "patate_douce",
+    "name": "Patate douce",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 86, "protein": 1.6, "carbs": 20, "fat": 0.1, "fiber": 3 },
+    "isCustom": false
+  },
+  {
+    "id": "flocons_avoine",
+    "name": "Flocons d'avoine",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 389, "protein": 16.9, "carbs": 66.3, "fat": 6.9, "fiber": 10.6 },
+    "isCustom": false
+  },
+  {
+    "id": "semoule_cuite",
+    "name": "Semoule cuite",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 112, "protein": 3.8, "carbs": 23, "fat": 0.2, "fiber": 1.4 },
+    "isCustom": false
+  },
+  {
+    "id": "quinoa_cuit",
+    "name": "Quinoa cuit",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 120, "protein": 4.4, "carbs": 21.3, "fat": 1.9, "fiber": 2.8 },
+    "isCustom": false
+  },
+  {
+    "id": "couscous_cuit",
+    "name": "Couscous cuit",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 112, "protein": 3.8, "carbs": 23.2, "fat": 0.2, "fiber": 1.4 },
+    "isCustom": false
+  },
+  {
+    "id": "mais_doux",
+    "name": "Maïs doux",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 96, "protein": 3.4, "carbs": 18.7, "fat": 1.5, "fiber": 2.4 },
+    "isCustom": false
+  },
+  {
+    "id": "tortilla_ble",
+    "name": "Tortilla de blé",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 310, "protein": 8, "carbs": 50, "fat": 8, "fiber": 3 },
+    "isCustom": false
+  },
+  {
+    "id": "galette_riz",
+    "name": "Galette de riz",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 387, "protein": 8, "carbs": 81, "fat": 3, "fiber": 3.5 },
+    "isCustom": false
+  },
+  {
+    "id": "farine_ble",
+    "name": "Farine de blé",
+    "category": "Féculents",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 364, "protein": 10, "carbs": 76, "fat": 1, "fiber": 2.7 },
+    "isCustom": false
+  },
+  {
+    "id": "brocoli",
+    "name": "Brocoli",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 34, "protein": 2.8, "carbs": 6.6, "fat": 0.4, "fiber": 2.6 },
+    "isCustom": false
+  },
+  {
+    "id": "courgette",
+    "name": "Courgette",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 17, "protein": 1.2, "carbs": 3.1, "fat": 0.3, "fiber": 1 },
+    "isCustom": false
+  },
+  {
+    "id": "carotte",
+    "name": "Carotte",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 41, "protein": 0.9, "carbs": 9.6, "fat": 0.2, "fiber": 2.8, "sugar": 4.7 },
+    "isCustom": false
+  },
+  {
+    "id": "tomate",
+    "name": "Tomate",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 18, "protein": 0.9, "carbs": 3.9, "fat": 0.2, "fiber": 1.2 },
+    "isCustom": false
+  },
+  {
+    "id": "concombre",
+    "name": "Concombre",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 15, "protein": 0.7, "carbs": 3.6, "fat": 0.1, "fiber": 0.5 },
+    "isCustom": false
+  },
+  {
+    "id": "salade_verte",
+    "name": "Salade verte",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 15, "protein": 1.4, "carbs": 2.9, "fat": 0.2, "fiber": 1.3 },
+    "isCustom": false
+  },
+  {
+    "id": "haricots_verts",
+    "name": "Haricots verts",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 31, "protein": 1.8, "carbs": 7, "fat": 0.1, "fiber": 3.4 },
+    "isCustom": false
+  },
+  {
+    "id": "epinards",
+    "name": "Épinards",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 23, "protein": 2.9, "carbs": 3.6, "fat": 0.4, "fiber": 2.2 },
+    "isCustom": false
+  },
+  {
+    "id": "poivron",
+    "name": "Poivron",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 31, "protein": 1, "carbs": 6, "fat": 0.3, "fiber": 2.1 },
+    "isCustom": false
+  },
+  {
+    "id": "champignons",
+    "name": "Champignons de Paris",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 22, "protein": 3.1, "carbs": 3.3, "fat": 0.3, "fiber": 1 },
+    "isCustom": false
+  },
+  {
+    "id": "oignon",
+    "name": "Oignon",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 40, "protein": 1.1, "carbs": 9.3, "fat": 0.1, "fiber": 1.7, "sugar": 4.2 },
+    "isCustom": false
+  },
+  {
+    "id": "chou_fleur",
+    "name": "Chou-fleur",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 25, "protein": 1.9, "carbs": 5, "fat": 0.3, "fiber": 2 },
+    "isCustom": false
+  },
+  {
+    "id": "aubergine",
+    "name": "Aubergine",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 25, "protein": 1, "carbs": 5.9, "fat": 0.2, "fiber": 3 },
+    "isCustom": false
+  },
+  {
+    "id": "petits_pois",
+    "name": "Petits pois",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 81, "protein": 5.4, "carbs": 14.5, "fat": 0.4, "fiber": 5.1 },
+    "isCustom": false
+  },
+  {
+    "id": "asperges",
+    "name": "Asperges",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 20, "protein": 2.2, "carbs": 3.9, "fat": 0.1, "fiber": 2.1 },
+    "isCustom": false
+  },
+  {
+    "id": "betterave",
+    "name": "Betterave",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 43, "protein": 1.6, "carbs": 9.6, "fat": 0.2, "fiber": 2.8, "sugar": 6.8 },
+    "isCustom": false
+  },
+  {
+    "id": "poireau",
+    "name": "Poireau",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 61, "protein": 1.5, "carbs": 14, "fat": 0.3, "fiber": 1.8 },
+    "isCustom": false
+  },
+  {
+    "id": "avocat",
+    "name": "Avocat",
+    "category": "Légumes",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 160, "protein": 2, "carbs": 8.5, "fat": 14.7, "fiber": 6.7 },
+    "isCustom": false
+  },
+  {
+    "id": "pomme",
+    "name": "Pomme",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 52, "protein": 0.3, "carbs": 13.8, "fat": 0.2, "fiber": 2.4, "sugar": 10.4 },
+    "isCustom": false
+  },
+  {
+    "id": "banane",
+    "name": "Banane",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 89, "protein": 1.1, "carbs": 22.8, "fat": 0.3, "fiber": 2.6, "sugar": 12.2 },
+    "isCustom": false
+  },
+  {
+    "id": "orange",
+    "name": "Orange",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 47, "protein": 0.9, "carbs": 11.8, "fat": 0.1, "fiber": 2.4, "sugar": 9.4 },
+    "isCustom": false
+  },
+  {
+    "id": "fraise",
+    "name": "Fraise",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 32, "protein": 0.7, "carbs": 7.7, "fat": 0.3, "fiber": 2, "sugar": 4.9 },
+    "isCustom": false
+  },
+  {
+    "id": "framboise",
+    "name": "Framboise",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 52, "protein": 1.2, "carbs": 12, "fat": 0.7, "fiber": 6.5, "sugar": 4.4 },
+    "isCustom": false
+  },
+  {
+    "id": "myrtille",
+    "name": "Myrtille",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 57, "protein": 0.7, "carbs": 14.5, "fat": 0.3, "fiber": 2.4, "sugar": 10 },
+    "isCustom": false
+  },
+  {
+    "id": "raisin",
+    "name": "Raisin",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 69, "protein": 0.7, "carbs": 18.1, "fat": 0.2, "fiber": 0.9, "sugar": 15.5 },
+    "isCustom": false
+  },
+  {
+    "id": "kiwi",
+    "name": "Kiwi",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 61, "protein": 1.1, "carbs": 14.7, "fat": 0.5, "fiber": 3, "sugar": 9 },
+    "isCustom": false
+  },
+  {
+    "id": "poire",
+    "name": "Poire",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 57, "protein": 0.4, "carbs": 15.2, "fat": 0.1, "fiber": 3.1, "sugar": 9.8 },
+    "isCustom": false
+  },
+  {
+    "id": "peche",
+    "name": "Pêche",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 39, "protein": 0.9, "carbs": 9.5, "fat": 0.3, "fiber": 1.5, "sugar": 8.4 },
+    "isCustom": false
+  },
+  {
+    "id": "abricot",
+    "name": "Abricot",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 48, "protein": 1.4, "carbs": 11.1, "fat": 0.4, "fiber": 2, "sugar": 9.2 },
+    "isCustom": false
+  },
+  {
+    "id": "ananas",
+    "name": "Ananas",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 50, "protein": 0.5, "carbs": 13.1, "fat": 0.1, "fiber": 1.4, "sugar": 10 },
+    "isCustom": false
+  },
+  {
+    "id": "mangue",
+    "name": "Mangue",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 60, "protein": 0.8, "carbs": 15, "fat": 0.4, "fiber": 1.6, "sugar": 13.7 },
+    "isCustom": false
+  },
+  {
+    "id": "melon",
+    "name": "Melon",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 34, "protein": 0.8, "carbs": 8.2, "fat": 0.2, "fiber": 0.9, "sugar": 7.9 },
+    "isCustom": false
+  },
+  {
+    "id": "pasteque",
+    "name": "Pastèque",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 30, "protein": 0.6, "carbs": 7.6, "fat": 0.2, "fiber": 0.4, "sugar": 6.2 },
+    "isCustom": false
+  },
+  {
+    "id": "pruneau",
+    "name": "Pruneau",
+    "category": "Fruits",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 240, "protein": 2.2, "carbs": 64, "fat": 0.4, "fiber": 7.1, "sugar": 38 },
+    "isCustom": false
+  },
+  {
+    "id": "lentilles_cuites",
+    "name": "Lentilles cuites",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 116, "protein": 9, "carbs": 20, "fat": 0.4, "fiber": 7.9 },
+    "isCustom": false
+  },
+  {
+    "id": "pois_chiches_cuits",
+    "name": "Pois chiches cuits",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 164, "protein": 8.9, "carbs": 27.4, "fat": 2.6, "fiber": 7.6 },
+    "isCustom": false
+  },
+  {
+    "id": "haricots_rouges_cuits",
+    "name": "Haricots rouges cuits",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 127, "protein": 8.7, "carbs": 22.8, "fat": 0.5, "fiber": 6.4 },
+    "isCustom": false
+  },
+  {
+    "id": "haricots_blancs_cuits",
+    "name": "Haricots blancs cuits",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 139, "protein": 9.7, "carbs": 25, "fat": 0.4, "fiber": 6.3 },
+    "isCustom": false
+  },
+  {
+    "id": "tofu",
+    "name": "Tofu",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 144, "protein": 15, "carbs": 3.9, "fat": 8, "fiber": 2.3 },
+    "isCustom": false
+  },
+  {
+    "id": "tempeh",
+    "name": "Tempeh",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 192, "protein": 20.3, "carbs": 7.6, "fat": 10.8, "fiber": 5 },
+    "isCustom": false
+  },
+  {
+    "id": "edamame",
+    "name": "Edamame",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 121, "protein": 11.9, "carbs": 8.9, "fat": 5.2, "fiber": 5.2 },
+    "isCustom": false
+  },
+  {
+    "id": "pois_casses_cuits",
+    "name": "Pois cassés cuits",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 118, "protein": 8.3, "carbs": 21.1, "fat": 0.4, "fiber": 8.3 },
+    "isCustom": false
+  },
+  {
+    "id": "falafel",
+    "name": "Falafel",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 333, "protein": 13.3, "carbs": 31.8, "fat": 17.8, "fiber": 4.9 },
+    "isCustom": false
+  },
+  {
+    "id": "houmous",
+    "name": "Houmous",
+    "category": "Légumineuses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 166, "protein": 7.9, "carbs": 14.3, "fat": 9.6, "fiber": 6 },
+    "isCustom": false
+  },
+  {
+    "id": "huile_olive",
+    "name": "Huile d'olive",
+    "category": "Matières grasses",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 884, "protein": 0, "carbs": 0, "fat": 100 },
+    "isCustom": false
+  },
+  {
+    "id": "huile_colza",
+    "name": "Huile de colza",
+    "category": "Matières grasses",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 884, "protein": 0, "carbs": 0, "fat": 100 },
+    "isCustom": false
+  },
+  {
+    "id": "beurre",
+    "name": "Beurre",
+    "category": "Matières grasses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 717, "protein": 0.9, "carbs": 0.1, "fat": 81 },
+    "isCustom": false
+  },
+  {
+    "id": "creme_fraiche_30",
+    "name": "Crème fraîche 30%",
+    "category": "Matières grasses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 292, "protein": 2.3, "carbs": 3, "fat": 30 },
+    "isCustom": false
+  },
+  {
+    "id": "margarine",
+    "name": "Margarine",
+    "category": "Matières grasses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 720, "protein": 0.2, "carbs": 0.5, "fat": 80 },
+    "isCustom": false
+  },
+  {
+    "id": "mayonnaise",
+    "name": "Mayonnaise",
+    "category": "Matières grasses",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 680, "protein": 1, "carbs": 1, "fat": 75, "salt": 1 },
+    "isCustom": false
+  },
+  {
+    "id": "vinaigrette",
+    "name": "Vinaigrette",
+    "category": "Matières grasses",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 450, "protein": 0.5, "carbs": 3, "fat": 48, "salt": 1.2 },
+    "isCustom": false
+  },
+  {
+    "id": "huile_coco",
+    "name": "Huile de coco",
+    "category": "Matières grasses",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 862, "protein": 0, "carbs": 0, "fat": 100 },
+    "isCustom": false
+  },
+  {
+    "id": "amandes",
+    "name": "Amandes",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 579, "protein": 21.2, "carbs": 21.6, "fat": 49.9, "fiber": 12.5 },
+    "isCustom": false
+  },
+  {
+    "id": "noix",
+    "name": "Noix",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 654, "protein": 15.2, "carbs": 13.7, "fat": 65.2, "fiber": 6.7 },
+    "isCustom": false
+  },
+  {
+    "id": "noisettes",
+    "name": "Noisettes",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 628, "protein": 15, "carbs": 16.7, "fat": 60.8, "fiber": 9.7 },
+    "isCustom": false
+  },
+  {
+    "id": "noix_cajou",
+    "name": "Noix de cajou",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 553, "protein": 18.2, "carbs": 30.2, "fat": 43.9, "fiber": 3.3 },
+    "isCustom": false
+  },
+  {
+    "id": "pistaches",
+    "name": "Pistaches",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 562, "protein": 20.2, "carbs": 27.2, "fat": 45.3, "fiber": 10.6 },
+    "isCustom": false
+  },
+  {
+    "id": "cacahuetes",
+    "name": "Cacahuètes",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 567, "protein": 25.8, "carbs": 16.1, "fat": 49.2, "fiber": 8.5 },
+    "isCustom": false
+  },
+  {
+    "id": "graines_chia",
+    "name": "Graines de chia",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 486, "protein": 16.5, "carbs": 42.1, "fat": 30.7, "fiber": 34.4 },
+    "isCustom": false
+  },
+  {
+    "id": "graines_lin",
+    "name": "Graines de lin",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 534, "protein": 18.3, "carbs": 28.9, "fat": 42.2, "fiber": 27.3 },
+    "isCustom": false
+  },
+  {
+    "id": "graines_courge",
+    "name": "Graines de courge",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 559, "protein": 30.2, "carbs": 10.7, "fat": 49, "fiber": 6 },
+    "isCustom": false
+  },
+  {
+    "id": "tahini",
+    "name": "Tahini",
+    "category": "Noix & graines",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 595, "protein": 17, "carbs": 21, "fat": 54, "fiber": 9 },
+    "isCustom": false
+  },
+  {
+    "id": "eau",
+    "name": "Eau",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 0, "protein": 0, "carbs": 0, "fat": 0 },
+    "isCustom": false
+  },
+  {
+    "id": "cafe_noir",
+    "name": "Café noir",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 2, "protein": 0.1, "carbs": 0, "fat": 0 },
+    "isCustom": false
+  },
+  {
+    "id": "the",
+    "name": "Thé",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 1, "protein": 0, "carbs": 0.2, "fat": 0 },
+    "isCustom": false
+  },
+  {
+    "id": "jus_orange",
+    "name": "Jus d'orange",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 45, "protein": 0.7, "carbs": 10.4, "fat": 0.2, "sugar": 8.4 },
+    "isCustom": false
+  },
+  {
+    "id": "cola",
+    "name": "Cola",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 42, "protein": 0, "carbs": 10.6, "fat": 0, "sugar": 10.6 },
+    "isCustom": false
+  },
+  {
+    "id": "lait_amande_sans_sucre",
+    "name": "Lait d'amande sans sucre",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 13, "protein": 0.4, "carbs": 0.2, "fat": 1.1, "sugar": 0.1 },
+    "isCustom": false
+  },
+  {
+    "id": "biere",
+    "name": "Bière",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 43, "protein": 0.5, "carbs": 3.6, "fat": 0 },
+    "isCustom": false
+  },
+  {
+    "id": "vin_rouge",
+    "name": "Vin rouge",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 85, "protein": 0.1, "carbs": 2.6, "fat": 0 },
+    "isCustom": false
+  },
+  {
+    "id": "smoothie_fruits",
+    "name": "Smoothie aux fruits",
+    "category": "Boissons",
+    "unit": "ml",
+    "nutritionPer100g": { "calories": 58, "protein": 0.6, "carbs": 13.5, "fat": 0.2, "fiber": 1.2, "sugar": 10.5 },
+    "isCustom": false
+  },
+  {
+    "id": "chocolat_noir",
+    "name": "Chocolat noir",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 546, "protein": 4.9, "carbs": 46, "fat": 31, "fiber": 7, "sugar": 24 },
+    "isCustom": false
+  },
+  {
+    "id": "chocolat_lait",
+    "name": "Chocolat au lait",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 535, "protein": 7.7, "carbs": 59, "fat": 30, "sugar": 52 },
+    "isCustom": false
+  },
+  {
+    "id": "biscuit_sec",
+    "name": "Biscuit sec",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 450, "protein": 7, "carbs": 72, "fat": 15, "sugar": 24 },
+    "isCustom": false
+  },
+  {
+    "id": "madeleine",
+    "name": "Madeleine",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 430, "protein": 6, "carbs": 55, "fat": 21, "sugar": 28 },
+    "isCustom": false
+  },
+  {
+    "id": "croissant",
+    "name": "Croissant",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 406, "protein": 8, "carbs": 45, "fat": 21, "sugar": 11 },
+    "isCustom": false
+  },
+  {
+    "id": "pain_chocolat",
+    "name": "Pain au chocolat",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 423, "protein": 7.5, "carbs": 46, "fat": 23, "sugar": 17 },
+    "isCustom": false
+  },
+  {
+    "id": "chips",
+    "name": "Chips",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 536, "protein": 6.5, "carbs": 53, "fat": 34, "fiber": 4.8, "salt": 1.4 },
+    "isCustom": false
+  },
+  {
+    "id": "glace_vanille",
+    "name": "Glace vanille",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 207, "protein": 3.5, "carbs": 24, "fat": 11, "sugar": 21 },
+    "isCustom": false
+  },
+  {
+    "id": "confiture",
+    "name": "Confiture",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 250, "protein": 0.4, "carbs": 61, "fat": 0.1, "sugar": 55 },
+    "isCustom": false
+  },
+  {
+    "id": "miel",
+    "name": "Miel",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 304, "protein": 0.3, "carbs": 82.4, "fat": 0, "sugar": 82 },
+    "isCustom": false
+  },
+  {
+    "id": "sucre_blanc",
+    "name": "Sucre blanc",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 400, "protein": 0, "carbs": 100, "fat": 0, "sugar": 100 },
+    "isCustom": false
+  },
+  {
+    "id": "cereales_chocolat",
+    "name": "Céréales chocolat",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 390, "protein": 7, "carbs": 78, "fat": 5, "fiber": 5, "sugar": 28 },
+    "isCustom": false
+  },
+  {
+    "id": "barre_cereales",
+    "name": "Barre de céréales",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 410, "protein": 7, "carbs": 65, "fat": 13, "fiber": 4, "sugar": 22 },
+    "isCustom": false
+  },
+  {
+    "id": "pop_corn",
+    "name": "Pop-corn",
+    "category": "Snacks/Sucré",
+    "unit": "g",
+    "nutritionPer100g": { "calories": 375, "protein": 11, "carbs": 74, "fat": 4.3, "fiber": 13 },
+    "isCustom": false
+  }
+]
