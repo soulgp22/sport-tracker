@@ -185,7 +185,7 @@ describe('swapExercise', () => {
 
     const exercise = useActiveSessionStore.getState().active!.exercises[0];
     expect(exercise.exerciseId).toBe(SWAP_TO_WITHOUT_HISTORY.id);
-    expect(exercise.exerciseName).toBe(SWAP_TO_WITHOUT_HISTORY.name);
+    expect(exercise.exerciseName).toBe(SWAP_TO_WITHOUT_HISTORY.nameFr ?? SWAP_TO_WITHOUT_HISTORY.name);
     expect(exercise.sets[0].targetWeight).toBe(60);
     expect(exercise.sets[0].actualWeight).toBe(60);
     expect(exercise.sets[1].targetWeight).toBe(70);
