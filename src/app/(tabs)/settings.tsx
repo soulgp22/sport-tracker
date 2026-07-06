@@ -280,7 +280,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Générer un programme avec une IA</Text>
           <Text style={styles.helpText}>
-            Copie ce prompt et donne-le à ChatGPT/Claude pour générer un programme, puis importe le JSON obtenu.
+            Copie ce prompt avec le bouton ci-dessous, puis colle-le dans ChatGPT/Claude pour générer un programme, et importe le JSON obtenu.
           </Text>
 
           <Button
@@ -290,16 +290,6 @@ export default function SettingsScreen() {
             style={styles.actionBtn}
           />
 
-          <View style={styles.promptPreview}>
-            <ScrollView
-              style={styles.promptScroll}
-              contentContainerStyle={styles.promptPreviewContent}
-              nestedScrollEnabled>
-              <Text selectable style={styles.promptText}>
-                {aiProgramPrompt}
-              </Text>
-            </ScrollView>
-          </View>
         </View>
 
         <View style={styles.section}>
@@ -363,21 +353,6 @@ const styles = StyleSheet.create({
   },
   actionBtn: { marginTop: 4 },
   helpText: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
-  promptPreview: {
-    maxHeight: 220,
-    backgroundColor: colors.surface,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  promptScroll: { maxHeight: 220 },
-  promptPreviewContent: { padding: 12 },
-  promptText: {
-    fontSize: 11,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: colors.textPrimary,
-    lineHeight: 16,
-  },
   codeBlock: {
     backgroundColor: colors.surfaceAlt,
     borderRadius: 8,
