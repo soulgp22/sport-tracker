@@ -39,6 +39,7 @@ export default function TabLayout() {
       <Stack.Screen name="session" options={{ headerShown: false }} />
       <Stack.Screen name="exercises" options={{ headerShown: false }} />
       <Stack.Screen name="foods" options={{ headerShown: false }} />
+      <Stack.Screen name="nutrition" options={{ headerShown: false }} />
       <Stack.Screen name="history" options={{ headerShown: false }} />
       <Stack.Screen name="progress" options={{ headerShown: false }} />
       <Stack.Screen
