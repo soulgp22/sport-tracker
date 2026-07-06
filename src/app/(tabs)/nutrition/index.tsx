@@ -84,6 +84,11 @@ export default function NutritionScreen() {
             onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
           />
           <Button
+            title="Tendance calories"
+            variant="secondary"
+            onPress={() => router.push('/(tabs)/nutrition/history' as never)}
+          />
+          <Button
             title="Objectifs"
             variant="secondary"
             onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
