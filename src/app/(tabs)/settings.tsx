@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Platform,
@@ -77,6 +77,18 @@ function buildAiProgramPrompt() {
   return [...fixedPromptLines, ...exerciseLines].join('\n');
 }
 
+// Calcul paresseux + mis en cache : construire le prompt parcourt tout le
+// catalogue et fait des opérations Intl coûteuses (lentes sur Hermes). On évite
+// de le faire au montage de l'écran ; il n'est calculé qu'au 1er appui sur
+// « Copier », puis réutilisé depuis le cache.
+let cachedAiProgramPrompt: string | null = null;
+function getAiProgramPrompt() {
+  if (cachedAiProgramPrompt === null) {
+    cachedAiProgramPrompt = buildAiProgramPrompt();
+  }
+  return cachedAiProgramPrompt;
+}
+
 export default function SettingsScreen() {
   const importPrograms = useProgramStore((s) => s.importPrograms);
   const programs = useProgramStore((s) => s.programs);
@@ -85,7 +97,6 @@ export default function SettingsScreen() {
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
-  const aiProgramPrompt = useMemo(buildAiProgramPrompt, []);
   const aiPromptCopied = aiPromptCopyFeedback > 0;
 
   useEffect(() => {
@@ -213,11 +224,11 @@ export default function SettingsScreen() {
 
   const handleCopyAiPrompt = async () => {
     try {
-      await Clipboard.setStringAsync(aiProgramPrompt);
+      await Clipboard.setStringAsync(getAiProgramPrompt());
       setAiPromptCopyFeedback((current) => current + 1);
     } catch {
       try {
-        await Share.share({ message: aiProgramPrompt });
+        await Share.share({ message: getAiProgramPrompt() });
       } catch {
         Alert.alert('Erreur', 'Impossible de copier ou partager le prompt.');
       }
