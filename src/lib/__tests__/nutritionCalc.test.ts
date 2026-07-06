@@ -5,6 +5,7 @@ import {
   calculateGoalProgress,
   calculateNutritionForQuantity,
   calculateRemainingGoals,
+  getCalorieTrend,
   getNutritionHistory,
   macroStatusColor,
 } from '../nutritionCalc';
@@ -122,6 +123,53 @@ describe('nutritionCalc', () => {
       totals: { calories: 700, protein: 30, carbs: 90, fat: 20 },
     });
     expect(history.average).toEqual({ calories: 150, protein: 7.1, carbs: 18.6, fat: 4.3 });
+  });
+
+  it('construit une tendance calories journalière sur 7 jours', () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-07-05T12:00:00.000Z'));
+
+    const trend = getCalorieTrend(
+      [
+        makeEntry({ id: 'today', date: '2026-07-05', calculatedNutrition: { calories: 700, protein: 30, carbs: 90, fat: 20 } }),
+        makeEntry({ id: 'past-1', date: '2026-07-03', calculatedNutrition: { calories: 250, protein: 12, carbs: 35, fat: 8 } }),
+        makeEntry({ id: 'past-2', date: '2026-07-03T08:00:00.000Z', calculatedNutrition: { calories: 100, protein: 8, carbs: 10, fat: 4 } }),
+        makeEntry({ id: 'ignored', date: '2026-06-20', calculatedNutrition: { calories: 999, protein: 99, carbs: 99, fat: 99 } }),
+      ],
+      7,
+      'day'
+    );
+
+    expect(trend.points).toHaveLength(7);
+    expect(trend.points.map((point) => point.label)).toEqual([
+      '29/06',
+      '30/06',
+      '01/07',
+      '02/07',
+      '03/07',
+      '04/07',
+      '05/07',
+    ]);
+    expect(trend.points[4]).toEqual({ label: '03/07', calories: 350 });
+    expect(trend.points[6]).toEqual({ label: '05/07', calories: 700 });
+    expect(trend.averagePerDay).toBe(150);
+  });
+
+  it('agrège une tendance calories mensuelle sur 1 an', () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-07-05T12:00:00.000Z'));
+
+    const trend = getCalorieTrend(
+      [
+        makeEntry({ id: 'july-2026', date: '2026-07-05', calculatedNutrition: { calories: 900, protein: 40, carbs: 100, fat: 25 } }),
+        makeEntry({ id: 'ignored', date: '2025-07-01', calculatedNutrition: { calories: 500, protein: 20, carbs: 50, fat: 10 } }),
+      ],
+      365,
+      'month'
+    );
+    const lastPoint = trend.points[trend.points.length - 1];
+
+    expect(trend.points.length).toBeLessThanOrEqual(13);
+    expect(lastPoint).toEqual({ label: 'juil.', calories: 900 });
+    expect(trend.averagePerDay).toBe(2);
   });
 
   it('renvoie la couleur de statut macro', () => {

@@ -6,21 +6,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CalorieTrendChart } from '../../../components/nutrition/CalorieTrendChart';
 import { colors } from '../../../constants/colors';
-import { getNutritionHistory } from '../../../lib/nutritionCalc';
+import { getCalorieTrend } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 
-type Period = 7 | 30;
+const periods = [
+  { label: '7 j', days: 7, bucket: 'day' },
+  { label: '30 j', days: 30, bucket: 'day' },
+  { label: '3 mois', days: 90, bucket: 'week' },
+  { label: '1 an', days: 365, bucket: 'month' },
+] as const;
 
-const periods: { label: string; value: Period }[] = [
-  { label: '7 jours', value: 7 },
-  { label: '30 jours', value: 30 },
-];
+type Period = (typeof periods)[number];
 
 export default function NutritionHistoryScreen() {
   const router = useRouter();
   const [, forceTick] = useReducer((x: number) => x + 1, 0);
-  const [period, setPeriod] = useState<Period>(7);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>(periods[0]);
   const entriesState = useFoodDiaryStore((s) => s.entries);
   const goals = useNutritionGoalsStore((s) => s.goals);
 
@@ -30,17 +32,9 @@ export default function NutritionHistoryScreen() {
     }, [])
   );
 
-  const history = useMemo(
-    () => getNutritionHistory(entriesState, period),
-    [entriesState, period]
-  );
-  const chartDays = useMemo(
-    () =>
-      history.days.map((day) => ({
-        date: day.date,
-        calories: day.totals.calories,
-      })),
-    [history.days]
+  const trend = useMemo(
+    () => getCalorieTrend(entriesState, selectedPeriod.days, selectedPeriod.bucket),
+    [entriesState, selectedPeriod]
   );
 
   return (
@@ -56,13 +50,13 @@ export default function NutritionHistoryScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.periodRow}>
           {periods.map((item) => {
-            const selected = item.value === period;
+            const selected = item.label === selectedPeriod.label;
 
             return (
               <TouchableOpacity
-                key={item.value}
+                key={item.label}
                 style={[styles.chip, selected && styles.chipSelected]}
-                onPress={() => setPeriod(item.value)}
+                onPress={() => setSelectedPeriod(item)}
                 activeOpacity={0.75}>
                 <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
                   {item.label}
@@ -75,7 +69,7 @@ export default function NutritionHistoryScreen() {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>Moyenne</Text>
-            <Text style={styles.statValue}>{history.average.calories} kcal/j</Text>
+            <Text style={styles.statValue}>{trend.averagePerDay} kcal/j</Text>
           </View>
           <View style={styles.statCard}>
             <Text style={styles.statLabel}>Objectif</Text>
@@ -84,7 +78,7 @@ export default function NutritionHistoryScreen() {
         </View>
 
         <View style={styles.chartCard}>
-          <CalorieTrendChart days={chartDays} goal={goals.dailyCalories} />
+          <CalorieTrendChart points={trend.points} goal={goals.dailyCalories} />
         </View>
       </ScrollView>
     </SafeAreaView>

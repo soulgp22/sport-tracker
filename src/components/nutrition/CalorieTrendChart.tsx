@@ -4,22 +4,17 @@ import { LineChart } from 'react-native-gifted-charts';
 import { colors } from '../../constants/colors';
 
 interface CalorieTrendDay {
-  date: string;
+  label: string;
   calories: number;
 }
 
 interface CalorieTrendChartProps {
-  days: CalorieTrendDay[];
+  points: CalorieTrendDay[];
   goal: number;
 }
 
-function formatShortDate(date: string) {
-  const [, month, day] = date.split('-');
-  return `${day}/${month}`;
-}
-
-export function CalorieTrendChart({ days, goal }: CalorieTrendChartProps) {
-  const hasData = days.length > 0 && days.some((day) => day.calories > 0);
+export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
+  const hasData = points.length > 0 && points.some((point) => point.calories > 0);
 
   if (!hasData) {
     return (
@@ -29,13 +24,13 @@ export function CalorieTrendChart({ days, goal }: CalorieTrendChartProps) {
     );
   }
 
-  const isCompact = days.length > 7;
-  const spacing = isCompact ? 16 : 44;
-  const chartData = days.map((day, index) => ({
-    value: day.calories,
-    label: !isCompact || index % 5 === 0 ? formatShortDate(day.date) : '',
+  const labelStep = points.length <= 8 ? 1 : Math.ceil(points.length / 8);
+  const spacing = points.length <= 7 ? 44 : points.length <= 14 ? 30 : 16;
+  const chartData = points.map((point, index) => ({
+    value: point.calories,
+    label: index % labelStep === 0 ? point.label : '',
   }));
-  const maxSource = Math.max(goal, ...days.map((day) => day.calories));
+  const maxSource = Math.max(goal, ...points.map((point) => point.calories));
   const maxValue = Math.ceil(maxSource * 1.15);
 
   return (
