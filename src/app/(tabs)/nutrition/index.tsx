@@ -3,9 +3,14 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { MacroBar } from '../../../components/nutrition/MacroBar';
 import { Button } from '../../../components/ui/Button';
 import { colors } from '../../../constants/colors';
-import { calculateDailyTotals, calculateRemainingGoals } from '../../../lib/nutritionCalc';
+import {
+  calculateDailyTotals,
+  calculateGoalProgress,
+  calculateRemainingGoals,
+} from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 
@@ -16,6 +21,10 @@ function todayKey() {
 function formatMacro(value: number) {
   if (Number.isInteger(value)) return String(value);
   return value.toFixed(1).replace('.', ',');
+}
+
+function roundedMacro(value: number) {
+  return Number(formatMacro(value).replace(',', '.'));
 }
 
 export default function NutritionScreen() {
@@ -38,39 +47,59 @@ export default function NutritionScreen() {
   );
   const totals = useMemo(() => calculateDailyTotals(entries), [entries]);
   const remaining = useMemo(() => calculateRemainingGoals(totals, goals), [goals, totals]);
+  const progress = useMemo(() => calculateGoalProgress(totals, goals), [goals, totals]);
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.summaryCard}>
+        <View style={styles.card}>
           <Text style={styles.cardTitle}>Aujourd'hui</Text>
 
           <View style={styles.caloriesBlock}>
             <Text style={styles.caloriesValue}>
               {totals.calories} / {goals.dailyCalories} kcal
             </Text>
-            <Text style={styles.remaining}>Restant: {remaining.calories} kcal</Text>
+            <Text style={[styles.remaining, remaining.calories < 0 ? styles.overGoal : null]}>
+              {remaining.calories >= 0
+                ? `Restant : ${remaining.calories} kcal`
+                : `Dépassé de ${Math.abs(remaining.calories)} kcal`}
+            </Text>
           </View>
 
-          <View style={styles.macroRow}>
-            <View style={styles.macroCell}>
-              <Text style={styles.macroValue}>
-                P {formatMacro(totals.protein)}/{formatMacro(goals.protein)} g
-              </Text>
-              <Text style={styles.macroLabel}>Protéines</Text>
-            </View>
-            <View style={styles.macroCell}>
-              <Text style={styles.macroValue}>
-                G {formatMacro(totals.carbs)}/{formatMacro(goals.carbs)} g
-              </Text>
-              <Text style={styles.macroLabel}>Glucides</Text>
-            </View>
-            <View style={styles.macroCell}>
-              <Text style={styles.macroValue}>
-                L {formatMacro(totals.fat)}/{formatMacro(goals.fat)} g
-              </Text>
-              <Text style={styles.macroLabel}>Lipides</Text>
-            </View>
+          <MacroBar
+            label="Calories"
+            current={totals.calories}
+            goal={goals.dailyCalories}
+            unit="kcal"
+            percent={progress.calories}
+          />
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Macros</Text>
+
+          <View style={styles.macroBars}>
+            <MacroBar
+              label="Protéines"
+              current={roundedMacro(totals.protein)}
+              goal={roundedMacro(goals.protein)}
+              unit="g"
+              percent={progress.protein}
+            />
+            <MacroBar
+              label="Glucides"
+              current={roundedMacro(totals.carbs)}
+              goal={roundedMacro(goals.carbs)}
+              unit="g"
+              percent={progress.carbs}
+            />
+            <MacroBar
+              label="Lipides"
+              current={roundedMacro(totals.fat)}
+              goal={roundedMacro(goals.fat)}
+              unit="g"
+              percent={progress.fat}
+            />
           </View>
         </View>
 
@@ -102,7 +131,7 @@ export default function NutritionScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 16, gap: 18, paddingBottom: 32 },
-  summaryCard: {
+  card: {
     backgroundColor: colors.surface,
     borderRadius: 12,
     borderWidth: 1,
@@ -114,15 +143,7 @@ const styles = StyleSheet.create({
   caloriesBlock: { gap: 4 },
   caloriesValue: { fontSize: 28, fontWeight: '800', color: colors.primary },
   remaining: { fontSize: 15, fontWeight: '700', color: colors.textSecondary },
-  macroRow: { flexDirection: 'row', gap: 8 },
-  macroCell: {
-    flex: 1,
-    backgroundColor: colors.surfaceAlt,
-    borderRadius: 8,
-    padding: 10,
-    gap: 4,
-  },
-  macroValue: { fontSize: 14, fontWeight: '800', color: colors.textPrimary },
-  macroLabel: { fontSize: 11, color: colors.textSecondary },
+  overGoal: { color: colors.danger },
+  macroBars: { gap: 14 },
   actions: { gap: 12 },
 });
