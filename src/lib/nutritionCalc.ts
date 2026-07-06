@@ -1,5 +1,5 @@
 import { colors } from '../constants/colors';
-import type { CalculatedNutrition, Food, FoodEntry, NutritionGoals } from '../types';
+import type { CalculatedNutrition, Food, FoodEntry, FoodUnit, NutritionGoals } from '../types';
 
 export interface NutritionHistoryDay {
   date: string;
@@ -57,8 +57,12 @@ function getEntryDateKey(entry: FoodEntry) {
   return entry.date.slice(0, 10);
 }
 
+function referenceAmount(unit: FoodUnit): number {
+  return unit === 'g' || unit === 'ml' ? 100 : 1;
+}
+
 export function calculateNutritionForQuantity(food: Food, quantity: number): CalculatedNutrition {
-  const factor = quantity / 100;
+  const factor = quantity / referenceAmount(food.unit);
 
   return roundNutrition({
     calories: food.nutritionPer100g.calories * factor,

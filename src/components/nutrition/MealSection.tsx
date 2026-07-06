@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from '../../constants/colors';
@@ -20,6 +20,7 @@ interface MealSectionProps {
   mealType: MealType;
   entries: FoodEntry[];
   onDeleteEntry: (entry: FoodEntry) => void;
+  onMoveEntry: (entry: FoodEntry, mealType: MealType) => void;
   onUpdateQuantity: (entry: FoodEntry, quantity: number) => void;
 }
 
@@ -37,6 +38,7 @@ export function MealSection({
   mealType,
   entries,
   onDeleteEntry,
+  onMoveEntry,
   onUpdateQuantity,
 }: MealSectionProps) {
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
@@ -65,6 +67,20 @@ export function MealSection({
 
     onUpdateQuantity(entry, quantity);
     cancelEdit();
+  };
+
+  const openMoveMenu = (entry: FoodEntry) => {
+    Alert.alert(
+      'Déplacer vers',
+      undefined,
+      [
+        ...MEAL_ORDER.filter((item) => item !== mealType).map((targetMealType) => ({
+          text: MEAL_LABELS[targetMealType],
+          onPress: () => onMoveEntry(entry, targetMealType),
+        })),
+        { text: 'Annuler', style: 'cancel' as const },
+      ]
+    );
   };
 
   return (
@@ -149,6 +165,14 @@ export function MealSection({
                   <Text style={styles.textActionLabel}>Modifier</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  style={styles.moveButton}
+                  onPress={() => openMoveMenu(entry)}
+                  activeOpacity={0.75}
+                  accessibilityRole="button"
+                  accessibilityLabel="Déplacer">
+                  <Ionicons name="swap-horizontal-outline" size={18} color={colors.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => onDeleteEntry(entry)}
                   activeOpacity={0.75}
@@ -202,6 +226,14 @@ const styles = StyleSheet.create({
   },
   textActionLabel: { fontSize: 12, fontWeight: '800', color: colors.primary },
   deleteButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surfaceAlt,
+  },
+  moveButton: {
     width: 32,
     height: 32,
     borderRadius: 16,

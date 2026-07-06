@@ -51,6 +51,10 @@ function formatNumber(value: number) {
   return value.toFixed(1).replace('.', ',');
 }
 
+function defaultQuantityForFood(food: Food) {
+  return food.unit === 'g' || food.unit === 'ml' ? '100' : '1';
+}
+
 function FoodResultRow({ food, onPress }: { food: Food; onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.foodRow} onPress={onPress} activeOpacity={0.75}>
@@ -106,6 +110,11 @@ export default function AddMealScreen() {
     router.back();
   };
 
+  const handleSelectFood = (food: Food) => {
+    setSelectedFood(food);
+    setQuantity(defaultQuantityForFood(food));
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
@@ -135,7 +144,7 @@ export default function AddMealScreen() {
               data={results}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <FoodResultRow food={item} onPress={() => setSelectedFood(item)} />
+                <FoodResultRow food={item} onPress={() => handleSelectFood(item)} />
               )}
               ListEmptyComponent={
                 <EmptyState

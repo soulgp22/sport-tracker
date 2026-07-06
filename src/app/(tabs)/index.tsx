@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors } from '../../constants/colors';
@@ -41,7 +41,9 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Sport Tracker</Text>
 
         <View style={styles.grid}>
@@ -58,16 +60,15 @@ export default function HomeScreen() {
                 </View>
               ) : null}
               <View style={styles.iconBox}>
-                <Ionicons name={tile.icon} size={30} color={colors.primary} />
+                <Ionicons name={tile.icon} size={24} color={colors.primary} />
               </View>
-              <View style={styles.tileFooter}>
-                <Text style={styles.tileLabel}>{tile.label}</Text>
-                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
-              </View>
+              <Text style={styles.tileLabel} numberOfLines={1}>
+                {tile.label}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -75,68 +76,62 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   content: {
-    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 32,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '800',
     color: colors.textPrimary,
-    marginBottom: 24,
+    marginBottom: 20,
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    rowGap: 12,
+    gap: 12,
   },
   tile: {
-    width: '48%',
+    width: '30%',
     aspectRatio: 1,
     backgroundColor: colors.surface,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 16,
-    justifyContent: 'space-between',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     shadowColor: colors.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   iconBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tileFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
-  },
   tileLabel: {
-    flex: 1,
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '700',
     color: colors.textPrimary,
+    textAlign: 'center',
   },
   badge: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: 6,
+    right: 6,
     backgroundColor: colors.primary,
     borderRadius: 999,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   badgeText: {
-    fontSize: 11,
+    fontSize: 9,
     fontWeight: '700',
     color: colors.primaryText,
   },

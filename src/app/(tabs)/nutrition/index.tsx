@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
@@ -20,9 +20,16 @@ function formatMacro(value: number) {
 
 export default function NutritionScreen() {
   const router = useRouter();
+  const [, forceTick] = useReducer((x: number) => x + 1, 0);
   const goals = useNutritionGoalsStore((s) => s.goals);
   const entriesState = useFoodDiaryStore((s) => s.entries);
   const getEntriesByDate = useFoodDiaryStore((s) => s.getEntriesByDate);
+
+  useFocusEffect(
+    useCallback(() => {
+      forceTick();
+    }, [])
+  );
 
   const today = todayKey();
   const entries = useMemo(

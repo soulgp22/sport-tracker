@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -22,11 +22,18 @@ function todayKey() {
 
 export default function NutritionDiaryScreen() {
   const router = useRouter();
+  const [, forceTick] = useReducer((x: number) => x + 1, 0);
   const entriesState = useFoodDiaryStore((s) => s.entries);
   const getEntriesByDate = useFoodDiaryStore((s) => s.getEntriesByDate);
   const deleteFoodEntry = useFoodDiaryStore((s) => s.deleteFoodEntry);
   const updateFoodEntry = useFoodDiaryStore((s) => s.updateFoodEntry);
   const getFoodById = useFoodStore((s) => s.getFoodById);
+
+  useFocusEffect(
+    useCallback(() => {
+      forceTick();
+    }, [])
+  );
 
   const today = todayKey();
   const entries = useMemo(
@@ -55,6 +62,10 @@ export default function NutritionDiaryScreen() {
         },
       ]
     );
+  };
+
+  const handleMove = (entry: FoodEntry, mealType: MealType) => {
+    updateFoodEntry(entry.id, { mealType });
   };
 
   const handleUpdateQuantity = (entry: FoodEntry, quantity: number) => {
@@ -105,6 +116,7 @@ export default function NutritionDiaryScreen() {
                 mealType={section.mealType as MealType}
                 entries={section.entries}
                 onDeleteEntry={handleDelete}
+                onMoveEntry={handleMove}
                 onUpdateQuantity={handleUpdateQuantity}
               />
             ))}

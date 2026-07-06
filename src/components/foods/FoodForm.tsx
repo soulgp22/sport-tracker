@@ -69,6 +69,12 @@ function labelForNumberField(field: (typeof requiredNumberFields)[number] | (typ
   }
 }
 
+function nutritionTitle(unit: FoodUnit) {
+  if (unit === 'g' || unit === 'ml') return `Nutrition pour 100 ${unit}`;
+  if (unit === 'unité') return 'Nutrition par unité';
+  return 'Nutrition par portion';
+}
+
 export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: FoodFormProps) {
   const [name, setName] = useState(initialFood?.name ?? '');
   const [category, setCategory] = useState(initialFood?.category ?? '');
@@ -242,7 +248,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Nutrition pour 100 g</Text>
+          <Text style={styles.sectionTitle}>{nutritionTitle(unit)}</Text>
 
           <TextInput
             label="Calories"

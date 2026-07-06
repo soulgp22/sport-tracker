@@ -18,6 +18,15 @@ const rizCuit: Food = {
   isCustom: false,
 };
 
+const oeuf: Food = {
+  id: 'oeuf',
+  name: 'Oeuf',
+  category: 'Protéines',
+  unit: 'unité',
+  nutritionPer100g: { calories: 78, protein: 6.3, carbs: 0.6, fat: 5.3 },
+  isCustom: true,
+};
+
 const goals: NutritionGoals = {
   dailyCalories: 2000,
   protein: 150,
@@ -51,6 +60,15 @@ describe('nutritionCalc', () => {
       protein: 5.4,
       carbs: 56.4,
       fat: 0.6,
+    });
+  });
+
+  it('calcule la nutrition par unité', () => {
+    expect(calculateNutritionForQuantity(oeuf, 2)).toEqual({
+      calories: 156,
+      protein: 12.6,
+      carbs: 1.2,
+      fat: 10.6,
     });
   });
 
