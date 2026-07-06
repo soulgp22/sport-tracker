@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { colors } from '../constants/colors';
 import { configureNotifications, requestNotificationPermission } from '../lib/restTimerNotifications';
@@ -27,9 +28,11 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <ThemeProvider value={navigationTheme}>
-      <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="light" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={navigationTheme}>
+        <Stack screenOptions={{ headerShown: false }} />
+        <StatusBar style="light" />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
