@@ -17,6 +17,7 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 import { Button } from '../../components/ui/Button';
 import { colors } from '../../constants/colors';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
+import { useFoodStore, type ImportFoodsResult } from '../../store/foodStore';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
 
@@ -89,12 +90,38 @@ function getAiProgramPrompt() {
   return cachedAiProgramPrompt;
 }
 
+function buildFoodImportMessage(result: ImportFoodsResult) {
+  const duplicateCount = result.duplicateIds.length;
+  const lines = [
+    `${result.added} aliment(s) ajouté(s).`,
+    `${duplicateCount} doublon(s) ignoré(s).`,
+    `${result.errors.length} erreur(s).`,
+  ];
+
+  if (result.errors.length > 0) {
+    const preview = result.errors.slice(0, 6).join('\n');
+    const remaining =
+      result.errors.length > 6 ? `\n… et ${result.errors.length - 6} autre(s)` : '';
+    lines.push('', preview + remaining);
+  }
+
+  if (duplicateCount > 0) {
+    const preview = result.duplicateIds.slice(0, 6).join(', ');
+    const remaining =
+      duplicateCount > 6 ? `, … et ${duplicateCount - 6} autre(s)` : '';
+    lines.push('', `Doublons : ${preview}${remaining}`);
+  }
+
+  return lines.join('\n');
+}
+
 export default function SettingsScreen() {
   const importPrograms = useProgramStore((s) => s.importPrograms);
   const programs = useProgramStore((s) => s.programs);
   const programsCount = useProgramStore((s) => s.programs.length);
   const sessionsCount = useSessionStore((s) => s.sessions.length);
   const [importing, setImporting] = useState(false);
+  const [importingFoods, setImportingFoods] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
   const aiPromptCopied = aiPromptCopyFeedback > 0;
@@ -222,6 +249,58 @@ export default function SettingsScreen() {
     }
   };
 
+  const showFoodImportResult = (result: ImportFoodsResult) => {
+    if (result.errors.length > 0 && result.added === 0) {
+      Alert.alert("Échec de l'import", buildFoodImportMessage(result));
+      return;
+    }
+
+    if (result.errors.length > 0 || result.duplicateIds.length > 0) {
+      Alert.alert('Import partiel', buildFoodImportMessage(result));
+      return;
+    }
+
+    Alert.alert('Import réussi', buildFoodImportMessage(result));
+  };
+
+  const handleImportFoodsCsv = async () => {
+    try {
+      setImportingFoods(true);
+
+      if (Platform.OS === 'web') {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+        const file = await new Promise<globalThis.File | null>((resolve) => {
+          input.onchange = () => resolve(input.files?.[0] ?? null);
+          input.click();
+        });
+        if (!file) return;
+
+        const content = await file.text();
+        const result = useFoodStore.getState().importFoodsFromCsv(content);
+        showFoodImportResult(result);
+        return;
+      }
+
+      const result = await DocumentPicker.getDocumentAsync({
+        type: '*/*',
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      const asset = result.assets[0];
+      const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+      const importResult = useFoodStore.getState().importFoodsFromCsv(content);
+      showFoodImportResult(importResult);
+    } catch {
+      Alert.alert('Erreur', 'Impossible de lire le fichier CSV.');
+    } finally {
+      setImportingFoods(false);
+    }
+  };
+
   const handleCopyAiPrompt = async () => {
     try {
       await Clipboard.setStringAsync(getAiProgramPrompt());
@@ -301,6 +380,27 @@ export default function SettingsScreen() {
             style={styles.actionBtn}
           />
 
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Aliments</Text>
+          <Text style={styles.helpText}>
+            Importez plusieurs aliments d&apos;un coup depuis un fichier CSV (import en masse). Colonnes reconnues : nom, categorie, unite, calories, proteines, glucides, lipides (fibres, sucre, sel optionnels).
+          </Text>
+
+          <Button
+            title="Importer des aliments (CSV)"
+            onPress={handleImportFoodsCsv}
+            loading={importingFoods}
+            style={styles.actionBtn}
+          />
+
+          <Text style={styles.helpText}>Format CSV</Text>
+          <View style={styles.codeBlock}>
+            <Text style={styles.code}>
+              {'nom;categorie;unite;calories;proteines;glucides;lipides\nYaourt grec 0%;Produits laitiers;g;59;10;3.6;0.4'}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.section}>

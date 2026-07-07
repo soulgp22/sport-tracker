@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import foodsDefaultJson from '../data/foods.default.json';
+import { parseFoodsCsv } from '../lib/foodCsv';
 import { validateFoodsJson } from '../lib/foodValidation';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 import type { Food } from '../types';
@@ -25,6 +26,7 @@ interface FoodState {
   updateCustomFood: (id: string, patch: Partial<Food>) => void;
   deleteCustomFood: (id: string) => void;
   importFoods: (text: string) => ImportFoodsResult;
+  importFoodsFromCsv: (text: string) => ImportFoodsResult;
 }
 
 const defaultFoods = foodsDefaultJson as Food[];
@@ -107,6 +109,24 @@ export const useFoodStore = create<FoodState>()(
         return {
           added: result.foods.length,
           errors: result.errors,
+          duplicateIds: result.duplicateIds,
+        };
+      },
+
+      importFoodsFromCsv: (text) => {
+        const { foods, errors: csvErrors } = parseFoodsCsv(text);
+        const existingIds = get()
+          .getAllFoods()
+          .map((food) => food.id);
+        const result = validateFoodsJson(JSON.stringify({ foods }), existingIds);
+
+        if (result.foods.length > 0) {
+          set((state) => ({ customFoods: [...result.foods, ...state.customFoods] }));
+        }
+
+        return {
+          added: result.foods.length,
+          errors: [...csvErrors, ...result.errors],
           duplicateIds: result.duplicateIds,
         };
       },
