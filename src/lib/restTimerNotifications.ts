@@ -5,6 +5,12 @@ const REST_TIMER_CHANNEL_ID = 'rest-timer';
 
 let scheduledRestEndNotificationId: string | null = null;
 
+const restEndNotificationContent: Notifications.NotificationContentInput = {
+  title: 'Repos terminé',
+  body: "Temps de repos écoulé, c'est reparti !",
+  sound: 'default',
+};
+
 export async function configureNotifications(): Promise<void> {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -67,11 +73,7 @@ export async function scheduleRestEndNotification(fireDate: Date): Promise<void>
 
   try {
     scheduledRestEndNotificationId = await Notifications.scheduleNotificationAsync({
-      content: {
-        title: 'Repos terminé',
-        body: "Temps de repos écoulé, c'est reparti !",
-        sound: 'default',
-      },
+      content: restEndNotificationContent,
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: fireDate,
@@ -79,7 +81,21 @@ export async function scheduleRestEndNotification(fireDate: Date): Promise<void>
       },
     });
   } catch {
-    scheduledRestEndNotificationId = null;
+    const remainingSeconds = Math.max(1, Math.ceil((fireDate.getTime() - Date.now()) / 1000));
+
+    try {
+      scheduledRestEndNotificationId = await Notifications.scheduleNotificationAsync({
+        content: restEndNotificationContent,
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: remainingSeconds,
+          repeats: false,
+          channelId: REST_TIMER_CHANNEL_ID,
+        },
+      });
+    } catch {
+      scheduledRestEndNotificationId = null;
+    }
   }
 }
 
