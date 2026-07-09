@@ -31,6 +31,12 @@ export interface NutritionGoals {
   targetWeight?: number;
 }
 
+export interface WeightEntry {
+  id: string;
+  date: string; // ISO date, comme FoodEntry.date
+  weight: number; // kg
+}
+
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
 export interface CalculatedNutrition {

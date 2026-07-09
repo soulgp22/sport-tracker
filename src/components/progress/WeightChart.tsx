@@ -5,9 +5,10 @@ import { colors } from '../../constants/colors';
 
 interface WeightChartProps {
   data: DataPoint[];
+  title?: string;
 }
 
-export function WeightChart({ data }: WeightChartProps) {
+export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartProps) {
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
@@ -20,7 +21,7 @@ export function WeightChart({ data }: WeightChartProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Poids maximum (kg)</Text>
+      <Text style={styles.title}>{title}</Text>
       <LineChart
         data={chartData}
         height={180}

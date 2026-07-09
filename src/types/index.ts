@@ -107,4 +107,5 @@ export type {
   GoalType,
   MealType,
   NutritionGoals,
+  WeightEntry,
 } from './nutrition';
