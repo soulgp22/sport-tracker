@@ -77,6 +77,7 @@ export default function FoodParamsScreen() {
   const deleteCustomFood = useFoodStore((s) => s.deleteCustomFood);
   const customFoods = useFoodStore((s) => s.customFoods);
   const [importing, setImporting] = useState(false);
+  const [importingCsv, setImportingCsv] = useState(false);
 
   const showImportResult = (result: ImportFoodsResult) => {
     if (result.errors.length > 0 && result.added === 0) {
@@ -132,6 +133,44 @@ export default function FoodParamsScreen() {
     }
   };
 
+  const handleImportCsv = async () => {
+    try {
+      setImportingCsv(true);
+
+      if (Platform.OS === 'web') {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+        const file = await new Promise<globalThis.File | null>((resolve) => {
+          input.onchange = () => resolve(input.files?.[0] ?? null);
+          input.click();
+        });
+        if (!file) return;
+
+        const content = await file.text();
+        const result = useFoodStore.getState().importFoodsFromCsv(content);
+        showImportResult(result);
+        return;
+      }
+
+      const result = await DocumentPicker.getDocumentAsync({
+        type: '*/*',
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+
+      const asset = result.assets[0];
+      const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+      const importResult = useFoodStore.getState().importFoodsFromCsv(content);
+      showImportResult(importResult);
+    } catch {
+      Alert.alert('Erreur', 'Impossible de lire le fichier CSV.');
+    } finally {
+      setImportingCsv(false);
+    }
+  };
+
   const handleDelete = (food: Food) => {
     Alert.alert('Supprimer', `Supprimer "${food.name}" ?`, [
       { text: 'Annuler', style: 'cancel' },
@@ -165,6 +204,22 @@ export default function FoodParamsScreen() {
             onPress={handleImport}
             loading={importing}
           />
+
+          <Text style={styles.helpText}>
+            Importez plusieurs aliments d&apos;un coup depuis un fichier CSV (import en masse). Colonnes reconnues : nom, categorie, unite, calories, proteines, glucides, lipides (fibres, sucre, sel optionnels).
+          </Text>
+          <Button
+            title="Importer des aliments (CSV)"
+            onPress={handleImportCsv}
+            loading={importingCsv}
+          />
+
+          <Text style={styles.helpText}>Format CSV</Text>
+          <View style={styles.codeBlock}>
+            <Text style={styles.code}>
+              {'nom;categorie;unite;calories;proteines;glucides;lipides\nYaourt grec 0%;Produits laitiers;g;59;10;3.6;0.4'}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.section}>

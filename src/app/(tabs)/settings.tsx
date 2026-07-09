@@ -12,12 +12,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystemLegacy from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
 import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
 import { colors } from '../../constants/colors';
+import {
+  buildProfileBackup,
+  parseProfileBackup,
+  restoreProfileBackup,
+  type ProfileBackup,
+} from '../../lib/profileBackup';
+import { useBodyWeightStore } from '../../store/bodyWeightStore';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
-import { useFoodStore, type ImportFoodsResult } from '../../store/foodStore';
+import { useFoodDiaryStore } from '../../store/foodDiaryStore';
+import { useFoodStore } from '../../store/foodStore';
+import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
 
@@ -90,29 +100,8 @@ function getAiProgramPrompt() {
   return cachedAiProgramPrompt;
 }
 
-function buildFoodImportMessage(result: ImportFoodsResult) {
-  const duplicateCount = result.duplicateIds.length;
-  const lines = [
-    `${result.added} aliment(s) ajouté(s).`,
-    `${duplicateCount} doublon(s) ignoré(s).`,
-    `${result.errors.length} erreur(s).`,
-  ];
-
-  if (result.errors.length > 0) {
-    const preview = result.errors.slice(0, 6).join('\n');
-    const remaining =
-      result.errors.length > 6 ? `\n… et ${result.errors.length - 6} autre(s)` : '';
-    lines.push('', preview + remaining);
-  }
-
-  if (duplicateCount > 0) {
-    const preview = result.duplicateIds.slice(0, 6).join(', ');
-    const remaining =
-      duplicateCount > 6 ? `, … et ${duplicateCount - 6} autre(s)` : '';
-    lines.push('', `Doublons : ${preview}${remaining}`);
-  }
-
-  return lines.join('\n');
+function profileSummary(data: ProfileBackup['data']) {
+  return `${data.programs.length} programme(s), ${data.sessions.length} séance(s), ${data.customFoods.length} aliment(s), ${data.foodDiaryEntries.length} entrée(s) nutrition, ${data.bodyWeightEntries.length} pesée(s).`;
 }
 
 export default function SettingsScreen() {
@@ -120,9 +109,14 @@ export default function SettingsScreen() {
   const programs = useProgramStore((s) => s.programs);
   const programsCount = useProgramStore((s) => s.programs.length);
   const sessionsCount = useSessionStore((s) => s.sessions.length);
+  const customFoodsCount = useFoodStore((s) => s.customFoods.length);
+  const foodDiaryEntriesCount = useFoodDiaryStore((s) => s.entries.length);
+  const nutritionGoals = useNutritionGoalsStore((s) => s.goals);
+  const bodyWeightEntriesCount = useBodyWeightStore((s) => s.entries.length);
   const [importing, setImporting] = useState(false);
-  const [importingFoods, setImportingFoods] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [profileImporting, setProfileImporting] = useState(false);
+  const [profileExporting, setProfileExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
   const aiPromptCopied = aiPromptCopyFeedback > 0;
 
@@ -249,55 +243,103 @@ export default function SettingsScreen() {
     }
   };
 
-  const showFoodImportResult = (result: ImportFoodsResult) => {
-    if (result.errors.length > 0 && result.added === 0) {
-      Alert.alert("Échec de l'import", buildFoodImportMessage(result));
-      return;
-    }
+  const handleProfileExport = async () => {
+    try {
+      setProfileExporting(true);
+      const content = buildProfileBackup();
+      const filename = `sport-tracker-profil-${new Date().toISOString().slice(0, 10)}.json`;
 
-    if (result.errors.length > 0 || result.duplicateIds.length > 0) {
-      Alert.alert('Import partiel', buildFoodImportMessage(result));
-      return;
-    }
+      if (Platform.OS === 'web') {
+        const blob = new Blob([content], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(url);
+        Alert.alert('Sauvegarde prête', "Conservez ce fichier hors de l'app pour pouvoir restaurer votre profil après une réinstallation.");
+        return;
+      }
 
-    Alert.alert('Import réussi', buildFoodImportMessage(result));
+      const available = await Sharing.isAvailableAsync();
+      if (!available) {
+        Alert.alert('Erreur', "Le partage de fichier n'est pas disponible sur cet appareil.");
+        return;
+      }
+
+      const file = new ExpoFile(Paths.cache, filename);
+      if (file.exists) file.delete();
+      file.create();
+      file.write(content);
+      await Sharing.shareAsync(file.uri, {
+        mimeType: 'application/json',
+        dialogTitle: 'Sauvegarder mon profil Sport Tracker',
+        UTI: 'public.json',
+      });
+    } catch {
+      Alert.alert('Erreur', 'Impossible de sauvegarder le profil.');
+    } finally {
+      setProfileExporting(false);
+    }
   };
 
-  const handleImportFoodsCsv = async () => {
+  const confirmAndRestoreProfile = (backup: ProfileBackup) => {
+    Alert.alert(
+      'Restaurer ce profil ?',
+      `Cette restauration remplacera toutes les données actuelles (${programsCount} programme(s), ${sessionsCount} séance(s), ${customFoodsCount} aliment(s), ${foodDiaryEntriesCount} entrée(s) nutrition, objectifs ${nutritionGoals.goalType}, ${bodyWeightEntriesCount} pesée(s)).\n\nProfil à restaurer : ${profileSummary(backup.data)}\n\nContinuer ?`,
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Restaurer',
+          style: 'destructive',
+          onPress: () => {
+            restoreProfileBackup(backup);
+            Alert.alert('Profil restauré', profileSummary(backup.data));
+          },
+        },
+      ]
+    );
+  };
+
+  const handleProfileImport = async () => {
     try {
-      setImportingFoods(true);
+      setProfileImporting(true);
+      let content: string | null = null;
 
       if (Platform.OS === 'web') {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = '.csv';
+        input.accept = '.json';
         const file = await new Promise<globalThis.File | null>((resolve) => {
           input.onchange = () => resolve(input.files?.[0] ?? null);
           input.click();
         });
-        if (!file) return;
+        content = file ? await file.text() : null;
+      } else {
+        const result = await DocumentPicker.getDocumentAsync({
+          type: 'application/json',
+          copyToCacheDirectory: true,
+        });
 
-        const content = await file.text();
-        const result = useFoodStore.getState().importFoodsFromCsv(content);
-        showFoodImportResult(result);
+        if (!result.canceled) {
+          const asset = result.assets[0];
+          content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+        }
+      }
+
+      if (!content) return;
+
+      const backup = parseProfileBackup(content);
+      if (typeof backup === 'string') {
+        Alert.alert('Échec de la restauration', backup);
         return;
       }
 
-      const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*',
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) return;
-
-      const asset = result.assets[0];
-      const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
-      const importResult = useFoodStore.getState().importFoodsFromCsv(content);
-      showFoodImportResult(importResult);
+      confirmAndRestoreProfile(backup);
     } catch {
-      Alert.alert('Erreur', 'Impossible de lire le fichier CSV.');
+      Alert.alert('Erreur', "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide.");
     } finally {
-      setImportingFoods(false);
+      setProfileImporting(false);
     }
   };
 
@@ -340,6 +382,28 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Profil</Text>
+          <Text style={styles.helpText}>
+            La sauvegarde contient vos programmes, séances, aliments personnalisés, données nutrition et poids. Conservez le fichier hors de l&apos;app (Drive, Téléchargements…) pour qu&apos;il survive à une réinstallation.
+          </Text>
+
+          <Button
+            title="Sauvegarder mon profil"
+            onPress={handleProfileExport}
+            loading={profileExporting}
+            style={styles.actionBtn}
+          />
+
+          <Button
+            title="Restaurer un profil"
+            variant="secondary"
+            onPress={handleProfileImport}
+            loading={profileImporting}
+            style={styles.actionBtn}
+          />
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Programmes</Text>
 
           <Button
@@ -380,27 +444,6 @@ export default function SettingsScreen() {
             style={styles.actionBtn}
           />
 
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Aliments</Text>
-          <Text style={styles.helpText}>
-            Importez plusieurs aliments d&apos;un coup depuis un fichier CSV (import en masse). Colonnes reconnues : nom, categorie, unite, calories, proteines, glucides, lipides (fibres, sucre, sel optionnels).
-          </Text>
-
-          <Button
-            title="Importer des aliments (CSV)"
-            onPress={handleImportFoodsCsv}
-            loading={importingFoods}
-            style={styles.actionBtn}
-          />
-
-          <Text style={styles.helpText}>Format CSV</Text>
-          <View style={styles.codeBlock}>
-            <Text style={styles.code}>
-              {'nom;categorie;unite;calories;proteines;glucides;lipides\nYaourt grec 0%;Produits laitiers;g;59;10;3.6;0.4'}
-            </Text>
-          </View>
         </View>
 
         <View style={styles.section}>
