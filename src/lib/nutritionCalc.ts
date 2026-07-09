@@ -1,16 +1,6 @@
 import { colors } from '../constants/colors';
 import type { CalculatedNutrition, Food, FoodEntry, FoodUnit, NutritionGoals } from '../types';
 
-export interface NutritionHistoryDay {
-  date: string;
-  totals: CalculatedNutrition;
-}
-
-export interface NutritionHistory {
-  days: NutritionHistoryDay[];
-  average: CalculatedNutrition;
-}
-
 export type TrendBucket = 'day' | 'week' | 'month';
 
 export interface CalorieTrendPoint {
@@ -147,34 +137,6 @@ export function calculateGoalProgress(
     protein: percent(totals.protein, goals.protein),
     carbs: percent(totals.carbs, goals.carbs),
     fat: percent(totals.fat, goals.fat),
-  };
-}
-
-export function getNutritionHistory(entries: FoodEntry[], period: 7 | 30): NutritionHistory {
-  const days = getRecentDateKeys(period);
-  const daySet = new Set(days);
-  const entriesByDate = new Map<string, FoodEntry[]>();
-
-  for (const entry of entries) {
-    const dateKey = getEntryDateKey(entry);
-    if (!daySet.has(dateKey)) continue;
-    entriesByDate.set(dateKey, [...(entriesByDate.get(dateKey) ?? []), entry]);
-  }
-
-  const historyDays = days.map((date) => ({
-    date,
-    totals: calculateDailyTotals(entriesByDate.get(date) ?? []),
-  }));
-  const periodTotals = sumNutrition(historyDays.map((day) => day.totals));
-
-  return {
-    days: historyDays,
-    average: roundNutrition({
-      calories: periodTotals.calories / period,
-      protein: periodTotals.protein / period,
-      carbs: periodTotals.carbs / period,
-      fat: periodTotals.fat / period,
-    }),
   };
 }
 

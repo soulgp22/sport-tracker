@@ -6,7 +6,6 @@ import {
   calculateNutritionForQuantity,
   calculateRemainingGoals,
   getCalorieTrend,
-  getNutritionHistory,
   macroStatusColor,
 } from '../nutritionCalc';
 
@@ -98,31 +97,6 @@ describe('nutritionCalc', () => {
         goals
       )
     ).toEqual({ calories: 50, protein: 100, carbs: 110, fat: 50 });
-  });
-
-  it('construit un historique sur 7 jours avec moyenne journalière', () => {
-    jest.useFakeTimers().setSystemTime(new Date('2026-07-05T12:00:00.000Z'));
-
-    const history = getNutritionHistory(
-      [
-        makeEntry({ id: 'today', date: '2026-07-05', calculatedNutrition: { calories: 700, protein: 30, carbs: 90, fat: 20 } }),
-        makeEntry({ id: 'past', date: '2026-07-03', calculatedNutrition: { calories: 350, protein: 20, carbs: 40, fat: 10 } }),
-        makeEntry({ id: 'ignored', date: '2026-06-20', calculatedNutrition: { calories: 999, protein: 99, carbs: 99, fat: 99 } }),
-      ],
-      7
-    );
-
-    expect(history.days).toHaveLength(7);
-    expect(history.days[0].date).toBe('2026-06-29');
-    expect(history.days[4]).toEqual({
-      date: '2026-07-03',
-      totals: { calories: 350, protein: 20, carbs: 40, fat: 10 },
-    });
-    expect(history.days[6]).toEqual({
-      date: '2026-07-05',
-      totals: { calories: 700, protein: 30, carbs: 90, fat: 20 },
-    });
-    expect(history.average).toEqual({ calories: 150, protein: 7.1, carbs: 18.6, fat: 4.3 });
   });
 
   it('construit une tendance calories journalière sur 7 jours', () => {
