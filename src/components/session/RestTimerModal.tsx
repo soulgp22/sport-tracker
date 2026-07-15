@@ -59,15 +59,17 @@ export function RestTimerModal({
   const addRestSeconds = useActiveSessionStore((s) => s.addRestSeconds);
   const skipRest = useActiveSessionStore((s) => s.skipRest);
   const [, setTick] = useState(0);
-  const [ringDuration, setRingDuration] = useState(0);
+  const restEndsAt = active?.restEndsAt;
+  const ringDuration = useMemo(() => {
+    if (!restEndsAt) return 0;
+    return Math.max(1, getRemainingRestSeconds(active));
+  }, [active, restEndsAt]);
 
   useEffect(() => {
     if (!visible || !active?.restTimerActive) {
-      setRingDuration(0);
       return undefined;
     }
 
-    setRingDuration(Math.max(1, getRemainingRestSeconds(active)));
     const timer = setInterval(() => setTick((tick) => tick + 1), 1000);
     return () => clearInterval(timer);
   }, [visible, active?.restTimerActive]);
@@ -85,7 +87,6 @@ export function RestTimerModal({
   const adjustRest = (delta: number) => {
     addRestSeconds(delta);
     const remaining = getRemainingRestSeconds(useActiveSessionStore.getState().active);
-    setRingDuration((duration) => Math.max(duration, remaining, 1));
     if (remaining === 0) onDismiss();
   };
 

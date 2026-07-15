@@ -16,7 +16,7 @@ import {
   HankenGrotesk_800ExtraBold,
 } from '@expo-google-fonts/hanken-grotesk';
 
-import { configureNotifications, requestNotificationPermission } from '../lib/restTimerNotifications';
+import { configureNotifications } from '../lib/restTimerNotifications';
 import { useColors, useThemeMode } from '../theme/useColors';
 
 void SplashScreen.preventAutoHideAsync();
@@ -50,10 +50,7 @@ export default function RootLayout() {
   }, [c, mode]);
 
   useEffect(() => {
-    void (async () => {
-      await configureNotifications();
-      await requestNotificationPermission();
-    })();
+    void configureNotifications();
   }, []);
 
   useEffect(() => {

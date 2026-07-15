@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Animated,
   Easing,
@@ -31,7 +30,7 @@ export function AnimatedExerciseImage({
 }: AnimatedExerciseImageProps) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
-  const fade = useRef(new Animated.Value(0)).current;
+  const [fade] = useState(() => new Animated.Value(0));
   const frames = exerciseGifs[id] as { a?: number; b?: number } | number | undefined;
   const sourceA = typeof frames === 'number' ? frames : frames?.a;
   const sourceB = typeof frames === 'number' ? undefined : frames?.b;

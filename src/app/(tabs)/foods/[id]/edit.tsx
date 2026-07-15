@@ -38,7 +38,7 @@ export default function EditFoodScreen() {
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
-          Modifier l'aliment
+          Modifier l&apos;aliment
         </Text>
         <View style={{ width: 24 }} />
       </View>

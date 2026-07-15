@@ -27,6 +27,11 @@ import {
   restoreProfileBackup,
   type ProfileBackup,
 } from '../../lib/profileBackup';
+import {
+  assertImportFileSize,
+  assertImportTextSize,
+  getImportErrorMessage,
+} from '../../lib/importLimits';
 import { useBodyWeightStore } from '../../store/bodyWeightStore';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
@@ -199,7 +204,9 @@ export default function SettingsScreen() {
         });
         if (!file) return;
 
+        assertImportFileSize(file.size);
         const text = await file.text();
+        assertImportTextSize(text);
         confirmAndImport(text);
         return;
       }
@@ -213,10 +220,18 @@ export default function SettingsScreen() {
       if (result.canceled) return;
 
       const asset = result.assets[0];
+      assertImportFileSize(asset.size);
       const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+      assertImportTextSize(content);
       confirmAndImport(content);
-    } catch {
-      Alert.alert('Erreur', "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide.");
+    } catch (error) {
+      Alert.alert(
+        'Erreur',
+        getImportErrorMessage(
+          error,
+          "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
+        )
+      );
     } finally {
       setImporting(false);
     }
@@ -266,7 +281,10 @@ export default function SettingsScreen() {
         link.download = filename;
         link.click();
         URL.revokeObjectURL(url);
-        Alert.alert('Sauvegarde prête', "Conservez ce fichier hors de l'app pour pouvoir restaurer votre profil après une réinstallation.");
+        Alert.alert(
+          'Sauvegarde prête',
+          "Ce fichier contient vos données sport et nutrition en clair. Conservez-le dans un emplacement privé."
+        );
         return;
       }
 
@@ -280,11 +298,15 @@ export default function SettingsScreen() {
       if (file.exists) file.delete();
       file.create();
       file.write(content);
-      await Sharing.shareAsync(file.uri, {
-        mimeType: 'application/json',
-        dialogTitle: 'Sauvegarder mon profil Sport Tracker',
-        UTI: 'public.json',
-      });
+      try {
+        await Sharing.shareAsync(file.uri, {
+          mimeType: 'application/json',
+          dialogTitle: 'Sauvegarder mon profil Sport Tracker',
+          UTI: 'public.json',
+        });
+      } finally {
+        if (file.exists) file.delete();
+      }
     } catch {
       Alert.alert('Erreur', 'Impossible de sauvegarder le profil.');
     } finally {
@@ -323,7 +345,11 @@ export default function SettingsScreen() {
           input.onchange = () => resolve(input.files?.[0] ?? null);
           input.click();
         });
-        content = file ? await file.text() : null;
+        if (file) {
+          assertImportFileSize(file.size);
+          content = await file.text();
+          assertImportTextSize(content);
+        }
       } else {
         const result = await DocumentPicker.getDocumentAsync({
           type: 'application/json',
@@ -332,7 +358,9 @@ export default function SettingsScreen() {
 
         if (!result.canceled) {
           const asset = result.assets[0];
+          assertImportFileSize(asset.size);
           content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+          assertImportTextSize(content);
         }
       }
 
@@ -345,8 +373,14 @@ export default function SettingsScreen() {
       }
 
       confirmAndRestoreProfile(backup);
-    } catch {
-      Alert.alert('Erreur', "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide.");
+    } catch (error) {
+      Alert.alert(
+        'Erreur',
+        getImportErrorMessage(
+          error,
+          "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
+        )
+      );
     } finally {
       setProfileImporting(false);
     }

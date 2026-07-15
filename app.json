@@ -6,8 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sport-tracker",
-    "userInterfaceStyle": "dark",
-    "backgroundColor": "#1F2B29",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#ECE5D6",
     "ios": {
       "bundleIdentifier": "com.sportracker.app",
       "icon": "./assets/expo.icon"
@@ -16,8 +16,7 @@
       "package": "com.sportracker.app",
       "softwareKeyboardLayoutMode": "resize",
       "permissions": [
-        "android.permission.SCHEDULE_EXACT_ALARM",
-        "android.permission.USE_EXACT_ALARM"
+        "android.permission.SCHEDULE_EXACT_ALARM"
       ],
       "adaptiveIcon": {
         "backgroundColor": "#1F2B29",
@@ -36,7 +35,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#1F2B29",
+          "backgroundColor": "#ECE5D6",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76

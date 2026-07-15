@@ -25,6 +25,8 @@ export function TextInput({ label, error, style, ...rest }: TextInputProps) {
       <RNTextInput
         style={[styles.input, error ? styles.inputError : null, style]}
         placeholderTextColor={c.textMuted}
+        accessibilityLabel={rest.accessibilityLabel ?? label}
+        accessibilityState={{ disabled: rest.editable === false }}
         {...rest}
       />
       {error ? <Text style={styles.error}>{error}</Text> : null}

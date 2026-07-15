@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -30,19 +30,14 @@ export default function ProgressScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const exercises = useExercisesWithHistory();
   const [mode, setMode] = useState<ProgressMode>('exercises');
-  const [selectedId, setSelectedId] = useState<string | null>(exercises[0]?.id ?? null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [weightInput, setWeightInput] = useState('');
+  const effectiveSelectedId = selectedId ?? exercises[0]?.id ?? null;
 
-  const { maxWeightPoints, volumePoints } = useProgressData(selectedId ?? '');
+  const { maxWeightPoints, volumePoints } = useProgressData(effectiveSelectedId ?? '');
   const bodyWeightEntries = useBodyWeightStore((s) => s.entries);
   const addBodyWeightEntry = useBodyWeightStore((s) => s.addEntry);
   const targetWeight = useNutritionGoalsStore((s) => s.goals.targetWeight);
-
-  useEffect(() => {
-    if (!selectedId && exercises.length > 0) {
-      setSelectedId(exercises[0].id);
-    }
-  }, [exercises, selectedId]);
 
   const parsedWeight = parseNumberInput(weightInput);
   const canSaveWeight = weightInput.trim().length > 0 && Number.isFinite(parsedWeight) && parsedWeight >= 0;
@@ -102,10 +97,10 @@ export default function ProgressScreen() {
               {exercises.map((ex) => (
                 <TouchableOpacity
                   key={ex.id}
-                  style={[styles.chip, selectedId === ex.id && styles.chipSelected]}
+                  style={[styles.chip, effectiveSelectedId === ex.id && styles.chipSelected]}
                   onPress={() => setSelectedId(ex.id)}
                   activeOpacity={0.75}>
-                  <Text style={[styles.chipText, selectedId === ex.id && styles.chipTextSelected]}>
+                  <Text style={[styles.chipText, effectiveSelectedId === ex.id && styles.chipTextSelected]}>
                     {ex.name}
                   </Text>
                 </TouchableOpacity>
@@ -121,7 +116,7 @@ export default function ProgressScreen() {
             />
           ) : (
             <ScrollView contentContainerStyle={styles.content}>
-              {selectedId ? (
+              {effectiveSelectedId ? (
                 <>
                   <View style={styles.chartCard}>
                     <WeightChart data={maxWeightPoints} />

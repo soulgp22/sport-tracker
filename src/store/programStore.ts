@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
+import { assertImportTextSize } from '../lib/importLimits';
 import type { Program, Exercise, ProgramDay, ProgramExercise, ImportResult } from '../types';
 import {
   findCatalogExerciseByName,
@@ -37,6 +38,7 @@ interface ImportPayloadSet {
 function parseAndValidateImport(jsonString: string): ImportPayloadProgram[] | string {
   let parsed: unknown;
   try {
+    assertImportTextSize(jsonString);
     parsed = JSON.parse(jsonString);
   } catch {
     return 'Le fichier n\'est pas un JSON valide.';

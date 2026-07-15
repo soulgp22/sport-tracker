@@ -1,5 +1,6 @@
 import { renderHook, act, cleanup } from '@testing-library/react-native';
 import { AppState, type AppStateStatus } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { useRestTimer } from '../useRestTimer';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 import type { Program, ProgramDay } from '../../types';
@@ -20,8 +21,23 @@ const makeDay = (): ProgramDay => ({
 const now = new Date('2026-03-01T12:00:00.000Z');
 
 beforeEach(() => {
+  jest.clearAllMocks();
   jest.useFakeTimers({ now });
   useActiveSessionStore.setState({ active: null });
+});
+
+it('requests notification permission only when a rest timer starts', async () => {
+  useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+  const { result } = renderHook(() => useRestTimer());
+  await act(async () => {});
+
+  expect(Notifications.requestPermissionsAsync).not.toHaveBeenCalled();
+
+  await act(async () => {
+    result.current!.startTimer(60);
+  });
+
+  expect(Notifications.getPermissionsAsync).toHaveBeenCalledTimes(1);
 });
 
 afterEach(async () => {

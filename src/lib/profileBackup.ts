@@ -13,6 +13,7 @@ import { useFoodStore } from '../store/foodStore';
 import { useNutritionGoalsStore } from '../store/nutritionGoalsStore';
 import { useProgramStore } from '../store/programStore';
 import { useSessionStore } from '../store/sessionStore';
+import { assertImportTextSize } from './importLimits';
 
 export const PROFILE_BACKUP_VERSION = 1;
 
@@ -122,6 +123,7 @@ export function buildProfileBackup(): string {
 export function parseProfileBackup(text: string): ProfileBackup | string {
   let parsed: unknown;
   try {
+    assertImportTextSize(text);
     parsed = JSON.parse(text);
   } catch {
     return "Le fichier profil n'est pas un JSON valide.";

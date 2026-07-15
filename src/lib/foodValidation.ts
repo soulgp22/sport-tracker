@@ -1,4 +1,5 @@
 import type { Food, FoodNutrition, FoodUnit } from '../types';
+import { assertImportTextSize } from './importLimits';
 
 export interface FoodValidationResult {
   foods: Food[];
@@ -124,6 +125,7 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
   let parsed: unknown;
 
   try {
+    assertImportTextSize(text);
     parsed = JSON.parse(text);
   } catch {
     return {

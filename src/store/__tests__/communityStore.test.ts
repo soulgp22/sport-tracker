@@ -101,6 +101,19 @@ describe('communityStore', () => {
     });
   });
 
+  it('rejects unsafe program paths from the remote manifest', async () => {
+    const manifest = manifestFixture();
+    manifest.programs[0].file = '../profile.json';
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result).toBeNull();
+    expect(useCommunityStore.getState().error).toBe(
+      'Impossible de charger les programmes communautaires.'
+    );
+  });
+
   it('downloads a program and imports it through the program store', async () => {
     const [entry] = manifestFixture().programs;
     const programPayload = {

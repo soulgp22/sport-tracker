@@ -21,7 +21,12 @@ function BackToHomeButton() {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.iconButton}
+      onPress={handlePress}
+      activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel="Retour à l'accueil">
       <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
     </TouchableOpacity>
   );
@@ -49,12 +54,21 @@ export default function ProgramsLayout() {
           headerRight: () => (
             <View style={styles.headerActions}>
               <Link href={'/(tabs)/community' as never} asChild>
-                <TouchableOpacity style={styles.communityButton} hitSlop={8} activeOpacity={0.7}>
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel="Programmes communautaires"
+                  accessibilityHint="Parcourir les programmes à télécharger">
                   <Ionicons name="cloud-download-outline" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>
               <Link href="/(tabs)/programs/new" asChild>
-                <TouchableOpacity style={styles.addButton} hitSlop={8} activeOpacity={0.7}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel="Créer un programme">
                   <Ionicons name="add" size={22} color={c.primaryText} />
                 </TouchableOpacity>
               </Link>
@@ -72,16 +86,16 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  communityButton: {
-    width: 36,
-    height: 36,
+  iconButton: {
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
   addButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: c.primary,
     alignItems: 'center',
     justifyContent: 'center',

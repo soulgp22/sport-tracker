@@ -57,7 +57,7 @@ export default function NutritionScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Aujourd'hui</Text>
+          <Text style={styles.cardTitle}>Aujourd&apos;hui</Text>
 
           <View style={styles.caloriesBlock}>
             <Text style={styles.caloriesValue}>

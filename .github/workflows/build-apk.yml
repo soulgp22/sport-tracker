@@ -38,6 +38,12 @@ jobs:
       - name: Run tests
         run: npx jest --ci
 
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
       - name: Build Android APK
         run: eas build --platform android --profile preview --local
 

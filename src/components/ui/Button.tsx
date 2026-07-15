@@ -25,6 +25,9 @@ export function Button({ title, variant = 'primary', loading, style, disabled, .
       style={[styles.base, styles[variant], disabled || loading ? styles.disabled : null, style]}
       disabled={disabled || loading}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: Boolean(disabled || loading), busy: Boolean(loading) }}
       {...rest}>
       {loading ? (
         <ActivityIndicator color={variant === 'secondary' ? c.primary : c.primaryText} size="small" />

@@ -16,6 +16,11 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
+import {
+  assertImportFileSize,
+  assertImportTextSize,
+  getImportErrorMessage,
+} from '../../../lib/importLimits';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore, type ImportFoodsResult } from '../../../store/foodStore';
@@ -117,7 +122,9 @@ export default function FoodParamsScreen() {
         });
         if (!file) return;
 
+        assertImportFileSize(file.size);
         const text = await file.text();
+        assertImportTextSize(text);
         confirmAndImport(text);
         return;
       }
@@ -130,10 +137,18 @@ export default function FoodParamsScreen() {
       if (result.canceled) return;
 
       const asset = result.assets[0];
+      assertImportFileSize(asset.size);
       const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+      assertImportTextSize(content);
       confirmAndImport(content);
-    } catch {
-      Alert.alert('Erreur', "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide.");
+    } catch (error) {
+      Alert.alert(
+        'Erreur',
+        getImportErrorMessage(
+          error,
+          "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
+        )
+      );
     } finally {
       setImporting(false);
     }
@@ -153,7 +168,9 @@ export default function FoodParamsScreen() {
         });
         if (!file) return;
 
+        assertImportFileSize(file.size);
         const content = await file.text();
+        assertImportTextSize(content);
         const result = useFoodStore.getState().importFoodsFromCsv(content);
         showImportResult(result);
         return;
@@ -167,11 +184,16 @@ export default function FoodParamsScreen() {
       if (result.canceled) return;
 
       const asset = result.assets[0];
+      assertImportFileSize(asset.size);
       const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
+      assertImportTextSize(content);
       const importResult = useFoodStore.getState().importFoodsFromCsv(content);
       showImportResult(importResult);
-    } catch {
-      Alert.alert('Erreur', 'Impossible de lire le fichier CSV.');
+    } catch (error) {
+      Alert.alert(
+        'Erreur',
+        getImportErrorMessage(error, 'Impossible de lire le fichier CSV.')
+      );
     } finally {
       setImportingCsv(false);
     }
@@ -202,7 +224,7 @@ export default function FoodParamsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Import</Text>
           <Text style={styles.helpText}>
-            Importez un fichier JSON contenant un tableau d'aliments ou un objet avec la clé foods.
+            Importez un fichier JSON contenant un tableau d&apos;aliments ou un objet avec la clé foods.
             Les ids déjà présents sont ignorés.
           </Text>
           <Button

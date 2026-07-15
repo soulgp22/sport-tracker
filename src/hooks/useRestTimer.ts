@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { cancelRestEndNotification, scheduleRestEndNotification } from '../lib/restTimerNotifications';
+import {
+  cancelRestEndNotification,
+  requestNotificationPermission,
+  scheduleRestEndNotification,
+} from '../lib/restTimerNotifications';
 import { getRemainingRestSeconds, useActiveSessionStore } from '../store/activeSessionStore';
 
 async function playRestHaptic(seconds: number): Promise<void> {
@@ -63,7 +67,20 @@ export function useRestTimer() {
       return;
     }
 
-    void scheduleRestEndNotification(fireDate);
+    let cancelled = false;
+    void (async () => {
+      const granted = await requestNotificationPermission();
+      if (granted && !cancelled) {
+        await scheduleRestEndNotification(fireDate);
+        if (cancelled) {
+          await cancelRestEndNotification();
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [restEndsAt, restTimerActive]);
 
   useEffect(() => {
