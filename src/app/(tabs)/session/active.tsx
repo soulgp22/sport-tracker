@@ -127,6 +127,26 @@ export default function ActiveSessionScreen() {
   const currentEx = active?.exercises[exIdx];
   const currentSet = currentEx?.sets[setIdx];
 
+  const restSetIndex = currentSet?.completed
+    ? currentEx?.sets.findIndex((set) => !set.completed) ?? -1
+    : setIdx;
+  const restSet = restSetIndex >= 0 ? currentEx?.sets[restSetIndex] : undefined;
+  const restExerciseCatalog = currentEx ? getCatalogExercise(currentEx.exerciseId) : undefined;
+  const restExerciseName = restSet && currentEx
+    ? restExerciseCatalog
+      ? getExerciseDisplayName(restExerciseCatalog)
+      : currentEx.exerciseName
+    : undefined;
+  const previousSet = active?.exercises
+    .flatMap((exercise) => exercise.sets)
+    .filter((set) => set.completed)
+    .reduce<typeof currentSet>((latest, set) => {
+      if (!latest) return set;
+      if (!latest.completedAt) return set;
+      if (!set.completedAt) return latest;
+      return set.completedAt > latest.completedAt ? set : latest;
+    }, undefined);
+
   // Redirige si plus de séance active (dans un effet, jamais pendant le render)
   useEffect(() => {
     if (!active) router.replace('/(tabs)/session');
@@ -290,7 +310,18 @@ export default function ActiveSessionScreen() {
         />
       </KeyboardAvoidingView>
 
-      <RestTimerModal visible={restTimerActive} onDismiss={() => {}} />
+      <RestTimerModal
+        visible={restTimerActive}
+        onDismiss={() => {}}
+        exerciseName={restExerciseName}
+        currentSetNumber={restSet ? restSetIndex + 1 : undefined}
+        totalSets={currentEx.sets.length}
+        completedSets={currentEx.sets.filter((set) => set.completed).length}
+        targetWeight={restSet?.targetWeight}
+        targetReps={restSet?.targetReps}
+        previousWeight={previousSet?.actualWeight}
+        previousReps={previousSet?.actualReps}
+      />
 
       <Modal visible={!!detailId} animationType="slide" onRequestClose={() => setDetailId(null)}>
         {detailId ? <ExerciseDetailView id={detailId} onClose={() => setDetailId(null)} /> : null}

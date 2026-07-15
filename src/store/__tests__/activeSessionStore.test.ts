@@ -333,6 +333,74 @@ describe('rest timer', () => {
   it('does nothing when syncing timer with no active session', () => {
     expect(() => useActiveSessionStore.getState().syncRestTimer()).not.toThrow();
   });
+
+  it('addRestSeconds with positive delta increases remaining rest time', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+
+    useActiveSessionStore.getState().addRestSeconds(30);
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(true);
+    expect(active.restEndsAt).toBe(new Date(now.getTime() + 120_000).toISOString());
+    expect(getRemainingRestSeconds(active)).toBe(120);
+  });
+
+  it('addRestSeconds with negative delta reduces remaining rest time', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+
+    jest.setSystemTime(new Date(now.getTime() + 10_000));
+    useActiveSessionStore.getState().addRestSeconds(-10);
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(true);
+    // original restEndsAt = now+90s, subtract 10s from the deadline → now+80s
+    expect(active.restEndsAt).toBe(new Date(now.getTime() + 80_000).toISOString());
+    expect(getRemainingRestSeconds(active)).toBe(70);
+  });
+
+  it('addRestSeconds clears timer when adjusted time falls at or below now (clamped at 0)', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+
+    // Advance time so only 5s remain, then subtract more than 5s
+    jest.setSystemTime(new Date(now.getTime() + 85_000));
+    useActiveSessionStore.getState().addRestSeconds(-30);
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(false);
+    expect(active.restEndsAt).toBeNull();
+    expect(getRemainingRestSeconds(active)).toBe(0);
+  });
+
+  it('addRestSeconds does nothing when no rest timer is active', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    // No setRestTimer called → restTimerActive is false, restEndsAt is null
+
+    useActiveSessionStore.getState().addRestSeconds(30);
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(false);
+    expect(active.restEndsAt).toBeNull();
+  });
+
+  it('skipRest disables rest timer immediately', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+    expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(true);
+
+    useActiveSessionStore.getState().skipRest();
+
+    const active = useActiveSessionStore.getState().active!;
+    expect(active.restTimerActive).toBe(false);
+    expect(active.restEndsAt).toBeNull();
+    expect(getRemainingRestSeconds(active)).toBe(0);
+  });
+
+  it('skipRest does nothing when no active session', () => {
+    expect(() => useActiveSessionStore.getState().skipRest()).not.toThrow();
+  });
 });
 
 describe('finishSession', () => {

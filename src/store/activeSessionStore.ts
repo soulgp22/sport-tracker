@@ -46,6 +46,8 @@ interface ActiveSessionState {
   logSet: (exerciseIndex: number, setIndex: number, actualReps: number, actualWeight: number) => void;
   swapExercise: (exerciseIndex: number, newExerciseId: string) => void;
   setRestTimer: (seconds: number) => void;
+  addRestSeconds: (delta: number) => void;
+  skipRest: () => void;
   clearRestTimer: () => void;
   syncRestTimer: () => void;
   finishSession: () => Session | null;
@@ -188,6 +190,34 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
           }
         : s
     );
+  },
+
+  addRestSeconds: (delta) => {
+    set((s) => {
+      if (!s.active?.restTimerActive || !s.active.restEndsAt) return s;
+
+      const adjustedEndTime = new Date(s.active.restEndsAt).getTime() + delta * 1000;
+      if (!Number.isFinite(adjustedEndTime) || adjustedEndTime <= Date.now()) {
+        return {
+          active: {
+            ...s.active,
+            restTimerActive: false,
+            restEndsAt: null,
+          },
+        };
+      }
+
+      return {
+        active: {
+          ...s.active,
+          restEndsAt: new Date(adjustedEndTime).toISOString(),
+        },
+      };
+    });
+  },
+
+  skipRest: () => {
+    get().clearRestTimer();
   },
 
   clearRestTimer: () => {

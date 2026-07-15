@@ -35,7 +35,8 @@ describe('RestTimerModal', () => {
     useActiveSessionStore.getState().setRestTimer(90);
     render(<RestTimerModal visible onDismiss={jest.fn()} />);
     expect(screen.getByText('01:30')).toBeTruthy();
-    expect(screen.getByText('Repos')).toBeTruthy();
+    expect(screen.getByText('REPOS')).toBeTruthy();
+    expect(screen.getByText('RESTANT')).toBeTruthy();
   });
 
   it('calls clearTimer and onDismiss when skip is pressed', async () => {
@@ -46,5 +47,29 @@ describe('RestTimerModal', () => {
     fireEvent.press(screen.getByText('Passer'));
     expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(false);
     expect(onDismiss).toHaveBeenCalled();
+  });
+
+  it('shows the next set context and adjusts the remaining time', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+    render(
+      <RestTimerModal
+        visible
+        onDismiss={jest.fn()}
+        exerciseName="Bench"
+        currentSetNumber={1}
+        totalSets={1}
+        completedSets={0}
+        targetWeight={60}
+        targetReps={10}
+      />
+    );
+
+    expect(screen.getByText('Bench')).toBeTruthy();
+    expect(screen.getByText('Série 1 / 1')).toBeTruthy();
+    expect(screen.getByText('60 kg × 10 reps')).toBeTruthy();
+
+    fireEvent.press(screen.getByText('+15 s'));
+    expect(screen.getByText('01:45')).toBeTruthy();
   });
 });
