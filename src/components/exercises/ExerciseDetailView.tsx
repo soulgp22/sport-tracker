@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +12,8 @@ import {
 } from '../../constants/exerciseI18n';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { EmptyState } from '../ui/EmptyState';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 /**
  * Fiche détail d'un exercice, réutilisable : route Exercices ET en modal
@@ -19,6 +21,8 @@ import { colors } from '../../constants/colors';
  * à l'écran d'origine et pas à la liste des exercices.
  */
 export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () => void }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const exercise = useExerciseCatalogStore((s) => s.getById(id));
   const displayName = exercise ? getExerciseDisplayName(exercise) : 'Exercice';
   const instructions = exercise ? getExerciseDisplayInstructions(exercise) : [];
@@ -27,7 +31,7 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={onClose} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>{displayName}</Text>
         <View style={{ width: 24 }} />
@@ -72,38 +76,38 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingVertical: 12 },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
   content: { padding: 16, gap: 14, paddingBottom: 32 },
-  hero: { width: '100%', aspectRatio: 1.25, borderRadius: 12, backgroundColor: colors.surface },
+  hero: { width: '100%', aspectRatio: 1.25, borderRadius: 12, backgroundColor: c.surface },
   metaCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     padding: 16,
     gap: 6,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  title: { fontSize: 22, fontWeight: '800', color: colors.textPrimary },
-  meta: { fontSize: 14, color: colors.primary, fontWeight: '600' },
-  secondary: { fontSize: 13, color: colors.textSecondary },
-  instructions: { backgroundColor: colors.surface, borderRadius: 12, padding: 16, gap: 12 },
-  sectionTitle: { fontSize: 17, fontWeight: '700', color: colors.textPrimary },
+  title: { fontSize: 22, fontWeight: '800', color: c.textPrimary },
+  meta: { fontSize: 14, color: c.primary, fontWeight: '600' },
+  secondary: { fontSize: 13, color: c.textSecondary },
+  instructions: { backgroundColor: c.surface, borderRadius: 12, padding: 16, gap: 12 },
+  sectionTitle: { fontSize: 17, fontWeight: '700', color: c.textPrimary },
   stepRow: { flexDirection: 'row', gap: 10 },
   stepIndex: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: colors.accentSoft,
-    color: colors.primary,
+    backgroundColor: c.accentSoft,
+    color: c.primary,
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 12,
     fontWeight: '700',
   },
-  stepText: { flex: 1, fontSize: 14, lineHeight: 20, color: colors.textPrimary },
+  stepText: { flex: 1, fontSize: 14, lineHeight: 20, color: c.textPrimary },
 });

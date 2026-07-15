@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import {
   Alert,
@@ -6,6 +7,7 @@ import {
   Share,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,7 +18,9 @@ import * as Sharing from 'expo-sharing';
 import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import { PALETTES, type PaletteId, type ThemeColors } from '../../theme/palettes';
+import { fonts } from '../../theme/fonts';
 import {
   buildProfileBackup,
   parseProfileBackup,
@@ -30,6 +34,7 @@ import { useFoodStore } from '../../store/foodStore';
 import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
+import { useThemeStore } from '../../store/themeStore';
 
 function getAuthorizedExerciseNames() {
   const namesByKey = new Map<string, string>();
@@ -105,6 +110,8 @@ function profileSummary(data: ProfileBackup['data']) {
 }
 
 export default function SettingsScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const importPrograms = useProgramStore((s) => s.importPrograms);
   const programs = useProgramStore((s) => s.programs);
   const programsCount = useProgramStore((s) => s.programs.length);
@@ -113,6 +120,8 @@ export default function SettingsScreen() {
   const foodDiaryEntriesCount = useFoodDiaryStore((s) => s.entries.length);
   const nutritionGoals = useNutritionGoalsStore((s) => s.goals);
   const bodyWeightEntriesCount = useBodyWeightStore((s) => s.entries.length);
+  const paletteId = useThemeStore((s) => s.paletteId);
+  const setPalette = useThemeStore((s) => s.setPalette);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [profileImporting, setProfileImporting] = useState(false);
@@ -382,6 +391,42 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Apparence</Text>
+          <Text style={styles.helpText}>
+            Choisis l&apos;ambiance de l&apos;app. Le logo et les polices ne changent pas.
+          </Text>
+          <View style={styles.paletteGrid}>
+            {(Object.keys(PALETTES) as PaletteId[]).map((id) => {
+              const palette = PALETTES[id];
+              const active = paletteId === id;
+              return (
+                <TouchableOpacity
+                  key={id}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: active }}
+                  onPress={() => setPalette(id)}
+                  activeOpacity={0.75}
+                  style={[styles.paletteOption, active ? styles.paletteOptionActive : null]}>
+                  <Text style={[styles.paletteLabel, active ? styles.paletteLabelActive : null]}>
+                    {palette.label}
+                  </Text>
+                  <View style={styles.swatches}>
+                    {[palette.colors.bg, palette.colors.primary, palette.colors.textPrimary].map(
+                      (color, index) => (
+                        <View
+                          key={`${id}-${index}`}
+                          style={[styles.swatch, { backgroundColor: color }]}
+                        />
+                      )
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Profil</Text>
           <Text style={styles.helpText}>
             La sauvegarde contient vos programmes, séances, aliments personnalisés, données nutrition et poids. Conservez le fichier hors de l&apos;app (Drive, Téléchargements…) pour qu&apos;il survive à une réinstallation.
@@ -493,26 +538,43 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   content: { padding: 16, gap: 32, paddingBottom: 40 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: colors.textPrimary,
+    fontFamily: fonts.serifBold,
+    color: c.textPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: c.border,
     paddingBottom: 8,
   },
   actionBtn: { marginTop: 4 },
-  helpText: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
+  helpText: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary, lineHeight: 18 },
+  paletteGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  paletteOption: {
+    width: '48%',
+    minHeight: 74,
+    justifyContent: 'space-between',
+    gap: 10,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: c.border,
+    backgroundColor: c.surface,
+  },
+  paletteOptionActive: { borderWidth: 2, borderColor: c.primary, backgroundColor: c.accentSoft },
+  paletteLabel: { fontFamily: fonts.sansSemi, fontSize: 15, color: c.textPrimary },
+  paletteLabelActive: { color: c.primary },
+  swatches: { flexDirection: 'row', gap: 7 },
+  swatch: { width: 20, height: 20, borderRadius: 10, borderWidth: 1, borderColor: c.border },
   codeBlock: {
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderRadius: 8,
     padding: 12,
   },
-  code: { fontSize: 11, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', color: colors.textPrimary },
-  aboutText: { fontSize: 15, fontWeight: '500', color: colors.textPrimary },
-  aboutSubtext: { fontSize: 13, color: colors.textSecondary },
+  code: { fontSize: 11, fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace', color: c.textPrimary },
+  aboutText: { fontSize: 15, fontWeight: '500', color: c.textPrimary },
+  aboutSubtext: { fontSize: 13, color: c.textSecondary },
 });

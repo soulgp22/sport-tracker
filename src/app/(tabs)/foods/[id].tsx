@@ -7,10 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NutritionFacts } from '../../../components/foods/NutritionFacts';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore } from '../../../store/foodStore';
 
 export default function FoodDetailScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const getFoodById = useFoodStore((s) => s.getFoodById);
@@ -39,7 +42,7 @@ export default function FoodDetailScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
           {food?.name ?? 'Aliment'}
@@ -87,8 +90,8 @@ export default function FoodDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -96,27 +99,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
   content: { padding: 16, gap: 14, paddingBottom: 32 },
   infoCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     padding: 16,
     gap: 6,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  title: { flex: 1, fontSize: 22, fontWeight: '800', color: colors.textPrimary },
-  meta: { fontSize: 14, color: colors.primary, fontWeight: '600' },
+  title: { flex: 1, fontSize: 22, fontWeight: '800', color: c.textPrimary },
+  meta: { fontSize: 14, color: c.primary, fontWeight: '600' },
   badge: {
-    backgroundColor: colors.secondary,
+    backgroundColor: c.secondary,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  badgeText: { fontSize: 11, fontWeight: '700', color: colors.textPrimary },
+  badgeText: { fontSize: 11, fontWeight: '700', color: c.textPrimary },
   actions: { gap: 10, paddingTop: 4 },
 });

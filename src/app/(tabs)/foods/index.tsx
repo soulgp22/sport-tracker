@@ -8,7 +8,8 @@ import { FoodRow } from '../../../components/foods/FoodRow';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -18,6 +19,8 @@ interface FoodSection {
 }
 
 export default function FoodsScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const getCategories = useFoodStore((s) => s.getCategories);
@@ -112,8 +115,8 @@ export default function FoodsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   wrapper: { flex: 1 },
   searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
   list: { paddingBottom: 16 },
@@ -121,17 +124,17 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 13,
     fontWeight: '700',
-    color: colors.textSecondary,
+    color: c.textSecondary,
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 4,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    backgroundColor: colors.bg,
+    backgroundColor: c.bg,
   },
   footer: {
     padding: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
+    borderTopColor: c.border,
   },
 });

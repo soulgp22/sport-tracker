@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -6,7 +7,9 @@ import {
   type TouchableOpacityProps,
 } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
+import { fonts } from '../../theme/fonts';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -15,6 +18,8 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 export function Button({ title, variant = 'primary', loading, style, disabled, ...rest }: ButtonProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity
       style={[styles.base, styles[variant], disabled || loading ? styles.disabled : null, style]}
@@ -22,7 +27,7 @@ export function Button({ title, variant = 'primary', loading, style, disabled, .
       activeOpacity={0.7}
       {...rest}>
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' ? colors.primary : colors.primaryText} size="small" />
+        <ActivityIndicator color={variant === 'secondary' ? c.primary : c.primaryText} size="small" />
       ) : (
         <Text style={[styles.label, variant === 'secondary' ? styles.labelSecondary : null]}>
           {title}
@@ -32,7 +37,7 @@ export function Button({ title, variant = 'primary', loading, style, disabled, .
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   base: {
     borderRadius: 10,
     paddingVertical: 12,
@@ -41,10 +46,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 48,
   },
-  primary: { backgroundColor: colors.primary },
-  secondary: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.primary },
-  danger: { backgroundColor: colors.danger },
+  primary: { backgroundColor: c.primary },
+  secondary: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: c.primary },
+  danger: { backgroundColor: c.danger },
   disabled: { opacity: 0.5 },
-  label: { color: colors.primaryText, fontWeight: '600', fontSize: 16 },
-  labelSecondary: { color: colors.primary },
+  label: { color: c.primaryText, fontFamily: fonts.sansSemi, fontSize: 16 },
+  labelSecondary: { color: c.primary },
 });

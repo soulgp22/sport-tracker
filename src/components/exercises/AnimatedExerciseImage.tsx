@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useEffect, useRef } from 'react';
 import {
   Animated,
@@ -10,7 +11,8 @@ import {
 import { Image } from 'expo-image';
 
 import { exerciseGifs } from '../../data/exercises.gifs';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface AnimatedExerciseImageProps {
   id: string;
@@ -27,6 +29,8 @@ export function AnimatedExerciseImage({
   animate = true,
   accessibilityLabel,
 }: AnimatedExerciseImageProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const fade = useRef(new Animated.Value(0)).current;
   const frames = exerciseGifs[id] as { a?: number; b?: number } | number | undefined;
   const sourceA = typeof frames === 'number' ? frames : frames?.a;
@@ -100,6 +104,6 @@ export function AnimatedExerciseImage({
   );
 }
 
-const styles = StyleSheet.create({
-  image: { borderRadius: 8, backgroundColor: colors.surfaceAlt, overflow: 'hidden' },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  image: { borderRadius: 8, backgroundColor: c.surfaceAlt, overflow: 'hidden' },
 });

@@ -7,7 +7,8 @@ import { VolumeChart } from '../../../components/progress/VolumeChart';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { useProgressData, useExercisesWithHistory, type DataPoint } from '../../../hooks/useProgressData';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
@@ -25,6 +26,8 @@ function toShortDateLabel(isoDate: string) {
 }
 
 export default function ProgressScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const exercises = useExercisesWithHistory();
   const [mode, setMode] = useState<ProgressMode>('exercises');
   const [selectedId, setSelectedId] = useState<string | null>(exercises[0]?.id ?? null);
@@ -177,8 +180,8 @@ export default function ProgressScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   modeRow: { flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 8, gap: 8, alignItems: 'center' },
   selectorScroll: { flexGrow: 0, flexShrink: 0 },
   selectorRow: { paddingHorizontal: 16, paddingBottom: 8, gap: 8, alignItems: 'center' },
@@ -187,25 +190,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 17,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
   },
-  chipSelected: { backgroundColor: colors.primary },
-  chipText: { fontSize: 14, fontWeight: '500', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipSelected: { backgroundColor: c.primary },
+  chipText: { fontSize: 14, fontWeight: '500', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
   content: { padding: 16, gap: 16, paddingBottom: 32 },
   formRow: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
   weightInput: { flex: 1, minWidth: 0 },
   saveButton: { minHeight: 46, paddingHorizontal: 14 },
   chartCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 16,
     padding: 16,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 6,
     elevation: 2,
     overflow: 'hidden',
   },
-  hint: { fontSize: 13, color: colors.textMuted, textAlign: 'center' },
-  emptyWeightText: { fontSize: 14, color: colors.textSecondary, textAlign: 'center' },
+  hint: { fontSize: 13, color: c.textMuted, textAlign: 'center' },
+  emptyWeightText: { fontSize: 14, color: c.textSecondary, textAlign: 'center' },
 });

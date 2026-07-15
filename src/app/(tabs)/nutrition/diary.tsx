@@ -8,7 +8,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FoodEntryRow } from '../../../components/nutrition/FoodEntryRow';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../../constants/meals';
 import { calculateDailyTotals, calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -24,6 +25,8 @@ function todayKey() {
 }
 
 export default function NutritionDiaryScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const [, forceTick] = useReducer((x: number) => x + 1, 0);
   const entriesState = useFoodDiaryStore((s) => s.entries);
@@ -136,7 +139,7 @@ export default function NutritionDiaryScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Journal du jour</Text>
         <View style={styles.headerSpacer} />
@@ -195,8 +198,8 @@ export default function NutritionDiaryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
   headerSpacer: { width: 24 },
   body: { flex: 1 },
   list: { flex: 1 },
@@ -217,12 +220,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 10,
   },
-  mealTitle: { flex: 1, fontSize: 16, fontWeight: '800', color: colors.textPrimary },
-  mealSubtotal: { fontSize: 14, fontWeight: '800', color: colors.primary },
+  mealTitle: { flex: 1, fontSize: 16, fontWeight: '800', color: c.textPrimary },
+  mealSubtotal: { fontSize: 14, fontWeight: '800', color: c.primary },
   footer: {
     padding: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
+    borderTopColor: c.border,
   },
   emptyContent: { flex: 1, paddingHorizontal: 16, paddingBottom: 16 },
   emptyButton: { paddingBottom: 16 },

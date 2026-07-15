@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -13,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import type { GoalType, NutritionGoals } from '../../../types';
@@ -49,6 +51,8 @@ function parseOptionalNumber(value: string) {
 }
 
 export default function NutritionGoalsScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const goals = useNutritionGoalsStore((s) => s.goals);
   const setGoals = useNutritionGoalsStore((s) => s.setGoals);
@@ -118,7 +122,7 @@ export default function NutritionGoalsScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Objectifs</Text>
         <View style={styles.headerSpacer} />
@@ -227,8 +231,8 @@ export default function NutritionGoalsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -236,7 +240,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
   headerSpacer: { width: 24 },
   keyboardAvoiding: { flex: 1 },
   content: { padding: 16, gap: 22, paddingBottom: 32 },
@@ -244,9 +248,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textPrimary,
+    color: c.textPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: c.border,
     paddingBottom: 8,
   },
   goalTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -255,13 +259,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 18,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: '700', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
+  chipText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
   twoColumns: { flexDirection: 'row', gap: 10 },
   columnField: { flex: 1, minWidth: 0 },
   submitButton: { marginTop: 4 },

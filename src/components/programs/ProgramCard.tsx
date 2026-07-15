@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { Program } from '../../types';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface ProgramCardProps {
   program: Program;
@@ -10,6 +12,8 @@ interface ProgramCardProps {
 }
 
 export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const totalExercises = program.days.reduce((sum, d) => sum + d.exercises.length, 0);
 
   return (
@@ -21,30 +25,30 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
         </Text>
       </View>
       <TouchableOpacity style={styles.deleteBtn} onPress={onDelete} hitSlop={8}>
-        <Ionicons name="trash-outline" size={20} color={colors.danger} />
+        <Ionicons name="trash-outline" size={20} color={c.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 6,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   body: { flex: 1, gap: 4 },
-  name: { fontSize: 17, fontWeight: '600', color: colors.textPrimary },
-  meta: { fontSize: 13, color: colors.textSecondary },
+  name: { fontSize: 17, fontWeight: '600', color: c.textPrimary },
+  meta: { fontSize: 13, color: c.textSecondary },
   deleteBtn: { paddingHorizontal: 8 },
 });

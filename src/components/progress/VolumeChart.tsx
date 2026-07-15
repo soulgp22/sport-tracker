@@ -1,13 +1,17 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface VolumeChartProps {
   data: DataPoint[];
 }
 
 export function VolumeChart({ data }: VolumeChartProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
@@ -19,7 +23,7 @@ export function VolumeChart({ data }: VolumeChartProps) {
   const chartData = data.map((d) => ({
     value: d.value,
     label: d.label,
-    frontColor: colors.primary,
+    frontColor: c.primary,
   }));
 
   return (
@@ -32,9 +36,9 @@ export function VolumeChart({ data }: VolumeChartProps) {
         barWidth={32}
         barBorderRadius={4}
         hideRules={false}
-        rulesColor={colors.border}
+        rulesColor={c.border}
         yAxisColor="transparent"
-        xAxisColor={colors.border}
+        xAxisColor={c.border}
         yAxisTextStyle={styles.axisLabel}
         xAxisLabelTextStyle={styles.axisLabel}
         hideYAxisText={false}
@@ -43,10 +47,10 @@ export function VolumeChart({ data }: VolumeChartProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: colors.textPrimary },
+  title: { fontSize: 14, fontWeight: '600', color: c.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
-  emptyText: { color: colors.textMuted, fontSize: 13 },
-  axisLabel: { fontSize: 10, color: colors.textSecondary },
+  emptyText: { color: c.textMuted, fontSize: 13 },
+  axisLabel: { fontSize: 10, color: c.textSecondary },
 });

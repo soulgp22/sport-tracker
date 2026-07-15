@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface WeightChartProps {
   data: DataPoint[];
@@ -9,6 +11,8 @@ interface WeightChartProps {
 }
 
 export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
@@ -26,18 +30,18 @@ export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartP
         data={chartData}
         height={180}
         spacing={52}
-        color={colors.primary}
+        color={c.primary}
         thickness={2}
-        dataPointsColor={colors.primary}
+        dataPointsColor={c.primary}
         dataPointsRadius={4}
-        startFillColor={colors.primary}
+        startFillColor={c.primary}
         startOpacity={0.2}
         endOpacity={0.02}
         areaChart
         hideRules={false}
-        rulesColor={colors.border}
+        rulesColor={c.border}
         yAxisColor="transparent"
-        xAxisColor={colors.border}
+        xAxisColor={c.border}
         yAxisTextStyle={styles.axisLabel}
         xAxisLabelTextStyle={styles.axisLabel}
         hideYAxisText={false}
@@ -47,10 +51,10 @@ export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartP
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: colors.textPrimary },
+  title: { fontSize: 14, fontWeight: '600', color: c.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
-  emptyText: { color: colors.textMuted, fontSize: 13 },
-  axisLabel: { fontSize: 10, color: colors.textSecondary },
+  emptyText: { color: c.textMuted, fontSize: 13 },
+  axisLabel: { fontSize: 10, color: c.textSecondary },
 });

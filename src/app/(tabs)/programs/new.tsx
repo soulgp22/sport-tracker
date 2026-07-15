@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -7,10 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useProgramStore } from '../../../store/programStore';
 import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 
 export default function NewProgramScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const addProgram = useProgramStore((s) => s.addProgram);
   const [name, setName] = useState('');
@@ -29,7 +33,7 @@ export default function NewProgramScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Nouveau programme</Text>
         <View style={{ width: 24 }} />
@@ -58,8 +62,8 @@ export default function NewProgramScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   keyboardAvoiding: { flex: 1 },
   header: {
     flexDirection: 'row',
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
   content: { padding: 16, gap: 24 },
   btn: { marginTop: 8 },
 });

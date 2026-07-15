@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -56,6 +57,8 @@ function defaultQuantityForFood(food: Food) {
 }
 
 function FoodResultRow({ food, onPress }: { food: Food; onPress: () => void }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity style={styles.foodRow} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.foodBody}>
@@ -66,12 +69,14 @@ function FoodResultRow({ food, onPress }: { food: Food; onPress: () => void }) {
           {food.category} · {Math.round(food.nutritionPer100g.calories)} kcal/100g
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
 
 export default function AddMealScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const customFoods = useFoodStore((s) => s.customFoods);
@@ -119,7 +124,7 @@ export default function AddMealScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Ajouter un repas</Text>
         <View style={styles.headerSpacer} />
@@ -221,8 +226,8 @@ export default function AddMealScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
   headerSpacer: { width: 24 },
   keyboardAvoiding: { flex: 1 },
   searchWrapper: { flex: 1 },
@@ -240,57 +245,57 @@ const styles = StyleSheet.create({
   foodRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 10,
     padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
     gap: 10,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   foodBody: { flex: 1, gap: 3 },
-  foodName: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
-  foodMeta: { fontSize: 13, color: colors.textSecondary },
+  foodName: { fontSize: 16, fontWeight: '700', color: c.textPrimary },
+  foodMeta: { fontSize: 13, color: c.textSecondary },
   content: { padding: 16, gap: 18, paddingBottom: 32 },
   selectedCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
     gap: 4,
   },
-  selectedLabel: { fontSize: 12, fontWeight: '700', color: colors.textSecondary },
-  selectedName: { fontSize: 20, fontWeight: '800', color: colors.textPrimary },
-  selectedMeta: { fontSize: 13, color: colors.primary, fontWeight: '700' },
+  selectedLabel: { fontSize: 12, fontWeight: '700', color: c.textSecondary },
+  selectedName: { fontSize: 20, fontWeight: '800', color: c.textPrimary },
+  selectedMeta: { fontSize: 13, color: c.primary, fontWeight: '700' },
   section: { gap: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: c.textPrimary },
   mealTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     minHeight: 36,
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 18,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: '700', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
+  chipText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
   previewCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
     gap: 8,
   },
-  previewTitle: { fontSize: 16, fontWeight: '800', color: colors.textPrimary },
-  previewCalories: { fontSize: 28, fontWeight: '800', color: colors.primary },
-  previewMacros: { fontSize: 14, fontWeight: '700', color: colors.textSecondary },
+  previewTitle: { fontSize: 16, fontWeight: '800', color: c.textPrimary },
+  previewCalories: { fontSize: 28, fontWeight: '800', color: c.primary },
+  previewMacros: { fontSize: 14, fontWeight: '700', color: c.textSecondary },
   actions: { gap: 12 },
 });

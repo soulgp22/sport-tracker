@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -5,9 +6,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProgramStore } from '../../../store/programStore';
 import { ProgramCard } from '../../../components/programs/ProgramCard';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 
 export default function ProgramsScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const programs = useProgramStore((s) => s.programs);
   const deleteProgram = useProgramStore((s) => s.deleteProgram);
@@ -44,8 +48,8 @@ export default function ProgramsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
 });

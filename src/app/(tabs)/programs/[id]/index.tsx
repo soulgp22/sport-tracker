@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import {
   Alert,
@@ -16,7 +17,8 @@ import { useProgramStore } from '../../../../store/programStore';
 import { Button } from '../../../../components/ui/Button';
 import { TextInput } from '../../../../components/ui/TextInput';
 import { EmptyState } from '../../../../components/ui/EmptyState';
-import { colors } from '../../../../constants/colors';
+import { useColors } from '../../../../theme/useColors';
+import type { ThemeColors } from '../../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../constants/keyboard';
 import type { ProgramDay } from '../../../../types';
 
@@ -29,6 +31,8 @@ function DayRow({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity style={styles.dayRow} onPress={onEdit} activeOpacity={0.75}>
       <View style={styles.dayBody}>
@@ -38,14 +42,16 @@ function DayRow({
         </Text>
       </View>
       <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.deleteBtn}>
-        <Ionicons name="trash-outline" size={18} color={colors.danger} />
+        <Ionicons name="trash-outline" size={18} color={c.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
 
 export default function ProgramDetailScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
 
@@ -96,7 +102,7 @@ export default function ProgramDetailScreen() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+            <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
           </TouchableOpacity>
           {editingName ? (
             <TextInput
@@ -111,7 +117,7 @@ export default function ProgramDetailScreen() {
           ) : (
             <TouchableOpacity onPress={() => { setNameValue(program.name); setEditingName(true); }} style={styles.nameBtn}>
               <Text style={styles.heading} numberOfLines={1}>{program.name}</Text>
-              <Ionicons name="pencil-outline" size={16} color={colors.textSecondary} />
+              <Ionicons name="pencil-outline" size={16} color={c.textSecondary} />
             </TouchableOpacity>
           )}
           <View style={{ width: 24 }} />
@@ -171,8 +177,8 @@ export default function ProgramDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   keyboardAvoiding: { flex: 1 },
   header: {
     flexDirection: 'row',
@@ -183,28 +189,28 @@ const styles = StyleSheet.create({
   },
   nameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   nameInput: { flex: 1 },
-  heading: { fontSize: 20, fontWeight: '700', color: colors.textPrimary, flex: 1 },
-  sectionLabel: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
+  heading: { fontSize: 20, fontWeight: '700', color: c.textPrimary, flex: 1 },
+  sectionLabel: { fontSize: 13, fontWeight: '600', color: c.textSecondary, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 10,
     padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   dayBody: { flex: 1, gap: 2 },
-  dayName: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
-  dayMeta: { fontSize: 13, color: colors.textSecondary },
+  dayName: { fontSize: 16, fontWeight: '600', color: c.textPrimary },
+  dayMeta: { fontSize: 13, color: c.textSecondary },
   deleteBtn: { paddingHorizontal: 8 },
   list: { paddingBottom: 16 },
   emptyContainer: { flex: 1 },
-  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
   addDayForm: { gap: 10 },
   addDayInput: {},
   addDayBtns: { flexDirection: 'row', gap: 8 },

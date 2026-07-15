@@ -5,7 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MacroBar } from '../../../components/nutrition/MacroBar';
 import { Button } from '../../../components/ui/Button';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import {
   calculateDailyTotals,
   calculateGoalProgress,
@@ -28,6 +30,8 @@ function roundedMacro(value: number) {
 }
 
 export default function NutritionScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const [, forceTick] = useReducer((x: number) => x + 1, 0);
   const goals = useNutritionGoalsStore((s) => s.goals);
@@ -128,22 +132,22 @@ export default function NutritionScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   content: { padding: 16, gap: 18, paddingBottom: 32 },
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
     gap: 16,
   },
-  cardTitle: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
+  cardTitle: { fontSize: 18, fontFamily: fonts.serifBold, color: c.textPrimary },
   caloriesBlock: { gap: 4 },
-  caloriesValue: { fontSize: 28, fontWeight: '800', color: colors.primary },
-  remaining: { fontSize: 15, fontWeight: '700', color: colors.textSecondary },
-  overGoal: { color: colors.danger },
+  caloriesValue: { fontSize: 28, fontFamily: fonts.serifBold, color: c.primary },
+  remaining: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textSecondary },
+  overGoal: { color: c.danger },
   macroBars: { gap: 14 },
   actions: { gap: 12 },
 });

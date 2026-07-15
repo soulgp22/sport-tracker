@@ -5,7 +5,8 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CalorieTrendChart } from '../../../components/nutrition/CalorieTrendChart';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { getCalorieTrend } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
@@ -20,6 +21,8 @@ const periods = [
 type Period = (typeof periods)[number];
 
 export default function NutritionHistoryScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const [, forceTick] = useReducer((x: number) => x + 1, 0);
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(periods[0]);
@@ -41,7 +44,7 @@ export default function NutritionHistoryScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Tendance calories</Text>
         <View style={styles.headerSpacer} />
@@ -85,8 +88,8 @@ export default function NutritionHistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
   headerSpacer: { width: 24 },
   content: { padding: 16, gap: 18, paddingBottom: 32 },
   periodRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -103,30 +106,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 18,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: '700', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
+  chipText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
   statsRow: { flexDirection: 'row', gap: 10 },
   statCard: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
     gap: 6,
   },
-  statLabel: { fontSize: 13, fontWeight: '700', color: colors.textSecondary },
-  statValue: { fontSize: 20, fontWeight: '800', color: colors.textPrimary },
+  statLabel: { fontSize: 13, fontWeight: '700', color: c.textSecondary },
+  statValue: { fontSize: 20, fontWeight: '800', color: c.textPrimary },
   chartCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
   },
 });

@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../constants/keyboard';
 import { Button } from '../ui/Button';
 import { TextInput } from '../ui/TextInput';
@@ -76,6 +77,8 @@ function nutritionTitle(unit: FoodUnit) {
 }
 
 export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: FoodFormProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const [name, setName] = useState(initialFood?.name ?? '');
   const [category, setCategory] = useState(initialFood?.category ?? '');
   const [unit, setUnit] = useState<FoodUnit>(initialFood?.unit ?? 'g');
@@ -334,34 +337,34 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   keyboardAvoiding: { flex: 1 },
   content: { padding: 16, gap: 22, paddingBottom: 32 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textPrimary,
+    color: c.textPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: c.border,
     paddingBottom: 8,
   },
   categoryBlock: { gap: 6 },
   fieldBlock: { gap: 6 },
-  label: { fontSize: 14, fontWeight: '500', color: colors.textPrimary },
+  label: { fontSize: 14, fontWeight: '500', color: c.textPrimary },
   unitRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   unitChip: {
     minHeight: 36,
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 18,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  unitChipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  unitText: { fontSize: 13, fontWeight: '700', color: colors.textPrimary },
-  unitTextSelected: { color: colors.primaryText },
+  unitChipSelected: { backgroundColor: c.primary, borderColor: c.primary },
+  unitText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  unitTextSelected: { color: c.primaryText },
   twoColumns: { flexDirection: 'row', gap: 10 },
   columnField: { flex: 1, minWidth: 0 },
   submitButton: { marginTop: 4 },

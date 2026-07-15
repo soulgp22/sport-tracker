@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface CategoryChipsProps {
   categories: string[];
@@ -15,6 +17,8 @@ export function CategoryChips({
   onSelect,
   includeAll = true,
 }: CategoryChipsProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const data = includeAll ? ['', ...categories] : categories;
 
   return (
@@ -44,7 +48,7 @@ export function CategoryChips({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   list: { flexGrow: 0, flexShrink: 0 },
   row: { paddingHorizontal: 16, gap: 8, paddingVertical: 8, alignItems: 'center' },
   chip: {
@@ -52,14 +56,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 17,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
   chipSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: c.primary,
+    borderColor: c.primary,
   },
-  chipText: { fontSize: 13, fontWeight: '600', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipText: { fontSize: 13, fontWeight: '600', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
 });

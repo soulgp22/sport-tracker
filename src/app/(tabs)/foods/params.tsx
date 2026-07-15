@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import {
   Alert,
@@ -15,7 +16,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore, type ImportFoodsResult } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -28,6 +30,8 @@ function CustomFoodRow({
   onOpen: () => void;
   onDelete: () => void;
 }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity style={styles.foodRow} onPress={onOpen} activeOpacity={0.75}>
       <View style={styles.foodBody}>
@@ -39,9 +43,9 @@ function CustomFoodRow({
         </Text>
       </View>
       <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.deleteButton}>
-        <Ionicons name="trash-outline" size={18} color={colors.danger} />
+        <Ionicons name="trash-outline" size={18} color={c.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -72,6 +76,8 @@ function buildImportMessage(result: ImportFoodsResult) {
 }
 
 export default function FoodParamsScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const importFoods = useFoodStore((s) => s.importFoods);
   const deleteCustomFood = useFoodStore((s) => s.deleteCustomFood);
@@ -186,7 +192,7 @@ export default function FoodParamsScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Paramètres aliments</Text>
         <View style={{ width: 24 }} />
@@ -285,8 +291,8 @@ export default function FoodParamsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -294,40 +300,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
   content: { padding: 16, gap: 28, paddingBottom: 40 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.textPrimary,
+    color: c.textPrimary,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: c.border,
     paddingBottom: 8,
   },
-  helpText: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
+  helpText: { fontSize: 13, color: c.textSecondary, lineHeight: 18 },
   codeBlock: {
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderRadius: 8,
     padding: 12,
   },
   code: {
     fontSize: 11,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    color: colors.textPrimary,
+    color: c.textPrimary,
     lineHeight: 16,
   },
   foodList: { gap: 8 },
   foodRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 10,
     padding: 12,
     gap: 8,
   },
   foodBody: { flex: 1, gap: 2 },
-  foodName: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
-  foodMeta: { fontSize: 12, color: colors.textSecondary },
+  foodName: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  foodMeta: { fontSize: 12, color: c.textSecondary },
   deleteButton: { paddingHorizontal: 8 },
 });

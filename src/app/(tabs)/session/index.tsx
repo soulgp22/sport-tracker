@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -8,10 +9,13 @@ import { useProgramStore } from '../../../store/programStore';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import type { Program, ProgramDay } from '../../../types';
 
 export default function SessionScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const programs = useProgramStore((s) => s.programs);
   const startSession = useActiveSessionStore((s) => s.startSession);
@@ -25,7 +29,7 @@ export default function SessionScreen() {
     return (
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.resumeContainer}>
-          <Ionicons name="play-circle" size={64} color={colors.primary} />
+          <Ionicons name="play-circle" size={64} color={c.primary} />
           <Text style={styles.resumeTitle}>Séance en cours</Text>
           <Text style={styles.resumeSub}>{active.programName} — {active.dayName}</Text>
           <Button title="Reprendre" onPress={() => router.push('/(tabs)/session/active')} style={styles.resumeBtn} />
@@ -65,7 +69,7 @@ export default function SessionScreen() {
                 <Ionicons
                   name={selectedProgram?.id === program.id ? 'chevron-up' : 'chevron-down'}
                   size={18}
-                  color={colors.textSecondary}
+                  color={c.textSecondary}
                 />
               </TouchableOpacity>
 
@@ -79,7 +83,7 @@ export default function SessionScreen() {
                     <Ionicons
                       name={selectedDay?.id === day.id ? 'radio-button-on' : 'radio-button-off'}
                       size={18}
-                      color={selectedDay?.id === day.id ? colors.primary : colors.textMuted}
+                      color={selectedDay?.id === day.id ? c.primary : c.textMuted}
                     />
                     <Text style={styles.dayName}>{day.name}</Text>
                     <Text style={styles.dayMeta}>{day.exercises.length} exercices</Text>
@@ -100,40 +104,40 @@ export default function SessionScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   list: { paddingBottom: 100 },
   programRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     marginHorizontal: 16,
     marginTop: 8,
     borderRadius: 10,
     padding: 14,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  selected: { borderWidth: 2, borderColor: colors.primary },
-  programName: { flex: 1, fontSize: 16, fontWeight: '600', color: colors.textPrimary },
+  selected: { borderWidth: 2, borderColor: c.primary },
+  programName: { flex: 1, fontSize: 16, fontWeight: '600', color: c.textPrimary },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     marginHorizontal: 24,
     marginTop: 2,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderRadius: 8,
     padding: 12,
   },
-  daySelected: { backgroundColor: colors.accentSoft },
-  dayName: { flex: 1, fontSize: 15, color: colors.textPrimary, fontWeight: '500' },
-  dayMeta: { fontSize: 13, color: colors.textMuted },
-  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
+  daySelected: { backgroundColor: c.accentSoft },
+  dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontWeight: '500' },
+  dayMeta: { fontSize: 13, color: c.textMuted },
+  footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
   resumeContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
-  resumeTitle: { fontSize: 22, fontWeight: '700', color: colors.textPrimary },
-  resumeSub: { fontSize: 15, color: colors.textSecondary },
+  resumeTitle: { fontSize: 22, fontWeight: '700', color: c.textPrimary },
+  resumeSub: { fontSize: 15, color: c.textSecondary },
   resumeBtn: { width: '100%', marginTop: 8 },
 });

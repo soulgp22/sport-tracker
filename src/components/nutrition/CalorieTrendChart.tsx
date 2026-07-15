@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface CalorieTrendDay {
   label: string;
@@ -14,6 +16,8 @@ interface CalorieTrendChartProps {
 }
 
 export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const hasData = points.length > 0 && points.some((point) => point.calories > 0);
 
   if (!hasData) {
@@ -40,18 +44,18 @@ export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
         data={chartData}
         height={180}
         spacing={spacing}
-        color={colors.primary}
+        color={c.primary}
         thickness={2}
-        dataPointsColor={colors.primary}
+        dataPointsColor={c.primary}
         dataPointsRadius={4}
-        startFillColor={colors.primary}
+        startFillColor={c.primary}
         startOpacity={0.2}
         endOpacity={0.02}
         areaChart
         hideRules={false}
-        rulesColor={colors.border}
+        rulesColor={c.border}
         yAxisColor="transparent"
-        xAxisColor={colors.border}
+        xAxisColor={c.border}
         yAxisTextStyle={styles.axisLabel}
         xAxisLabelTextStyle={styles.axisLabel}
         hideYAxisText={false}
@@ -61,7 +65,7 @@ export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
         showReferenceLine1={goal > 0}
         referenceLine1Position={goal}
         referenceLine1Config={{
-          color: colors.textMuted,
+          color: c.textMuted,
           type: 'dashed',
           thickness: 1,
           dashWidth: 6,
@@ -72,10 +76,10 @@ export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: colors.textPrimary },
+  title: { fontSize: 14, fontWeight: '600', color: c.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
-  emptyText: { color: colors.textMuted, fontSize: 13 },
-  axisLabel: { fontSize: 10, color: colors.textSecondary },
+  emptyText: { color: c.textMuted, fontSize: 13 },
+  axisLabel: { fontSize: 10, color: c.textSecondary },
 });

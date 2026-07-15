@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 
 interface RestTimerModalProps {
   visible: boolean;
@@ -14,6 +16,8 @@ function pad(n: number) {
 }
 
 export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const active = useActiveSessionStore((s) => s.active);
   const clearTimer = useActiveSessionStore((s) => s.clearRestTimer);
   const [, setTick] = useState(0);
@@ -40,7 +44,7 @@ export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
     <Modal visible={visible} transparent animationType="fade" onRequestClose={skip}>
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <Ionicons name="timer-outline" size={36} color={colors.primary} />
+          <Ionicons name="timer-outline" size={36} color={c.primary} />
           <Text style={styles.label}>Repos</Text>
           <Text style={styles.timer}>
             {pad(mins)}:{pad(secs)}
@@ -54,29 +58,29 @@ export function RestTimerModal({ visible, onDismiss }: RestTimerModalProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: colors.overlay,
+    backgroundColor: c.overlay,
     alignItems: 'center',
     justifyContent: 'center',
   },
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 20,
     padding: 40,
     alignItems: 'center',
     gap: 12,
     width: 260,
   },
-  label: { fontSize: 16, color: colors.textSecondary, fontWeight: '500' },
-  timer: { fontSize: 56, fontWeight: '700', color: colors.textPrimary, letterSpacing: -1 },
+  label: { fontSize: 16, color: c.textSecondary, fontWeight: '500' },
+  timer: { fontSize: 56, fontWeight: '700', color: c.textPrimary, letterSpacing: -1 },
   skipBtn: {
     marginTop: 8,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     paddingVertical: 10,
     paddingHorizontal: 28,
     borderRadius: 10,
   },
-  skipLabel: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
+  skipLabel: { fontSize: 16, fontWeight: '600', color: c.textPrimary },
 });

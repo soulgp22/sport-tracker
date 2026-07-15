@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -13,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { useCommunityStore, type CommunityProgramEntry } from '../../../store/communityStore';
 import type { ImportResult } from '../../../types';
 
@@ -32,6 +34,8 @@ function CommunityCard({
   loading: boolean;
   onDownload: () => void;
 }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -49,7 +53,7 @@ function CommunityCard({
       <Text style={styles.description}>{entry.description}</Text>
 
       <View style={styles.metaRow}>
-        <Ionicons name="calendar-outline" size={16} color={colors.textSecondary} />
+        <Ionicons name="calendar-outline" size={16} color={c.textSecondary} />
         <Text style={styles.metaText}>{formatDays(entry.daysCount)}</Text>
       </View>
 
@@ -65,6 +69,8 @@ function CommunityCard({
 }
 
 export default function CommunityScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const data = useCommunityStore((s) => s.data);
   const loading = useCommunityStore((s) => s.loading);
@@ -122,7 +128,7 @@ export default function CommunityScreen() {
     return (
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.centerState}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={c.primary} />
           <Text style={styles.centerText}>Chargement des programmes...</Text>
         </View>
       </SafeAreaView>
@@ -166,7 +172,7 @@ export default function CommunityScreen() {
         ListHeaderComponent={
           offline ? (
             <View style={styles.offlineBanner}>
-              <Ionicons name="cloud-offline-outline" size={18} color={colors.primary} />
+              <Ionicons name="cloud-offline-outline" size={18} color={c.primary} />
               <Text style={styles.offlineText}>Hors-ligne, liste en cache.</Text>
             </View>
           ) : null
@@ -177,8 +183,8 @@ export default function CommunityScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   list: { paddingVertical: 10, paddingBottom: 28 },
   centerState: {
     flex: 1,
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 32,
   },
-  centerText: { fontSize: 14, color: colors.textSecondary, textAlign: 'center' },
+  centerText: { fontSize: 14, color: c.textSecondary, textAlign: 'center' },
   emptyContainer: { flex: 1 },
   retryContainer: { paddingHorizontal: 16, paddingBottom: 24 },
   offlineBanner: {
@@ -198,22 +204,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  offlineText: { flex: 1, fontSize: 13, fontWeight: '600', color: colors.textPrimary },
+  offlineText: { flex: 1, fontSize: 13, fontWeight: '600', color: c.textPrimary },
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 6,
     gap: 12,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
@@ -221,20 +227,20 @@ const styles = StyleSheet.create({
   },
   cardHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   cardTitleBlock: { flex: 1, gap: 4 },
-  cardTitle: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
-  author: { fontSize: 13, color: colors.textSecondary },
+  cardTitle: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  author: { fontSize: 13, color: c.textSecondary },
   levelBadge: {
     maxWidth: 132,
     paddingHorizontal: 10,
     paddingVertical: 6,
-    backgroundColor: colors.accentSoft,
+    backgroundColor: c.accentSoft,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
-  levelText: { fontSize: 12, fontWeight: '700', color: colors.primary, textAlign: 'center' },
-  description: { fontSize: 14, lineHeight: 20, color: colors.textSecondary },
+  levelText: { fontSize: 12, fontWeight: '700', color: c.primary, textAlign: 'center' },
+  description: { fontSize: 14, lineHeight: 20, color: c.textSecondary },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  metaText: { fontSize: 13, fontWeight: '600', color: colors.textSecondary },
+  metaText: { fontSize: 13, fontWeight: '600', color: c.textSecondary },
   downloadButton: { marginTop: 2 },
 });

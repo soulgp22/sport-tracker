@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 import { macroStatusColor } from '../../lib/nutritionCalc';
 
 interface MacroBarProps {
@@ -17,6 +19,8 @@ function formatValue(value: number) {
 }
 
 export function MacroBar({ label, current, goal, unit, percent }: MacroBarProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const statusColor = macroStatusColor(percent);
   const fillWidth = `${Math.min(Math.max(percent, 0), 100)}%` as const;
 
@@ -39,17 +43,17 @@ export function MacroBar({ label, current, goal, unit, percent }: MacroBarProps)
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  label: { flex: 1, fontSize: 14, fontWeight: '700', color: colors.textPrimary },
+  label: { flex: 1, fontSize: 14, fontWeight: '700', color: c.textPrimary },
   values: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  amount: { fontSize: 13, fontWeight: '700', color: colors.textSecondary },
+  amount: { fontSize: 13, fontWeight: '700', color: c.textSecondary },
   percent: { fontSize: 13, fontWeight: '800' },
   track: {
     height: 8,
     borderRadius: 999,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     overflow: 'hidden',
   },
   fill: { height: 8, borderRadius: 999 },

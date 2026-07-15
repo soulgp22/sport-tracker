@@ -5,7 +5,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FoodForm, type FoodFormValues } from '../../../components/foods/FoodForm';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import { normalizeFoodName, useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -24,6 +25,8 @@ function buildUniqueFoodId(name: string, foods: Food[]) {
 }
 
 export default function NewFoodScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const getAllFoods = useFoodStore((s) => s.getAllFoods);
@@ -51,7 +54,7 @@ export default function NewFoodScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading}>Nouvel aliment</Text>
         <View style={{ width: 24 }} />
@@ -62,8 +65,8 @@ export default function NewFoodScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -71,5 +74,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
 });

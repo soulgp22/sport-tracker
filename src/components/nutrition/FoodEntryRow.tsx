@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
 import type { FoodEntry, MealType } from '../../types';
 import { TextInput } from '../ui/TextInput';
@@ -34,6 +36,8 @@ export function FoodEntryRow({
   drag,
   isActive,
 }: FoodEntryRowProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const [isEditing, setIsEditing] = useState(false);
   const [quantityText, setQuantityText] = useState('');
   const [quantityError, setQuantityError] = useState('');
@@ -106,14 +110,14 @@ export function FoodEntryRow({
               onPress={cancelEdit}
               activeOpacity={0.75}
               accessibilityRole="button">
-              <Ionicons name="close" size={18} color={colors.textSecondary} />
+              <Ionicons name="close" size={18} color={c.textSecondary} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconButton}
               onPress={saveEdit}
               activeOpacity={0.75}
               accessibilityRole="button">
-              <Ionicons name="checkmark" size={18} color={colors.primary} />
+              <Ionicons name="checkmark" size={18} color={c.primary} />
             </TouchableOpacity>
           </View>
         </View>
@@ -155,45 +159,45 @@ export function FoodEntryRow({
           activeOpacity={0.75}
           accessibilityRole="button"
           accessibilityLabel="Déplacer">
-          <Ionicons name="swap-horizontal-outline" size={18} color={colors.primary} />
+          <Ionicons name="swap-horizontal-outline" size={18} color={c.primary} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={() => onDeleteEntry(entry)}
           activeOpacity={0.75}
           accessibilityRole="button">
-          <Ionicons name="trash-outline" size={18} color={colors.danger} />
+          <Ionicons name="trash-outline" size={18} color={c.danger} />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 10,
     padding: 14,
     marginHorizontal: 16,
     gap: 10,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
   activeRow: {
-    borderColor: colors.primary,
-    backgroundColor: colors.surfaceAlt,
+    borderColor: c.primary,
+    backgroundColor: c.surfaceAlt,
     elevation: 4,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.18,
     shadowRadius: 10,
   },
   body: { flex: 1, gap: 3 },
-  foodName: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
-  meta: { fontSize: 13, color: colors.textSecondary },
-  macros: { fontSize: 13, color: colors.primary, fontWeight: '700' },
+  foodName: { fontSize: 16, fontWeight: '700', color: c.textPrimary },
+  meta: { fontSize: 13, color: c.textSecondary },
+  macros: { fontSize: 13, color: c.primary, fontWeight: '700' },
   actions: { alignItems: 'flex-end', gap: 8 },
   textAction: {
     minHeight: 32,
@@ -201,16 +205,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: c.primary,
   },
-  textActionLabel: { fontSize: 12, fontWeight: '800', color: colors.primary },
+  textActionLabel: { fontSize: 12, fontWeight: '800', color: c.primary },
   deleteButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
   },
   moveButton: {
     width: 32,
@@ -218,21 +222,21 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
   },
   editBody: { flex: 1, gap: 8 },
   editControls: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
   quantityField: { width: 96 },
   quantityInput: { minHeight: 40, paddingVertical: 8 },
-  unitLabel: { paddingTop: 11, fontSize: 14, fontWeight: '700', color: colors.textSecondary },
+  unitLabel: { paddingTop: 11, fontSize: 14, fontWeight: '700', color: c.textSecondary },
   iconButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
 });

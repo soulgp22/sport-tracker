@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -5,7 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 import type { Session } from '../../../types';
 
 function fmt(secs: number) {
@@ -15,6 +17,8 @@ function fmt(secs: number) {
 }
 
 function SessionCard({ session, onPress }: { session: Session; onPress: () => void }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const date = new Date(session.date);
   const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
   const totalSets = session.exercises.reduce((sum, ex) => sum + ex.sets.filter((s) => s.completed).length, 0);
@@ -29,12 +33,14 @@ function SessionCard({ session, onPress }: { session: Session; onPress: () => vo
           {session.exercises.length} exercice{session.exercises.length !== 1 ? 's' : ''} · {totalSets} série{totalSets !== 1 ? 's' : ''} · {fmt(session.durationSeconds)}
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+      <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
 
 export default function HistoryScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const sessions = useSessionStore((s) => s.sessions);
 
@@ -59,26 +65,26 @@ export default function HistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 5,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
   cardLeft: { flex: 1, gap: 2 },
-  cardDate: { fontSize: 12, color: colors.textMuted, textTransform: 'capitalize' },
-  cardTitle: { fontSize: 17, fontWeight: '700', color: colors.textPrimary },
-  cardSub: { fontSize: 14, color: colors.primary, fontWeight: '500' },
-  cardMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
+  cardDate: { fontSize: 12, color: c.textMuted, textTransform: 'capitalize' },
+  cardTitle: { fontSize: 17, fontWeight: '700', color: c.textPrimary },
+  cardSub: { fontSize: 14, color: c.primary, fontWeight: '500' },
+  cardMeta: { fontSize: 13, color: c.textSecondary, marginTop: 2 },
 });

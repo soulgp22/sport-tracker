@@ -1,10 +1,13 @@
+import { useMemo } from 'react';
 import type { ComponentProps } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
+import { fonts } from '../../theme/fonts';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 
 type IoniconsName = ComponentProps<typeof Ionicons>['name'];
@@ -36,6 +39,8 @@ const HOME_TILES: HomeTile[] = [
 ];
 
 export default function HomeScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const active = useActiveSessionStore((s) => s.active);
 
@@ -60,7 +65,7 @@ export default function HomeScreen() {
                 </View>
               ) : null}
               <View style={styles.iconBox}>
-                <Ionicons name={tile.icon} size={24} color={colors.primary} />
+                <Ionicons name={tile.icon} size={24} color={c.primary} />
               </View>
               <Text style={styles.tileLabel} numberOfLines={1}>
                 {tile.label}
@@ -73,8 +78,8 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   content: {
     paddingHorizontal: 16,
     paddingTop: 24,
@@ -82,8 +87,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
-    color: colors.textPrimary,
+    fontFamily: fonts.serifBold,
+    color: c.textPrimary,
     marginBottom: 20,
   },
   grid: {
@@ -94,15 +99,15 @@ const styles = StyleSheet.create({
   tile: {
     width: '30%',
     aspectRatio: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
@@ -111,28 +116,28 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: colors.accentSoft,
+    backgroundColor: c.accentSoft,
     alignItems: 'center',
     justifyContent: 'center',
   },
   tileLabel: {
     fontSize: 12,
-    fontWeight: '700',
-    color: colors.textPrimary,
+    fontFamily: fonts.sansBold,
+    color: c.textPrimary,
     textAlign: 'center',
   },
   badge: {
     position: 'absolute',
     top: 6,
     right: 6,
-    backgroundColor: colors.primary,
+    backgroundColor: c.primary,
     borderRadius: 999,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
   badgeText: {
     fontSize: 9,
-    fontWeight: '700',
-    color: colors.primaryText,
+    fontFamily: fonts.sansBold,
+    color: c.primaryText,
   },
 });

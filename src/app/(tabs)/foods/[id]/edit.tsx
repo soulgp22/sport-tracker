@@ -6,10 +6,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FoodForm, type FoodFormValues } from '../../../../components/foods/FoodForm';
 import { EmptyState } from '../../../../components/ui/EmptyState';
-import { colors } from '../../../../constants/colors';
+import { useColors } from '../../../../theme/useColors';
+import type { ThemeColors } from '../../../../theme/palettes';
 import { useFoodStore } from '../../../../store/foodStore';
 
 export default function EditFoodScreen() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const getFoodById = useFoodStore((s) => s.getFoodById);
@@ -32,7 +35,7 @@ export default function EditFoodScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
           Modifier l'aliment
@@ -60,8 +63,8 @@ export default function EditFoodScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.bg },
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -69,5 +72,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: colors.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
 });

@@ -2,9 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
 
 function BackToHomeButton() {
+  const c = useColors();
   const router = useRouter();
 
   const handlePress = () => {
@@ -18,21 +19,22 @@ function BackToHomeButton() {
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+      <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
     </TouchableOpacity>
   );
 }
 
 export default function HistoryLayout() {
+  const c = useColors();
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: colors.bg },
-        headerTintColor: colors.textPrimary,
+        headerStyle: { backgroundColor: c.bg },
+        headerTintColor: c.textPrimary,
         headerTitleStyle: { fontWeight: '700' },
         headerShadowVisible: false,
-        contentStyle: { backgroundColor: colors.bg },
+        contentStyle: { backgroundColor: c.bg },
       }}>
       <Stack.Screen
         name="index"

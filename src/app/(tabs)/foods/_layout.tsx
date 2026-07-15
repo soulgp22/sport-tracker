@@ -1,10 +1,14 @@
+import { useMemo } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack, useRouter } from 'expo-router';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { colors } from '../../../constants/colors';
+import { useColors } from '../../../theme/useColors';
+import type { ThemeColors } from '../../../theme/palettes';
 
 function BackToHomeButton() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
 
   const handlePress = () => {
@@ -18,21 +22,23 @@ function BackToHomeButton() {
 
   return (
     <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+      <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
     </TouchableOpacity>
   );
 }
 
 export default function FoodsLayout() {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: colors.bg },
-        headerTintColor: colors.textPrimary,
+        headerStyle: { backgroundColor: c.bg },
+        headerTintColor: c.textPrimary,
         headerTitleStyle: { fontWeight: '700' },
         headerShadowVisible: false,
-        contentStyle: { backgroundColor: colors.bg },
+        contentStyle: { backgroundColor: c.bg },
       }}>
       <Stack.Screen
         name="index"
@@ -43,7 +49,7 @@ export default function FoodsLayout() {
           headerRight: () => (
             <Link href="/(tabs)/foods/params" asChild>
               <TouchableOpacity style={styles.settingsButton} hitSlop={8} activeOpacity={0.7}>
-                <Ionicons name="settings-outline" size={22} color={colors.primary} />
+                <Ionicons name="settings-outline" size={22} color={c.primary} />
               </TouchableOpacity>
             </Link>
           ),
@@ -57,7 +63,7 @@ export default function FoodsLayout() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   settingsButton: {
     width: 36,
     height: 36,

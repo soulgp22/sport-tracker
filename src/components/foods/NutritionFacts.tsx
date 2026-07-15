@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 import type { FoodNutrition } from '../../types';
 
 interface NutritionFactsProps {
@@ -13,6 +15,8 @@ function formatNumber(value: number) {
 }
 
 function MacroCell({ label, value, suffix }: { label: string; value: number; suffix: string }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <View style={styles.cell}>
       <Text style={styles.cellValue}>
@@ -25,6 +29,8 @@ function MacroCell({ label, value, suffix }: { label: string; value: number; suf
 }
 
 function DetailRow({ label, value }: { label: string; value: number }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <View style={styles.detailRow}>
       <Text style={styles.detailLabel}>{label}</Text>
@@ -34,6 +40,8 @@ function DetailRow({ label, value }: { label: string; value: number }) {
 }
 
 export function NutritionFacts({ nutrition }: NutritionFactsProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const details = [
     nutrition.fiber !== undefined ? { label: 'Fibres', value: nutrition.fiber } : null,
     nutrition.sugar !== undefined ? { label: 'Sucres', value: nutrition.sugar } : null,
@@ -69,38 +77,38 @@ export function NutritionFacts({ nutrition }: NutritionFactsProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 12,
     padding: 16,
     gap: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: c.border,
   },
   header: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },
-  title: { fontSize: 18, fontWeight: '800', color: colors.textPrimary },
-  subtitle: { fontSize: 13, color: colors.textSecondary },
+  title: { fontSize: 18, fontWeight: '800', color: c.textPrimary },
+  subtitle: { fontSize: 13, color: c.textSecondary },
   caloriesRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
-  caloriesValue: { fontSize: 34, fontWeight: '800', color: colors.primary },
-  caloriesLabel: { fontSize: 16, fontWeight: '700', color: colors.primary },
+  caloriesValue: { fontSize: 34, fontWeight: '800', color: c.primary },
+  caloriesLabel: { fontSize: 16, fontWeight: '700', color: c.primary },
   macroGrid: { flexDirection: 'row', gap: 8 },
   cell: {
     flex: 1,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
     borderRadius: 10,
     padding: 10,
     gap: 3,
   },
-  cellValue: { fontSize: 16, fontWeight: '800', color: colors.textPrimary },
-  cellLabel: { fontSize: 11, color: colors.textSecondary },
+  cellValue: { fontSize: 16, fontWeight: '800', color: c.textPrimary },
+  cellLabel: { fontSize: 11, color: c.textSecondary },
   details: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
+    borderTopColor: c.border,
     paddingTop: 8,
     gap: 7,
   },
   detailRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
-  detailLabel: { fontSize: 14, color: colors.textSecondary },
-  detailValue: { fontSize: 14, fontWeight: '700', color: colors.textPrimary },
+  detailLabel: { fontSize: 14, color: c.textSecondary },
+  detailValue: { fontSize: 14, fontWeight: '700', color: c.textPrimary },
 });

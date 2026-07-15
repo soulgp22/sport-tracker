@@ -11,7 +11,8 @@ import {
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { TextInput } from '../ui/TextInput';
 import { EmptyState } from '../ui/EmptyState';
-import { colors } from '../../constants/colors';
+import { useColors } from '../../theme/useColors';
+import type { ThemeColors } from '../../theme/palettes';
 import type { CatalogExercise } from '../../types';
 
 interface ExerciseCatalogListProps {
@@ -28,6 +29,8 @@ function ExerciseRow({
   selected: boolean;
   onPress: () => void;
 }) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const displayName = getExerciseDisplayName(exercise);
 
   return (
@@ -47,12 +50,14 @@ function ExerciseRow({
           {translateMuscle(exercise.target)} · {translateEquipment(exercise.equipment)}
         </Text>
       </View>
-      {selected ? <Ionicons name="checkmark-circle" size={22} color={colors.primary} /> : null}
+      {selected ? <Ionicons name="checkmark-circle" size={22} color={c.primary} /> : null}
     </TouchableOpacity>
   );
 }
 
 export function ExerciseCatalogList({ onSelect, selectedId }: ExerciseCatalogListProps) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const searchCatalog = useExerciseCatalogStore((s) => s.search);
   const bodyParts = useExerciseCatalogStore((s) => s.bodyParts);
   const [query, setQuery] = useState('');
@@ -121,7 +126,7 @@ export function ExerciseCatalogList({ onSelect, selectedId }: ExerciseCatalogLis
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (c: ThemeColors) => StyleSheet.create({
   wrapper: { flex: 1 },
   searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
   chipList: { flexGrow: 0, flexShrink: 0 },
@@ -131,28 +136,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 14,
     borderRadius: 17,
-    backgroundColor: colors.surfaceAlt,
+    backgroundColor: c.surfaceAlt,
   },
-  chipSelected: { backgroundColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: '600', color: colors.textPrimary },
-  chipTextSelected: { color: colors.primaryText },
+  chipSelected: { backgroundColor: c.primary },
+  chipText: { fontSize: 13, fontWeight: '600', color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
   list: { paddingHorizontal: 16, paddingBottom: 24, gap: 8 },
   empty: { flexGrow: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: c.surface,
     borderRadius: 10,
     padding: 10,
     gap: 10,
-    shadowColor: colors.overlay,
+    shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  cardSelected: { borderWidth: 2, borderColor: colors.primary },
-  thumb: { width: 58, height: 58, borderRadius: 8, backgroundColor: colors.surfaceAlt },
+  cardSelected: { borderWidth: 2, borderColor: c.primary },
+  thumb: { width: 58, height: 58, borderRadius: 8, backgroundColor: c.surfaceAlt },
   cardBody: { flex: 1, gap: 3 },
-  name: { fontSize: 15, fontWeight: '700', color: colors.textPrimary },
-  meta: { fontSize: 12, color: colors.textSecondary },
+  name: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  meta: { fontSize: 12, color: c.textSecondary },
 });
