@@ -8,6 +8,8 @@ import {
 } from '../constants/community';
 import { assertImportTextSize, MAX_IMPORT_FILE_BYTES } from '../lib/importLimits';
 import type { ImportResult } from '../types';
+import type { ImportFoodsResult } from './foodStore';
+import { useFoodStore } from './foodStore';
 import { useProgramStore } from './programStore';
 
 export type CommunityProgramLevel = 'Débutant' | 'Intermédiaire' | 'Avancé';
@@ -22,9 +24,25 @@ export interface CommunityProgramEntry {
   file: string;
 }
 
+export type CommunityFoodFormat = 'json' | 'csv';
+
+export interface CommunityFoodDatabaseEntry {
+  id: string;
+  name: string;
+  description: string;
+  author: string;
+  retailer: string;
+  country: string;
+  foodsCount: number;
+  format: CommunityFoodFormat;
+  file: string;
+  disclaimer: string;
+}
+
 export interface CommunityManifest {
-  version: 1;
+  version: 1 | 2;
   programs: CommunityProgramEntry[];
+  foodDatabases: CommunityFoodDatabaseEntry[];
 }
 
 interface CommunityState {
@@ -34,14 +52,16 @@ interface CommunityState {
   offline: boolean;
   fetchManifest: () => Promise<CommunityManifest | null>;
   downloadProgram: (entry: CommunityProgramEntry) => Promise<ImportResult>;
+  downloadFoodDatabase: (entry: CommunityFoodDatabaseEntry) => Promise<ImportFoodsResult>;
 }
 
 const COMMUNITY_LEVELS: CommunityProgramLevel[] = ['Débutant', 'Intermédiaire', 'Avancé'];
 const OFFLINE_CACHE_MESSAGE = 'Hors-ligne, liste en cache.';
-const LOAD_ERROR_MESSAGE = 'Impossible de charger les programmes communautaires.';
+const LOAD_ERROR_MESSAGE = 'Impossible de charger les contenus communautaires.';
 const DOWNLOAD_ERROR_MESSAGE = 'Impossible de télécharger ce programme.';
 const MAX_COMMUNITY_PROGRAMS = 200;
-const SAFE_PROGRAM_FILE_PATTERN = /^[a-z0-9][a-z0-9._-]*\.json$/i;
+const MAX_COMMUNITY_FOOD_DATABASES = 100;
+const SAFE_COMMUNITY_FILE_PATTERN = /^[a-z0-9][a-z0-9._-]*\.(json|csv)$/i;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
@@ -76,11 +96,33 @@ function readLevel(record: Record<string, unknown>): CommunityProgramLevel {
 
 function readProgramFile(record: Record<string, unknown>): string {
   const file = readString(record, 'file');
-  if (!SAFE_PROGRAM_FILE_PATTERN.test(file)) {
+  if (!SAFE_COMMUNITY_FILE_PATTERN.test(file) || !file.toLowerCase().endsWith('.json')) {
     throw new Error('Manifeste communautaire invalide.');
   }
 
   return file;
+}
+
+function readPositiveCount(record: Record<string, unknown>, key: string): number {
+  const value = record[key];
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+
+  return value;
+}
+
+function readFoodFormat(record: Record<string, unknown>, file: string): CommunityFoodFormat {
+  const value = record.format;
+  if (value !== 'json' && value !== 'csv') {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+
+  if (!file.toLowerCase().endsWith(`.${value}`)) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+
+  return value;
 }
 
 function parseManifest(text: string): CommunityManifest {
@@ -93,9 +135,10 @@ function parseManifest(text: string): CommunityManifest {
 
   if (
     !isRecord(parsed) ||
-    parsed.version !== 1 ||
+    (parsed.version !== 1 && parsed.version !== 2) ||
     !Array.isArray(parsed.programs) ||
-    parsed.programs.length > MAX_COMMUNITY_PROGRAMS
+    parsed.programs.length > MAX_COMMUNITY_PROGRAMS ||
+    ('foodDatabases' in parsed && !Array.isArray(parsed.foodDatabases))
   ) {
     throw new Error('Manifeste communautaire invalide.');
   }
@@ -123,9 +166,45 @@ function parseManifest(text: string): CommunityManifest {
       };
     });
 
+  const rawFoodDatabases = Array.isArray(parsed.foodDatabases) ? parsed.foodDatabases : [];
+  if (rawFoodDatabases.length > MAX_COMMUNITY_FOOD_DATABASES) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+
+  const foodDatabases = rawFoodDatabases.map((database) => {
+    if (!isRecord(database)) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+
+    const id = readString(database, 'id');
+    if (ids.has(id)) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+    ids.add(id);
+
+    const file = readString(database, 'file');
+    if (!SAFE_COMMUNITY_FILE_PATTERN.test(file)) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+
+    return {
+      id,
+      name: readString(database, 'name'),
+      description: readString(database, 'description'),
+      author: readString(database, 'author'),
+      retailer: readString(database, 'retailer'),
+      country: readString(database, 'country'),
+      foodsCount: readPositiveCount(database, 'foodsCount'),
+      format: readFoodFormat(database, file),
+      file,
+      disclaimer: readString(database, 'disclaimer'),
+    };
+  });
+
   return {
-    version: 1,
+    version: parsed.version,
     programs,
+    foodDatabases,
   };
 }
 
@@ -205,6 +284,18 @@ export const useCommunityStore = create<CommunityState>((set) => ({
       return useProgramStore.getState().importPrograms(text);
     } catch {
       throw new Error(DOWNLOAD_ERROR_MESSAGE);
+    }
+  },
+
+  downloadFoodDatabase: async (entry) => {
+    try {
+      const text = await fetchText(`${COMMUNITY_BASE_URL}${entry.file}`);
+      const foodStore = useFoodStore.getState();
+      return entry.format === 'csv'
+        ? foodStore.importFoodsFromCsv(text)
+        : foodStore.importFoods(text);
+    } catch {
+      throw new Error('Impossible de télécharger cette base d’aliments.');
     }
   },
 }));

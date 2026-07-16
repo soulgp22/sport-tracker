@@ -1,14 +1,13 @@
 import { useMemo } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack, useRouter } from 'expo-router';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 
 function BackToHomeButton() {
   const c = useColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
 
   const handlePress = () => {
@@ -47,11 +46,33 @@ export default function FoodsLayout() {
           title: 'Aliments',
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
-            <Link href="/(tabs)/foods/params" asChild>
-              <TouchableOpacity style={styles.settingsButton} hitSlop={8} activeOpacity={0.7}>
-                <Ionicons name="settings-outline" size={22} color={c.primary} />
-              </TouchableOpacity>
-            </Link>
+            <View style={styles.headerActions}>
+              <Link
+                href={{
+                  pathname: '/(tabs)/community',
+                  params: { tab: 'foods' },
+                } as never}
+                asChild>
+                <TouchableOpacity
+                  style={styles.settingsButton}
+                  hitSlop={8}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel="Bases d’aliments communautaires">
+                  <Ionicons name="cloud-download-outline" size={22} color={c.primary} />
+                </TouchableOpacity>
+              </Link>
+              <Link href="/(tabs)/foods/params" asChild>
+                <TouchableOpacity
+                  style={styles.settingsButton}
+                  hitSlop={8}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel="Paramètres des aliments">
+                  <Ionicons name="settings-outline" size={22} color={c.primary} />
+                </TouchableOpacity>
+              </Link>
+            </View>
           ),
         }}
       />
@@ -64,6 +85,7 @@ export default function FoodsLayout() {
 }
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   settingsButton: {
     width: 36,
     height: 36,

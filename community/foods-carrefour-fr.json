@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Carrefour France — Essentiels",
+    "retailer": "Carrefour",
+    "country": "France",
+    "official": false,
+    "disclaimer": "Sélection communautaire indicative. Vérifier les valeurs sur l’emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "carrefour_fr_fromage_blanc_0",
+      "name": "Carrefour - Fromage blanc 0%",
+      "category": "Produits laitiers",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 8,
+        "carbs": 4,
+        "fat": 0.2,
+        "sugar": 4,
+        "salt": 0.1
+      }
+    },
+    {
+      "id": "carrefour_fr_lentilles_vertes",
+      "name": "Carrefour - Lentilles vertes crues",
+      "category": "Légumineuses",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 335,
+        "protein": 25,
+        "carbs": 52,
+        "fat": 1.5,
+        "fiber": 11,
+        "sugar": 2,
+        "salt": 0.02
+      }
+    },
+    {
+      "id": "carrefour_fr_quinoa",
+      "name": "Carrefour - Quinoa cru",
+      "category": "Féculents",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 368,
+        "protein": 14,
+        "carbs": 64,
+        "fat": 6,
+        "fiber": 7,
+        "sugar": 1.5,
+        "salt": 0.02
+      }
+    },
+    {
+      "id": "carrefour_fr_oeufs",
+      "name": "Carrefour - Œufs",
+      "category": "Œufs",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 143,
+        "protein": 13,
+        "carbs": 0.7,
+        "fat": 9.5,
+        "sugar": 0.4,
+        "salt": 0.35
+      }
+    },
+    {
+      "id": "carrefour_fr_saumon_fume",
+      "name": "Carrefour - Saumon fumé",
+      "category": "Poissons",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 180,
+        "protein": 22,
+        "carbs": 0,
+        "fat": 10,
+        "sugar": 0,
+        "salt": 3
+      }
+    },
+    {
+      "id": "carrefour_fr_yaourt_grec",
+      "name": "Carrefour - Yaourt grec nature",
+      "category": "Produits laitiers",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 120,
+        "protein": 6,
+        "carbs": 4,
+        "fat": 9,
+        "sugar": 4,
+        "salt": 0.1
+      }
+    },
+    {
+      "id": "carrefour_fr_amandes",
+      "name": "Carrefour - Amandes nature",
+      "category": "Oléagineux",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 610,
+        "protein": 21,
+        "carbs": 9,
+        "fat": 53,
+        "fiber": 12,
+        "sugar": 4,
+        "salt": 0.02
+      }
+    },
+    {
+      "id": "carrefour_fr_chocolat_noir_70",
+      "name": "Carrefour - Chocolat noir 70%",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 570,
+        "protein": 8,
+        "carbs": 35,
+        "fat": 42,
+        "fiber": 10,
+        "sugar": 30,
+        "salt": 0.02
+      }
+    }
+  ]
+}

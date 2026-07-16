@@ -1,4 +1,4 @@
-# Sport Tracker
+# Life Sport Tracker
 
 Application Expo / React Native de suivi de programmes, séances, historique et progression.
 

@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Auchan France — Essentiels",
+    "retailer": "Auchan",
+    "country": "France",
+    "official": false,
+    "disclaimer": "Sélection communautaire indicative. Vérifier les valeurs sur l’emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "auchan_fr_flocons_avoine",
+      "name": "Auchan - Flocons d’avoine",
+      "category": "Céréales",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 372,
+        "protein": 13,
+        "carbs": 59,
+        "fat": 7,
+        "fiber": 10,
+        "sugar": 1,
+        "salt": 0.02
+      }
+    },
+    {
+      "id": "auchan_fr_riz_basmati",
+      "name": "Auchan - Riz basmati cru",
+      "category": "Féculents",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 354,
+        "protein": 8,
+        "carbs": 78,
+        "fat": 1,
+        "fiber": 1.5,
+        "sugar": 0.5,
+        "salt": 0.01
+      }
+    },
+    {
+      "id": "auchan_fr_skyr_nature",
+      "name": "Auchan - Skyr nature",
+      "category": "Produits laitiers",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 61,
+        "protein": 10,
+        "carbs": 4,
+        "fat": 0.2,
+        "sugar": 4,
+        "salt": 0.1
+      }
+    },
+    {
+      "id": "auchan_fr_thon_naturel",
+      "name": "Auchan - Thon au naturel égoutté",
+      "category": "Poissons",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 116,
+        "protein": 26,
+        "carbs": 0,
+        "fat": 1,
+        "sugar": 0,
+        "salt": 1
+      }
+    },
+    {
+      "id": "auchan_fr_blanc_poulet",
+      "name": "Auchan - Blanc de poulet rôti",
+      "category": "Viandes",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 110,
+        "protein": 23,
+        "carbs": 1,
+        "fat": 2,
+        "sugar": 0.5,
+        "salt": 1.5
+      }
+    },
+    {
+      "id": "auchan_fr_compote_pomme_ssa",
+      "name": "Auchan - Compote pomme sans sucres ajoutés",
+      "category": "Fruits",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 53,
+        "protein": 0.3,
+        "carbs": 12,
+        "fat": 0.2,
+        "fiber": 1.6,
+        "sugar": 11,
+        "salt": 0.01
+      }
+    },
+    {
+      "id": "auchan_fr_beurre_cacahuete",
+      "name": "Auchan - Beurre de cacahuète",
+      "category": "Oléagineux",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 610,
+        "protein": 25,
+        "carbs": 15,
+        "fat": 50,
+        "fiber": 8,
+        "sugar": 6,
+        "salt": 0.5
+      }
+    },
+    {
+      "id": "auchan_fr_pain_complet",
+      "name": "Auchan - Pain de mie complet",
+      "category": "Pains",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 250,
+        "protein": 9,
+        "carbs": 43,
+        "fat": 4.5,
+        "fiber": 6,
+        "sugar": 5,
+        "salt": 1.1
+      }
+    }
+  ]
+}

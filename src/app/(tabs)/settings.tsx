@@ -304,7 +304,7 @@ export default function SettingsScreen() {
       try {
         await Sharing.shareAsync(file.uri, {
           mimeType: 'application/json',
-          dialogTitle: 'Sauvegarder mon profil Sport Tracker',
+          dialogTitle: 'Sauvegarder mon profil Life Sport Tracker',
           UTI: 'public.json',
         });
       } finally {
@@ -678,7 +678,7 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>À propos</Text>
-          <Text style={styles.aboutText}>Sport Tracker v1.0.0</Text>
+          <Text style={styles.aboutText}>Life Sport Tracker v1.0.0</Text>
           <Text style={styles.aboutSubtext}>
             Application de suivi d&apos;entraînement personnel
           </Text>

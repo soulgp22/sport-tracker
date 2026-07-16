@@ -6,6 +6,7 @@ import {
   COMMUNITY_MANIFEST_URL,
 } from '../../constants/community';
 import { useCommunityStore, type CommunityManifest } from '../communityStore';
+import { useFoodStore } from '../foodStore';
 import { useProgramStore } from '../programStore';
 
 const { store: asyncStorageStore } = jest.requireMock('@react-native-async-storage/async-storage') as {
@@ -24,16 +25,30 @@ function textResponse(text: string, ok = true): Response {
 
 function manifestFixture(id = 'ppl-6'): CommunityManifest {
   return {
-    version: 1,
+    version: 2,
     programs: [
       {
         id,
         name: 'Push Pull Legs',
         description: 'Programme prêt à importer.',
-        author: 'Sport Tracker',
+        author: 'Life Sport Tracker',
         level: 'Intermédiaire',
         daysCount: 6,
         file: `${id}.json`,
+      },
+    ],
+    foodDatabases: [
+      {
+        id: 'auchan-fr',
+        name: 'Auchan France',
+        description: 'Sélection communautaire.',
+        author: 'Life Sport Tracker',
+        retailer: 'Auchan',
+        country: 'France',
+        foodsCount: 1,
+        format: 'json',
+        file: 'foods-auchan-fr.json',
+        disclaimer: 'Valeurs à vérifier sur l’emballage.',
       },
     ],
   };
@@ -51,6 +66,7 @@ beforeEach(() => {
     offline: false,
   });
   useProgramStore.setState({ programs: [], exercises: [] });
+  useFoodStore.setState({ customFoods: [] });
 });
 
 describe('communityStore', () => {
@@ -69,6 +85,20 @@ describe('communityStore', () => {
       offline: false,
     });
     expect(asyncStorageStore.get(COMMUNITY_MANIFEST_CACHE_KEY)).toBe(JSON.stringify(manifest));
+  });
+
+  it('keeps compatibility with a version 1 manifest without food databases', async () => {
+    const manifest = manifestFixture();
+    const legacyManifest = { version: 1, programs: manifest.programs };
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(legacyManifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result).toEqual({
+      version: 1,
+      programs: manifest.programs,
+      foodDatabases: [],
+    });
   });
 
   it('falls back to the cached manifest when the network fails', async () => {
@@ -96,7 +126,7 @@ describe('communityStore', () => {
     expect(useCommunityStore.getState()).toMatchObject({
       data: null,
       loading: false,
-      error: 'Impossible de charger les programmes communautaires.',
+      error: 'Impossible de charger les contenus communautaires.',
       offline: false,
     });
   });
@@ -110,7 +140,20 @@ describe('communityStore', () => {
 
     expect(result).toBeNull();
     expect(useCommunityStore.getState().error).toBe(
-      'Impossible de charger les programmes communautaires.'
+      'Impossible de charger les contenus communautaires.'
+    );
+  });
+
+  it('rejects unsafe food database paths from the remote manifest', async () => {
+    const manifest = manifestFixture();
+    manifest.foodDatabases[0].file = '../foods.json';
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result).toBeNull();
+    expect(useCommunityStore.getState().error).toBe(
+      'Impossible de charger les contenus communautaires.'
     );
   });
 
@@ -134,5 +177,27 @@ describe('communityStore', () => {
     expect(result.errors).toEqual([]);
     expect(useProgramStore.getState().programs).toHaveLength(1);
     expect(useProgramStore.getState().programs[0].name).toBe('Programme communautaire');
+  });
+
+  it('downloads and imports a community food database', async () => {
+    const [entry] = manifestFixture().foodDatabases;
+    const payload = {
+      foods: [
+        {
+          id: 'auchan_test',
+          name: 'Produit test Auchan',
+          category: 'Tests',
+          unit: 'g',
+          nutritionPer100g: { calories: 100, protein: 10, carbs: 10, fat: 2 },
+        },
+      ],
+    };
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(payload)));
+
+    const result = await useCommunityStore.getState().downloadFoodDatabase(entry);
+
+    expect(fetchMock).toHaveBeenCalledWith(`${COMMUNITY_BASE_URL}${entry.file}`);
+    expect(result.added).toBe(1);
+    expect(result.errors).toEqual([]);
   });
 });

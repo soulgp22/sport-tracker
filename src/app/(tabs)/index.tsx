@@ -2,9 +2,10 @@ import { useMemo } from 'react';
 import type { ComponentProps } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { LifeSportLogo } from '../../components/brand/LifeSportLogo';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
@@ -58,7 +59,7 @@ const HOME_TILES: HomeTile[] = [
   },
   {
     key: 'progress',
-    label: 'Progression',
+    label: 'Progrès',
     description: 'Mesurer vos résultats',
     icon: 'trending-up-outline',
     href: '/(tabs)/progress',
@@ -84,25 +85,28 @@ export default function HomeScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const active = useActiveSessionStore((state) => state.active);
+  const { height } = useWindowDimensions();
+  const compact = height < 700;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.eyebrow}>VOTRE ESPACE</Text>
-        <Text style={styles.title}>Sport Tracker</Text>
-        <Text style={styles.subtitle}>
-          Entraînez-vous avec intention, mesurez ce qui compte.
-        </Text>
+      <View style={[styles.content, compact ? styles.contentCompact : null]}>
+        <View style={styles.brandRow}>
+          <LifeSportLogo />
+          <View style={styles.brandTag}>
+            <Text style={styles.brandTagText}>SPORT · NUTRITION · PROGRÈS</Text>
+          </View>
+        </View>
 
         <TouchableOpacity
-          style={styles.sessionCard}
+          style={[styles.sessionCard, compact ? styles.sessionCardCompact : null]}
           onPress={() => router.push('/(tabs)/session')}
           activeOpacity={0.82}
           accessibilityRole="button"
           accessibilityLabel={active ? 'Reprendre la séance en cours' : 'Démarrer une séance'}
           accessibilityHint="Ouvre votre espace de séance">
           <View style={styles.sessionIconBox}>
-            <Ionicons name={active ? 'refresh' : 'play'} size={24} color={c.primary} />
+            <Ionicons name={active ? 'refresh' : 'play'} size={21} color={c.primary} />
           </View>
           <View style={styles.sessionCopy}>
             <Text style={styles.sessionKicker}>
@@ -117,7 +121,7 @@ export default function HomeScreen() {
                 : 'Choisissez un programme et un jour'}
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={22} color={c.primaryText} />
+          <Ionicons name="chevron-forward" size={20} color={c.primaryText} />
         </TouchableOpacity>
 
         <View style={styles.sectionHeader}>
@@ -138,24 +142,21 @@ export default function HomeScreen() {
                 accessibilityLabel={tile.label}
                 accessibilityHint={tile.description}>
                 <View style={styles.iconBox}>
-                  <Ionicons name={tile.icon} size={24} color={c.primary} />
+                  <Ionicons name={tile.icon} size={compact ? 18 : 20} color={c.primary} />
                 </View>
                 <View style={styles.tileCopy}>
                   <Text style={styles.tileLabel} numberOfLines={1}>
                     {tile.label}
                   </Text>
-                  <Text style={styles.tileDescription} numberOfLines={2}>
-                    {tile.description}
-                  </Text>
                 </View>
                 {isWide ? (
-                  <Ionicons name="chevron-forward" size={20} color={c.textMuted} />
+                  <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
                 ) : null}
               </TouchableOpacity>
             );
           })}
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -164,135 +165,146 @@ const makeStyles = (c: ThemeColors) =>
   StyleSheet.create({
     safe: { flex: 1, backgroundColor: c.bg },
     content: {
-      paddingHorizontal: 18,
-      paddingTop: 22,
-      paddingBottom: 36,
+      flex: 1,
+      paddingHorizontal: 14,
+      paddingTop: 12,
+      paddingBottom: 10,
     },
-    eyebrow: {
-      fontSize: 11,
-      letterSpacing: 1.8,
-      fontFamily: fonts.sansBold,
-      color: c.primary,
-      marginBottom: 5,
+    contentCompact: {
+      paddingTop: 7,
+      paddingBottom: 6,
     },
-    title: {
-      fontSize: 32,
-      fontFamily: fonts.serifBold,
-      color: c.textPrimary,
-    },
-    subtitle: {
-      maxWidth: 320,
-      marginTop: 6,
-      fontSize: 15,
-      lineHeight: 21,
-      fontFamily: fonts.sans,
-      color: c.textSecondary,
-    },
-    sessionCard: {
-      minHeight: 118,
-      marginTop: 24,
-      borderRadius: 18,
-      padding: 16,
+    brandRow: {
+      minHeight: 50,
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 13,
+      justifyContent: 'space-between',
+      gap: 10,
+    },
+    brandTag: {
+      flexShrink: 1,
+      paddingHorizontal: 9,
+      paddingVertical: 6,
+      borderRadius: 999,
+      backgroundColor: c.accentSoft,
+    },
+    brandTagText: {
+      fontSize: 8,
+      letterSpacing: 0.8,
+      fontFamily: fonts.sansBold,
+      color: c.primary,
+      textAlign: 'center',
+    },
+    sessionCard: {
+      minHeight: 84,
+      marginTop: 12,
+      borderRadius: 16,
+      paddingHorizontal: 13,
+      paddingVertical: 11,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 11,
       backgroundColor: c.primary,
       shadowColor: c.overlay,
       shadowOpacity: 0.16,
-      shadowRadius: 12,
-      shadowOffset: { width: 0, height: 6 },
+      shadowRadius: 10,
+      shadowOffset: { width: 0, height: 5 },
       elevation: 4,
     },
+    sessionCardCompact: {
+      minHeight: 74,
+      marginTop: 8,
+      paddingVertical: 7,
+    },
     sessionIconBox: {
-      width: 48,
-      height: 48,
-      borderRadius: 24,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
       backgroundColor: c.surface,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    sessionCopy: { flex: 1, gap: 2 },
+    sessionCopy: { flex: 1, gap: 1 },
     sessionKicker: {
-      fontSize: 10,
-      letterSpacing: 1.3,
+      fontSize: 9,
+      letterSpacing: 1.2,
       fontFamily: fonts.sansBold,
       color: c.primaryText,
       opacity: 0.72,
     },
     sessionTitle: {
-      fontSize: 19,
+      fontSize: 17,
       fontFamily: fonts.serifBold,
       color: c.primaryText,
     },
     sessionSubtitle: {
-      fontSize: 12,
+      fontSize: 11,
       fontFamily: fonts.sans,
       color: c.primaryText,
       opacity: 0.82,
     },
     sectionHeader: {
-      marginTop: 28,
-      marginBottom: 12,
+      marginTop: 12,
+      marginBottom: 7,
       flexDirection: 'row',
       alignItems: 'baseline',
       justifyContent: 'space-between',
     },
     sectionTitle: {
-      fontSize: 20,
+      fontSize: 17,
       fontFamily: fonts.serifBold,
       color: c.textPrimary,
     },
     sectionMeta: {
-      fontSize: 12,
+      fontSize: 10,
       fontFamily: fonts.sans,
       color: c.textMuted,
     },
     grid: {
+      flex: 1,
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 12,
+      alignContent: 'stretch',
+      gap: 8,
     },
     tile: {
-      width: '48%',
-      minHeight: 132,
+      width: '31.5%',
+      minHeight: 70,
+      flexGrow: 1,
       backgroundColor: c.surface,
-      borderRadius: 16,
+      borderRadius: 13,
       borderWidth: 1,
       borderColor: c.border,
-      padding: 14,
-      alignItems: 'flex-start',
-      justifyContent: 'space-between',
-      gap: 10,
+      padding: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 5,
       shadowColor: c.overlay,
-      shadowOpacity: 0.06,
-      shadowRadius: 6,
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
       elevation: 1,
     },
     tileWide: {
       width: '100%',
-      minHeight: 88,
+      minHeight: 58,
+      flexGrow: 0,
       flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
+      justifyContent: 'center',
+      paddingHorizontal: 14,
     },
     iconBox: {
-      width: 42,
-      height: 42,
-      borderRadius: 14,
+      width: 32,
+      height: 32,
+      borderRadius: 10,
       backgroundColor: c.accentSoft,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    tileCopy: { flex: 1, gap: 3 },
+    tileCopy: { flexGrow: 0, flexShrink: 1 },
     tileLabel: {
-      fontSize: 15,
+      fontSize: 12,
       fontFamily: fonts.sansBold,
       color: c.textPrimary,
-    },
-    tileDescription: {
-      fontSize: 12,
-      lineHeight: 16,
-      fontFamily: fonts.sans,
-      color: c.textSecondary,
+      textAlign: 'center',
     },
   });

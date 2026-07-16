@@ -53,7 +53,12 @@ export default function ProgramsLayout() {
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <View style={styles.headerActions}>
-              <Link href={'/(tabs)/community' as never} asChild>
+              <Link
+                href={{
+                  pathname: '/(tabs)/community',
+                  params: { tab: 'programs' },
+                } as never}
+                asChild>
                 <TouchableOpacity
                   style={styles.iconButton}
                   activeOpacity={0.7}

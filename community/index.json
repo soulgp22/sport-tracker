@@ -1,11 +1,11 @@
 {
-  "version": 1,
+  "version": 2,
   "programs": [
     {
       "id": "full-body-3",
       "name": "Full Body Débutant",
-      "description": "Programme corps entier 3 séances/semaine, idéal pour démarrer la muscu sur les mouvements de base.",
-      "author": "Sport Tracker",
+      "description": "Programme corps entier 3 séances/semaine, idéal pour démarrer la musculation sur les mouvements de base.",
+      "author": "Life Sport Tracker",
       "level": "Débutant",
       "daysCount": 3,
       "exercisesCount": 15,
@@ -14,8 +14,8 @@
     {
       "id": "ppl-3",
       "name": "Push Pull Legs",
-      "description": "Le grand classique : Poussée / Tirage / Jambes. À enchaîner 3 à 6 jours/semaine selon ta récup.",
-      "author": "Sport Tracker",
+      "description": "Le grand classique : Poussée / Tirage / Jambes. À enchaîner 3 à 6 jours/semaine selon ta récupération.",
+      "author": "Life Sport Tracker",
       "level": "Intermédiaire",
       "daysCount": 3,
       "exercisesCount": 16,
@@ -25,11 +25,37 @@
       "id": "upper-lower-4",
       "name": "Upper / Lower",
       "description": "Haut / Bas sur 4 séances : bon équilibre volume et récupération pour progresser en force.",
-      "author": "Sport Tracker",
+      "author": "Life Sport Tracker",
       "level": "Intermédiaire",
       "daysCount": 4,
       "exercisesCount": 21,
       "file": "upper-lower-4.json"
+    }
+  ],
+  "foodDatabases": [
+    {
+      "id": "foods-auchan-fr-starter",
+      "name": "Produits Auchan France — Essentiels",
+      "description": "Une sélection de démarrage orientée sport : féculents, protéines, produits laitiers et collations.",
+      "author": "Communauté Life Sport Tracker",
+      "retailer": "Auchan FR",
+      "country": "France",
+      "foodsCount": 8,
+      "format": "json",
+      "file": "foods-auchan-fr.json",
+      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit."
+    },
+    {
+      "id": "foods-carrefour-fr-starter",
+      "name": "Produits Carrefour France — Essentiels",
+      "description": "Une sélection de produits courants pour compléter rapidement le suivi nutritionnel quotidien.",
+      "author": "Communauté Life Sport Tracker",
+      "retailer": "Carrefour FR",
+      "country": "France",
+      "foodsCount": 8,
+      "format": "json",
+      "file": "foods-carrefour-fr.json",
+      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit."
     }
   ]
 }
