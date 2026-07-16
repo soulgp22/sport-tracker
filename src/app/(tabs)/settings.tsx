@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Platform,
@@ -11,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystemLegacy from 'expo-file-system/legacy';
@@ -20,7 +20,7 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 import { Button } from '../../components/ui/Button';
 import { useColors } from '../../theme/useColors';
 import { PALETTES, type PaletteId, type ThemeColors } from '../../theme/palettes';
-import { fonts } from '../../theme/fonts';
+import { FONT_THEMES, fonts, type FontId } from '../../theme/fonts';
 import {
   buildProfileBackup,
   parseProfileBackup,
@@ -127,6 +127,9 @@ export default function SettingsScreen() {
   const bodyWeightEntriesCount = useBodyWeightStore((s) => s.entries.length);
   const paletteId = useThemeStore((s) => s.paletteId);
   const setPalette = useThemeStore((s) => s.setPalette);
+  const fontId = useThemeStore((s) => s.fontId);
+  const setFont = useThemeStore((s) => s.setFont);
+  const [openAppearanceMenu, setOpenAppearanceMenu] = useState<'palette' | 'font' | null>(null);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [profileImporting, setProfileImporting] = useState(false);
@@ -427,36 +430,149 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Apparence</Text>
           <Text style={styles.helpText}>
-            Choisis l&apos;ambiance de l&apos;app. Le logo et les polices ne changent pas.
+            Personnalise séparément les couleurs et la typographie de l&apos;application.
           </Text>
-          <View style={styles.paletteGrid}>
-            {(Object.keys(PALETTES) as PaletteId[]).map((id) => {
-              const palette = PALETTES[id];
-              const active = paletteId === id;
-              return (
-                <TouchableOpacity
-                  key={id}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: active }}
-                  onPress={() => setPalette(id)}
-                  activeOpacity={0.75}
-                  style={[styles.paletteOption, active ? styles.paletteOptionActive : null]}>
-                  <Text style={[styles.paletteLabel, active ? styles.paletteLabelActive : null]}>
-                    {palette.label}
-                  </Text>
-                  <View style={styles.swatches}>
-                    {[palette.colors.bg, palette.colors.primary, palette.colors.textPrimary].map(
-                      (color, index) => (
-                        <View
-                          key={`${id}-${index}`}
-                          style={[styles.swatch, { backgroundColor: color }]}
-                        />
-                      )
-                    )}
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+
+          <View style={styles.dropdownGroup}>
+            <Text style={styles.dropdownLabel}>Palette de couleurs</Text>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={{ expanded: openAppearanceMenu === 'palette' }}
+              onPress={() =>
+                setOpenAppearanceMenu((current) => current === 'palette' ? null : 'palette')
+              }
+              activeOpacity={0.75}
+              style={styles.dropdownTrigger}>
+              <View style={styles.dropdownSelection}>
+                <Text style={styles.dropdownValue}>{PALETTES[paletteId].label}</Text>
+                <View style={styles.swatches}>
+                  {[
+                    PALETTES[paletteId].colors.bg,
+                    PALETTES[paletteId].colors.primary,
+                    PALETTES[paletteId].colors.secondary,
+                  ].map((color, index) => (
+                    <View
+                      key={`${paletteId}-selected-${index}`}
+                      style={[styles.swatch, { backgroundColor: color }]}
+                    />
+                  ))}
+                </View>
+              </View>
+              <Ionicons
+                name={openAppearanceMenu === 'palette' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color={c.textSecondary}
+              />
+            </TouchableOpacity>
+
+            {openAppearanceMenu === 'palette' ? (
+              <View style={styles.dropdownMenu}>
+                {(Object.keys(PALETTES) as PaletteId[]).map((id) => {
+                  const palette = PALETTES[id];
+                  const active = paletteId === id;
+                  return (
+                    <TouchableOpacity
+                      key={id}
+                      accessibilityRole="radio"
+                      accessibilityState={{ checked: active }}
+                      onPress={() => {
+                        setPalette(id);
+                        setOpenAppearanceMenu(null);
+                      }}
+                      activeOpacity={0.72}
+                      style={[styles.dropdownOption, active ? styles.dropdownOptionActive : null]}>
+                      <View style={styles.optionText}>
+                        <Text style={[styles.paletteLabel, active ? styles.paletteLabelActive : null]}>
+                          {palette.label}
+                        </Text>
+                        <Text style={styles.optionDescription}>
+                          {palette.mode === 'dark' ? 'Mode sombre' : 'Mode clair'}
+                        </Text>
+                      </View>
+                      <View style={styles.swatches}>
+                        {[palette.colors.bg, palette.colors.primary, palette.colors.secondary].map(
+                          (color, index) => (
+                            <View
+                              key={`${id}-${index}`}
+                              style={[styles.swatch, { backgroundColor: color }]}
+                            />
+                          )
+                        )}
+                      </View>
+                      {active ? <Ionicons name="checkmark-circle" size={20} color={c.primary} /> : null}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ) : null}
+          </View>
+
+          <View style={styles.dropdownGroup}>
+            <Text style={styles.dropdownLabel}>Police</Text>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={{ expanded: openAppearanceMenu === 'font' }}
+              onPress={() =>
+                setOpenAppearanceMenu((current) => current === 'font' ? null : 'font')
+              }
+              activeOpacity={0.75}
+              style={styles.dropdownTrigger}>
+              <View style={styles.dropdownSelection}>
+                <Text
+                  style={[
+                    styles.dropdownValue,
+                    { fontFamily: FONT_THEMES[fontId].tokens.serifBold },
+                  ]}>
+                  {FONT_THEMES[fontId].label}
+                </Text>
+                <Text style={styles.optionDescription}>{FONT_THEMES[fontId].description}</Text>
+              </View>
+              <Ionicons
+                name={openAppearanceMenu === 'font' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color={c.textSecondary}
+              />
+            </TouchableOpacity>
+
+            {openAppearanceMenu === 'font' ? (
+              <View style={styles.dropdownMenu}>
+                {(Object.keys(FONT_THEMES) as FontId[]).map((id) => {
+                  const fontTheme = FONT_THEMES[id];
+                  const active = fontId === id;
+                  return (
+                    <TouchableOpacity
+                      key={id}
+                      accessibilityRole="radio"
+                      accessibilityState={{ checked: active }}
+                      onPress={() => {
+                        setFont(id);
+                        setOpenAppearanceMenu(null);
+                      }}
+                      activeOpacity={0.72}
+                      style={[styles.dropdownOption, active ? styles.dropdownOptionActive : null]}>
+                      <View style={styles.optionText}>
+                        <Text
+                          style={[
+                            styles.fontPreview,
+                            { fontFamily: fontTheme.tokens.serifBold },
+                            active ? styles.paletteLabelActive : null,
+                          ]}>
+                          {fontTheme.label}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.optionDescription,
+                            { fontFamily: fontTheme.tokens.sans },
+                          ]}>
+                          {fontTheme.description}
+                        </Text>
+                      </View>
+                      {active ? <Ionicons name="checkmark-circle" size={20} color={c.primary} /> : null}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ) : null}
           </View>
         </View>
 
@@ -586,21 +702,54 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   actionBtn: { marginTop: 4 },
   helpText: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary, lineHeight: 18 },
-  paletteGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  paletteOption: {
-    width: '48%',
-    minHeight: 74,
+  dropdownGroup: { gap: 7 },
+  dropdownLabel: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 13,
+    color: c.textSecondary,
+  },
+  dropdownTrigger: {
+    minHeight: 62,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 10,
-    padding: 12,
-    borderRadius: 10,
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: c.border,
     backgroundColor: c.surface,
   },
-  paletteOptionActive: { borderWidth: 2, borderColor: c.primary, backgroundColor: c.accentSoft },
+  dropdownSelection: { flex: 1, gap: 5 },
+  dropdownValue: { fontFamily: fonts.sansBold, fontSize: 16, color: c.textPrimary },
+  dropdownMenu: {
+    overflow: 'hidden',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: c.border,
+    backgroundColor: c.surface,
+  },
+  dropdownOption: {
+    minHeight: 62,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: c.border,
+  },
+  dropdownOptionActive: { backgroundColor: c.accentSoft },
+  optionText: { flex: 1, gap: 2 },
+  optionDescription: {
+    fontFamily: fonts.sans,
+    fontSize: 12,
+    color: c.textSecondary,
+  },
   paletteLabel: { fontFamily: fonts.sansSemi, fontSize: 15, color: c.textPrimary },
   paletteLabelActive: { color: c.primary },
+  fontPreview: { fontSize: 18, color: c.textPrimary },
   swatches: { flexDirection: 'row', gap: 7 },
   swatch: { width: 20, height: 20, borderRadius: 10, borderWidth: 1, borderColor: c.border },
   codeBlock: {

@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   Platform,
@@ -30,15 +29,36 @@ function CustomFoodRow({
   food,
   onOpen,
   onDelete,
+  selectionMode,
+  selected,
+  onToggle,
+  onLongPress,
 }: {
   food: Food;
   onOpen: () => void;
   onDelete: () => void;
+  selectionMode: boolean;
+  selected: boolean;
+  onToggle: () => void;
+  onLongPress: () => void;
 }) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
-    <TouchableOpacity style={styles.foodRow} onPress={onOpen} activeOpacity={0.75}>
+    <TouchableOpacity
+      style={[styles.foodRow, selected ? styles.foodRowSelected : null]}
+      onPress={selectionMode ? onToggle : onOpen}
+      onLongPress={onLongPress}
+      activeOpacity={0.75}
+      accessibilityRole={selectionMode ? 'checkbox' : 'button'}
+      accessibilityState={selectionMode ? { checked: selected } : undefined}>
+      {selectionMode ? (
+        <Ionicons
+          name={selected ? 'checkmark-circle' : 'ellipse-outline'}
+          size={22}
+          color={selected ? c.primary : c.textMuted}
+        />
+      ) : null}
       <View style={styles.foodBody}>
         <Text style={styles.foodName} numberOfLines={1}>
           {food.name}
@@ -47,10 +67,19 @@ function CustomFoodRow({
           {food.category} · {food.unit}
         </Text>
       </View>
-      <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.deleteButton}>
-        <Ionicons name="trash-outline" size={18} color={c.danger} />
-      </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+      {!selectionMode ? (
+        <>
+          <TouchableOpacity
+            onPress={onDelete}
+            hitSlop={8}
+            style={styles.deleteButton}
+            accessibilityRole="button"
+            accessibilityLabel={`Supprimer ${food.name}`}>
+            <Ionicons name="trash-outline" size={18} color={c.danger} />
+          </TouchableOpacity>
+          <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+        </>
+      ) : null}
     </TouchableOpacity>
   );
 }
@@ -86,9 +115,12 @@ export default function FoodParamsScreen() {
   const router = useRouter();
   const importFoods = useFoodStore((s) => s.importFoods);
   const deleteCustomFood = useFoodStore((s) => s.deleteCustomFood);
+  const deleteCustomFoods = useFoodStore((s) => s.deleteCustomFoods);
   const customFoods = useFoodStore((s) => s.customFoods);
   const [importing, setImporting] = useState(false);
   const [importingCsv, setImportingCsv] = useState(false);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
 
   const showImportResult = (result: ImportFoodsResult) => {
     if (result.errors.length > 0 && result.added === 0) {
@@ -210,6 +242,62 @@ export default function FoodParamsScreen() {
     ]);
   };
 
+  const toggleSelection = (id: string) => {
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const enterSelectionMode = (id?: string) => {
+    setSelectionMode(true);
+    setSelectedIds(id ? new Set([id]) : new Set());
+  };
+
+  const exitSelectionMode = () => {
+    setSelectionMode(false);
+    setSelectedIds(new Set());
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === customFoods.length) {
+      setSelectedIds(new Set());
+      return;
+    }
+
+    setSelectedIds(new Set(customFoods.map((food) => food.id)));
+  };
+
+  const handleDeleteSelected = () => {
+    const count = selectedIds.size;
+    if (count === 0) return;
+
+    Alert.alert(
+      'Supprimer les aliments',
+      `Supprimer définitivement ${count} aliment${count > 1 ? 's' : ''} personnalisé${count > 1 ? 's' : ''} ?`,
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Supprimer',
+          style: 'destructive',
+          onPress: () => {
+            const deleted = deleteCustomFoods([...selectedIds]);
+            exitSelectionMode();
+            Alert.alert(
+              'Suppression terminée',
+              `${deleted} aliment${deleted > 1 ? 's ont' : ' a'} été supprimé${deleted > 1 ? 's' : ''}.`
+            );
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
@@ -284,28 +372,86 @@ export default function FoodParamsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Mes aliments personnalisés ({customFoods.length})
-          </Text>
+          <View style={styles.sectionTitleRow}>
+            <Text style={[styles.sectionTitle, styles.sectionTitleFlexible]}>
+              Mes aliments personnalisés ({customFoods.length})
+            </Text>
+            {customFoods.length > 0 ? (
+              <TouchableOpacity
+                onPress={selectionMode ? exitSelectionMode : () => enterSelectionMode()}
+                accessibilityRole="button"
+                style={styles.selectionLink}>
+                <Text style={styles.selectionLinkText}>
+                  {selectionMode ? 'Annuler' : 'Sélectionner'}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
 
           {customFoods.length === 0 ? (
             <Text style={styles.helpText}>Aucun aliment personnalisé pour le moment.</Text>
           ) : (
-            <View style={styles.foodList}>
-              {customFoods.map((food) => (
-                <CustomFoodRow
-                  key={food.id}
-                  food={food}
-                  onOpen={() =>
-                    router.push({
-                      pathname: '/(tabs)/foods/[id]' as never,
-                      params: { id: food.id },
-                    })
-                  }
-                  onDelete={() => handleDelete(food)}
+            <>
+              {selectionMode ? (
+                <View style={styles.selectionToolbar}>
+                  <TouchableOpacity
+                    onPress={toggleSelectAll}
+                    accessibilityRole="button"
+                    style={styles.selectAllButton}>
+                    <Ionicons
+                      name={
+                        selectedIds.size === customFoods.length
+                          ? 'checkmark-circle'
+                          : 'ellipse-outline'
+                      }
+                      size={20}
+                      color={c.primary}
+                    />
+                    <Text style={styles.selectAllText}>
+                      {selectedIds.size === customFoods.length
+                        ? 'Tout désélectionner'
+                        : 'Tout sélectionner'}
+                    </Text>
+                  </TouchableOpacity>
+                  <Text style={styles.selectionCount}>{selectedIds.size} sélectionné(s)</Text>
+                </View>
+              ) : (
+                <Text style={styles.selectionHint}>
+                  Appui long sur un aliment pour démarrer une sélection multiple.
+                </Text>
+              )}
+
+              <View style={styles.foodList}>
+                {customFoods.map((food) => (
+                  <CustomFoodRow
+                    key={food.id}
+                    food={food}
+                    selectionMode={selectionMode}
+                    selected={selectedIds.has(food.id)}
+                    onToggle={() => toggleSelection(food.id)}
+                    onLongPress={() => {
+                      if (!selectionMode) enterSelectionMode(food.id);
+                    }}
+                    onOpen={() =>
+                      router.push({
+                        pathname: '/(tabs)/foods/[id]' as never,
+                        params: { id: food.id },
+                      })
+                    }
+                    onDelete={() => handleDelete(food)}
+                  />
+                ))}
+              </View>
+
+              {selectionMode ? (
+                <Button
+                  title={`Supprimer la sélection (${selectedIds.size})`}
+                  variant="danger"
+                  disabled={selectedIds.size === 0}
+                  onPress={handleDeleteSelected}
                 />
-              ))}
-            </View>
+              ) : null}
+            </>
           )}
         </View>
       </ScrollView>
@@ -333,6 +479,15 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderBottomColor: c.border,
     paddingBottom: 8,
   },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: c.border,
+  },
+  sectionTitleFlexible: { flex: 1, borderBottomWidth: 0 },
+  selectionLink: { paddingHorizontal: 4, paddingVertical: 10 },
+  selectionLinkText: { fontSize: 13, fontWeight: '700', color: c.primary },
   helpText: { fontSize: 13, color: c.textSecondary, lineHeight: 18 },
   codeBlock: {
     backgroundColor: c.surfaceAlt,
@@ -346,6 +501,16 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     lineHeight: 16,
   },
   foodList: { gap: 8 },
+  selectionToolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  selectAllButton: { flexDirection: 'row', alignItems: 'center', gap: 7, paddingVertical: 4 },
+  selectAllText: { fontSize: 13, fontWeight: '700', color: c.primary },
+  selectionCount: { fontSize: 12, color: c.textSecondary },
+  selectionHint: { fontSize: 12, color: c.textMuted },
   foodRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -353,6 +518,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     gap: 8,
+  },
+  foodRowSelected: {
+    borderWidth: 1.5,
+    borderColor: c.primary,
+    backgroundColor: c.accentSoft,
   },
   foodBody: { flex: 1, gap: 2 },
   foodName: { fontSize: 15, fontWeight: '700', color: c.textPrimary },

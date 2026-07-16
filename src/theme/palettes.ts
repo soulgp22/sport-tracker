@@ -1,4 +1,12 @@
-export type PaletteId = 'oxford' | 'ecurie' | 'regiment' | 'sousbois';
+export type PaletteId =
+  | 'oxford'
+  | 'ecurie'
+  | 'regiment'
+  | 'sousbois'
+  | 'sprint'
+  | 'stadium'
+  | 'pulse'
+  | 'energy';
 
 export interface ThemeColors {
   bg: string;
@@ -66,6 +74,50 @@ export const PALETTES: Record<
       textPrimary: '#ECE8DB', textSecondary: '#98A493', textMuted: '#6E7A70',
       primary: '#B08D57', primaryText: '#14201D', secondary: '#A65442', success: '#86A98C', danger: '#A65442',
       accentSoft: 'rgba(176,141,87,0.16)', overlay: 'rgba(0,0,0,0.6)',
+    },
+  },
+  sprint: {
+    id: 'sprint',
+    label: 'Sprint',
+    mode: 'light',
+    colors: {
+      bg: '#F3F6FA', surface: '#FFFFFF', surfaceAlt: '#E8EEF7', border: '#D5DEEA',
+      textPrimary: '#101828', textSecondary: '#475467', textMuted: '#7C899B',
+      primary: '#2563EB', primaryText: '#FFFFFF', secondary: '#06B6D4', success: '#16A34A', danger: '#DC2626',
+      accentSoft: 'rgba(37,99,235,0.11)', overlay: 'rgba(16,24,40,0.5)',
+    },
+  },
+  stadium: {
+    id: 'stadium',
+    label: 'Stadium',
+    mode: 'dark',
+    colors: {
+      bg: '#080D18', surface: '#111827', surfaceAlt: '#172033', border: '#26334A',
+      textPrimary: '#F8FAFC', textSecondary: '#A7B3C7', textMuted: '#6F7F98',
+      primary: '#22D3EE', primaryText: '#06131A', secondary: '#A3E635', success: '#4ADE80', danger: '#FB7185',
+      accentSoft: 'rgba(34,211,238,0.13)', overlay: 'rgba(0,0,0,0.68)',
+    },
+  },
+  pulse: {
+    id: 'pulse',
+    label: 'Pulse',
+    mode: 'dark',
+    colors: {
+      bg: '#0D0B14', surface: '#171321', surfaceAlt: '#211A2E', border: '#332842',
+      textPrimary: '#FAF7FF', textSecondary: '#B9ABC8', textMuted: '#81738F',
+      primary: '#A78BFA', primaryText: '#160E2A', secondary: '#FB7185', success: '#34D399', danger: '#FB7185',
+      accentSoft: 'rgba(167,139,250,0.14)', overlay: 'rgba(0,0,0,0.7)',
+    },
+  },
+  energy: {
+    id: 'energy',
+    label: 'Energy',
+    mode: 'light',
+    colors: {
+      bg: '#F7F8F3', surface: '#FFFFFF', surfaceAlt: '#EDF0E7', border: '#DCE2D3',
+      textPrimary: '#172016', textSecondary: '#4F5D4B', textMuted: '#7B8877',
+      primary: '#F97316', primaryText: '#FFFFFF', secondary: '#16A34A', success: '#16A34A', danger: '#E11D48',
+      accentSoft: 'rgba(249,115,22,0.12)', overlay: 'rgba(23,32,22,0.5)',
     },
   },
 };

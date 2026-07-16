@@ -25,6 +25,7 @@ interface FoodState {
   addCustomFood: (food: Food) => void;
   updateCustomFood: (id: string, patch: Partial<Food>) => void;
   deleteCustomFood: (id: string) => void;
+  deleteCustomFoods: (ids: string[]) => number;
   importFoods: (text: string) => ImportFoodsResult;
   importFoodsFromCsv: (text: string) => ImportFoodsResult;
 }
@@ -94,6 +95,17 @@ export const useFoodStore = create<FoodState>()(
 
       deleteCustomFood: (id) => {
         set((state) => ({ customFoods: state.customFoods.filter((food) => food.id !== id) }));
+      },
+
+      deleteCustomFoods: (ids) => {
+        const selectedIds = new Set(ids);
+        if (selectedIds.size === 0) return 0;
+
+        const previousCount = get().customFoods.length;
+        set((state) => ({
+          customFoods: state.customFoods.filter((food) => !selectedIds.has(food.id)),
+        }));
+        return previousCount - get().customFoods.length;
       },
 
       importFoods: (text) => {

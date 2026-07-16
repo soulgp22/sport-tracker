@@ -15,6 +15,23 @@ import {
   HankenGrotesk_700Bold,
   HankenGrotesk_800ExtraBold,
 } from '@expo-google-fonts/hanken-grotesk';
+import {
+  Barlow_400Regular,
+  Barlow_600SemiBold,
+  Barlow_700Bold,
+  Barlow_800ExtraBold,
+} from '@expo-google-fonts/barlow';
+import {
+  BarlowCondensed_600SemiBold,
+  BarlowCondensed_600SemiBold_Italic,
+  BarlowCondensed_700Bold,
+} from '@expo-google-fonts/barlow-condensed';
+import {
+  SpaceGrotesk_400Regular,
+  SpaceGrotesk_500Medium,
+  SpaceGrotesk_600SemiBold,
+  SpaceGrotesk_700Bold,
+} from '@expo-google-fonts/space-grotesk';
 
 import { configureNotifications } from '../lib/restTimerNotifications';
 import { useColors, useThemeMode } from '../theme/useColors';
@@ -32,6 +49,17 @@ export default function RootLayout() {
     HankenGrotesk_600SemiBold,
     HankenGrotesk_700Bold,
     HankenGrotesk_800ExtraBold,
+    Barlow_400Regular,
+    Barlow_600SemiBold,
+    Barlow_700Bold,
+    Barlow_800ExtraBold,
+    BarlowCondensed_600SemiBold,
+    BarlowCondensed_600SemiBold_Italic,
+    BarlowCondensed_700Bold,
+    SpaceGrotesk_400Regular,
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
   });
   const navigationTheme = useMemo(() => {
     const baseTheme = mode === 'dark' ? DarkTheme : DefaultTheme;

@@ -35,6 +35,23 @@ describe('foodStore', () => {
     expect(useFoodStore.getState().getCustomFoods()).toEqual([]);
   });
 
+  it('supprime plusieurs aliments personnalisés en une seule opération', () => {
+    const first = makeFood({ id: 'custom_1', name: 'Premier' });
+    const second = makeFood({ id: 'custom_2', name: 'Deuxième' });
+    const third = makeFood({ id: 'custom_3', name: 'Troisième' });
+    const store = useFoodStore.getState();
+
+    store.addCustomFood(first);
+    store.addCustomFood(second);
+    store.addCustomFood(third);
+
+    const deleted = useFoodStore.getState().deleteCustomFoods(['custom_1', 'custom_3', 'riz_cuit']);
+
+    expect(deleted).toBe(2);
+    expect(useFoodStore.getState().getCustomFoods()).toEqual([second]);
+    expect(useFoodStore.getState().getFoodById('riz_cuit')).toBeDefined();
+  });
+
   it('cherche par nom sans tenir compte de la casse ni des accents', () => {
     useFoodStore.getState().addCustomFood(makeFood());
 

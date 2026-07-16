@@ -4,7 +4,7 @@ import { useThemeStore } from '../themeStore';
 
 beforeEach(async () => {
   await AsyncStorage.clear();
-  useThemeStore.setState({ paletteId: 'oxford' });
+  useThemeStore.setState({ paletteId: 'oxford', fontId: 'performance' });
 });
 
 describe('themeStore', () => {
@@ -20,6 +20,13 @@ describe('themeStore', () => {
     expect(useThemeStore.getState().paletteId).toBe('regiment');
   });
 
+  it("change la police indépendamment de la palette", () => {
+    useThemeStore.getState().setFont('tech');
+
+    expect(useThemeStore.getState().fontId).toBe('tech');
+    expect(useThemeStore.getState().paletteId).toBe('oxford');
+  });
+
   it("persiste dans AsyncStorage sous la clé 'theme-store' après un changement", async () => {
     useThemeStore.getState().setPalette('ecurie');
 
@@ -31,5 +38,6 @@ describe('themeStore', () => {
 
     const parsed = JSON.parse(stored!);
     expect(parsed.state.paletteId).toBe('ecurie');
+    expect(parsed.state.fontId).toBe('performance');
   });
 });
