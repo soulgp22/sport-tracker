@@ -5,10 +5,10 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
 
   const handlePress = () => {
@@ -29,6 +29,7 @@ function BackToHomeButton() {
 
 export default function ProgressLayout() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
@@ -44,12 +45,12 @@ export default function ProgressLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: 'Progression',
+          title: t('nav.progress'),
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <Link href="/(tabs)/history" asChild>
               <TouchableOpacity hitSlop={8} activeOpacity={0.75}>
-                <Text style={styles.historyLink}>Historique</Text>
+                <Text style={styles.historyLink}>{t('nav.history')}</Text>
               </TouchableOpacity>
             </Link>
           ),

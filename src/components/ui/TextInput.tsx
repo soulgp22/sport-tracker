@@ -10,6 +10,7 @@ import {
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;
@@ -18,18 +19,24 @@ interface TextInputProps extends RNTextInputProps {
 
 export function TextInput({ label, error, style, ...rest }: TextInputProps) {
   const c = useColors();
+  const { tr } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const translatedLabel = label ? tr(label) : undefined;
+  const translatedError = error ? tr(error) : undefined;
+  const translatedPlaceholder =
+    typeof rest.placeholder === 'string' ? tr(rest.placeholder) : rest.placeholder;
   return (
     <View style={styles.wrapper}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {translatedLabel ? <Text style={styles.label}>{translatedLabel}</Text> : null}
       <RNTextInput
         style={[styles.input, error ? styles.inputError : null, style]}
         placeholderTextColor={c.textMuted}
-        accessibilityLabel={rest.accessibilityLabel ?? label}
+        accessibilityLabel={rest.accessibilityLabel ?? translatedLabel}
         accessibilityState={{ disabled: rest.editable === false }}
         {...rest}
+        placeholder={translatedPlaceholder}
       />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {translatedError ? <Text style={styles.error}>{translatedError}</Text> : null}
     </View>
   );
 }

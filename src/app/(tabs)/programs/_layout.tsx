@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
@@ -34,6 +35,7 @@ function BackToHomeButton() {
 
 export default function ProgramsLayout() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
@@ -49,7 +51,7 @@ export default function ProgramsLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: 'Programmes',
+          title: t('nav.programs'),
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <View style={styles.headerActions}>

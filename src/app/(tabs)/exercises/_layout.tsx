@@ -3,6 +3,7 @@ import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
@@ -26,6 +27,7 @@ function BackToHomeButton() {
 
 export default function ExercisesLayout() {
   const c = useColors();
+  const { t } = useTranslation();
   return (
     <Stack
       screenOptions={{
@@ -40,7 +42,7 @@ export default function ExercisesLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: 'Exercices',
+          title: t('nav.exercises'),
           headerLeft: () => <BackToHomeButton />,
         }}
       />

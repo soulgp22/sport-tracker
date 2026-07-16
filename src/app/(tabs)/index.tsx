@@ -10,13 +10,14 @@ import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
+import { useTranslation } from '../../i18n/useTranslation';
 
 type IoniconsName = ComponentProps<typeof Ionicons>['name'];
 
 interface HomeTile {
   key: string;
-  label: string;
-  description: string;
+  labelKey: string;
+  descriptionKey: string;
   icon: IoniconsName;
   href:
     | '/(tabs)/programs'
@@ -31,50 +32,50 @@ interface HomeTile {
 const HOME_TILES: HomeTile[] = [
   {
     key: 'programs',
-    label: 'Programmes',
-    description: 'Planifier vos entraînements',
+    labelKey: 'home.programs',
+    descriptionKey: 'home.programsDescription',
     icon: 'barbell-outline',
     href: '/(tabs)/programs',
   },
   {
     key: 'exercises',
-    label: 'Exercices',
-    description: 'Explorer le catalogue',
+    labelKey: 'home.exercises',
+    descriptionKey: 'home.exercisesDescription',
     icon: 'body-outline',
     href: '/(tabs)/exercises',
   },
   {
     key: 'nutrition',
-    label: 'Nutrition',
-    description: 'Suivre calories et macros',
+    labelKey: 'home.nutrition',
+    descriptionKey: 'home.nutritionDescription',
     icon: 'pie-chart-outline',
     href: '/(tabs)/nutrition',
   },
   {
     key: 'foods',
-    label: 'Aliments',
-    description: 'Gérer votre catalogue',
+    labelKey: 'home.foods',
+    descriptionKey: 'home.foodsDescription',
     icon: 'restaurant-outline',
     href: '/(tabs)/foods',
   },
   {
     key: 'progress',
-    label: 'Progrès',
-    description: 'Mesurer vos résultats',
+    labelKey: 'home.progress',
+    descriptionKey: 'home.progressDescription',
     icon: 'trending-up-outline',
     href: '/(tabs)/progress',
   },
   {
     key: 'history',
-    label: 'Historique',
-    description: 'Revoir vos séances',
+    labelKey: 'home.history',
+    descriptionKey: 'home.historyDescription',
     icon: 'time-outline',
     href: '/(tabs)/history',
   },
   {
     key: 'settings',
-    label: 'Paramètres',
-    description: 'Apparence, sauvegardes et imports',
+    labelKey: 'home.settings',
+    descriptionKey: 'home.settingsDescription',
     icon: 'settings-outline',
     href: '/(tabs)/settings',
   },
@@ -82,6 +83,7 @@ const HOME_TILES: HomeTile[] = [
 
 export default function HomeScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const active = useActiveSessionStore((state) => state.active);
@@ -94,7 +96,7 @@ export default function HomeScreen() {
         <View style={styles.brandRow}>
           <LifeSportLogo />
           <View style={styles.brandTag}>
-            <Text style={styles.brandTagText}>SPORT · NUTRITION · PROGRÈS</Text>
+            <Text style={styles.brandTagText}>{t('home.tagline')}</Text>
           </View>
         </View>
 
@@ -103,30 +105,29 @@ export default function HomeScreen() {
           onPress={() => router.push('/(tabs)/session')}
           activeOpacity={0.82}
           accessibilityRole="button"
-          accessibilityLabel={active ? 'Reprendre la séance en cours' : 'Démarrer une séance'}
-          accessibilityHint="Ouvre votre espace de séance">
+          accessibilityLabel={active ? t('home.resumeSession') : t('home.startSession')}>
           <View style={styles.sessionIconBox}>
             <Ionicons name={active ? 'refresh' : 'play'} size={21} color={c.primary} />
           </View>
           <View style={styles.sessionCopy}>
             <Text style={styles.sessionKicker}>
-              {active ? 'SÉANCE EN COURS' : 'PROCHAIN EFFORT'}
+              {active ? t('home.activeSession') : t('home.nextEffort')}
             </Text>
             <Text style={styles.sessionTitle}>
-              {active ? 'Reprendre la séance' : 'Démarrer une séance'}
+              {active ? t('home.resumeSession') : t('home.startSession')}
             </Text>
             <Text style={styles.sessionSubtitle} numberOfLines={1}>
               {active
                 ? `${active.programName} · ${active.dayName}`
-                : 'Choisissez un programme et un jour'}
+                : t('home.chooseProgram')}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color={c.primaryText} />
         </TouchableOpacity>
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Votre suivi</Text>
-          <Text style={styles.sectionMeta}>Tout au même endroit</Text>
+          <Text style={styles.sectionTitle}>{t('home.tracking')}</Text>
+          <Text style={styles.sectionMeta}>{t('home.allInOne')}</Text>
         </View>
 
         <View style={styles.grid}>
@@ -139,14 +140,14 @@ export default function HomeScreen() {
                 onPress={() => router.push(tile.href as never)}
                 activeOpacity={0.75}
                 accessibilityRole="button"
-                accessibilityLabel={tile.label}
-                accessibilityHint={tile.description}>
+                accessibilityLabel={t(tile.labelKey)}
+                accessibilityHint={t(tile.descriptionKey)}>
                 <View style={styles.iconBox}>
                   <Ionicons name={tile.icon} size={compact ? 18 : 20} color={c.primary} />
                 </View>
                 <View style={styles.tileCopy}>
                   <Text style={styles.tileLabel} numberOfLines={1}>
-                    {tile.label}
+                    {t(tile.labelKey)}
                   </Text>
                 </View>
                 {isWide ? (

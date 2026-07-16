@@ -10,6 +10,7 @@ import {
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -19,21 +20,23 @@ interface ButtonProps extends TouchableOpacityProps {
 
 export function Button({ title, variant = 'primary', loading, style, disabled, ...rest }: ButtonProps) {
   const c = useColors();
+  const { tr } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const translatedTitle = tr(title);
   return (
     <TouchableOpacity
       style={[styles.base, styles[variant], disabled || loading ? styles.disabled : null, style]}
       disabled={disabled || loading}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel={title}
+      accessibilityLabel={translatedTitle}
       accessibilityState={{ disabled: Boolean(disabled || loading), busy: Boolean(loading) }}
       {...rest}>
       {loading ? (
         <ActivityIndicator color={variant === 'secondary' ? c.primary : c.primaryText} size="small" />
       ) : (
         <Text style={[styles.label, variant === 'secondary' ? styles.labelSecondary : null]}>
-          {title}
+          {translatedTitle}
         </Text>
       )}
     </TouchableOpacity>

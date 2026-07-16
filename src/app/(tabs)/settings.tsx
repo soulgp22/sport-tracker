@@ -40,6 +40,9 @@ import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
 import { useThemeStore } from '../../store/themeStore';
+import { useLanguageStore } from '../../store/languageStore';
+import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
+import { useTranslation } from '../../i18n/useTranslation';
 
 function getAuthorizedExerciseNames() {
   const namesByKey = new Map<string, string>();
@@ -116,6 +119,7 @@ function profileSummary(data: ProfileBackup['data']) {
 
 export default function SettingsScreen() {
   const c = useColors();
+  const { language, t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const importPrograms = useProgramStore((s) => s.importPrograms);
   const programs = useProgramStore((s) => s.programs);
@@ -129,7 +133,9 @@ export default function SettingsScreen() {
   const setPalette = useThemeStore((s) => s.setPalette);
   const fontId = useThemeStore((s) => s.fontId);
   const setFont = useThemeStore((s) => s.setFont);
-  const [openAppearanceMenu, setOpenAppearanceMenu] = useState<'palette' | 'font' | null>(null);
+  const setLanguage = useLanguageStore((s) => s.setLanguage);
+  const [openAppearanceMenu, setOpenAppearanceMenu] =
+    useState<'language' | 'palette' | 'font' | null>(null);
   const [importing, setImporting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [profileImporting, setProfileImporting] = useState(false);
@@ -428,13 +434,65 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Apparence</Text>
+          <Text style={styles.sectionTitle}>{t('settings.appearance')}</Text>
           <Text style={styles.helpText}>
-            Personnalise séparément les couleurs et la typographie de l&apos;application.
+            {t('settings.appearanceHelp')}
           </Text>
 
           <View style={styles.dropdownGroup}>
-            <Text style={styles.dropdownLabel}>Palette de couleurs</Text>
+            <Text style={styles.dropdownLabel}>{t('settings.language')}</Text>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={{ expanded: openAppearanceMenu === 'language' }}
+              onPress={() =>
+                setOpenAppearanceMenu((current) => current === 'language' ? null : 'language')
+              }
+              activeOpacity={0.75}
+              style={styles.dropdownTrigger}>
+              <View style={styles.dropdownSelection}>
+                <Text style={styles.dropdownValue}>
+                  {LANGUAGE_OPTIONS.find((option) => option.id === language)?.nativeLabel}
+                </Text>
+                <Text style={styles.optionDescription}>{t('settings.languageHelp')}</Text>
+              </View>
+              <Ionicons
+                name={openAppearanceMenu === 'language' ? 'chevron-up' : 'chevron-down'}
+                size={20}
+                color={c.textSecondary}
+              />
+            </TouchableOpacity>
+
+            {openAppearanceMenu === 'language' ? (
+              <View style={styles.dropdownMenu}>
+                {LANGUAGE_OPTIONS.map((option) => {
+                  const active = language === option.id;
+                  return (
+                    <TouchableOpacity
+                      key={option.id}
+                      accessibilityRole="radio"
+                      accessibilityState={{ checked: active }}
+                      onPress={() => {
+                        setLanguage(option.id as LanguageId);
+                        setOpenAppearanceMenu(null);
+                      }}
+                      activeOpacity={0.72}
+                      style={[styles.dropdownOption, active ? styles.dropdownOptionActive : null]}>
+                      <View style={styles.optionText}>
+                        <Text style={[styles.paletteLabel, active ? styles.paletteLabelActive : null]}>
+                          {option.nativeLabel}
+                        </Text>
+                        <Text style={styles.optionDescription}>{option.label}</Text>
+                      </View>
+                      {active ? <Ionicons name="checkmark-circle" size={20} color={c.primary} /> : null}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ) : null}
+          </View>
+
+          <View style={styles.dropdownGroup}>
+            <Text style={styles.dropdownLabel}>{t('settings.palette')}</Text>
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityState={{ expanded: openAppearanceMenu === 'palette' }}
@@ -486,7 +544,7 @@ export default function SettingsScreen() {
                           {palette.label}
                         </Text>
                         <Text style={styles.optionDescription}>
-                          {palette.mode === 'dark' ? 'Mode sombre' : 'Mode clair'}
+                          {palette.mode === 'dark' ? t('settings.darkMode') : t('settings.lightMode')}
                         </Text>
                       </View>
                       <View style={styles.swatches}>
@@ -508,7 +566,7 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.dropdownGroup}>
-            <Text style={styles.dropdownLabel}>Police</Text>
+            <Text style={styles.dropdownLabel}>{t('settings.font')}</Text>
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityState={{ expanded: openAppearanceMenu === 'font' }}
@@ -577,20 +635,20 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Profil</Text>
+          <Text style={styles.sectionTitle}>{t('settings.profile')}</Text>
           <Text style={styles.helpText}>
             La sauvegarde contient vos programmes, séances, aliments personnalisés, données nutrition et poids. Conservez le fichier hors de l&apos;app (Drive, Téléchargements…) pour qu&apos;il survive à une réinstallation.
           </Text>
 
           <Button
-            title="Sauvegarder mon profil"
+            title={t('settings.saveProfile')}
             onPress={handleProfileExport}
             loading={profileExporting}
             style={styles.actionBtn}
           />
 
           <Button
-            title="Restaurer un profil"
+            title={t('settings.restoreProfile')}
             variant="secondary"
             onPress={handleProfileImport}
             loading={profileImporting}
@@ -599,17 +657,17 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Programmes</Text>
+          <Text style={styles.sectionTitle}>{t('settings.programs')}</Text>
 
           <Button
-            title="Importer un programme"
+            title={t('settings.importProgram')}
             onPress={handleImport}
             loading={importing}
             style={styles.actionBtn}
           />
 
           <Button
-            title="Exporter les programmes"
+            title={t('settings.exportPrograms')}
             variant="secondary"
             onPress={handleExport}
             loading={exporting}
@@ -627,13 +685,13 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Générer un programme avec une IA</Text>
+          <Text style={styles.sectionTitle}>{t('settings.aiProgram')}</Text>
           <Text style={styles.helpText}>
             Copie ce prompt avec le bouton ci-dessous, puis colle-le dans ChatGPT/Claude pour générer un programme, et importe le JSON obtenu.
           </Text>
 
           <Button
-            title={aiPromptCopied ? 'Copié ✓' : 'Copier le prompt'}
+            title={aiPromptCopied ? t('settings.copied') : t('settings.copyPrompt')}
             variant="secondary"
             onPress={handleCopyAiPrompt}
             style={styles.actionBtn}
@@ -642,7 +700,7 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Format d&apos;import</Text>
+          <Text style={styles.sectionTitle}>{t('settings.importFormat')}</Text>
           <Text style={styles.helpText}>
             Importez un fichier JSON exporté par l&apos;app. Les exercices absents du catalogue sont ignorés après confirmation. Exemple :
           </Text>
@@ -677,10 +735,10 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>À propos</Text>
+          <Text style={styles.sectionTitle}>{t('settings.about')}</Text>
           <Text style={styles.aboutText}>Life Sport Tracker v1.0.0</Text>
           <Text style={styles.aboutSubtext}>
-            Application de suivi d&apos;entraînement personnel
+            {t('settings.aboutSubtitle')}
           </Text>
         </View>
       </ScrollView>

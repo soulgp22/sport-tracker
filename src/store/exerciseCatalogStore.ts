@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 
-import { getExerciseDisplayName } from '../constants/exerciseI18n';
+import {
+  getExerciseDisplayName,
+  getExerciseSearchAliases,
+  translateEquipment,
+  translateMuscle,
+} from '../constants/exerciseI18n';
 import catalogJson from '../data/exercises.catalog.json';
 import type { CatalogExercise } from '../types';
 
@@ -55,6 +60,13 @@ export const useExerciseCatalogStore = create<ExerciseCatalogState>()((_, get) =
           exercise.target,
           exercise.equipment,
           ...exercise.secondaryMuscles,
+          ...getExerciseSearchAliases(exercise.id),
+          ...(['fr', 'en', 'es', 'de'] as const).flatMap((language) => [
+            translateMuscle(exercise.bodyPart, language),
+            translateMuscle(exercise.target, language),
+            translateEquipment(exercise.equipment, language),
+            ...exercise.secondaryMuscles.map((muscle) => translateMuscle(muscle, language)),
+          ]),
         ]
           .filter(Boolean)
           .join(' ')

@@ -5,10 +5,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
 
   const handlePress = () => {
@@ -29,6 +29,7 @@ function BackToHomeButton() {
 
 export default function NutritionLayout() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
@@ -44,7 +45,7 @@ export default function NutritionLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: 'Nutrition',
+          title: t('nav.nutrition'),
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <Link href={'/(tabs)/nutrition/goals' as never} asChild>

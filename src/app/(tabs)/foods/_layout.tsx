@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
@@ -28,6 +29,7 @@ function BackToHomeButton() {
 
 export default function FoodsLayout() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
@@ -43,7 +45,7 @@ export default function FoodsLayout() {
         name="index"
         options={{
           headerShown: true,
-          title: 'Aliments',
+          title: t('nav.foods'),
           headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <View style={styles.headerActions}>
