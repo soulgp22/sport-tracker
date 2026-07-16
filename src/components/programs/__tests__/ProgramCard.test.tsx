@@ -41,4 +41,17 @@ describe('ProgramCard', () => {
     expect(screen.getByText(/1 jour/)).toBeTruthy();
     expect(screen.getByText(/1 exercice/)).toBeTruthy();
   });
+
+  it('renders the selected gym logo and name', () => {
+    render(
+      <ProgramCard
+        program={makeProgram({ gymProfileId: 'basic-fit' })}
+        onPress={jest.fn()}
+        onDelete={jest.fn()}
+      />
+    );
+
+    expect(screen.getAllByLabelText('Basic-Fit').length).toBeGreaterThan(0);
+    expect(screen.getByText('Basic-Fit')).toBeTruthy();
+  });
 });
