@@ -83,6 +83,7 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
         programDayId: day.id,
         programName: program.name,
         dayName: day.name,
+        gymProfileId: program.gymProfileId,
         startedAt: new Date().toISOString(),
         currentExerciseIndex: 0,
         currentSetIndex: 0,

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { GymBrandBadge } from '../gyms/GymBrandBadge';
+import { getGymProfile } from '../../constants/gymProfiles';
 import type { Program } from '../../types';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
@@ -15,14 +17,20 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const totalExercises = program.days.reduce((sum, d) => sum + d.exercises.length, 0);
+  const gymId = program.gymProfileId ?? 'all';
+  const gym = getGymProfile(gymId);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
+      {gymId !== 'all' ? <GymBrandBadge gymId={gymId} size={38} /> : null}
       <View style={styles.body}>
         <Text style={styles.name} numberOfLines={1}>{program.name}</Text>
         <Text style={styles.meta}>
           {program.days.length} jour{program.days.length !== 1 ? 's' : ''} · {totalExercises} exercice{totalExercises !== 1 ? 's' : ''}
         </Text>
+        {gymId !== 'all' ? (
+          <Text style={styles.gymName} numberOfLines={1}>{gym.name}</Text>
+        ) : null}
       </View>
       <TouchableOpacity style={styles.deleteBtn} onPress={onDelete} hitSlop={8}>
         <Ionicons name="trash-outline" size={20} color={c.danger} />
@@ -47,8 +55,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
-  body: { flex: 1, gap: 4 },
+  body: { flex: 1, gap: 3 },
   name: { fontSize: 17, fontWeight: '600', color: c.textPrimary },
   meta: { fontSize: 13, color: c.textSecondary },
+  gymName: { fontSize: 11, fontWeight: '700', color: c.primary },
   deleteBtn: { paddingHorizontal: 8 },
 });

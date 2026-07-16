@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -27,9 +26,11 @@ import {
   translateEquipment,
   translateMuscle,
 } from '../../../constants/exerciseI18n';
+import { isExerciseAvailableAtGym } from '../../../constants/gymProfiles';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
+import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
 import type { LoggedSet, SessionExercise } from '../../../types';
 
 function fmt(secs: number) {
@@ -205,7 +206,25 @@ export default function ActiveSessionScreen() {
 
   const replacementExercise =
     replacementExerciseIndex !== null ? active.exercises[replacementExerciseIndex] : null;
-  const replacementAlternatives = replacementExercise?.alternativeExerciseIds ?? [];
+  const replacementAlternatives = replacementExercise
+    ? Array.from(
+        new Set([
+          ...(replacementExercise.alternativeExerciseIds ?? []),
+          ...getRelatedExerciseIds(
+            replacementExercise.exerciseId,
+            active.gymProfileId ?? 'all',
+            6
+          ),
+        ])
+      ).filter((exerciseId) => exerciseId !== replacementExercise.exerciseId)
+        .filter((exerciseId) => {
+          const candidate = getCatalogExercise(exerciseId);
+          return (
+            candidate &&
+            isExerciseAvailableAtGym(candidate, active.gymProfileId ?? 'all')
+          );
+        })
+    : [];
 
   const closeReplacementModal = () => {
     setReplacementExerciseIndex(null);
@@ -252,7 +271,16 @@ export default function ActiveSessionScreen() {
               : ex.exerciseName;
             const exDone = ex.sets.every((s) => s.completed);
             const isCurrentEx = ei === exIdx;
-            const hasAlternatives = (ex.alternativeExerciseIds?.length ?? 0) > 0;
+            const hasAlternatives =
+              (ex.alternativeExerciseIds ?? []).some((alternativeId) => {
+                const candidate = getCatalogExercise(alternativeId);
+                return (
+                  candidate &&
+                  alternativeId !== ex.exerciseId &&
+                  isExerciseAvailableAtGym(candidate, active.gymProfileId ?? 'all')
+                );
+              }) ||
+              getRelatedExerciseIds(ex.exerciseId, active.gymProfileId ?? 'all', 1).length > 0;
             return (
               <TouchableOpacity
                 key={ei}

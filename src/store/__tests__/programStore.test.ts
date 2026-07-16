@@ -1,5 +1,6 @@
 import { useProgramStore } from '../programStore';
 import { useExerciseCatalogStore } from '../exerciseCatalogStore';
+import { getRelatedExerciseIds } from '../../lib/exerciseRelations';
 
 // Exercice réel du catalogue (pour des fixtures d'import robustes au contenu)
 const CATALOG = useExerciseCatalogStore.getState().all();
@@ -38,6 +39,34 @@ describe('programs', () => {
   it('handles delete of non-existent program without error', () => {
     useProgramStore.getState().deleteProgram('nonexistent');
     expect(useProgramStore.getState().programs).toHaveLength(0);
+  });
+
+  it('creates a gym-compatible copy without changing the original program', () => {
+    const sourceExerciseId = 'offline-497';
+    const replacementId = getRelatedExerciseIds(sourceExerciseId, 'basic-fit', 1)[0];
+    expect(replacementId).toBeDefined();
+
+    const program = useProgramStore.getState().addProgram('Pull');
+    const day = useProgramStore.getState().addDay(program.id, 'Dos');
+    useProgramStore.getState().addExerciseToDay(program.id, day.id, {
+      exerciseId: sourceExerciseId,
+      exerciseName: 'Sled Row',
+      alternativeExerciseIds: [replacementId],
+      sets: [{ reps: 10, weight: 40, restSeconds: 90 }],
+    });
+
+    const copy = useProgramStore
+      .getState()
+      .duplicateProgramForGym(program.id, 'basic-fit');
+
+    expect(copy).not.toBeNull();
+    expect(copy?.gymProfileId).toBe('basic-fit');
+    expect(copy?.id).not.toBe(program.id);
+    expect(copy?.days[0].exercises[0].exerciseId).toBe(replacementId);
+    expect(copy?.days[0].exercises[0].alternativeExerciseIds).toContain(sourceExerciseId);
+    expect(useProgramStore.getState().programs[0].days[0].exercises[0].exerciseId).toBe(
+      sourceExerciseId
+    );
   });
 });
 

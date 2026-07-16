@@ -8,6 +8,12 @@ import {
   getCatalogExercise,
   getCatalogExerciseName,
 } from './exerciseCatalogStore';
+import { getGymProfile } from '../constants/gymProfiles';
+import {
+  analyzeProgramCompatibility,
+  getRelatedExerciseIds,
+} from '../lib/exerciseRelations';
+import type { GymProfileId } from '../types/gym';
 
 const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
@@ -83,7 +89,11 @@ interface ProgramState {
   exercises: Exercise[];
 
   addProgram: (name: string) => Program;
-  updateProgram: (id: string, patch: Partial<Pick<Program, 'name' | 'days'>>) => void;
+  updateProgram: (
+    id: string,
+    patch: Partial<Pick<Program, 'name' | 'days' | 'gymProfileId'>>
+  ) => void;
+  duplicateProgramForGym: (id: string, gymId: GymProfileId) => Program | null;
   deleteProgram: (id: string) => void;
 
   addDay: (programId: string, name: string) => ProgramDay;
@@ -119,6 +129,57 @@ export const useProgramStore = create<ProgramState>()(
             p.id === id ? { ...p, ...patch, updatedAt: new Date().toISOString() } : p
           ),
         }));
+      },
+
+      duplicateProgramForGym: (id, gymId) => {
+        const source = get().programs.find((program) => program.id === id);
+        if (!source) return null;
+
+        const compatibility = analyzeProgramCompatibility(source, gymId);
+        const replacements = new Map(
+          compatibility.issues
+            .filter((issue) => issue.replacementId)
+            .map((issue) => [issue.programExerciseId, issue.replacementId!])
+        );
+        const now = new Date().toISOString();
+        const copy: Program = {
+          id: uid(),
+          name: `${source.name} · ${getGymProfile(gymId).name}`,
+          gymProfileId: gymId,
+          days: source.days.map((day, dayIndex) => ({
+            ...day,
+            id: uid(),
+            order: dayIndex,
+            exercises: day.exercises.map((exercise, exerciseIndex) => {
+              const replacementId = replacements.get(exercise.id);
+              const nextExerciseId = replacementId ?? exercise.exerciseId;
+              const linkedAlternatives = [
+                exercise.exerciseId,
+                ...(exercise.alternativeExerciseIds ?? []),
+                ...getRelatedExerciseIds(nextExerciseId, gymId, 5),
+              ].filter(
+                (alternativeId, index, values) =>
+                  alternativeId !== nextExerciseId && values.indexOf(alternativeId) === index
+              );
+
+              return {
+                ...exercise,
+                id: uid(),
+                exerciseId: nextExerciseId,
+                exerciseName: getCatalogExerciseName(nextExerciseId, exercise.exerciseName),
+                alternativeExerciseIds:
+                  linkedAlternatives.length > 0 ? linkedAlternatives : undefined,
+                order: exerciseIndex,
+                sets: exercise.sets.map((setValue) => ({ ...setValue })),
+              };
+            }),
+          })),
+          createdAt: now,
+          updatedAt: now,
+        };
+
+        set((state) => ({ programs: [...state.programs, copy] }));
+        return copy;
       },
 
       deleteProgram: (id) => {

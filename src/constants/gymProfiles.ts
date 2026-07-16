@@ -1,15 +1,7 @@
 import type { CatalogExercise } from '../types';
+import type { GymProfileId } from '../types/gym';
 
-export type GymProfileId =
-  | 'all'
-  | 'fitness-park'
-  | 'basic-fit'
-  | 'on-air'
-  | 'planet-fitness'
-  | 'la-fitness'
-  | 'golds-gym';
-
-type GymCapability =
+export type GymCapability =
   | 'cardio'
   | 'freeWeights'
   | 'machines'
@@ -20,7 +12,11 @@ type GymCapability =
 export interface GymProfile {
   id: GymProfileId;
   name: string;
+  shortName: string;
   country: 'FR' | 'US' | 'ALL';
+  iconText: string;
+  brandColor: string;
+  brandTextColor: string;
   capabilities: GymCapability[];
   sourceUrl?: string;
 }
@@ -28,49 +24,77 @@ export interface GymProfile {
 export const GYM_PROFILES: GymProfile[] = [
   {
     id: 'all',
-    name: 'Toutes les salles',
+    name: 'Sans salle définie',
+    shortName: 'Libre',
     country: 'ALL',
+    iconText: '∞',
+    brandColor: '#334155',
+    brandTextColor: '#FFFFFF',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional', 'olympic', 'strongman'],
   },
   {
     id: 'fitness-park',
     name: 'Fitness Park',
+    shortName: 'Fitness Park',
     country: 'FR',
+    iconText: 'FP',
+    brandColor: '#E30613',
+    brandTextColor: '#FFFFFF',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional', 'olympic', 'strongman'],
     sourceUrl: 'https://www.fitnesspark.fr/activites/musculation/',
   },
   {
     id: 'basic-fit',
     name: 'Basic-Fit',
+    shortName: 'Basic-Fit',
     country: 'FR',
+    iconText: 'BF',
+    brandColor: '#F36F21',
+    brandTextColor: '#FFFFFF',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional'],
     sourceUrl: 'https://www.basic-fit.com/fr-fr/trainingzones',
   },
   {
     id: 'on-air',
     name: 'ON AIR Fitness',
+    shortName: 'ON AIR',
     country: 'FR',
+    iconText: 'OA',
+    brandColor: '#E51B23',
+    brandTextColor: '#FFFFFF',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional', 'olympic'],
     sourceUrl: 'https://onair-fitness.fr/abonnements/',
   },
   {
     id: 'planet-fitness',
     name: 'Planet Fitness',
+    shortName: 'Planet',
     country: 'US',
+    iconText: 'PF',
+    brandColor: '#5B2C83',
+    brandTextColor: '#F9D648',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional'],
     sourceUrl: 'https://www.planetfitness.com/our-clubs',
   },
   {
     id: 'la-fitness',
     name: 'LA Fitness',
+    shortName: 'LA Fitness',
     country: 'US',
+    iconText: 'LA',
+    brandColor: '#1F4F9A',
+    brandTextColor: '#FFFFFF',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional', 'olympic'],
     sourceUrl: 'https://www.lafitness.com/',
   },
   {
     id: 'golds-gym',
     name: "Gold's Gym",
+    shortName: "Gold's",
     country: 'US',
+    iconText: 'GG',
+    brandColor: '#F3C623',
+    brandTextColor: '#111827',
     capabilities: ['cardio', 'freeWeights', 'machines', 'functional', 'olympic', 'strongman'],
     sourceUrl: 'https://www.goldsgym.com/',
   },
@@ -83,7 +107,7 @@ const STRONGMAN_TERMS =
 const CARDIO_TERMS =
   /\b(run|running|walk|walking|cycle|cycling|bike|bicycl|elliptical|rowing|stair|stepmill|cardio|jog|rope jumping)\b/i;
 
-function getRequirements(exercise: CatalogExercise): GymCapability[] {
+export function getExerciseRequirements(exercise: CatalogExercise): GymCapability[] {
   const requirements = new Set<GymCapability>();
   const searchableName = `${exercise.name} ${exercise.nameFr ?? ''}`;
 
@@ -107,18 +131,15 @@ function getRequirements(exercise: CatalogExercise): GymCapability[] {
   return [...requirements];
 }
 
-export function getGymProfile(id: GymProfileId) {
+export function getGymProfile(id: GymProfileId | null | undefined) {
   return GYM_PROFILES.find((profile) => profile.id === id) ?? GYM_PROFILES[0];
 }
 
-export function isExerciseAvailableAtGym(exercise: CatalogExercise, gymId: GymProfileId) {
-  if (gymId === 'all' || exercise.equipment === 'body only') return true;
+export function isExerciseAvailableAtGym(
+  exercise: CatalogExercise,
+  gymId: GymProfileId | null | undefined
+) {
+  if (!gymId || gymId === 'all' || exercise.equipment === 'body only') return true;
   const capabilities = new Set(getGymProfile(gymId).capabilities);
-  return getRequirements(exercise).every((requirement) => capabilities.has(requirement));
-}
-
-export function getGymFlag(country: GymProfile['country']) {
-  if (country === 'FR') return '🇫🇷';
-  if (country === 'US') return '🇺🇸';
-  return '🌍';
+  return getExerciseRequirements(exercise).every((requirement) => capabilities.has(requirement));
 }

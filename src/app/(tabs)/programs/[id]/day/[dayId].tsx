@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -21,6 +20,8 @@ import { EmptyState } from '../../../../../components/ui/EmptyState';
 import { ExerciseCatalogList } from '../../../../../components/exercises/ExerciseCatalogList';
 import { ExerciseThumbnail } from '../../../../../components/exercises/ExerciseThumbnail';
 import { ExerciseDetailView } from '../../../../../components/exercises/ExerciseDetailView';
+import { GymBrandBadge } from '../../../../../components/gyms/GymBrandBadge';
+import { isExerciseAvailableAtGym } from '../../../../../constants/gymProfiles';
 import { useExerciseCatalogStore } from '../../../../../store/exerciseCatalogStore';
 import {
   getExerciseDisplayName,
@@ -30,7 +31,10 @@ import {
 import { useColors } from '../../../../../theme/useColors';
 import type { ThemeColors } from '../../../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../../constants/keyboard';
+import { useTranslation } from '../../../../../i18n/useTranslation';
+import { getRelatedExerciseIds } from '../../../../../lib/exerciseRelations';
 import type { CatalogExercise, ProgramExercise, ProgramSet } from '../../../../../types';
+import type { GymProfileId } from '../../../../../types/gym';
 
 const DEFAULT_SET: ProgramSet = { reps: 10, weight: 0, restSeconds: 90 };
 
@@ -90,20 +94,37 @@ function ExerciseCard({
   onDelete,
   onSelectExercise,
   onAddAlternative,
+  onLinkAlternative,
   onOpenDetail,
+  gymId,
 }: {
   exercise: ProgramExercise;
   onUpdate: (patch: Partial<ProgramExercise>) => void;
   onDelete: () => void;
   onSelectExercise: () => void;
   onAddAlternative: () => void;
+  onLinkAlternative: (exerciseId: string) => void;
   onOpenDetail: () => void;
+  gymId: GymProfileId;
 }) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const getCatalogExercise = useExerciseCatalogStore((s) => s.getById);
   const catalogExercise = getCatalogExercise(exercise.exerciseId);
-  const alternativeExerciseIds = exercise.alternativeExerciseIds ?? [];
+  const alternativeExerciseIds = useMemo(
+    () => exercise.alternativeExerciseIds ?? [],
+    [exercise.alternativeExerciseIds]
+  );
+  const suggestedExerciseIds = useMemo(
+    () =>
+      getRelatedExerciseIds(exercise.exerciseId, gymId, 4).filter(
+        (exerciseId) => !alternativeExerciseIds.includes(exerciseId)
+      ),
+    [alternativeExerciseIds, exercise.exerciseId, gymId]
+  );
+  const isAvailable =
+    !catalogExercise || gymId === 'all' || isExerciseAvailableAtGym(catalogExercise, gymId);
   const exerciseName = catalogExercise
     ? getExerciseDisplayName(catalogExercise)
     : exercise.exerciseName;
@@ -161,8 +182,16 @@ function ExerciseCard({
         </TouchableOpacity>
       ) : null}
 
+      {!isAvailable ? (
+        <View style={styles.gymWarning}>
+          <GymBrandBadge gymId={gymId} size={24} />
+          <Ionicons name="alert-circle" size={16} color={c.danger} />
+          <Text style={styles.gymWarningText}>{t('program.incompatibleGym')}</Text>
+        </View>
+      ) : null}
+
       <View style={styles.alternativesBlock}>
-        <Text style={styles.alternativesTitle}>Alternatives</Text>
+        <Text style={styles.alternativesTitle}>{t('program.manualAlternatives')}</Text>
         <View style={styles.alternativesRow}>
           {alternativeExerciseIds.map((alternativeId) => {
             const alternative = getCatalogExercise(alternativeId);
@@ -183,6 +212,30 @@ function ExerciseCard({
           </TouchableOpacity>
         </View>
       </View>
+
+      {suggestedExerciseIds.length > 0 ? (
+        <View style={styles.suggestionsBlock}>
+          <Text style={styles.alternativesTitle}>{t('program.suggestions')}</Text>
+          {suggestedExerciseIds.map((suggestedId) => {
+            const suggestion = getCatalogExercise(suggestedId);
+            if (!suggestion) return null;
+            return (
+              <View key={suggestedId} style={styles.suggestionRow}>
+                <ExerciseThumbnail id={suggestedId} size={34} />
+                <Text style={styles.suggestionName} numberOfLines={1}>
+                  {getExerciseDisplayName(suggestion)}
+                </Text>
+                <TouchableOpacity
+                  style={styles.linkButton}
+                  onPress={() => onLinkAlternative(suggestedId)}>
+                  <Ionicons name="link-outline" size={14} color={c.primary} />
+                  <Text style={styles.linkButtonText}>{t('program.linkAlternative')}</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
+      ) : null}
 
       {exercise.sets.map((set, i) => (
         <SetRow
@@ -299,6 +352,16 @@ export default function DayEditScreen() {
     ]);
   };
 
+  const linkAlternative = (programExerciseId: string, alternativeId: string) => {
+    const targetExercise = day.exercises.find((exercise) => exercise.id === programExerciseId);
+    if (!targetExercise) return;
+    const currentAlternatives = targetExercise.alternativeExerciseIds ?? [];
+    if (currentAlternatives.includes(alternativeId)) return;
+    updateExerciseInDay(id, dayId, programExerciseId, {
+      alternativeExerciseIds: [...currentAlternatives, alternativeId],
+    });
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <KeyboardAvoidingView
@@ -340,7 +403,9 @@ export default function DayEditScreen() {
               onDelete={() => handleDeleteExercise(item.id, item.exerciseName)}
               onSelectExercise={() => openSelector(item.id)}
               onAddAlternative={() => openAlternativeSelector(item.id)}
+              onLinkAlternative={(alternativeId) => linkAlternative(item.id, alternativeId)}
               onOpenDetail={() => setDetailId(item.exerciseId)}
+              gymId={program.gymProfileId ?? 'all'}
             />
           )}
           ListEmptyComponent={
@@ -378,6 +443,7 @@ export default function DayEditScreen() {
                   : undefined
               }
               onSelect={handleSelectCatalogExercise}
+              targetGymId={program.gymProfileId}
             />
           </SafeAreaView>
         </Modal>
@@ -435,6 +501,17 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   exercisePickerMeta: { fontSize: 12, color: c.textSecondary },
   changeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', paddingVertical: 2 },
   changeLabel: { color: c.primary, fontSize: 13, fontWeight: '600' },
+  gymWarning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: c.surfaceAlt,
+    borderWidth: 1,
+    borderColor: c.danger,
+  },
+  gymWarningText: { flex: 1, fontSize: 12, fontWeight: '700', color: c.danger },
   alternativesBlock: { gap: 6, paddingVertical: 2 },
   alternativesTitle: { fontSize: 11, fontWeight: '700', color: c.textSecondary, textTransform: 'uppercase' },
   alternativesRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
@@ -457,6 +534,24 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 2,
   },
   addAlternativeLabel: { color: c.primary, fontSize: 12, fontWeight: '600' },
+  suggestionsBlock: {
+    gap: 5,
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: c.surfaceAlt,
+  },
+  suggestionRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  suggestionName: { flex: 1, fontSize: 12, fontWeight: '600', color: c.textPrimary },
+  linkButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 14,
+    backgroundColor: c.accentSoft,
+  },
+  linkButtonText: { fontSize: 11, fontWeight: '700', color: c.primary },
   setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   setIndex: { fontSize: 13, fontWeight: '600', color: c.textSecondary, width: 22 },
   setField: { flex: 1, gap: 2 },
