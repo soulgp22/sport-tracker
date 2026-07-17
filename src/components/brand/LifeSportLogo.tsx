@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { fonts } from '../../theme/fonts';
@@ -20,10 +20,11 @@ export function LifeSportLogo({ compact = false }: LifeSportLogoProps) {
       accessibilityRole="image"
       accessibilityLabel="Logo Life Sport Tracker">
       <View style={[styles.mark, compact ? styles.markCompact : null]}>
-        <Text style={[styles.monogram, compact ? styles.monogramCompact : null]}>LS</Text>
-        <View style={styles.pulseBadge}>
-          <Ionicons name="pulse" size={compact ? 10 : 12} color={c.primaryText} />
-        </View>
+        <Image
+          source={require('../../../assets/images/life-sport-mark.png')}
+          style={[styles.markImage, compact ? styles.markImageCompact : null]}
+          contentFit="contain"
+        />
       </View>
 
       {!compact ? (
@@ -43,13 +44,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     gap: 11,
   },
   mark: {
-    width: 48,
-    height: 48,
-    borderRadius: 15,
+    width: 52,
+    height: 52,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: c.primary,
-    transform: [{ rotate: '-4deg' }],
+    backgroundColor: '#071A33',
     shadowColor: c.overlay,
     shadowOpacity: 0.18,
     shadowRadius: 8,
@@ -61,26 +61,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     height: 34,
     borderRadius: 11,
   },
-  monogram: {
-    color: c.primaryText,
-    fontFamily: fonts.sansHeavy,
-    fontSize: 17,
-    letterSpacing: -0.8,
-  },
-  monogramCompact: { fontSize: 12 },
-  pulseBadge: {
-    position: 'absolute',
-    right: -5,
-    bottom: -4,
-    width: 21,
-    height: 21,
-    borderRadius: 11,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: c.secondary,
-    borderWidth: 2,
-    borderColor: c.bg,
-  },
+  markImage: { width: 46, height: 46 },
+  markImageCompact: { width: 30, height: 30 },
   wordmark: { gap: 0 },
   life: {
     color: c.primary,

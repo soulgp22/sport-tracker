@@ -10,7 +10,7 @@
     "backgroundColor": "#ECE5D6",
     "ios": {
       "bundleIdentifier": "com.sportracker.app",
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/icon.png"
     },
     "android": {
       "package": "com.sportracker.app",
@@ -35,10 +35,10 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#ECE5D6",
+          "backgroundColor": "#071A33",
           "android": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "imageWidth": 132
           }
         }
       ],
@@ -51,9 +51,9 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/android-icon-monochrome.png",
-          "color": "#C6883E",
-          "defaultChannel": "rest-timer"
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#1677FF",
+          "defaultChannel": "rest-timer-v2"
         }
       ],
       "expo-sharing"

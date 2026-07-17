@@ -132,11 +132,10 @@ export default function HomeScreen() {
 
         <View style={styles.grid}>
           {HOME_TILES.map((tile) => {
-            const isWide = tile.key === 'settings';
             return (
               <TouchableOpacity
                 key={tile.key}
-                style={[styles.tile, isWide ? styles.tileWide : null]}
+                style={styles.tile}
                 onPress={() => router.push(tile.href as never)}
                 activeOpacity={0.75}
                 accessibilityRole="button"
@@ -150,9 +149,6 @@ export default function HomeScreen() {
                     {t(tile.labelKey)}
                   </Text>
                 </View>
-                {isWide ? (
-                  <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
-                ) : null}
               </TouchableOpacity>
             );
           })}
@@ -271,7 +267,7 @@ const makeStyles = (c: ThemeColors) =>
     tile: {
       width: '31.5%',
       minHeight: 70,
-      flexGrow: 1,
+      flexGrow: 0,
       backgroundColor: c.surface,
       borderRadius: 13,
       borderWidth: 1,
@@ -284,14 +280,6 @@ const makeStyles = (c: ThemeColors) =>
       shadowOpacity: 0.05,
       shadowRadius: 4,
       elevation: 1,
-    },
-    tileWide: {
-      width: '100%',
-      minHeight: 58,
-      flexGrow: 0,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      paddingHorizontal: 14,
     },
     iconBox: {
       width: 32,

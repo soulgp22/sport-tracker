@@ -31,6 +31,8 @@ export function useRestTimer() {
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastHapticSecondRef = useRef<number | null>(null);
+  const scheduledNotificationIdRef = useRef<string | null>(null);
+  const notificationGenerationRef = useRef(0);
 
   useEffect(() => {
     if (restTimerActive) {
@@ -55,15 +57,21 @@ export function useRestTimer() {
   }, [restTimerActive, syncRestTimer]);
 
   useEffect(() => {
+    const generation = ++notificationGenerationRef.current;
+
     if (!restTimerActive || !restEndsAt) {
-      void cancelRestEndNotification();
+      const notificationId = scheduledNotificationIdRef.current;
+      scheduledNotificationIdRef.current = null;
+      void cancelRestEndNotification(notificationId);
       return;
     }
 
     const fireDate = new Date(restEndsAt);
 
     if (Number.isNaN(fireDate.getTime()) || fireDate.getTime() <= Date.now()) {
-      void cancelRestEndNotification();
+      const notificationId = scheduledNotificationIdRef.current;
+      scheduledNotificationIdRef.current = null;
+      void cancelRestEndNotification(notificationId);
       return;
     }
 
@@ -71,9 +79,11 @@ export function useRestTimer() {
     void (async () => {
       const granted = await requestNotificationPermission();
       if (granted && !cancelled) {
-        await scheduleRestEndNotification(fireDate);
-        if (cancelled) {
-          await cancelRestEndNotification();
+        const notificationId = await scheduleRestEndNotification(fireDate);
+        if (cancelled || notificationGenerationRef.current !== generation) {
+          await cancelRestEndNotification(notificationId);
+        } else {
+          scheduledNotificationIdRef.current = notificationId;
         }
       }
     })();
@@ -87,6 +97,20 @@ export function useRestTimer() {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (nextAppState === 'active') {
         syncRestTimer();
+
+        const active = useActiveSessionStore.getState().active;
+        if (active?.restTimerActive && active.restEndsAt) {
+          const fireDate = new Date(active.restEndsAt);
+          if (fireDate.getTime() > Date.now()) {
+            void (async () => {
+              const granted = await requestNotificationPermission();
+              if (granted) {
+                scheduledNotificationIdRef.current =
+                  await scheduleRestEndNotification(fireDate);
+              }
+            })();
+          }
+        }
       }
     });
 
