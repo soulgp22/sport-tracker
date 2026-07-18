@@ -13,7 +13,9 @@ import { useFoodStore } from '../store/foodStore';
 import { useNutritionGoalsStore } from '../store/nutritionGoalsStore';
 import { useProgramStore } from '../store/programStore';
 import { useSessionStore } from '../store/sessionStore';
+import { usePerformanceStore } from '../store/performanceStore';
 import { assertImportTextSize } from './importLimits';
+import type { PerformanceProfile, UnlockedBadge } from '../types/performance';
 
 export const PROFILE_BACKUP_VERSION = 1;
 
@@ -25,6 +27,7 @@ export interface ProfileBackupData {
   foodDiaryEntries: FoodEntry[];
   nutritionGoals: NutritionGoals;
   bodyWeightEntries: WeightEntry[];
+  performanceProfile: PerformanceProfile & { unlockedBadges: UnlockedBadge[] };
 }
 
 export interface ProfileBackup {
@@ -114,6 +117,16 @@ export function buildProfileBackup(): string {
       foodDiaryEntries: useFoodDiaryStore.getState().entries,
       nutritionGoals: useNutritionGoalsStore.getState().goals,
       bodyWeightEntries: useBodyWeightStore.getState().entries,
+      performanceProfile: {
+        sex: usePerformanceStore.getState().sex,
+        age: usePerformanceStore.getState().age,
+        experience: usePerformanceStore.getState().experience,
+        weeklySessionGoal: usePerformanceStore.getState().weeklySessionGoal,
+        monthlySessionGoal: usePerformanceStore.getState().monthlySessionGoal,
+        notificationsEnabled: usePerformanceStore.getState().notificationsEnabled,
+        programDescription: usePerformanceStore.getState().programDescription,
+        unlockedBadges: usePerformanceStore.getState().unlockedBadges,
+      },
     },
   };
 
@@ -171,6 +184,47 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
     return 'Objectifs nutrition invalides.';
   }
 
+  const currentPerformance = usePerformanceStore.getState();
+  const performanceProfile: ProfileBackupData['performanceProfile'] = isRecord(data.performanceProfile)
+    ? {
+        sex: data.performanceProfile.sex === 'male' || data.performanceProfile.sex === 'female'
+          ? data.performanceProfile.sex
+          : 'unspecified' as const,
+        age: isNumber(data.performanceProfile.age) ? data.performanceProfile.age : undefined,
+        experience:
+          data.performanceProfile.experience === 'intermediate' ||
+          data.performanceProfile.experience === 'advanced' ||
+          data.performanceProfile.experience === 'expert'
+            ? data.performanceProfile.experience
+            : 'beginner' as const,
+        weeklySessionGoal: isNumber(data.performanceProfile.weeklySessionGoal)
+          ? data.performanceProfile.weeklySessionGoal
+          : currentPerformance.weeklySessionGoal,
+        monthlySessionGoal: isNumber(data.performanceProfile.monthlySessionGoal)
+          ? data.performanceProfile.monthlySessionGoal
+          : currentPerformance.monthlySessionGoal,
+        notificationsEnabled: data.performanceProfile.notificationsEnabled === true,
+        programDescription: typeof data.performanceProfile.programDescription === 'string'
+          ? data.performanceProfile.programDescription
+          : '',
+        unlockedBadges: Array.isArray(data.performanceProfile.unlockedBadges)
+          ? data.performanceProfile.unlockedBadges.filter(
+              (badge): badge is UnlockedBadge =>
+                isRecord(badge) && isNonEmptyString(badge.id) && isNonEmptyString(badge.unlockedAt)
+            )
+          : [],
+      }
+    : {
+        sex: 'unspecified' as const,
+        age: undefined,
+        experience: 'beginner' as const,
+        weeklySessionGoal: currentPerformance.weeklySessionGoal,
+        monthlySessionGoal: currentPerformance.monthlySessionGoal,
+        notificationsEnabled: false,
+        programDescription: '',
+        unlockedBadges: [],
+      };
+
   return {
     version: PROFILE_BACKUP_VERSION,
     exportedAt: parsed.exportedAt,
@@ -182,6 +236,7 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
       foodDiaryEntries: foodDiaryEntries as FoodEntry[],
       nutritionGoals: data.nutritionGoals,
       bodyWeightEntries: bodyWeightEntries as WeightEntry[],
+      performanceProfile,
     },
   };
 }
@@ -196,4 +251,5 @@ export function restoreProfileBackup(backup: ProfileBackup): void {
   useFoodDiaryStore.setState({ entries: backup.data.foodDiaryEntries });
   useNutritionGoalsStore.setState({ goals: backup.data.nutritionGoals });
   useBodyWeightStore.setState({ entries: backup.data.bodyWeightEntries });
+  usePerformanceStore.setState(backup.data.performanceProfile);
 }

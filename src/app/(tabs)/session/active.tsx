@@ -31,6 +31,18 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
+import {
+  buildPerformanceNotificationInsight,
+  schedulePerformanceNotification,
+} from '../../../lib/performanceNotifications';
+import {
+  buildPerformanceSnapshot,
+  evaluateBadgeUnlocks,
+} from '../../../lib/performanceEngine';
+import { useBodyWeightStore } from '../../../store/bodyWeightStore';
+import { useLanguageStore } from '../../../store/languageStore';
+import { usePerformanceStore } from '../../../store/performanceStore';
+import { useSessionStore } from '../../../store/sessionStore';
 import type { LoggedSet, SessionExercise } from '../../../types';
 
 function fmt(secs: number) {
@@ -188,8 +200,33 @@ export default function ActiveSessionScreen() {
         text: 'Terminer',
         style: 'destructive',
         onPress: () => {
+          const previousSessions = useSessionStore.getState().sessions.filter(
+            (storedSession) => storedSession.id !== active.id
+          );
           const session = finishSession();
           if (session) {
+            const profile = usePerformanceStore.getState();
+            const bodyweightEntries = useBodyWeightStore.getState().entries;
+            const snapshot = buildPerformanceSnapshot(
+              useSessionStore.getState().sessions,
+              bodyweightEntries,
+              profile
+            );
+            const newBadgeIds = evaluateBadgeUnlocks(
+              snapshot.badgeMetrics,
+              profile.unlockedBadges.map((badge) => badge.id)
+            );
+            if (newBadgeIds.length > 0) profile.unlockBadges(newBadgeIds, session.date);
+            if (profile.notificationsEnabled) {
+              const insight = buildPerformanceNotificationInsight({
+                previousSessions,
+                session,
+                bodyweightEntries,
+                profile,
+                language: useLanguageStore.getState().language,
+              });
+              if (insight) void schedulePerformanceNotification(insight);
+            }
             router.replace('/(tabs)/history');
           }
         },

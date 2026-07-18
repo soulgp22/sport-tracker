@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-18",
+  "source": {
+    "name": "OpenIPF",
+    "url": "https://openpowerlifting.gitlab.io/opl-csv/bulk-csv.html",
+    "datasetDate": "2026-07-18",
+    "revision": "c4f23ad8",
+    "license": "Public domain dedication",
+    "population": "Best result per lifter; IPF affiliates; Raw; Tested; SBD; 2016+",
+    "limitation": "Competition reference, not a percentile of all gym users."
+  },
+  "normalization": "estimated_1rm_kg / bodyweight_kg",
+  "standards": {
+    "bench_press": {
+      "male": {
+        "sampleSize": 135630,
+        "ratioThresholds": {
+          "top50": 1.438,
+          "top25": 1.641,
+          "top10": 1.835,
+          "top5": 1.959,
+          "top3": 2.043,
+          "top1": 2.206
+        }
+      },
+      "female": {
+        "sampleSize": 62346,
+        "ratioThresholds": {
+          "top50": 0.896,
+          "top25": 1.077,
+          "top10": 1.265,
+          "top5": 1.387,
+          "top3": 1.468,
+          "top1": 1.64
+        }
+      }
+    },
+    "back_squat": {
+      "male": {
+        "sampleSize": 135974,
+        "ratioThresholds": {
+          "top50": 2.2,
+          "top25": 2.503,
+          "top10": 2.786,
+          "top5": 2.96,
+          "top3": 3.077,
+          "top1": 3.304
+        }
+      },
+      "female": {
+        "sampleSize": 62259,
+        "ratioThresholds": {
+          "top50": 1.654,
+          "top25": 1.946,
+          "top10": 2.22,
+          "top5": 2.394,
+          "top3": 2.509,
+          "top1": 2.721
+        }
+      }
+    },
+    "deadlift": {
+      "male": {
+        "sampleSize": 135909,
+        "ratioThresholds": {
+          "top50": 2.552,
+          "top25": 2.89,
+          "top10": 3.204,
+          "top5": 3.401,
+          "top3": 3.532,
+          "top1": 3.794
+        }
+      },
+      "female": {
+        "sampleSize": 62548,
+        "ratioThresholds": {
+          "top50": 1.983,
+          "top25": 2.317,
+          "top10": 2.618,
+          "top5": 2.806,
+          "top3": 2.939,
+          "top1": 3.177
+        }
+      }
+    }
+  }
+}

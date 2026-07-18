@@ -5,6 +5,7 @@ import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
 import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { useProgramStore } from '../../store/programStore';
+import { usePerformanceStore } from '../../store/performanceStore';
 import { useSessionStore } from '../../store/sessionStore';
 import {
   buildProfileBackup,
@@ -28,6 +29,16 @@ beforeEach(async () => {
     },
   });
   useBodyWeightStore.setState({ entries: [] });
+  usePerformanceStore.setState({
+    sex: 'unspecified',
+    age: undefined,
+    experience: 'beginner',
+    weeklySessionGoal: 3,
+    monthlySessionGoal: 12,
+    notificationsEnabled: false,
+    programDescription: '',
+    unlockedBadges: [],
+  });
 });
 
 describe('profileBackup', () => {
@@ -94,6 +105,16 @@ describe('profileBackup', () => {
     useBodyWeightStore.setState({
       entries: [{ id: 'weight-1', date: '2026-07-05T08:00:00.000Z', weight: 80.5 }],
     });
+    usePerformanceStore.setState({
+      sex: 'male',
+      age: 34,
+      experience: 'advanced',
+      weeklySessionGoal: 4,
+      monthlySessionGoal: 16,
+      notificationsEnabled: true,
+      programDescription: 'Quatre séances orientées force.',
+      unlockedBadges: [{ id: 'first_session', unlockedAt: '2026-07-03T11:00:00.000Z' }],
+    });
 
     const text = buildProfileBackup();
     const parsed = parseProfileBackup(text);
@@ -113,6 +134,7 @@ describe('profileBackup', () => {
       },
     });
     useBodyWeightStore.setState({ entries: [] });
+    usePerformanceStore.setState({ sex: 'unspecified', programDescription: '', unlockedBadges: [] });
 
     restoreProfileBackup(parsed as Exclude<typeof parsed, string>);
 
@@ -124,6 +146,9 @@ describe('profileBackup', () => {
     expect(useFoodDiaryStore.getState().entries[0].id).toBe('food-entry-1');
     expect(useNutritionGoalsStore.getState().goals.dailyCalories).toBe(2400);
     expect(useBodyWeightStore.getState().entries[0].weight).toBe(80.5);
+    expect(usePerformanceStore.getState().sex).toBe('male');
+    expect(usePerformanceStore.getState().programDescription).toContain('force');
+    expect(usePerformanceStore.getState().unlockedBadges).toHaveLength(1);
   });
 
   it('rejette un JSON invalide', () => {

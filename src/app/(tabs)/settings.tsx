@@ -18,6 +18,7 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
 import { appAlert } from '../../components/ui/AppDialog';
+import { TextInput } from '../../components/ui/TextInput';
 import { useColors } from '../../theme/useColors';
 import { PALETTES, type PaletteId, type ThemeColors } from '../../theme/palettes';
 import { FONT_THEMES, fonts, type FontId } from '../../theme/fonts';
@@ -41,8 +42,25 @@ import { useProgramStore } from '../../store/programStore';
 import { useSessionStore } from '../../store/sessionStore';
 import { useThemeStore } from '../../store/themeStore';
 import { useLanguageStore } from '../../store/languageStore';
+import { usePerformanceStore } from '../../store/performanceStore';
 import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
 import { useTranslation } from '../../i18n/useTranslation';
+import { requestNotificationPermission } from '../../lib/restTimerNotifications';
+import { combineAiProgramPrompt } from '../../lib/aiProgramPrompt';
+import type { ExperienceLevel, PerformanceSex } from '../../types/performance';
+
+const SEX_OPTIONS: { id: PerformanceSex; labelKey: string }[] = [
+  { id: 'unspecified', labelKey: 'performance.sexUnspecified' },
+  { id: 'female', labelKey: 'performance.sexFemale' },
+  { id: 'male', labelKey: 'performance.sexMale' },
+];
+
+const EXPERIENCE_OPTIONS: { id: ExperienceLevel; labelKey: string }[] = [
+  { id: 'beginner', labelKey: 'performance.experienceBeginner' },
+  { id: 'intermediate', labelKey: 'performance.experienceIntermediate' },
+  { id: 'advanced', labelKey: 'performance.experienceAdvanced' },
+  { id: 'expert', labelKey: 'performance.experienceExpert' },
+];
 
 function getAuthorizedExerciseNames() {
   const namesByKey = new Map<string, string>();
@@ -106,11 +124,11 @@ function buildAiProgramPrompt() {
 // de le faire au montage de l'écran ; il n'est calculé qu'au 1er appui sur
 // « Copier », puis réutilisé depuis le cache.
 let cachedAiProgramPrompt: string | null = null;
-function getAiProgramPrompt() {
+function getAiProgramPrompt(programDescription: string) {
   if (cachedAiProgramPrompt === null) {
     cachedAiProgramPrompt = buildAiProgramPrompt();
   }
-  return cachedAiProgramPrompt;
+  return combineAiProgramPrompt(cachedAiProgramPrompt, programDescription);
 }
 
 function profileSummary(data: ProfileBackup['data']) {
@@ -134,6 +152,20 @@ export default function SettingsScreen() {
   const fontId = useThemeStore((s) => s.fontId);
   const setFont = useThemeStore((s) => s.setFont);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
+  const programDescription = usePerformanceStore((s) => s.programDescription);
+  const setProgramDescription = usePerformanceStore((s) => s.setProgramDescription);
+  const performanceSex = usePerformanceStore((s) => s.sex);
+  const setPerformanceSex = usePerformanceStore((s) => s.setSex);
+  const performanceAge = usePerformanceStore((s) => s.age);
+  const setPerformanceAge = usePerformanceStore((s) => s.setAge);
+  const experience = usePerformanceStore((s) => s.experience);
+  const setExperience = usePerformanceStore((s) => s.setExperience);
+  const weeklySessionGoal = usePerformanceStore((s) => s.weeklySessionGoal);
+  const monthlySessionGoal = usePerformanceStore((s) => s.monthlySessionGoal);
+  const setWeeklySessionGoal = usePerformanceStore((s) => s.setWeeklySessionGoal);
+  const setMonthlySessionGoal = usePerformanceStore((s) => s.setMonthlySessionGoal);
+  const notificationsEnabled = usePerformanceStore((s) => s.notificationsEnabled);
+  const setNotificationsEnabled = usePerformanceStore((s) => s.setNotificationsEnabled);
   const [openAppearanceMenu, setOpenAppearanceMenu] =
     useState<'language' | 'palette' | 'font' | null>(null);
   const [importing, setImporting] = useState(false);
@@ -141,6 +173,8 @@ export default function SettingsScreen() {
   const [profileImporting, setProfileImporting] = useState(false);
   const [profileExporting, setProfileExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
+  const [ageDraft, setAgeDraft] = useState<string | null>(null);
+  const ageInput = ageDraft ?? (performanceAge ? String(performanceAge) : '');
   const aiPromptCopied = aiPromptCopyFeedback > 0;
 
   useEffect(() => {
@@ -396,16 +430,33 @@ export default function SettingsScreen() {
   };
 
   const handleCopyAiPrompt = async () => {
+    const prompt = getAiProgramPrompt(programDescription);
     try {
-      await Clipboard.setStringAsync(getAiProgramPrompt());
+      await Clipboard.setStringAsync(prompt);
       setAiPromptCopyFeedback((current) => current + 1);
     } catch {
       try {
-        await Share.share({ message: getAiProgramPrompt() });
+        await Share.share({ message: prompt });
       } catch {
         appAlert('Erreur', 'Impossible de copier ou partager le prompt.');
       }
     }
+  };
+
+  const handleNotificationsToggle = async () => {
+    if (notificationsEnabled) {
+      setNotificationsEnabled(false);
+      return;
+    }
+    const granted = await requestNotificationPermission();
+    if (!granted) {
+      appAlert(
+        t('performance.notificationsDeniedTitle'),
+        t('performance.notificationsDeniedBody')
+      );
+      return;
+    }
+    setNotificationsEnabled(true);
   };
 
   const handleDeleteAll = () => {
@@ -657,6 +708,120 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('performance.profileTitle')}</Text>
+          <Text style={styles.helpText}>{t('performance.profileHelp')}</Text>
+
+          <Text style={styles.fieldLabel}>{t('performance.sex')}</Text>
+          <View style={styles.choiceRow}>
+            {SEX_OPTIONS.map((option) => {
+              const active = performanceSex === option.id;
+              return (
+                <TouchableOpacity
+                  key={option.id}
+                  style={[styles.choiceChip, active ? styles.choiceChipActive : null]}
+                  onPress={() => setPerformanceSex(option.id)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: active }}>
+                  <Text style={[styles.choiceText, active ? styles.choiceTextActive : null]}>
+                    {t(option.labelKey)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <TextInput
+            label={t('performance.age')}
+            value={ageInput}
+            onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))}
+            onEndEditing={() => {
+              setPerformanceAge(ageInput ? Number(ageInput) : undefined);
+              setAgeDraft(null);
+            }}
+            keyboardType="number-pad"
+            maxLength={3}
+            placeholder={t('performance.agePlaceholder')}
+          />
+
+          <Text style={styles.fieldLabel}>{t('performance.experience')}</Text>
+          <View style={styles.choiceRow}>
+            {EXPERIENCE_OPTIONS.map((option) => {
+              const active = experience === option.id;
+              return (
+                <TouchableOpacity
+                  key={option.id}
+                  style={[styles.choiceChip, active ? styles.choiceChipActive : null]}
+                  onPress={() => setExperience(option.id)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: active }}>
+                  <Text style={[styles.choiceText, active ? styles.choiceTextActive : null]}>
+                    {t(option.labelKey)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <View style={styles.goalRow}>
+            <View style={styles.goalCopy}>
+              <Text style={styles.fieldLabel}>{t('performance.weeklyGoal')}</Text>
+              <Text style={styles.goalHint}>{t('performance.sessionsUnit')}</Text>
+            </View>
+            <View style={styles.stepper}>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setWeeklySessionGoal(weeklySessionGoal - 1)}
+                accessibilityLabel={t('performance.decreaseGoal')}>
+                <Ionicons name="remove" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+              <Text style={styles.stepValue}>{weeklySessionGoal}</Text>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setWeeklySessionGoal(weeklySessionGoal + 1)}
+                accessibilityLabel={t('performance.increaseGoal')}>
+                <Ionicons name="add" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.goalRow}>
+            <View style={styles.goalCopy}>
+              <Text style={styles.fieldLabel}>{t('performance.monthlyGoal')}</Text>
+              <Text style={styles.goalHint}>{t('performance.sessionsUnit')}</Text>
+            </View>
+            <View style={styles.stepper}>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setMonthlySessionGoal(monthlySessionGoal - 1)}
+                accessibilityLabel={t('performance.decreaseGoal')}>
+                <Ionicons name="remove" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+              <Text style={styles.stepValue}>{monthlySessionGoal}</Text>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setMonthlySessionGoal(monthlySessionGoal + 1)}
+                accessibilityLabel={t('performance.increaseGoal')}>
+                <Ionicons name="add" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={styles.notificationRow}
+            onPress={handleNotificationsToggle}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: notificationsEnabled }}>
+            <View style={styles.notificationCopy}>
+              <Text style={styles.fieldLabel}>{t('performance.notifications')}</Text>
+              <Text style={styles.goalHint}>{t('performance.notificationsHelp')}</Text>
+            </View>
+            <View style={[styles.switchTrack, notificationsEnabled ? styles.switchTrackActive : null]}>
+              <View style={[styles.switchThumb, notificationsEnabled ? styles.switchThumbActive : null]} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.programs')}</Text>
 
           <Button
@@ -689,6 +854,19 @@ export default function SettingsScreen() {
           <Text style={styles.helpText}>
             Copie ce prompt avec le bouton ci-dessous, puis colle-le dans ChatGPT/Claude pour générer un programme, et importe le JSON obtenu.
           </Text>
+
+          <TextInput
+            label={t('settings.programDescription')}
+            value={programDescription}
+            onChangeText={setProgramDescription}
+            placeholder={t('settings.programDescriptionPlaceholder')}
+            multiline
+            numberOfLines={6}
+            textAlignVertical="top"
+            maxLength={4000}
+            style={styles.descriptionInput}
+          />
+          <Text style={styles.counterText}>{programDescription.length} / 4000</Text>
 
           <Button
             title={aiPromptCopied ? t('settings.copied') : t('settings.copyPrompt')}
@@ -760,6 +938,68 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   actionBtn: { marginTop: 4 },
   helpText: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary, lineHeight: 18 },
+  fieldLabel: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary },
+  choiceRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  choiceChip: {
+    minHeight: 38,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: c.border,
+    backgroundColor: c.surface,
+  },
+  choiceChipActive: { borderColor: c.primary, backgroundColor: c.accentSoft },
+  choiceText: { fontSize: 12, fontFamily: fonts.sansSemi, color: c.textSecondary },
+  choiceTextActive: { color: c.primary },
+  goalRow: {
+    minHeight: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderRadius: 14,
+    backgroundColor: c.surface,
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  goalCopy: { flex: 1, gap: 2 },
+  goalHint: { fontSize: 11, lineHeight: 15, fontFamily: fonts.sans, color: c.textMuted },
+  stepper: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  stepButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: c.surfaceAlt,
+  },
+  stepValue: { minWidth: 24, textAlign: 'center', fontSize: 17, fontFamily: fonts.sansBold, color: c.textPrimary },
+  notificationRow: {
+    minHeight: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderRadius: 14,
+    backgroundColor: c.surface,
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  notificationCopy: { flex: 1, gap: 3 },
+  switchTrack: {
+    width: 48,
+    height: 28,
+    padding: 3,
+    borderRadius: 14,
+    justifyContent: 'center',
+    backgroundColor: c.border,
+  },
+  switchTrackActive: { backgroundColor: c.primary },
+  switchThumb: { width: 22, height: 22, borderRadius: 11, backgroundColor: c.surface },
+  switchThumbActive: { alignSelf: 'flex-end' },
+  descriptionInput: { minHeight: 132, paddingTop: 12 },
+  counterText: { marginTop: -8, textAlign: 'right', fontSize: 10, fontFamily: fonts.sans, color: c.textMuted },
   dropdownGroup: { gap: 7 },
   dropdownLabel: {
     fontFamily: fonts.sansSemi,

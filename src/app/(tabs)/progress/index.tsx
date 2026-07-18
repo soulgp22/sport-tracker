@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   FlatList,
@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { WeightChart } from '../../../components/progress/WeightChart';
 import { VolumeChart } from '../../../components/progress/VolumeChart';
+import { PerformanceDashboard } from '../../../components/progress/PerformanceDashboard';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
@@ -21,10 +22,18 @@ import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useProgressData, useExercisesWithHistory, type DataPoint } from '../../../hooks/useProgressData';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
+import { usePerformanceStore } from '../../../store/performanceStore';
+import { useSessionStore } from '../../../store/sessionStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { useTranslation } from '../../../i18n/useTranslation';
+import {
+  analyzeExercisePerformance,
+  calculateConsistencyMetrics,
+  createBadgeMetrics,
+  evaluateBadgeUnlocks,
+} from '../../../lib/performanceEngine';
 
-type ProgressMode = 'exercises' | 'bodyWeight';
+type ProgressMode = 'exercises' | 'bodyWeight' | 'performance';
 
 function parseNumberInput(value: string) {
   return Number(value.trim().replace(',', '.'));
@@ -53,6 +62,42 @@ export default function ProgressScreen() {
   const bodyWeightEntries = useBodyWeightStore((s) => s.entries);
   const addBodyWeightEntry = useBodyWeightStore((s) => s.addEntry);
   const targetWeight = useNutritionGoalsStore((s) => s.goals.targetWeight);
+  const sessions = useSessionStore((s) => s.sessions);
+  const performanceSex = usePerformanceStore((s) => s.sex);
+  const weeklyGoal = usePerformanceStore((s) => s.weeklySessionGoal);
+  const monthlyGoal = usePerformanceStore((s) => s.monthlySessionGoal);
+  const unlockedBadges = usePerformanceStore((s) => s.unlockedBadges);
+  const unlockBadges = usePerformanceStore((s) => s.unlockBadges);
+
+  const performanceAnalyses = useMemo(
+    () => exercises.map((exercise) => analyzeExercisePerformance({
+      exerciseId: exercise.id,
+      exerciseName: exercise.name,
+      sessions,
+      bodyweightEntries: bodyWeightEntries,
+      sex: performanceSex,
+    })),
+    [bodyWeightEntries, exercises, performanceSex, sessions]
+  );
+  const selectedPerformance = performanceAnalyses.find(
+    (analysis) => analysis.exerciseId === effectiveSelectedId
+  );
+  const consistency = useMemo(
+    () => calculateConsistencyMetrics(sessions, weeklyGoal, monthlyGoal),
+    [monthlyGoal, sessions, weeklyGoal]
+  );
+  const badgeMetrics = useMemo(
+    () => createBadgeMetrics(consistency, performanceAnalyses),
+    [consistency, performanceAnalyses]
+  );
+
+  useEffect(() => {
+    const newBadgeIds = evaluateBadgeUnlocks(
+      badgeMetrics,
+      unlockedBadges.map((badge) => badge.id)
+    );
+    if (newBadgeIds.length > 0) unlockBadges(newBadgeIds);
+  }, [badgeMetrics, unlockBadges, unlockedBadges]);
 
   const filteredExercises = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -107,7 +152,9 @@ export default function ProgressScreen() {
             size={17}
             color={mode === 'exercises' ? c.primaryText : c.textSecondary}
           />
-          <Text style={[styles.modeChipText, mode === 'exercises' && styles.modeChipTextSelected]}>
+          <Text
+            numberOfLines={1}
+            style={[styles.modeChipText, mode === 'exercises' && styles.modeChipTextSelected]}>
             {t('progress.exercises')}
           </Text>
         </TouchableOpacity>
@@ -120,8 +167,25 @@ export default function ProgressScreen() {
             size={17}
             color={mode === 'bodyWeight' ? c.primaryText : c.textSecondary}
           />
-          <Text style={[styles.modeChipText, mode === 'bodyWeight' && styles.modeChipTextSelected]}>
+          <Text
+            numberOfLines={1}
+            style={[styles.modeChipText, mode === 'bodyWeight' && styles.modeChipTextSelected]}>
             {t('progress.bodyWeight')}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.modeChip, mode === 'performance' && styles.modeChipSelected]}
+          onPress={() => setMode('performance')}
+          activeOpacity={0.75}>
+          <Ionicons
+            name="trophy-outline"
+            size={17}
+            color={mode === 'performance' ? c.primaryText : c.textSecondary}
+          />
+          <Text
+            numberOfLines={1}
+            style={[styles.modeChipText, mode === 'performance' && styles.modeChipTextSelected]}>
+            {t('progress.performance')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -180,7 +244,7 @@ export default function ProgressScreen() {
             ) : null}
           </ScrollView>
         )
-      ) : (
+      ) : mode === 'bodyWeight' ? (
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.formRow}>
             <View style={styles.weightInput}>
@@ -215,6 +279,15 @@ export default function ProgressScreen() {
               ) : null}
             </>
           )}
+        </ScrollView>
+      ) : (
+        <ScrollView contentContainerStyle={styles.content}>
+          <PerformanceDashboard
+            analysis={selectedPerformance}
+            consistency={consistency}
+            unlockedBadges={unlockedBadges}
+            onChooseExercise={() => setSelectorOpen(true)}
+          />
         </ScrollView>
       )}
 
@@ -276,20 +349,20 @@ export default function ProgressScreen() {
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
-  modeRow: { flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 10, gap: 8 },
+  modeRow: { flexDirection: 'row', paddingHorizontal: 12, paddingBottom: 10, gap: 6 },
   modeChip: {
     flex: 1,
     minHeight: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 7,
-    paddingHorizontal: 12,
+    gap: 4,
+    paddingHorizontal: 7,
     borderRadius: 12,
     backgroundColor: c.surfaceAlt,
   },
   modeChipSelected: { backgroundColor: c.primary },
-  modeChipText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
+  modeChipText: { flexShrink: 1, fontSize: 11, fontFamily: fonts.sansBold, color: c.textSecondary },
   modeChipTextSelected: { color: c.primaryText },
   content: { paddingHorizontal: 16, gap: 14, paddingBottom: 32 },
   exerciseSelector: {

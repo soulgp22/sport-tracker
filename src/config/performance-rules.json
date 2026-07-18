@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "oneRepMax": {
+    "method": "mean",
+    "formulas": ["epley", "brzycki"],
+    "highConfidenceMaxReps": 10,
+    "supportedMaxReps": 15,
+    "minimumWeightKg": 1
+  },
+  "exerciseFamilies": {
+    "bench_press": {
+      "label": "Développé couché",
+      "exerciseIds": ["offline-198"],
+      "matchers": [
+        "barbell bench press - medium grip",
+        "wide-grip barbell bench press",
+        "développé couché à la barre",
+        "développé couché à la barre - prise moyenne",
+        "développé couché prise large"
+      ]
+    },
+    "back_squat": {
+      "label": "Squat à la barre",
+      "exerciseIds": ["offline-516", "offline-520"],
+      "matchers": [
+        "barbell full squat",
+        "barbell squat",
+        "squat complet à la barre",
+        "squat à la barre"
+      ]
+    },
+    "deadlift": {
+      "label": "Soulevé de terre",
+      "exerciseIds": ["offline-398", "offline-447"],
+      "matchers": [
+        "barbell deadlift",
+        "sumo deadlift",
+        "soulevé de terre à la barre",
+        "soulevé de terre sumo"
+      ]
+    }
+  },
+  "levels": [
+    { "id": "beginner", "label": "Débutant", "topPercent": 100, "color": "#64748B" },
+    { "id": "intermediate", "label": "Intermédiaire", "topPercent": 50, "color": "#16A34A" },
+    { "id": "confirmed", "label": "Confirmé", "topPercent": 25, "color": "#0891B2" },
+    { "id": "top10", "label": "Top 10 %", "topPercent": 10, "color": "#2563EB" },
+    { "id": "top5", "label": "Top 5 %", "topPercent": 5, "color": "#7C3AED" },
+    { "id": "top3", "label": "Top 3 %", "topPercent": 3, "color": "#DB2777" },
+    { "id": "top1", "label": "Top 1 %", "topPercent": 1, "color": "#F97316" }
+  ],
+  "badges": [
+    { "id": "first_session", "label": "Premier départ", "labelKey": "performance.badge.firstSession", "description": "Terminer une première séance", "icon": "rocket-outline", "metric": "sessionCount", "minimum": 1 },
+    { "id": "streak_3", "label": "Régularité 3", "labelKey": "performance.badge.streak3", "description": "S’entraîner 3 semaines consécutives", "icon": "flame-outline", "metric": "weeklyStreak", "minimum": 3 },
+    { "id": "streak_7", "label": "Régularité 7", "labelKey": "performance.badge.streak7", "description": "S’entraîner 7 semaines consécutives", "icon": "bonfire-outline", "metric": "weeklyStreak", "minimum": 7 },
+    { "id": "weekly_goal", "label": "Semaine validée", "labelKey": "performance.badge.weeklyGoal", "description": "Atteindre l’objectif hebdomadaire", "icon": "calendar-outline", "metric": "weeklyGoalProgress", "minimum": 1 },
+    { "id": "pr_5", "label": "Nouveau palier", "labelKey": "performance.badge.newLevel", "description": "Améliorer un 1RM estimé d’au moins 5 %", "icon": "trending-up-outline", "metric": "bestPrImprovementPct", "minimum": 5 },
+    { "id": "top_10", "label": "Top 10 % estimé", "labelKey": "performance.badge.top10", "description": "Atteindre le seuil OpenIPF Top 10 %", "icon": "medal-outline", "metric": "inverseTopPercent", "minimum": 90 },
+    { "id": "top_5", "label": "Top 5 % estimé", "labelKey": "performance.badge.top5", "description": "Atteindre le seuil OpenIPF Top 5 %", "icon": "ribbon-outline", "metric": "inverseTopPercent", "minimum": 95 },
+    { "id": "top_3", "label": "Top 3 % estimé", "labelKey": "performance.badge.top3", "description": "Atteindre le seuil OpenIPF Top 3 %", "icon": "diamond-outline", "metric": "inverseTopPercent", "minimum": 97 },
+    { "id": "top_1", "label": "Top 1 % estimé", "labelKey": "performance.badge.top1", "description": "Atteindre le seuil OpenIPF Top 1 %", "icon": "trophy-outline", "metric": "inverseTopPercent", "minimum": 99 }
+  ],
+  "goals": {
+    "defaultWeeklySessions": 3,
+    "defaultMonthlySessions": 12,
+    "minimum": 1,
+    "maximumWeekly": 14,
+    "maximumMonthly": 60
+  },
+  "communityPhase": {
+    "minimumComparableSampleSize": 200,
+    "comparisonKeys": ["exerciseFamily", "sex", "bodyweightBand", "ageBand"],
+    "method": "empirical_cdf"
+  },
+  "notificationTemplates": {
+    "levelReachedTitleKey": "notification.performance.levelTitle",
+    "levelReachedBodyKey": "notification.performance.levelBody",
+    "closeToLevelTitleKey": "notification.performance.closeTitle",
+    "closeToLevelBodyKey": "notification.performance.closeBody",
+    "prTitleKey": "notification.performance.prTitle",
+    "prBodyKey": "notification.performance.prBody",
+    "weeklyGoalTitleKey": "notification.performance.weeklyTitle",
+    "weeklyGoalBodyKey": "notification.performance.weeklyBody"
+  }
+}
