@@ -1,5 +1,6 @@
 import { useProgramStore } from '../programStore';
 import { useExerciseCatalogStore } from '../exerciseCatalogStore';
+import remoteCatalog from '../../../community/exercises-all.json';
 import { getRelatedExerciseIds } from '../../lib/exerciseRelations';
 
 // Exercice réel du catalogue (pour des fixtures d'import robustes au contenu)
@@ -13,6 +14,9 @@ beforeEach(() => {
 });
 
 describe('programs', () => {
+  beforeAll(() => {
+    useExerciseCatalogStore.getState().installPack('test-remote-pack', remoteCatalog.exercises);
+  });
   it('adds a program', () => {
     const p = useProgramStore.getState().addProgram('PPL');
     expect(useProgramStore.getState().programs).toHaveLength(1);

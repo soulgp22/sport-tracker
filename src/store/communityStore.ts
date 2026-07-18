@@ -7,10 +7,11 @@ import {
   COMMUNITY_MANIFEST_URL,
 } from '../constants/community';
 import { assertImportTextSize, MAX_IMPORT_FILE_BYTES } from '../lib/importLimits';
-import type { ImportResult } from '../types';
+import type { CatalogExercise, ImportResult } from '../types';
 import type { ImportFoodsResult } from './foodStore';
 import { useFoodStore } from './foodStore';
 import { useProgramStore } from './programStore';
+import { useExerciseCatalogStore } from './exerciseCatalogStore';
 
 export type CommunityProgramLevel = 'Débutant' | 'Intermédiaire' | 'Avancé';
 
@@ -39,10 +40,22 @@ export interface CommunityFoodDatabaseEntry {
   disclaimer: string;
 }
 
+export interface CommunityExercisePackEntry {
+  id: string;
+  name: string;
+  description: string;
+  author: string;
+  level: string;
+  exercisesCount: number;
+  file: string;
+  mediaBaseUrl: string;
+}
+
 export interface CommunityManifest {
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   programs: CommunityProgramEntry[];
   foodDatabases: CommunityFoodDatabaseEntry[];
+  exercisePacks?: CommunityExercisePackEntry[];
 }
 
 interface CommunityState {
@@ -53,6 +66,7 @@ interface CommunityState {
   fetchManifest: () => Promise<CommunityManifest | null>;
   downloadProgram: (entry: CommunityProgramEntry) => Promise<ImportResult>;
   downloadFoodDatabase: (entry: CommunityFoodDatabaseEntry) => Promise<ImportFoodsResult>;
+  downloadExercisePack: (entry: CommunityExercisePackEntry) => Promise<number>;
 }
 
 const COMMUNITY_LEVELS: CommunityProgramLevel[] = ['Débutant', 'Intermédiaire', 'Avancé'];
@@ -61,6 +75,7 @@ const LOAD_ERROR_MESSAGE = 'Impossible de charger les contenus communautaires.';
 const DOWNLOAD_ERROR_MESSAGE = 'Impossible de télécharger ce programme.';
 const MAX_COMMUNITY_PROGRAMS = 200;
 const MAX_COMMUNITY_FOOD_DATABASES = 100;
+const MAX_COMMUNITY_EXERCISE_PACKS = 20;
 const SAFE_COMMUNITY_FILE_PATTERN = /^[a-z0-9][a-z0-9._-]*\.(json|csv)$/i;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -135,10 +150,11 @@ function parseManifest(text: string): CommunityManifest {
 
   if (
     !isRecord(parsed) ||
-    (parsed.version !== 1 && parsed.version !== 2) ||
+    (parsed.version !== 1 && parsed.version !== 2 && parsed.version !== 3) ||
     !Array.isArray(parsed.programs) ||
     parsed.programs.length > MAX_COMMUNITY_PROGRAMS ||
-    ('foodDatabases' in parsed && !Array.isArray(parsed.foodDatabases))
+    ('foodDatabases' in parsed && !Array.isArray(parsed.foodDatabases)) ||
+    ('exercisePacks' in parsed && !Array.isArray(parsed.exercisePacks))
   ) {
     throw new Error('Manifeste communautaire invalide.');
   }
@@ -201,10 +217,40 @@ function parseManifest(text: string): CommunityManifest {
     };
   });
 
+  const rawExercisePacks = Array.isArray(parsed.exercisePacks) ? parsed.exercisePacks : [];
+  if (rawExercisePacks.length > MAX_COMMUNITY_EXERCISE_PACKS) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+  const exercisePacks = rawExercisePacks.map((pack) => {
+    if (!isRecord(pack)) throw new Error('Manifeste communautaire invalide.');
+    const id = readString(pack, 'id');
+    if (ids.has(id)) throw new Error('Manifeste communautaire invalide.');
+    ids.add(id);
+    const file = readString(pack, 'file');
+    if (!SAFE_COMMUNITY_FILE_PATTERN.test(file) || !file.endsWith('.json')) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+    const mediaBaseUrl = readString(pack, 'mediaBaseUrl');
+    if (!mediaBaseUrl.startsWith('https://raw.githubusercontent.com/soulgp22/sport-tracker/')) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+    return {
+      id,
+      name: readString(pack, 'name'),
+      description: readString(pack, 'description'),
+      author: readString(pack, 'author'),
+      level: readString(pack, 'level'),
+      exercisesCount: readPositiveCount(pack, 'exercisesCount'),
+      file,
+      mediaBaseUrl,
+    };
+  });
+
   return {
     version: parsed.version,
     programs,
     foodDatabases,
+    ...(Array.isArray(parsed.exercisePacks) ? { exercisePacks } : {}),
   };
 }
 
@@ -296,6 +342,23 @@ export const useCommunityStore = create<CommunityState>((set) => ({
         : foodStore.importFoods(text);
     } catch {
       throw new Error('Impossible de télécharger cette base d’aliments.');
+    }
+  },
+
+  downloadExercisePack: async (entry) => {
+    try {
+      const text = await fetchText(`${COMMUNITY_BASE_URL}${entry.file}`);
+      const parsed = JSON.parse(text) as { version?: number; exercises?: CatalogExercise[] };
+      if (parsed.version !== 1 || !Array.isArray(parsed.exercises)) {
+        throw new Error('Pack invalide.');
+      }
+      const exercises = parsed.exercises.slice(0, 2_000).map((exercise) => ({
+        ...exercise,
+        remoteMediaBaseUrl: entry.mediaBaseUrl,
+      }));
+      return useExerciseCatalogStore.getState().installPack(entry.id, exercises);
+    } catch {
+      throw new Error('Impossible de télécharger ce pack d’exercices.');
     }
   },
 }));

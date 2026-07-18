@@ -15,6 +15,8 @@ export interface CatalogExercise {
   instructions: string[];
   instructionsFr?: string[];
   gif: { a: string; b: string };
+  /** Base HTTPS utilisée pour les deux poses quand l'exercice vient d'un pack GitHub. */
+  remoteMediaBaseUrl?: string;
 }
 
 export interface ProgramSet {

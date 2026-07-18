@@ -110,15 +110,23 @@ export function AppDialog() {
         <Pressable style={StyleSheet.absoluteFill} onPress={requestClose} />
         <SafeAreaView style={styles.safe} pointerEvents="box-none">
           <View style={styles.card} accessibilityRole="alert">
-            <View style={[styles.icon, isDestructive ? styles.iconDanger : null]}>
-              <Ionicons
-                name={isDestructive ? 'alert-outline' : 'checkmark-circle-outline'}
-                size={25}
-                color={isDestructive ? c.danger : c.primary}
-              />
+            <View style={styles.grabber} />
+            <View style={styles.headerRow}>
+              <View style={[styles.icon, isDestructive ? styles.iconDanger : null]}>
+                <Ionicons
+                  name={isDestructive ? 'alert-outline' : 'sparkles-outline'}
+                  size={23}
+                  color={isDestructive ? c.danger : c.primary}
+                />
+              </View>
+              <View style={styles.headerCopy}>
+                <Text style={styles.eyebrow}>{isDestructive ? 'CONFIRMATION' : 'LIFE SPORT TRACKER'}</Text>
+                <Text style={styles.title}>{tr(dialog?.title ?? '')}</Text>
+              </View>
+              <TouchableOpacity style={styles.closeButton} onPress={requestClose} accessibilityRole="button">
+                <Ionicons name="close" size={20} color={c.textSecondary} />
+              </TouchableOpacity>
             </View>
-
-            <Text style={styles.title}>{tr(dialog?.title ?? '')}</Text>
 
             {dialog?.message ? (
               <ScrollView
@@ -130,7 +138,7 @@ export function AppDialog() {
               </ScrollView>
             ) : null}
 
-            <View style={[styles.actions, dialog && dialog.buttons.length > 2 ? styles.actionsStack : null]}>
+            <View style={styles.actions}>
               {dialog?.buttons.map((button, index) => {
                 const destructive = button.style === 'destructive';
                 const cancel = button.style === 'cancel';
@@ -139,7 +147,6 @@ export function AppDialog() {
                     key={`${dialog.id}-${button.text ?? index}`}
                     style={[
                       styles.action,
-                      dialog.buttons.length > 2 ? styles.actionStacked : null,
                       cancel ? styles.actionCancel : null,
                       destructive ? styles.actionDanger : null,
                     ]}
@@ -168,16 +175,19 @@ export function AppDialog() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   root: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'flex-end',
     backgroundColor: c.overlay,
   },
-  safe: { width: '100%', maxWidth: 440, alignItems: 'stretch' },
+  safe: { width: '100%', alignItems: 'center', justifyContent: 'flex-end' },
   card: {
     maxHeight: '82%',
-    padding: 20,
-    borderRadius: 22,
+    width: '100%',
+    maxWidth: 560,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 18,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
     borderWidth: 1,
     borderColor: c.border,
     backgroundColor: c.surface,
@@ -187,32 +197,35 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     shadowOffset: { width: 0, height: 14 },
     elevation: 18,
   },
+  grabber: { width: 42, height: 4, borderRadius: 2, backgroundColor: c.border, alignSelf: 'center', marginBottom: 18 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerCopy: { flex: 1 },
+  eyebrow: { fontFamily: fonts.sansBold, fontSize: 9, letterSpacing: 1.4, color: c.primary, marginBottom: 3 },
+  closeButton: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surfaceAlt },
   icon: {
-    width: 46,
-    height: 46,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
     backgroundColor: c.accentSoft,
-    marginBottom: 15,
   },
   iconDanger: { backgroundColor: `${c.danger}18` },
   title: {
     fontFamily: fonts.sansBold,
-    fontSize: 20,
-    lineHeight: 25,
+    fontSize: 19,
+    lineHeight: 23,
     color: c.textPrimary,
   },
-  messageScroll: { maxHeight: 320, marginTop: 9 },
-  messageContent: { paddingBottom: 2 },
+  messageScroll: { maxHeight: 300, marginTop: 16 },
+  messageContent: { padding: 14, borderRadius: 14, backgroundColor: c.surfaceAlt },
   message: {
     fontFamily: fonts.sans,
     fontSize: 14,
     lineHeight: 21,
     color: c.textSecondary,
   },
-  actions: { flexDirection: 'row', gap: 9, marginTop: 20 },
-  actionsStack: { flexDirection: 'column-reverse' },
+  actions: { flexDirection: 'column-reverse', gap: 9, marginTop: 16 },
   action: {
     flex: 1,
     minHeight: 46,

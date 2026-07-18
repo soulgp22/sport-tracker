@@ -15,6 +15,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystemLegacy from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import { File as ExpoFile, Paths } from 'expo-file-system';
+import { useRouter } from 'expo-router';
 
 import { Button } from '../../components/ui/Button';
 import { appAlert } from '../../components/ui/AppDialog';
@@ -43,6 +44,7 @@ import { useSessionStore } from '../../store/sessionStore';
 import { useThemeStore } from '../../store/themeStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePerformanceStore } from '../../store/performanceStore';
+import { useOnboardingStore } from '../../store/onboardingStore';
 import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
 import { useTranslation } from '../../i18n/useTranslation';
 import { requestNotificationPermission } from '../../lib/restTimerNotifications';
@@ -136,6 +138,7 @@ function profileSummary(data: ProfileBackup['data']) {
 }
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const c = useColors();
   const { language, t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -152,6 +155,7 @@ export default function SettingsScreen() {
   const fontId = useThemeStore((s) => s.fontId);
   const setFont = useThemeStore((s) => s.setFont);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
+  const restartOnboarding = useOnboardingStore((s) => s.restart);
   const programDescription = usePerformanceStore((s) => s.programDescription);
   const setProgramDescription = usePerformanceStore((s) => s.setProgramDescription);
   const performanceSex = usePerformanceStore((s) => s.sex);
@@ -910,6 +914,12 @@ export default function SettingsScreen() {
               )}
             </Text>
           </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Personnalisation</Text>
+          <Text style={styles.aboutSubtext}>Refaire le questionnaire pour actualiser tes objectifs et tes recommandations.</Text>
+          <Button title="Refaire l’onboarding" variant="secondary" onPress={() => { restartOnboarding(); router.replace('/onboarding' as never); }} />
         </View>
 
         <View style={styles.section}>

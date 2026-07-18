@@ -19,12 +19,14 @@ import type { ThemeColors } from '../../../theme/palettes';
 import {
   useCommunityStore,
   type CommunityFoodDatabaseEntry,
+  type CommunityExercisePackEntry,
   type CommunityProgramEntry,
 } from '../../../store/communityStore';
 import type { ImportResult } from '../../../types';
 import type { ImportFoodsResult } from '../../../store/foodStore';
+import { useExerciseCatalogStore } from '../../../store/exerciseCatalogStore';
 
-type CommunityTab = 'programs' | 'foods';
+type CommunityTab = 'programs' | 'exercises' | 'foods';
 
 function formatDays(daysCount: number) {
   return `${daysCount} jour${daysCount !== 1 ? 's' : ''}`;
@@ -135,6 +137,23 @@ function CommunityFoodCard({
   );
 }
 
+function CommunityExerciseCard({ entry, disabled, loading, installed, onDownload }: {
+  entry: CommunityExercisePackEntry;
+  disabled: boolean;
+  loading: boolean;
+  installed: boolean;
+  onDownload: () => void;
+}) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
+  return <View style={styles.card}>
+    <View style={styles.cardHeader}><View style={styles.cardTitleBlock}><Text style={styles.cardTitle}>{entry.name}</Text><Text style={styles.author}>Par {entry.author}</Text></View><View style={styles.levelBadge}><Text style={styles.levelText}>{entry.level}</Text></View></View>
+    <Text style={styles.description}>{entry.description}</Text>
+    <View style={styles.metaRow}><Ionicons name="fitness-outline" size={16} color={c.textSecondary} /><Text style={styles.metaText}>{entry.exercisesCount} exercices · animations incluses</Text></View>
+    <Button title={installed ? 'Mettre à jour le catalogue' : 'Télécharger les exercices'} onPress={onDownload} loading={loading} disabled={disabled} style={styles.downloadButton} />
+  </View>;
+}
+
 export default function CommunityScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -147,14 +166,17 @@ export default function CommunityScreen() {
   const fetchManifest = useCommunityStore((s) => s.fetchManifest);
   const downloadProgram = useCommunityStore((s) => s.downloadProgram);
   const downloadFoodDatabase = useCommunityStore((s) => s.downloadFoodDatabase);
+  const downloadExercisePack = useCommunityStore((s) => s.downloadExercisePack);
+  const installedPackIds = useExerciseCatalogStore((s) => s.installedPackIds);
   const [selectedTab, setSelectedTab] = useState<CommunityTab>(
-    params.tab === 'foods' ? 'foods' : 'programs'
+    params.tab === 'foods' ? 'foods' : params.tab === 'exercises' ? 'exercises' : 'programs'
   );
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const programs = data?.programs ?? [];
   const foodDatabases = data?.foodDatabases ?? [];
-  const currentItems = selectedTab === 'programs' ? programs : foodDatabases;
+  const exercisePacks = data?.exercisePacks ?? [];
+  const currentItems = selectedTab === 'programs' ? programs : selectedTab === 'exercises' ? exercisePacks : foodDatabases;
 
   useEffect(() => {
     void fetchManifest();
@@ -241,14 +263,26 @@ export default function CommunityScreen() {
     }
   };
 
+  const handleExerciseDownload = async (entry: CommunityExercisePackEntry) => {
+    try {
+      setDownloadingId(entry.id);
+      const count = await downloadExercisePack(entry);
+      appAlert('Catalogue installé', `${count} exercices sont maintenant disponibles, avec leur animation.`);
+    } catch {
+      appAlert('Téléchargement impossible', 'Impossible de télécharger les exercices. Réessayez plus tard.');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   const emptyTitle =
     selectedTab === 'programs'
       ? 'Aucun programme communautaire'
-      : 'Aucune base d’aliments';
+      : selectedTab === 'exercises' ? 'Aucun pack d’exercices' : 'Aucune base d’aliments';
   const loadingLabel =
     selectedTab === 'programs'
       ? 'Chargement des programmes...'
-      : 'Chargement des bases d’aliments...';
+      : selectedTab === 'exercises' ? 'Chargement des exercices...' : 'Chargement des bases d’aliments...';
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -281,6 +315,12 @@ export default function CommunityScreen() {
           <Text style={[styles.tabText, selectedTab === 'programs' ? styles.tabTextActive : null]}>
             Programmes
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setSelectedTab('exercises')}
+          style={[styles.tab, selectedTab === 'exercises' ? styles.tabActive : null]}>
+          <Ionicons name="fitness-outline" size={17} color={selectedTab === 'exercises' ? c.primaryText : c.textSecondary} />
+          <Text style={[styles.tabText, selectedTab === 'exercises' ? styles.tabTextActive : null]}>Exercices</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setSelectedTab('foods')}
@@ -331,6 +371,17 @@ export default function CommunityScreen() {
             />
           }
           contentContainerStyle={programs.length > 0 ? styles.list : styles.emptyList}
+        />
+      ) : selectedTab === 'exercises' ? (
+        <FlatList
+          data={exercisePacks}
+          key="exercises"
+          keyExtractor={(entry) => entry.id}
+          renderItem={({ item }) => <CommunityExerciseCard entry={item} loading={downloadingId === item.id} disabled={!!downloadingId && downloadingId !== item.id} installed={installedPackIds.includes(item.id)} onDownload={() => void handleExerciseDownload(item)} />}
+          refreshing={loading}
+          onRefresh={() => void fetchManifest()}
+          ListEmptyComponent={<EmptyState icon={error ? 'cloud-offline-outline' : 'fitness-outline'} title={error ? 'Contenus indisponibles' : emptyTitle} subtitle={error ?? 'La liste distante est vide pour le moment.'} />}
+          contentContainerStyle={exercisePacks.length > 0 ? styles.list : styles.emptyList}
         />
       ) : (
         <FlatList

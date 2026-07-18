@@ -12,6 +12,7 @@ import { Image } from 'expo-image';
 
 import { exerciseGifs } from '../../data/exercises.gifs';
 import { exerciseMedia } from '../../data/exerciseMedia';
+import { getCatalogExercise } from '../../store/exerciseCatalogStore';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
@@ -37,9 +38,15 @@ export function AnimatedExerciseImage({
   const [fade] = useState(() => new Animated.Value(0));
   const [failedMediaId, setFailedMediaId] = useState<string | null>(null);
   const enhancedMedia = exerciseMedia[id];
-  const frames = exerciseGifs[id] as { a?: number; b?: number } | number | undefined;
-  const sourceA = typeof frames === 'number' ? frames : frames?.a;
-  const sourceB = typeof frames === 'number' ? undefined : frames?.b;
+  const bundledSource = exerciseGifs[id];
+  const catalogExercise = getCatalogExercise(id);
+  const remoteBase = catalogExercise?.remoteMediaBaseUrl;
+  const sourceA = useMemo(() => bundledSource ?? (remoteBase && catalogExercise
+    ? { uri: `${remoteBase}${catalogExercise.gif.a}` }
+    : undefined), [bundledSource, catalogExercise, remoteBase]);
+  const sourceB = useMemo(() => !bundledSource && remoteBase && catalogExercise
+    ? { uri: `${remoteBase}${catalogExercise.gif.b}` }
+    : undefined, [bundledSource, catalogExercise, remoteBase]);
   const shouldAnimate = animate && Boolean(sourceA && sourceB);
   const shouldUseEnhancedMedia = Boolean(enhancedMedia && animate && failedMediaId !== id);
 
@@ -106,7 +113,8 @@ export function AnimatedExerciseImage({
             source={sourceA}
             style={StyleSheet.absoluteFill}
             contentFit="contain"
-            autoplay={false}
+            autoplay={animate && Boolean(bundledSource)}
+            cachePolicy="memory-disk"
             accessibilityLabel={accessibilityLabel}
           />
           {shouldAnimate && sourceB ? (

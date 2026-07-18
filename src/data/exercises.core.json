@@ -1,0 +1,657 @@
+[
+  {
+    "id": "offline-025",
+    "name": "Crunches",
+    "bodyPart": "abdominals",
+    "target": "abdominals",
+    "secondaryMuscles": [],
+    "equipment": "body only",
+    "instructions": [
+      "Lie flat on your back with your feet flat on the ground, or resting on a bench with your knees bent at a 90 degree angle. If you are resting your feet on a bench, place them three to four inches apart and point your toes inward so they touch.",
+      "Now place your hands lightly on either side of your head keeping your elbows in. Tip: Don't lock your fingers behind your head.",
+      "While pushing the small of your back down in the floor to better isolate your abdominal muscles, begin to roll your shoulders off the floor.",
+      "Continue to push down as hard as you can with your lower back as you contract your abdominals and exhale. Your shoulders should come up off the floor only about four inches, and your lower back should remain on the floor. At the top of the movement, contract your abdominals hard and keep the contraction for a second. Tip: Focus on slow, controlled movement - don't cheat yourself by using momentum.",
+      "After the one second contraction, begin to come down slowly again to the starting position as you inhale.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-025-a.jpg",
+      "b": "offline-025-b.jpg"
+    },
+    "nameFr": "Crunch",
+    "instructionsFr": [
+      "Allongez-vous sur le dos, les pieds posés au sol ou sur un banc avec les genoux fléchis à 90 degrés. Si vos pieds sont sur un banc, placez-les à 3 à 4 pouces l'un de l'autre et pointez vos orteils vers l'intérieur pour qu'ils se touchent.",
+      "Placez vos mains légèrement de chaque côté de votre tête en maintenant vos coudes rentrés. Astuce : Ne croisez pas vos doigts derrière votre tête.",
+      "En appuyant le bas de votre dos contre le sol pour mieux isoler vos muscles abdominaux, commencez à soulever vos épaules du sol.",
+      "Continuez à appuyer aussi fort que possible avec votre bas du dos tout en contractant vos abdominaux et en expirant. Vos épaules ne doivent monter que d'environ 4 pouces, et votre bas du dos doit rester en contact avec le sol. Au sommet du mouvement, contractez vos abdominaux fortement et maintenez cette contraction pendant une seconde. Astuce : Concentrez-vous sur un mouvement lent et contrôlé – ne vous trahissez pas en utilisant le momentum.",
+      "Après la contraction de une seconde, redescendez lentement à la position initiale tout en inspirant.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  },
+  {
+    "id": "offline-117",
+    "name": "Barbell Curl",
+    "bodyPart": "biceps",
+    "target": "biceps",
+    "secondaryMuscles": [
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Stand up with your torso upright while holding a barbell at a shoulder-width grip. The palm of your hands should be facing forward and the elbows should be close to the torso. This will be your starting position.",
+      "While holding the upper arms stationary, curl the weights forward while contracting the biceps as you breathe out. Tip: Only the forearms should move.",
+      "Continue the movement until your biceps are fully contracted and the bar is at shoulder level. Hold the contracted position for a second and squeeze the biceps hard.",
+      "Slowly begin to bring the bar back to starting position as your breathe in.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-117-a.jpg",
+      "b": "offline-117-b.jpg"
+    },
+    "nameFr": "Curl à la barre",
+    "instructionsFr": [
+      "Restez debout avec le torse droit tout en tenant une barre à une prise à la largeur des épaules. La paume des mains doit être orientée vers l'avant et les coudes doivent être proches du torse. Cela constituera votre position de départ.",
+      "En maintenant les bras supérieurs fixes, soulevez les poids vers l'avant tout en contractant les biceps en expirant. Conseil : Seuls les avant-bras doivent bouger.",
+      "Continuez le mouvement jusqu'à ce que vos biceps soient pleinement contractés et que la barre soit au niveau des épaules. Maintenez cette position pendant une seconde et serrez fortement les biceps.",
+      "Retournez lentement la barre à la position de départ en inspirant.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  },
+  {
+    "id": "offline-187",
+    "name": "Seated Calf Raise",
+    "bodyPart": "calves",
+    "target": "calves",
+    "secondaryMuscles": [],
+    "equipment": "machine",
+    "instructions": [
+      "Sit on the machine and place your toes on the lower portion of the platform provided with the heels extending off. Choose the toe positioning of your choice (forward, in, or out) as per the beginning of this chapter.",
+      "Place your lower thighs under the lever pad, which will need to be adjusted according to the height of your thighs. Now place your hands on top of the lever pad in order to prevent it from slipping forward.",
+      "Lift the lever slightly by pushing your heels up and release the safety bar. This will be your starting position.",
+      "Slowly lower your heels by bending at the ankles until the calves are fully stretched. Inhale as you perform this movement.",
+      "Raise the heels by extending the ankles as high as possible as you contract the calves and breathe out. Hold the top contraction for a second.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-187-a.jpg",
+      "b": "offline-187-b.jpg"
+    },
+    "nameFr": "Extension mollets assis",
+    "instructionsFr": [
+      "Asseyez-vous sur la machine et placez vos orteils sur la partie inférieure de la plateforme, en laissant vos talons pendre. Choisissez la position de vos orteils selon votre préférence (avant, à l'intérieur ou à l'extérieur) comme indiqué au début de ce chapitre.",
+      "Placez vos cuisses inférieures sous le coussinet de levier, qui devra être ajusté en fonction de la hauteur de vos cuisses. Maintenez vos mains sur le coussinet de levier pour éviter qu'il ne glisse vers l'avant.",
+      "Soulevez légèrement le levier en poussant vos talons vers le haut, puis libérez la barre de sécurité. Cela constituera votre position de départ.",
+      "Abaissez lentement vos talons en fléchissant les chevilles jusqu'à ce que les mollets soient complètement étirés. Inspirez pendant cette phase.",
+      "Soulevez vos talons en étendant les chevilles aussi haut que possible en contractant les mollets, tout en expirant. Maintenez la contraction au sommet pendant une seconde.",
+      "Répétez le mouvement pour le nombre de répétitions recommandé."
+    ]
+  },
+  {
+    "id": "offline-198",
+    "name": "Barbell Bench Press - Medium Grip",
+    "bodyPart": "chest",
+    "target": "chest",
+    "secondaryMuscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Lie back on a flat bench. Using a medium width grip (a grip that creates a 90-degree angle in the middle of the movement between the forearms and the upper arms), lift the bar from the rack and hold it straight over you with your arms locked. This will be your starting position.",
+      "From the starting position, breathe in and begin coming down slowly until the bar touches your middle chest.",
+      "After a brief pause, push the bar back to the starting position as you breathe out. Focus on pushing the bar using your chest muscles. Lock your arms and squeeze your chest in the contracted position at the top of the motion, hold for a second and then start coming down slowly again. Tip: Ideally, lowering the weight should take about twice as long as raising it.",
+      "Repeat the movement for the prescribed amount of repetitions.",
+      "When you are done, place the bar back in the rack."
+    ],
+    "gif": {
+      "a": "offline-198-a.jpg",
+      "b": "offline-198-b.jpg"
+    },
+    "nameFr": "Développé couché à la barre - Prise moyenne",
+    "instructionsFr": [
+      "Allongez-vous sur une banque plate. En utilisant une prise de largeur moyenne (une prise qui crée un angle de 90 degrés au milieu du mouvement entre les avant-bras et les bras supérieurs), soulevez la barre du support et tenez-la droit au-dessus de vous avec les bras tendus. Cela constituera votre position de départ.",
+      "À partir de la position de départ, inspirez et commencez à descendre lentement jusqu'à ce que la barre touche le milieu de votre poitrine.",
+      "Après une pause brève, poussez la barre vers la position de départ tout en expirant. Concentrez-vous sur l'utilisation de vos muscles pectoraux pour pousser la barre. Verrouillez vos bras et serrez votre poitrine à la position la plus tendue, maintenez-la pendant une seconde, puis redescendez lentement à nouveau. Conseil : Idéalement, la descente de la charge devrait prendre environ deux fois plus de temps que la montée.",
+      "Répétez le mouvement pour le nombre prescrit de répétitions.",
+      "Lorsque vous avez terminé, replacez la barre sur le support."
+    ]
+  },
+  {
+    "id": "offline-225",
+    "name": "Dumbbell Bench Press",
+    "bodyPart": "chest",
+    "target": "chest",
+    "secondaryMuscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "instructions": [
+      "Lie down on a flat bench with a dumbbell in each hand resting on top of your thighs. The palms of your hands will be facing each other.",
+      "Then, using your thighs to help raise the dumbbells up, lift the dumbbells one at a time so that you can hold them in front of you at shoulder width.",
+      "Once at shoulder width, rotate your wrists forward so that the palms of your hands are facing away from you. The dumbbells should be just to the sides of your chest, with your upper arm and forearm creating a 90 degree angle. Be sure to maintain full control of the dumbbells at all times. This will be your starting position.",
+      "Then, as you breathe out, use your chest to push the dumbbells up. Lock your arms at the top of the lift and squeeze your chest, hold for a second and then begin coming down slowly. Tip: Ideally, lowering the weight should take about twice as long as raising it.",
+      "Repeat the movement for the prescribed amount of repetitions of your training program."
+    ],
+    "gif": {
+      "a": "offline-225-a.jpg",
+      "b": "offline-225-b.jpg"
+    },
+    "nameFr": "Développé couché aux haltères",
+    "instructionsFr": [
+      "Allongez-vous sur une banque plate, les haltères tenus dans chaque main, reposant sur vos cuisses. Les paumes de vos mains doivent être face à face.",
+      "Ensuite, utilisez vos cuisses pour aider à soulever les haltères, les levant un par un jusqu'à ce que vous puissiez les tenir devant vous à la largeur des épaules.",
+      "Une fois à la largeur des épaules, tournez vos poignets vers l'avant afin que les paumes de vos mains soient dirigées vers l'extérieur. Les haltères doivent être juste à côté de votre poitrine, avec un angle de 90 degrés entre votre bras supérieur et votre avant-bras. Assurez-vous de garder un contrôle total des haltères à tout moment. Cela constituera votre position de départ.",
+      "Ensuite, en expirant, utilisez votre poitrine pour pousser les haltères vers le haut. Verrouillez vos bras au sommet du mouvement, serrez votre poitrine, maintenez pendant une seconde, puis commencez à descendre lentement. Conseil : Idéalement, la descente du poids doit prendre environ deux fois plus de temps que la montée.",
+      "Répétez le mouvement pour le nombre de répétitions prescrit par votre programme d'entraînement."
+    ]
+  },
+  {
+    "id": "offline-241",
+    "name": "Incline Dumbbell Press",
+    "bodyPart": "chest",
+    "target": "chest",
+    "secondaryMuscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "instructions": [
+      "Lie back on an incline bench with a dumbbell in each hand atop your thighs. The palms of your hands will be facing each other.",
+      "Then, using your thighs to help push the dumbbells up, lift the dumbbells one at a time so that you can hold them at shoulder width.",
+      "Once you have the dumbbells raised to shoulder width, rotate your wrists forward so that the palms of your hands are facing away from you. This will be your starting position.",
+      "Be sure to keep full control of the dumbbells at all times. Then breathe out and push the dumbbells up with your chest.",
+      "Lock your arms at the top, hold for a second, and then start slowly lowering the weight. Tip Ideally, lowering the weights should take about twice as long as raising them.",
+      "Repeat the movement for the prescribed amount of repetitions.",
+      "When you are done, place the dumbbells back on your thighs and then on the floor. This is the safest manner to release the dumbbells."
+    ],
+    "gif": {
+      "a": "offline-241-a.jpg",
+      "b": "offline-241-b.jpg"
+    },
+    "nameFr": "Développé couché aux haltères incliné",
+    "instructionsFr": [
+      "Allongez-vous sur une banque inclinée avec un haltère dans chaque main posé sur vos cuisses. Les paumes de vos mains seront orientées l'une vers l'autre.",
+      "Ensuite, utilisez vos cuisses pour aider à pousser les haltères vers le haut, soulevez les haltères un par un afin de les tenir à la largeur des épaules.",
+      "Une fois que les haltères sont levés à la largeur des épaules, tournez vos poignets vers l'avant afin que les paumes de vos mains soient orientées vers l'extérieur. Cela constituera votre position de départ.",
+      "Assurez-vous de garder un contrôle total sur les haltères à tout moment. Exhalez ensuite et poussez les haltères vers le haut avec votre poitrine.",
+      "Verrouillez vos bras en haut, maintenez pendant une seconde, puis commencez lentement à descendre la charge. Idéalement, la descente des haltères devrait prendre environ deux fois plus de temps que la montée.",
+      "Répétez le mouvement pour le nombre prescrit de répétitions.",
+      "Lorsque vous avez terminé, replacez les haltères sur vos cuisses, puis au sol. C'est la manière la plus sûre de relâcher les haltères."
+    ]
+  },
+  {
+    "id": "offline-307",
+    "name": "Barbell Hip Thrust",
+    "bodyPart": "glutes",
+    "target": "glutes",
+    "secondaryMuscles": [
+      "calves",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Begin seated on the ground with a bench directly behind you. Have a loaded barbell over your legs. Using a fat bar or having a pad on the bar can greatly reduce the discomfort caused by this exercise.",
+      "Roll the bar so that it is directly above your hips, and lean back against the bench so that your shoulder blades are near the top of it.",
+      "Begin the movement by driving through your feet, extending your hips vertically through the bar. Your weight should be supported by your shoulder blades and your feet. Extend as far as possible, then reverse the motion to return to the starting position."
+    ],
+    "gif": {
+      "a": "offline-307-a.jpg",
+      "b": "offline-307-b.jpg"
+    },
+    "nameFr": "Hip Thrust à la barre",
+    "instructionsFr": [
+      "Commencez assis par terre avec une banque directement derrière vous. Placez une barre chargée au-dessus de vos jambes. L'utilisation d'une barre épaisse ou d'un coussin sur la barre peut réduire considérablement l'inconfort causé par cet exercice.",
+      "Faites glisser la barre jusqu'à ce qu'elle soit directement au-dessus de vos hanches, puis reculez contre la banque afin que vos omoplates soient près du haut de celle-ci.",
+      "Commencez le mouvement en poussant avec vos pieds, étendant vos hanches verticalement vers la barre. Votre poids doit être soutenu par vos omoplates et vos pieds. Étendez-vous aussi loin que possible, puis inversez le mouvement pour revenir à la position initiale."
+    ]
+  },
+  {
+    "id": "offline-362",
+    "name": "Lying Leg Curls",
+    "bodyPart": "hamstrings",
+    "target": "hamstrings",
+    "secondaryMuscles": [],
+    "equipment": "machine",
+    "instructions": [
+      "Adjust the machine lever to fit your height and lie face down on the leg curl machine with the pad of the lever on the back of your legs (just a few inches under the calves). Tip: Preferably use a leg curl machine that is angled as opposed to flat since an angled position is more favorable for hamstrings recruitment.",
+      "Keeping the torso flat on the bench, ensure your legs are fully stretched and grab the side handles of the machine. Position your toes straight (or you can also use any of the other two stances described on the foot positioning section). This will be your starting position.",
+      "As you exhale, curl your legs up as far as possible without lifting the upper legs from the pad. Once you hit the fully contracted position, hold it for a second.",
+      "As you inhale, bring the legs back to the initial position. Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-362-a.jpg",
+      "b": "offline-362-b.jpg"
+    },
+    "nameFr": "Curl des jambes allongé",
+    "instructionsFr": [
+      "Ajustez le levier de la machine à votre taille et allongez-vous sur la machine d'élévation des jambes, le pad du levier étant placé sur la partie arrière des jambes (quelques pouces sous les mollets). Conseil : Privilégiez une machine inclinée plutôt qu'une machine plate, car une position inclinée est plus favorable à l'activation des ischio-jambiers.",
+      "Maintenez le torse plat sur le banc, assurez-vous que vos jambes sont complètement tendues et attrapez les poignées latérales de la machine. Positionnez vos orteils droit (ou vous pouvez également utiliser l'une des deux autres positions de pieds décrites dans la section de positionnement des pieds). Cela constituera votre position de départ.",
+      "En expirant, soulevez vos jambes vers le haut aussi loin que possible sans lever les hanches du pad. Une fois que vous atteignez la position complètement contractée, maintenez-la pendant une seconde.",
+      "En inspirant, ramenez les jambes à la position initiale. Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-379",
+    "name": "Romanian Deadlift",
+    "bodyPart": "hamstrings",
+    "target": "hamstrings",
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "lower back"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Put a barbell in front of you on the ground and grab it using a pronated (palms facing down) grip that a little wider than shoulder width. Tip: Depending on the weight used, you may need wrist wraps to perform the exercise and also a raised platform in order to allow for better range of motion.",
+      "Bend the knees slightly and keep the shins vertical, hips back and back straight. This will be your starting position.",
+      "Keeping your back and arms completely straight at all times, use your hips to lift the bar as you exhale. Tip: The movement should not be fast but steady and under control.",
+      "Once you are standing completely straight up, lower the bar by pushing the hips back, only slightly bending the knees, unlike when squatting. Tip: Take a deep breath at the start of the movement and keep your chest up. Hold your breath as you lower and exhale as you complete the movement.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-379-a.jpg",
+      "b": "offline-379-b.jpg"
+    },
+    "nameFr": "Soulevé de terre roumain",
+    "instructionsFr": [
+      "Placez une barre sur le sol devant vous et saisissez-la avec une prise pronée (paumes vers le bas) légèrement plus large que la largeur des épaules. Conseil : Selon le poids utilisé, vous pourriez avoir besoin de manchons pour les poignets et d'une plateforme surélevée afin d'améliorer l'amplitude du mouvement.",
+      "Fléchissez légèrement les genoux et maintenez les tibias verticaux, les hanches en arrière et le dos droit. Cela constituera votre position de départ.",
+      "Maintenez votre dos et vos bras complètement droits à tout moment, utilisez vos hanches pour soulever la barre en expirant. Conseil : Le mouvement ne doit pas être rapide, mais lent et contrôlé.",
+      "Une fois que vous êtes complètement droit, abaissez la barre en poussant les hanches vers l'arrière, en fléchissant légèrement les genoux, contrairement au squat. Conseil : Inspirez profondément au début du mouvement et maintenez votre torse relevé. Retenez votre respiration en descendant et expirez lorsque vous terminez le mouvement.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  },
+  {
+    "id": "offline-411",
+    "name": "Chin-Up",
+    "bodyPart": "lats",
+    "target": "lats",
+    "secondaryMuscles": [
+      "biceps",
+      "forearms",
+      "middle back"
+    ],
+    "equipment": "body only",
+    "instructions": [
+      "Grab the pull-up bar with the palms facing your torso and a grip closer than the shoulder width.",
+      "As you have both arms extended in front of you holding the bar at the chosen grip width, keep your torso as straight as possible while creating a curvature on your lower back and sticking your chest out. This is your starting position. Tip: Keeping the torso as straight as possible maximizes biceps stimulation while minimizing back involvement.",
+      "As you breathe out, pull your torso up until your head is around the level of the pull-up bar. Concentrate on using the biceps muscles in order to perform the movement. Keep the elbows close to your body. Tip: The upper torso should remain stationary as it moves through space and only the arms should move. The forearms should do no other work other than hold the bar.",
+      "After a second of squeezing the biceps in the contracted position, slowly lower your torso back to the starting position; when your arms are fully extended. Breathe in as you perform this portion of the movement.",
+      "Repeat this motion for the prescribed amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-411-a.jpg",
+      "b": "offline-411-b.jpg"
+    },
+    "nameFr": "Traction",
+    "instructionsFr": [
+      "Attrapez la barre de traction avec les paumes dirigées vers votre torse et un grip plus étroit que la largeur des épaules.",
+      "En maintenant les bras tendus devant vous et en tenant la barre à la largeur de grip choisie, gardez votre torse aussi droit que possible tout en créant une courbure dans votre bas du dos et en projetant votre poitrine en avant. C'est votre position de départ. Conseil : Garder le torse aussi droit que possible maximise l'activation des biceps tout en minimisant l'implication du dos.",
+      "Alors que vous expirez, tirez votre torse vers le haut jusqu'à ce que votre tête soit à environ le niveau de la barre de traction. Concentrez-vous sur l'utilisation des muscles biceps pour effectuer le mouvement. Gardez les coudes proches de votre corps. Conseil : Le haut du torse doit rester stationnaire pendant le mouvement et seul les bras doivent bouger. Les avant-bras ne doivent faire aucun autre travail que de tenir la barre.",
+      "Après une seconde de contraction des biceps, descendez lentement votre torse jusqu'à la position de départ lorsque vos bras sont complètement tendus. Inspirez pendant cette phase du mouvement.",
+      "Répétez ce mouvement pour le nombre de répétitions prescrit."
+    ]
+  },
+  {
+    "id": "offline-429",
+    "name": "Pullups",
+    "bodyPart": "lats",
+    "target": "lats",
+    "secondaryMuscles": [
+      "biceps",
+      "middle back"
+    ],
+    "equipment": "body only",
+    "instructions": [
+      "Grab the pull-up bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than your shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width.",
+      "As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
+      "Pull your torso up until the bar touches your upper chest by drawing the shoulders and the upper arms down and back. Exhale as you perform this portion of the movement. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary as it moves through space and only the arms should move. The forearms should do no other work other than hold the bar.",
+      "After a second on the contracted position, start to inhale and slowly lower your torso back to the starting position when your arms are fully extended and the lats are fully stretched.",
+      "Repeat this motion for the prescribed amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-429-a.jpg",
+      "b": "offline-429-b.jpg"
+    },
+    "nameFr": "Traction",
+    "instructionsFr": [
+      "Prenez la barre de traction avec les paumes dirigées vers l'avant en utilisant la prise prescrite. Note sur les prises : Pour une prise large, vos mains doivent être espacées à une distance supérieure à la largeur de vos épaules. Pour une prise moyenne, vos mains doivent être espacées à une distance égale à la largeur de vos épaules, et pour une prise serrée, à une distance inférieure à la largeur de vos épaules.",
+      "Avec les deux bras tendus devant vous en tenant la barre à la largeur de prise choisie, reculez votre torse d'environ 30 degrés tout en créant une courbure dans votre bas du dos et en enfonçant votre poitrine. C'est votre position de départ.",
+      "Tirez votre torse vers le haut jusqu'à ce que la barre touche votre poitrine supérieure en tirant vos épaules et vos bras supérieurs vers le bas et vers l'arrière. Expirez pendant cette phase du mouvement. Conseil : Concentrez-vous sur la contraction des muscles du dos une fois que vous atteignez la position pleinement contractée. Le haut du torse doit rester stationnaire pendant qu'il se déplace dans l'espace, uniquement les bras doivent bouger. Les avant-bras ne doivent faire aucun autre travail que de tenir la barre.",
+      "Après une seconde en position contractée, commencez à inspirer et descendez lentement votre torse jusqu'à la position de départ lorsque vos bras sont complètement tendus et que vos lats sont complètement étirés.",
+      "Répétez ce mouvement pour le nombre de répétitions prescrit."
+    ]
+  },
+  {
+    "id": "offline-441",
+    "name": "Wide-Grip Lat Pulldown",
+    "bodyPart": "lats",
+    "target": "lats",
+    "secondaryMuscles": [
+      "biceps",
+      "middle back",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "instructions": [
+      "Sit down on a pull-down machine with a wide bar attached to the top pulley. Make sure that you adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.",
+      "Grab the bar with the palms facing forward using the prescribed grip. Note on grips: For a wide grip, your hands need to be spaced out at a distance wider than shoulder width. For a medium grip, your hands need to be spaced out at a distance equal to your shoulder width and for a close grip at a distance smaller than your shoulder width.",
+      "As you have both arms extended in front of you holding the bar at the chosen grip width, bring your torso back around 30 degrees or so while creating a curvature on your lower back and sticking your chest out. This is your starting position.",
+      "As you breathe out, bring the bar down until it touches your upper chest by drawing the shoulders and the upper arms down and back. Tip: Concentrate on squeezing the back muscles once you reach the full contracted position. The upper torso should remain stationary and only the arms should move. The forearms should do no other work except for holding the bar; therefore do not try to pull down the bar using the forearms.",
+      "After a second at the contracted position squeezing your shoulder blades together, slowly raise the bar back to the starting position when your arms are fully extended and the lats are fully stretched. Inhale during this portion of the movement.",
+      "Repeat this motion for the prescribed amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-441-a.jpg",
+      "b": "offline-441-b.jpg"
+    },
+    "nameFr": "Tirage vertical à la poulie - Prise large",
+    "instructionsFr": [
+      "Asseyez-vous sur une machine de tirage vertical avec une barre fixée au haut de la poulie. Assurez-vous d'ajuster le coussinet de genou de la machine à votre taille. Ces coussinets empêcheront votre corps d'être soulevé par la résistance attachée à la barre.",
+      "Prenez la barre avec les paumes dirigées vers l'avant en utilisant la prise prescrite. Note sur les prises : Pour une prise large, vos mains doivent être espacées à une distance supérieure à la largeur des épaules. Pour une prise moyenne, vos mains doivent être espacées à une distance égale à la largeur des épaules, et pour une prise serrée, à une distance inférieure à la largeur des épaules.",
+      "Avec les deux bras tendus devant vous en tenant la barre à la largeur de prise choisie, reculez votre torse d'environ 30 degrés tout en créant une courbure dans votre bas du dos et en enfonçant votre poitrine. C'est votre position de départ.",
+      "En expirant, descendez la barre jusqu'à ce qu'elle touche votre poitrine supérieure en ramenant les épaules et les bras supérieurs vers le bas et vers l'arrière. Conseil : Concentrez-vous sur le serrage des muscles du dos une fois que vous atteignez la position complètement contractée. Le haut du torse doit rester immobile et seul les bras doivent bouger. Les avant-bras ne doivent faire aucun autre travail que de tenir la barre ; ne tentez donc pas de tirer la barre vers le bas en utilisant les avant-bras.",
+      "Après une seconde en position contractée en serrant vos omoplates ensemble, ramenez lentement la barre vers la position de départ lorsque vos bras sont complètement tendus et que vos lats sont complètement étirés. Inspirez pendant cette partie du mouvement.",
+      "Répétez ce mouvement pour le nombre de répétitions prescrit."
+    ]
+  },
+  {
+    "id": "offline-447",
+    "name": "Barbell Deadlift",
+    "bodyPart": "lower back",
+    "target": "lower back",
+    "secondaryMuscles": [
+      "calves",
+      "forearms",
+      "glutes",
+      "hamstrings",
+      "lats",
+      "middle back",
+      "quadriceps",
+      "traps"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Stand in front of a loaded barbell.",
+      "While keeping the back as straight as possible, bend your knees, bend forward and grasp the bar using a medium (shoulder width) overhand grip. This will be the starting position of the exercise. Tip: If it is difficult to hold on to the bar with this grip, alternate your grip or use wrist straps.",
+      "While holding the bar, start the lift by pushing with your legs while simultaneously getting your torso to the upright position as you breathe out. In the upright position, stick your chest out and contract the back by bringing the shoulder blades back. Think of how the soldiers in the military look when they are in standing in attention.",
+      "Go back to the starting position by bending at the knees while simultaneously leaning the torso forward at the waist while keeping the back straight. When the weights on the bar touch the floor you are back at the starting position and ready to perform another repetition.",
+      "Perform the amount of repetitions prescribed in the program."
+    ],
+    "gif": {
+      "a": "offline-447-a.jpg",
+      "b": "offline-447-b.jpg"
+    },
+    "nameFr": "Soulevé de terre à la barre",
+    "instructionsFr": [
+      "Placez-vous devant une barre chargée.",
+      "En maintenant le dos aussi droit que possible, fléchissez les genoux, penchez-vous en avant et saisissez la barre avec une prise en main large (largeur des épaules). Cela constituera la position de départ de l'exercice. Conseil : Si il est difficile de maintenir la barre avec cette prise, alternez votre prise ou utilisez des ceintures de poignets.",
+      "En maintenant la barre, commencez le soulevé en poussant avec vos jambes tout en redressant votre torse en expirant. Dans la position redressée, sortez votre poitrine en avant et contractez votre dos en ramenant vos omoplates en arrière. Imaginez comment les soldats de l'armée ont l'air lorsqu'ils sont en position d'attention.",
+      "Retournez à la position de départ en fléchissant les genoux tout en penchant le torse en avant au niveau de la taille, tout en maintenant le dos droit. Lorsque les poids de la barre touchent le sol, vous êtes de nouveau en position de départ et prêt à effectuer une autre répétition.",
+      "Effectuez le nombre de répétitions prescrit dans le programme."
+    ]
+  },
+  {
+    "id": "offline-473",
+    "name": "Bent Over Barbell Row",
+    "bodyPart": "middle back",
+    "target": "middle back",
+    "secondaryMuscles": [
+      "biceps",
+      "lats",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Holding a barbell with a pronated grip (palms facing down), bend your knees slightly and bring your torso forward, by bending at the waist, while keeping the back straight until it is almost parallel to the floor. Tip: Make sure that you keep the head up. The barbell should hang directly in front of you as your arms hang perpendicular to the floor and your torso. This is your starting position.",
+      "Now, while keeping the torso stationary, breathe out and lift the barbell to you. Keep the elbows close to the body and only use the forearms to hold the weight. At the top contracted position, squeeze the back muscles and hold for a brief pause.",
+      "Then inhale and slowly lower the barbell back to the starting position.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-473-a.jpg",
+      "b": "offline-473-b.jpg"
+    },
+    "nameFr": "Rowing barre buste penché",
+    "instructionsFr": [
+      "Tenez une barre avec une prise pronée (paumes vers le bas), fléchissez légèrement les genoux et inclinez le torse en avant en pliant les hanches, tout en maintenant le dos droit jusqu'à ce qu'il soit presque parallèle au sol. Conseil : Assurez-vous de garder la tête haute. La barre doit pendre directement devant vous, avec les bras perpendiculaires au sol et au torse. C'est votre position de départ.",
+      "Maintenez le torse immobile, expirez et soulevez la barre vers vous. Gardez les coudes proches du corps et utilisez uniquement les avant-bras pour soutenir le poids. À la position contractée, serrez les muscles du dos et faites une pause brève.",
+      "Inspirez ensuite et abaissez lentement la barre jusqu'à la position de départ.",
+      "Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-495",
+    "name": "Seated Cable Rows",
+    "bodyPart": "middle back",
+    "target": "middle back",
+    "secondaryMuscles": [
+      "biceps",
+      "lats",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "instructions": [
+      "For this exercise you will need access to a low pulley row machine with a V-bar. Note: The V-bar will enable you to have a neutral grip where the palms of your hands face each other. To get into the starting position, first sit down on the machine and place your feet on the front platform or crossbar provided making sure that your knees are slightly bent and not locked.",
+      "Lean over as you keep the natural alignment of your back and grab the V-bar handles.",
+      "With your arms extended pull back until your torso is at a 90-degree angle from your legs. Your back should be slightly arched and your chest should be sticking out. You should be feeling a nice stretch on your lats as you hold the bar in front of you. This is the starting position of the exercise.",
+      "Keeping the torso stationary, pull the handles back towards your torso while keeping the arms close to it until you touch the abdominals. Breathe out as you perform that movement. At that point you should be squeezing your back muscles hard. Hold that contraction for a second and slowly go back to the original position while breathing in.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-495-a.jpg",
+      "b": "offline-495-b.jpg"
+    },
+    "nameFr": "Rowing à la poulie, assis",
+    "instructionsFr": [
+      "Pour cet exercice, vous aurez besoin d'accéder à une machine de rowing à poulie basse avec une barre en V. Note : La barre en V vous permettra d'avoir une prise neutre où les paumes de vos mains sont orientées l'une vers l'autre. Pour prendre la position initiale, asseyez-vous sur la machine et placez vos pieds sur la plateforme avant ou la barre transversale fournie, en veillant à ce que vos genoux soient légèrement fléchis et non verrouillés.",
+      "Inclinez-vous en maintenant l'alignement naturel de votre dos et attrapez les poignées de la barre en V.",
+      "Avec les bras tendus, tirez la barre vers vous jusqu'à ce que votre torse forme un angle de 90 degrés avec vos jambes. Votre dos doit être légèrement arqué et votre poitrine doit être en avant. Vous devriez ressentir une bonne étirement sur vos lats en tenant la barre devant vous. C'est la position initiale de l'exercice.",
+      "En maintenant le torse immobile, tirez les poignées vers votre torse tout en maintenant les bras proches de celui-ci jusqu'à ce que vous touchiez votre abdomen. Expirez pendant cette action. À ce moment, vous devez contracter fortement vos muscles du dos. Maintenez cette contraction pendant une seconde, puis retournez lentement à la position initiale en inspirant.",
+      "Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-516",
+    "name": "Barbell Full Squat",
+    "bodyPart": "quadriceps",
+    "target": "quadriceps",
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings",
+      "lower back"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "This exercise is best performed inside a squat rack for safety purposes. To begin, first set the bar on a rack just above shoulder level. Once the correct height is chosen and the bar is loaded, step under the bar and place the back of your shoulders (slightly below the neck) across it.",
+      "Hold on to the bar using both arms at each side and lift it off the rack by first pushing with your legs and at the same time straightening your torso.",
+      "Step away from the rack and position your legs using a shoulder-width medium stance with the toes slightly pointed out. Keep your head up at all times and maintain a straight back. This will be your starting position.",
+      "Begin to slowly lower the bar by bending the knees and sitting back with your hips as you maintain a straight posture with the head up. Continue down until your hamstrings are on your calves. Inhale as you perform this portion of the movement.",
+      "Begin to raise the bar as you exhale by pushing the floor with the heel or middle of your foot as you straighten the legs and extend the hips to go back to the starting position.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-516-a.jpg",
+      "b": "offline-516-b.jpg"
+    },
+    "nameFr": "Squat complet à la barre",
+    "instructionsFr": [
+      "Cette exercice est préférablement effectué à l'intérieur d'un rack de squat pour des raisons de sécurité. Pour commencer, placez d'abord la barre sur le rack juste au-dessus du niveau des épaules.",
+      "Une fois que la hauteur correcte a été choisie et que la barre est chargée, approchez-vous de la barre et placez le haut des épaules (légèrement en dessous de la nuque) sur celle-ci.",
+      "Saisissez la barre avec les deux bras de chaque côté et soulevez-la du rack en poussant avec vos jambes tout en redressant votre torse.",
+      "Éloignez-vous du rack et positionnez vos jambes avec une largeur de stance moyenne égale à celle des épaules, les orteils légèrement pointés vers l'extérieur. Gardez la tête haute à tout moment et maintenez un dos droit. Cela constituera votre position de départ.",
+      "Commencez à descendre lentement la barre en fléchissant les genoux et en vous asseyant en arrière avec les hanches tout en maintenant une posture droite avec la tête haute. Continuez vers le bas jusqu'à ce que vos ischio-jambiers touchent vos mollets. Inspirez pendant cette phase du mouvement.",
+      "Commencez à relever la barre en expirant en poussant le sol avec la partie arrière ou le milieu de votre pied tout en redressant les jambes et en étendant les hanches pour revenir à la position de départ.",
+      "Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-573",
+    "name": "Leg Extensions",
+    "bodyPart": "quadriceps",
+    "target": "quadriceps",
+    "secondaryMuscles": [],
+    "equipment": "machine",
+    "instructions": [
+      "For this exercise you will need to use a leg extension machine. First choose your weight and sit on the machine with your legs under the pad (feet pointed forward) and the hands holding the side bars. This will be your starting position. Tip: You will need to adjust the pad so that it falls on top of your lower leg (just above your feet). Also, make sure that your legs form a 90-degree angle between the lower and upper leg. If the angle is less than 90-degrees then that means the knee is over the toes which in turn creates undue stress at the knee joint. If the machine is designed that way, either look for another machine or just make sure that when you start executing the exercise you stop going down once you hit the 90-degree angle.",
+      "Using your quadriceps, extend your legs to the maximum as you exhale. Ensure that the rest of the body remains stationary on the seat. Pause a second on the contracted position.",
+      "Slowly lower the weight back to the original position as you inhale, ensuring that you do not go past the 90-degree angle limit.",
+      "Repeat for the recommended amount of times."
+    ],
+    "gif": {
+      "a": "offline-573-a.jpg",
+      "b": "offline-573-b.jpg"
+    },
+    "nameFr": "Extension des jambes",
+    "instructionsFr": [
+      "Pour cet exercice, vous devrez utiliser une machine d'extension des jambes. Choisissez d'abord votre poids, puis asseyez-vous sur la machine avec vos jambes sous le coussin (pieds dirigés vers l'avant) et les mains tenant les barres latérales. Cela constituera votre position de départ. Conseil : Vous devrez ajuster le coussin afin qu'il repose sur votre jambe inférieure (juste au-dessus des pieds). Assurez-vous également que vos jambes forment un angle de 90 degrés entre la jambe inférieure et la jambe supérieure. Si l'angle est inférieur à 90 degrés, cela signifie que le genou est au-dessus des orteils, ce qui crée une pression excessive sur le genou. Si la machine est conçue ainsi, cherchez une autre machine ou assurez-vous simplement que, lors de l'exécution de l'exercice, vous arrêtez de descendre dès que vous atteignez l'angle de 90 degrés.",
+      "Utilisez vos quadriceps pour étendre vos jambes au maximum en expirant. Assurez-vous que le reste de votre corps reste immobile sur le siège. Pausez une seconde en position tendue.",
+      "Abaissez lentement le poids jusqu'à la position initiale en inspirant, en veillant à ne pas dépasser la limite de l'angle de 90 degrés.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  },
+  {
+    "id": "offline-574",
+    "name": "Leg Press",
+    "bodyPart": "quadriceps",
+    "target": "quadriceps",
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "instructions": [
+      "Using a leg press machine, sit down on the machine and place your legs on the platform directly in front of you at a medium (shoulder width) foot stance. (Note: For the purposes of this discussion we will use the medium stance described above which targets overall development; however you can choose any of the three stances described in the foot positioning section).",
+      "Lower the safety bars holding the weighted platform in place and press the platform all the way up until your legs are fully extended in front of you. Tip: Make sure that you do not lock your knees. Your torso and the legs should make a perfect 90-degree angle. This will be your starting position.",
+      "As you inhale, slowly lower the platform until your upper and lower legs make a 90-degree angle.",
+      "Pushing mainly with the heels of your feet and using the quadriceps go back to the starting position as you exhale.",
+      "Repeat for the recommended amount of repetitions and ensure to lock the safety pins properly once you are done. You do not want that platform falling on you fully loaded."
+    ],
+    "gif": {
+      "a": "offline-574-a.jpg",
+      "b": "offline-574-b.jpg"
+    },
+    "nameFr": "Développé à la machine",
+    "instructionsFr": [
+      "En utilisant une presse à cuisses, asseyez-vous sur la machine et placez vos jambes sur la plateforme directement devant vous, avec une position des pieds à largeur des épaules. (Note : Pour la discussion actuelle, nous utiliserons la position médiane décrite ci-dessus qui cible le développement global ; toutefois, vous pouvez choisir l'une des trois positions décrites dans la section de positionnement des pieds).",
+      "Abaissez les barres de sécurité pour maintenir la plateforme chargée en place et poussez la plateforme jusqu'en haut jusqu'à ce que vos jambes soient complètement tendues devant vous. Conseil : Assurez-vous de ne pas bloquer vos genoux. Votre torse et vos jambes doivent former un angle parfait de 90 degrés. Cela sera votre position de départ.",
+      "En inspirant, abaissez lentement la plateforme jusqu'à ce que vos jambes supérieures et inférieures forment un angle de 90 degrés.",
+      "Poussez principalement avec la partie arrière de vos pieds et utilisez vos quadriceps pour revenir à la position de départ en expirant.",
+      "Répétez le mouvement le nombre de fois recommandé et assurez-vous de verrouiller correctement les piquets de sécurité une fois que vous avez terminé. Vous ne souhaitez pas que la plateforme tombe sur vous lorsqu'elle est pleinement chargée."
+    ]
+  },
+  {
+    "id": "offline-672",
+    "name": "Barbell Shoulder Press",
+    "bodyPart": "shoulders",
+    "target": "shoulders",
+    "secondaryMuscles": [
+      "chest",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "instructions": [
+      "Sit on a bench with back support in a squat rack. Position a barbell at a height that is just above your head. Grab the barbell with a pronated grip (palms facing forward).",
+      "Once you pick up the barbell with the correct grip width, lift the bar up over your head by locking your arms. Hold at about shoulder level and slightly in front of your head. This is your starting position.",
+      "Lower the bar down to the shoulders slowly as you inhale.",
+      "Lift the bar back up to the starting position as you exhale.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-672-a.jpg",
+      "b": "offline-672-b.jpg"
+    },
+    "nameFr": "Développé militaire à la barre",
+    "instructionsFr": [
+      "Asseyez-vous sur un banc avec appui lombaire dans un rack de squat. Placez une barre à une hauteur légèrement au-dessus de votre tête. Prenez la barre avec une prise pronée (paumes vers l'avant).",
+      "Une fois que vous avez pris la barre avec la largeur de prise correcte, soulevez-la au-dessus de votre tête en verrouillant vos bras. Maintenez-la à environ la hauteur des épaules et légèrement devant votre tête. C'est votre position de départ.",
+      "Abaissez lentement la barre jusqu'aux épaules tout en inspirant.",
+      "Soulevez la barre de nouveau en position de départ tout en expirant.",
+      "Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-729",
+    "name": "Machine Shoulder (Military) Press",
+    "bodyPart": "shoulders",
+    "target": "shoulders",
+    "secondaryMuscles": [
+      "triceps"
+    ],
+    "equipment": "machine",
+    "instructions": [
+      "Sit down on the Shoulder Press Machine and select the weight.",
+      "Grab the handles to your sides as you keep the elbows bent and in line with your torso. This will be your starting position.",
+      "Now lift the handles as you exhale and you extend the arms fully. At the top of the position make sure that you hold the contraction for a second.",
+      "Lower the handles slowly back to the starting position as you inhale.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-729-a.jpg",
+      "b": "offline-729-b.jpg"
+    },
+    "nameFr": "Développé militaire à la machine",
+    "instructionsFr": [
+      "Asseyez-vous sur la machine de développé militaire et sélectionnez le poids.",
+      "Prenez les poignées à vos côtés tout en maintenant les coudes fléchis et alignés avec votre torse. Cela constituera votre position de départ.",
+      "Maintenant, soulevez les poignées en expirant et étendez complètement les bras. Au sommet de la position, assurez-vous de maintenir la contraction pendant une seconde.",
+      "Abaissez lentement les poignées jusqu'à la position de départ en inspirant.",
+      "Répétez le mouvement pour le nombre recommandé de répétitions."
+    ]
+  },
+  {
+    "id": "offline-761",
+    "name": "Side Lateral Raise",
+    "bodyPart": "shoulders",
+    "target": "shoulders",
+    "secondaryMuscles": [],
+    "equipment": "dumbbell",
+    "instructions": [
+      "Pick a couple of dumbbells and stand with a straight torso and the dumbbells by your side at arms length with the palms of the hand facing you. This will be your starting position.",
+      "While maintaining the torso in a stationary position (no swinging), lift the dumbbells to your side with a slight bend on the elbow and the hands slightly tilted forward as if pouring water in a glass. Continue to go up until you arms are parallel to the floor. Exhale as you execute this movement and pause for a second at the top.",
+      "Lower the dumbbells back down slowly to the starting position as you inhale.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-761-a.jpg",
+      "b": "offline-761-b.jpg"
+    },
+    "nameFr": "Élévation latérale latérale aux haltères",
+    "instructionsFr": [
+      "Choisissez deux haltères et tenez-vous droit avec les haltères à vos côtés, les paumes dirigées vers vous et les bras tendus. C'est votre position de départ.",
+      "En maintenant le tronc immobile (sans balancement), soulevez les haltères latéralement, avec un léger pli au coude et les paumes légèrement orientées vers l'avant, comme si vous versiez de l'eau dans un verre. Continuez jusqu'à ce que vos bras soient parallèles au sol. Exhalez pendant l'execution de ce mouvement et restez une seconde en position haute.",
+      "Abaissez lentement les haltères jusqu'à la position de départ en inspirant.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  },
+  {
+    "id": "offline-869",
+    "name": "Triceps Pushdown",
+    "bodyPart": "triceps",
+    "target": "triceps",
+    "secondaryMuscles": [],
+    "equipment": "cable",
+    "instructions": [
+      "Attach a straight or angled bar to a high pulley and grab with an overhand grip (palms facing down) at shoulder width.",
+      "Standing upright with the torso straight and a very small inclination forward, bring the upper arms close to your body and perpendicular to the floor. The forearms should be pointing up towards the pulley as they hold the bar. This is your starting position.",
+      "Using the triceps, bring the bar down until it touches the front of your thighs and the arms are fully extended perpendicular to the floor. The upper arms should always remain stationary next to your torso and only the forearms should move. Exhale as you perform this movement.",
+      "After a second hold at the contracted position, bring the bar slowly up to the starting point. Breathe in as you perform this step.",
+      "Repeat for the recommended amount of repetitions."
+    ],
+    "gif": {
+      "a": "offline-869-a.jpg",
+      "b": "offline-869-b.jpg"
+    },
+    "nameFr": "Pushdown triceps à la poulie",
+    "instructionsFr": [
+      "Attachez une barre droite ou inclinée à une poulie haute et saisissez-la avec une prise sur les épaules, paumes dirigées vers le bas.",
+      "Restez droit, le torse droit et légèrement incliné en avant, amenez les bras supérieurs près de votre corps et perpendiculairement au sol. Les avant-bras doivent être orientés vers la poulie tout en tenant la barre. C'est votre position de départ.",
+      "Utilisez vos triceps pour descendre la barre jusqu'à ce qu'elle touche le devant de vos cuisses, les bras étant complètement tendus perpendiculairement au sol. Les bras supérieurs doivent rester fixes à côté de votre torse, uniquement les avant-bras doivent bouger. Exhalez pendant cette phase.",
+      "Maintenez la position contractée pendant une seconde, puis ramenez lentement la barre à la position de départ. Inspirez pendant cette phase.",
+      "Répétez le mouvement le nombre de fois recommandé."
+    ]
+  }
+]

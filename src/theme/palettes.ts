@@ -26,7 +26,7 @@ export interface ThemeColors {
 }
 
 export const BRAND_BRASS = '#B08D57';
-export const DEFAULT_PALETTE: PaletteId = 'oxford';
+export const DEFAULT_PALETTE: PaletteId = 'sprint';
 
 export const PALETTES: Record<
   PaletteId,

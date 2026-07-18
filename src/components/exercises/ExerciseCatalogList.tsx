@@ -25,6 +25,7 @@ interface ExerciseCatalogListProps {
   onSelect: (exercise: CatalogExercise) => void;
   selectedId?: string;
   targetGymId?: GymProfileId;
+  onBrowseDownloads?: () => void;
 }
 
 function ExerciseRow({
@@ -85,6 +86,7 @@ export function ExerciseCatalogList({
   onSelect,
   selectedId,
   targetGymId,
+  onBrowseDownloads,
 }: ExerciseCatalogListProps) {
   const c = useColors();
   const { language, t } = useTranslation();
@@ -93,6 +95,7 @@ export function ExerciseCatalogList({
   const bodyParts = useExerciseCatalogStore((state) => state.bodyParts);
   const [query, setQuery] = useState('');
   const [bodyPart, setBodyPart] = useState('');
+  const installedPackIds = useExerciseCatalogStore((state) => state.installedPackIds);
 
   const exercises = useMemo(() => {
     const searched = searchCatalog(query);
@@ -109,6 +112,11 @@ export function ExerciseCatalogList({
 
   return (
     <View style={styles.wrapper}>
+      {onBrowseDownloads ? <TouchableOpacity style={styles.downloadBanner} onPress={onBrowseDownloads} activeOpacity={0.78}>
+        <View style={styles.downloadIcon}><Ionicons name="cloud-download-outline" size={20} color={c.primary} /></View>
+        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? 'Catalogue téléchargé' : 'Plus d’exercices'}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? `${exercises.length} exercices disponibles · vérifier les mises à jour` : 'Télécharger gratuitement le catalogue GitHub'}</Text></View>
+        <Ionicons name="chevron-forward" size={19} color={c.textMuted} />
+      </TouchableOpacity> : null}
       <View style={styles.searchBox}>
         <TextInput
           value={query}
@@ -167,6 +175,11 @@ export function ExerciseCatalogList({
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   wrapper: { flex: 1 },
+  downloadBanner: { marginHorizontal: 16, marginTop: 8, padding: 12, borderRadius: 15, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  downloadIcon: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
+  downloadCopy: { flex: 1 },
+  downloadTitle: { fontSize: 14, fontWeight: '800', color: c.textPrimary },
+  downloadMeta: { fontSize: 11, lineHeight: 15, color: c.textSecondary, marginTop: 2 },
   searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
   chipList: { flexGrow: 0, flexShrink: 0 },
   chipRow: { paddingHorizontal: 16, gap: 8, paddingVertical: 8, alignItems: 'center' },

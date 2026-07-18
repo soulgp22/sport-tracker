@@ -15,6 +15,7 @@ export default function ExercisesScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ExerciseCatalogList
+        onBrowseDownloads={() => router.push({ pathname: '/(tabs)/community' as never, params: { tab: 'exercises' } })}
         onSelect={(exercise) =>
           router.push({ pathname: '/(tabs)/exercises/[id]' as never, params: { id: exercise.id } })
         }

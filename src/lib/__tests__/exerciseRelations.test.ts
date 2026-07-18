@@ -1,8 +1,13 @@
 import { analyzeProgramCompatibility, getRelatedExerciseIds } from '../exerciseRelations';
-import { getCatalogExercise } from '../../store/exerciseCatalogStore';
+import { getCatalogExercise, useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
+import remoteCatalog from '../../../community/exercises-all.json';
 import type { Program } from '../../types';
 
 const SLED_ROW_ID = 'offline-497';
+
+beforeAll(() => {
+  useExerciseCatalogStore.getState().installPack('test-remote-pack', remoteCatalog.exercises);
+});
 
 describe('exercise relations', () => {
   it('suggests an available movement alternative for a gym', () => {

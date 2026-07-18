@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "programs": [
     {
       "id": "full-body-3",
@@ -56,6 +56,18 @@
       "format": "json",
       "file": "foods-carrefour-fr.json",
       "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit."
+    }
+  ],
+  "exercisePacks": [
+    {
+      "id": "exercises-complete-v1",
+      "name": "Catalogue complet d’exercices",
+      "description": "851 exercices supplémentaires avec instructions et animations.",
+      "author": "Life Sport Tracker",
+      "level": "Tous niveaux",
+      "exercisesCount": 851,
+      "file": "exercises-all.json",
+      "mediaBaseUrl": "https://raw.githubusercontent.com/soulgp22/sport-tracker/main/assets/exercises/gifs/"
     }
   ]
 }
