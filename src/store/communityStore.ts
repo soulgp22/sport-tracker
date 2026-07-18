@@ -22,7 +22,14 @@ export interface CommunityProgramEntry {
   author: string;
   level: CommunityProgramLevel;
   daysCount: number;
+  exercisesCount?: number;
   file: string;
+  goal?: string;
+  equipment?: string;
+  sessionsPerWeek?: number;
+  sessionMinutes?: number;
+  progression?: string;
+  tags?: string[];
 }
 
 export type CommunityFoodFormat = 'json' | 'csv';
@@ -89,6 +96,41 @@ function readString(record: Record<string, unknown>, key: string): string {
   }
 
   return value.trim();
+}
+
+function readOptionalString(
+  record: Record<string, unknown>,
+  key: string
+): string | undefined {
+  if (!(key in record)) return undefined;
+  return readString(record, key);
+}
+
+function readOptionalCount(
+  record: Record<string, unknown>,
+  key: string,
+  minimum: number
+): number | undefined {
+  if (!(key in record)) return undefined;
+  const value = record[key];
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < minimum) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+  return value;
+}
+
+function readOptionalTags(record: Record<string, unknown>): string[] | undefined {
+  if (!('tags' in record)) return undefined;
+  const value = record.tags;
+  if (
+    !Array.isArray(value) ||
+    value.length > 20 ||
+    value.some((tag) => typeof tag !== 'string' || tag.trim().length === 0)
+  ) {
+    throw new Error('Manifeste communautaire invalide.');
+  }
+
+  return value.map((tag) => (tag as string).trim());
 }
 
 function readDaysCount(record: Record<string, unknown>): number {
@@ -171,6 +213,14 @@ function parseManifest(text: string): CommunityManifest {
       }
       ids.add(id);
 
+      const exercisesCount = readOptionalCount(program, 'exercisesCount', 0);
+      const goal = readOptionalString(program, 'goal');
+      const equipment = readOptionalString(program, 'equipment');
+      const sessionsPerWeek = readOptionalCount(program, 'sessionsPerWeek', 1);
+      const sessionMinutes = readOptionalCount(program, 'sessionMinutes', 1);
+      const progression = readOptionalString(program, 'progression');
+      const tags = readOptionalTags(program);
+
       return {
         id,
         name: readString(program, 'name'),
@@ -178,7 +228,14 @@ function parseManifest(text: string): CommunityManifest {
         author: readString(program, 'author'),
         level: readLevel(program),
         daysCount: readDaysCount(program),
+        ...(exercisesCount !== undefined ? { exercisesCount } : {}),
         file: readProgramFile(program),
+        ...(goal !== undefined ? { goal } : {}),
+        ...(equipment !== undefined ? { equipment } : {}),
+        ...(sessionsPerWeek !== undefined ? { sessionsPerWeek } : {}),
+        ...(sessionMinutes !== undefined ? { sessionMinutes } : {}),
+        ...(progression !== undefined ? { progression } : {}),
+        ...(tags !== undefined ? { tags } : {}),
       };
     });
 

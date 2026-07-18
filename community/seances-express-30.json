@@ -1,0 +1,425 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Séances express — 30 min",
+      "days": [
+        {
+          "name": "Express A — antagonistes",
+          "exercises": [
+            {
+              "exerciseName": "Goblet Squat",
+              "alternativeExerciseNames": [
+                "Dumbbell Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Bench Press",
+              "alternativeExerciseNames": [
+                "Pushups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Cable Rows",
+              "alternativeExerciseNames": [
+                "One-Arm Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Romanian Deadlift",
+              "alternativeExerciseNames": [
+                "Stiff-Legged Dumbbell Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "alternativeExerciseNames": [
+                "Dead Bug"
+              ],
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Express B — circuit",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Clean",
+              "alternativeExerciseNames": [
+                "Vertical Swing"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Rear Lunge",
+              "alternativeExerciseNames": [
+                "Bodyweight Walking Lunge"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Floor Press",
+              "alternativeExerciseNames": [
+                "Pushups"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "One-Arm Dumbbell Row",
+              "alternativeExerciseNames": [
+                "Bent Over Two-Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Mountain Climbers",
+              "alternativeExerciseNames": [
+                "Fast Skipping"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Express C — vertical",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Squat",
+              "alternativeExerciseNames": [
+                "Goblet Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Shoulder Press",
+              "alternativeExerciseNames": [
+                "Shoulder Press - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Wide-Grip Lat Pulldown",
+              "alternativeExerciseNames": [
+                "Pullups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Single Leg Glute Bridge",
+              "alternativeExerciseNames": [
+                "Hip Lift with Band"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Face Pull",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

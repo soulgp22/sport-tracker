@@ -60,9 +60,37 @@ function CommunityProgramCard({
 
       <Text style={styles.description}>{entry.description}</Text>
 
-      <View style={styles.metaRow}>
-        <Ionicons name="calendar-outline" size={16} color={c.textSecondary} />
-        <Text style={styles.metaText}>{formatDays(entry.daysCount)}</Text>
+      <View style={styles.programMeta}>
+        {entry.goal ? (
+          <View style={styles.metaRow}>
+            <Ionicons name="flag-outline" size={16} color={c.textSecondary} />
+            <Text style={styles.metaText}>{entry.goal}</Text>
+          </View>
+        ) : null}
+        {entry.equipment ? (
+          <View style={styles.metaRow}>
+            <Ionicons name="barbell-outline" size={16} color={c.textSecondary} />
+            <Text style={styles.metaText}>{entry.equipment}</Text>
+          </View>
+        ) : null}
+        <View style={styles.metaWrap}>
+          <View style={styles.metaRow}>
+            <Ionicons name="calendar-outline" size={16} color={c.textSecondary} />
+            <Text style={styles.metaText}>{formatDays(entry.daysCount)}</Text>
+          </View>
+          {entry.sessionsPerWeek ? (
+            <View style={styles.metaRow}>
+              <Ionicons name="repeat-outline" size={16} color={c.textSecondary} />
+              <Text style={styles.metaText}>{entry.sessionsPerWeek} séance{entry.sessionsPerWeek > 1 ? 's' : ''}/sem.</Text>
+            </View>
+          ) : null}
+          {entry.sessionMinutes ? (
+            <View style={styles.metaRow}>
+              <Ionicons name="time-outline" size={16} color={c.textSecondary} />
+              <Text style={styles.metaText}>≈ {entry.sessionMinutes} min</Text>
+            </View>
+          ) : null}
+        </View>
       </View>
 
       <Button
@@ -514,9 +542,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   retailerText: { fontSize: 11, fontWeight: '800', color: c.primaryText },
   description: { fontSize: 14, lineHeight: 19, color: c.textSecondary },
+  programMeta: { gap: 8 },
   metaWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   metaRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  metaText: { fontSize: 12, fontWeight: '600', color: c.textSecondary },
+  metaText: { flexShrink: 1, fontSize: 12, fontWeight: '600', color: c.textSecondary },
   disclaimer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
