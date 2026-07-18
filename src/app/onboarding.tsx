@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../components/ui/Button';
 import { appAlert } from '../components/ui/AppDialog';
+import { RetailerPicker } from '../components/community/RetailerPicker';
 import { LANGUAGE_OPTIONS, type LanguageId } from '../i18n/translations';
 import { useTranslation } from '../i18n/useTranslation';
 import { useCommunityStore } from '../store/communityStore';
@@ -25,6 +26,13 @@ const copy: Record<LanguageId, Record<string, string>> = {
   en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', goal: 'What is your main goal?', level: 'What is your current level?', rhythm: 'How will you train?', nutrition: 'Let’s tailor nutrition too', result: 'Your space is ready', resultHelp: 'These are your recommended downloads. Get them now or anytime later.', next: 'Continue', back: 'Back', finish: 'Install my selection', skip: 'Start without downloads', downloading: 'Installing your content…', days: 'sessions per week', gym: 'Main training place', retailer: 'Usual supermarket', coreFoods: '142 essential foods are already available offline.', recommended: 'Recommended program · GitHub', catalog: 'Full exercise catalog', extraExercises: '851 extra exercises' },
   es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', goal: '¿Cuál es tu objetivo principal?', level: '¿Cuál es tu nivel actual?', rhythm: '¿Cómo vas a entrenar?', nutrition: 'Personalicemos también la nutrición', result: 'Tu espacio está listo', resultHelp: 'Estas son tus descargas recomendadas. Puedes instalarlas ahora o más tarde.', next: 'Continuar', back: 'Atrás', finish: 'Instalar mi selección', skip: 'Empezar sin descargar', downloading: 'Instalando tu contenido…', days: 'sesiones por semana', gym: 'Lugar principal', retailer: 'Supermercado habitual', coreFoods: '142 alimentos esenciales ya están disponibles sin conexión.', recommended: 'Programa recomendado · GitHub', catalog: 'Catálogo completo', extraExercises: '851 ejercicios adicionales' },
   de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', goal: 'Was ist dein Hauptziel?', level: 'Wie ist dein aktuelles Niveau?', rhythm: 'Wie wirst du trainieren?', nutrition: 'Auch Ernährung personalisieren', result: 'Dein Bereich ist bereit', resultHelp: 'Das sind deine empfohlenen Downloads. Jetzt oder später installieren.', next: 'Weiter', back: 'Zurück', finish: 'Auswahl installieren', skip: 'Ohne Download starten', downloading: 'Inhalte werden installiert…', days: 'Einheiten pro Woche', gym: 'Haupttrainingsort', retailer: 'Bevorzugter Supermarkt', coreFoods: '142 wichtige Lebensmittel sind bereits offline verfügbar.', recommended: 'Empfohlenes Programm · GitHub', catalog: 'Vollständiger Katalog', extraExercises: '851 zusätzliche Übungen' },
+};
+
+const retailerCopy: Record<LanguageId, Record<string, string>> = {
+  fr: { placeholder: 'Choisir une enseigne', search: 'Rechercher une enseigne ou un pays', none: 'Aucune / plus tard', github: 'GitHub', close: 'Fermer', empty: 'Aucune enseigne trouvée' },
+  en: { placeholder: 'Choose a supermarket', search: 'Search a supermarket or country', none: 'None / later', github: 'GitHub', close: 'Close', empty: 'No supermarket found' },
+  es: { placeholder: 'Elegir un supermercado', search: 'Buscar supermercado o país', none: 'Ninguno / más tarde', github: 'GitHub', close: 'Cerrar', empty: 'No se encontró ningún supermercado' },
+  de: { placeholder: 'Supermarkt auswählen', search: 'Supermarkt oder Land suchen', none: 'Keine / später', github: 'GitHub', close: 'Schließen', empty: 'Kein Supermarkt gefunden' },
 };
 
 type ChoiceLabelGroups = {
@@ -90,10 +98,27 @@ export default function OnboardingScreen() {
   const downloadProgram = useCommunityStore((state) => state.downloadProgram);
   const downloadFoodDatabase = useCommunityStore((state) => state.downloadFoodDatabase);
   const downloadExercisePack = useCommunityStore((state) => state.downloadExercisePack);
+  const communityData = useCommunityStore((state) => state.data);
+  const communityLoading = useCommunityStore((state) => state.loading);
   const [step, setStep] = useState(0);
   const [installing, setInstalling] = useState(false);
   const [withExercises, setWithExercises] = useState(profile.level !== 'beginner');
   const totalSteps = 6;
+  const retailerText = retailerCopy[language];
+  const selectedFoodDatabaseId = profile.retailer === 'auchan'
+    ? 'foods-auchan-fr-starter'
+    : profile.retailer === 'carrefour'
+      ? 'foods-carrefour-fr-starter'
+      : profile.retailer === 'none' ? null : profile.retailer;
+  const selectedFoodDatabase = communityData?.foodDatabases.find(
+    (entry) => entry.id === selectedFoodDatabaseId
+  );
+
+  useEffect(() => {
+    if (step >= 4 && !communityData && !communityLoading) {
+      void fetchManifest();
+    }
+  }, [communityData, communityLoading, fetchManifest, step]);
 
   const programId = profile.level === 'beginner' || profile.goal === 'weight_loss'
     ? 'full-body-3'
@@ -109,7 +134,7 @@ export default function OnboardingScreen() {
         const program = manifest.programs.find((item) => item.id === programId);
         if (program) await downloadProgram(program);
         if (withExercises && manifest.exercisePacks?.[0]) await downloadExercisePack(manifest.exercisePacks[0]);
-        const foodId = profile.retailer === 'auchan' ? 'foods-auchan-fr-starter' : profile.retailer === 'carrefour' ? 'foods-carrefour-fr-starter' : null;
+        const foodId = selectedFoodDatabaseId;
         const foodPack = manifest.foodDatabases.find((item) => item.id === foodId);
         if (foodPack) await downloadFoodDatabase(foodPack);
       }
@@ -133,8 +158,8 @@ export default function OnboardingScreen() {
       {step === 1 ? <ChoiceGrid items={options.goals} value={profile.goal} onChange={(goal) => updateProfile({ goal: goal as OnboardingGoal })} /> : null}
       {step === 2 ? <ChoiceGrid items={options.levels} value={profile.level} onChange={(level) => { updateProfile({ level: level as OnboardingLevel }); setWithExercises(level !== 'beginner'); }} /> : null}
       {step === 3 ? <><Text style={styles.sectionLabel}>{text.days}</Text><View style={styles.daysRow}>{[2,3,4,5,6].map((days) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: profile.daysPerWeek === days }} key={days} style={[styles.day, profile.daysPerWeek === days && styles.daySelected]} onPress={() => updateProfile({ daysPerWeek: days })}><Text style={[styles.dayText, profile.daysPerWeek === days && styles.dayTextSelected]}>{days}</Text></TouchableOpacity>)}</View><Text style={styles.sectionLabel}>{text.gym}</Text><ChoiceGrid items={options.gyms} value={profile.gym} onChange={(gym) => updateProfile({ gym: gym as OnboardingGym })} /></> : null}
-      {step === 4 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><Text style={styles.sectionLabel}>{text.retailer}</Text><ChoiceGrid items={options.retailers} value={profile.retailer} onChange={(retailer) => updateProfile({ retailer: retailer as OnboardingRetailer })} /></> : null}
-      {step === 5 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{profile.retailer !== 'none' ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{profile.retailer === 'auchan' ? 'Auchan France' : 'Carrefour France'}</Text><Text style={styles.recMeta}>Produits essentiels · GitHub</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
+      {step === 4 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><RetailerPicker entries={communityData?.foodDatabases ?? []} value={selectedFoodDatabaseId} loading={communityLoading} label={text.retailer} placeholder={retailerText.placeholder} searchPlaceholder={retailerText.search} noneLabel={retailerText.none} githubLabel={retailerText.github} closeLabel={retailerText.close} emptyLabel={retailerText.empty} onChange={(id) => updateProfile({ retailer: id ?? 'none' })} onRefresh={() => void fetchManifest()} /></> : null}
+      {step === 5 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.retailer}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.foodsCount} aliments · GitHub</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
       {installing ? <View style={styles.installing}><ActivityIndicator color={c.primary} /><Text style={styles.installingText}>{text.downloading}</Text></View> : null}
     </ScrollView>
     {step < totalSteps - 1 ? <View style={styles.footer}>{step > 0 && !installing ? <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={20} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity> : <View />}<Button title={text.next} onPress={() => setStep(step + 1)} style={styles.nextButton} /></View> : <View style={styles.finalFooter}><Button title={text.finish} loading={installing} onPress={() => void finish(true)} style={styles.installButton} /><View style={styles.finalSecondary}><TouchableOpacity accessibilityRole="button" disabled={installing} style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={18} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity><TouchableOpacity accessibilityRole="button" disabled={installing} onPress={() => void finish(false)}><Text style={styles.skipText}>{text.skip}</Text></TouchableOpacity></View></View>}

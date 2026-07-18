@@ -6,7 +6,9 @@ import { asyncStorageAdapter } from '../storage/storageAdapter';
 export type OnboardingGoal = 'muscle' | 'strength' | 'weight_loss' | 'fitness';
 export type OnboardingLevel = 'beginner' | 'intermediate' | 'advanced';
 export type OnboardingGym = 'home' | 'commercial' | 'other';
-export type OnboardingRetailer = 'auchan' | 'carrefour' | 'none';
+// L'identifiant correspond à une entrée foodDatabases du manifeste GitHub.
+// Les anciennes valeurs `auchan` et `carrefour` restent migrées à la lecture.
+export type OnboardingRetailer = string;
 
 export interface OnboardingProfile {
   goal: OnboardingGoal;

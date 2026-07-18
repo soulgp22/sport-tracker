@@ -312,7 +312,7 @@ export default function CommunityScreen() {
             size={17}
             color={selectedTab === 'programs' ? c.primaryText : c.textSecondary}
           />
-          <Text style={[styles.tabText, selectedTab === 'programs' ? styles.tabTextActive : null]}>
+          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'programs' ? styles.tabTextActive : null]}>
             Programmes
           </Text>
         </TouchableOpacity>
@@ -320,7 +320,7 @@ export default function CommunityScreen() {
           onPress={() => setSelectedTab('exercises')}
           style={[styles.tab, selectedTab === 'exercises' ? styles.tabActive : null]}>
           <Ionicons name="fitness-outline" size={17} color={selectedTab === 'exercises' ? c.primaryText : c.textSecondary} />
-          <Text style={[styles.tabText, selectedTab === 'exercises' ? styles.tabTextActive : null]}>Exercices</Text>
+          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'exercises' ? styles.tabTextActive : null]}>Exercices</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setSelectedTab('foods')}
@@ -330,8 +330,8 @@ export default function CommunityScreen() {
             size={17}
             color={selectedTab === 'foods' ? c.primaryText : c.textSecondary}
           />
-          <Text style={[styles.tabText, selectedTab === 'foods' ? styles.tabTextActive : null]}>
-            Bases d’aliments
+          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'foods' ? styles.tabTextActive : null]}>
+            Aliments
           </Text>
         </TouchableOpacity>
       </View>
@@ -432,7 +432,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   headerSubtitle: { fontSize: 11, color: c.textSecondary },
   tabs: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 4,
     marginHorizontal: 16,
     marginBottom: 8,
     padding: 4,
@@ -445,11 +445,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 7,
+    gap: 4,
+    paddingHorizontal: 4,
     borderRadius: 10,
   },
   tabActive: { backgroundColor: c.primary },
-  tabText: { fontSize: 13, fontWeight: '700', color: c.textSecondary },
+  tabText: { flexShrink: 1, fontSize: 12, fontWeight: '700', color: c.textSecondary },
   tabTextActive: { color: c.primaryText },
   list: { paddingVertical: 4, paddingBottom: 28 },
   emptyList: { flexGrow: 1 },

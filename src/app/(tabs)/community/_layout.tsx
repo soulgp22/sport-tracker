@@ -1,33 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
+import { Stack } from 'expo-router';
 
 import { useColors } from '../../../theme/useColors';
-import { useTranslation } from '../../../i18n/useTranslation';
-
-function BackToHomeButton() {
-  const c = useColors();
-  const router = useRouter();
-
-  const handlePress = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-
-    router.replace('/(tabs)' as never);
-  };
-
-  return (
-    <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-    </TouchableOpacity>
-  );
-}
 
 export default function CommunityLayout() {
   const c = useColors();
-  const { t } = useTranslation();
   return (
     <Stack
       screenOptions={{
@@ -38,14 +14,7 @@ export default function CommunityLayout() {
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: true,
-          title: t('nav.community'),
-          headerLeft: () => <BackToHomeButton />,
-        }}
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
     </Stack>
   );
 }
