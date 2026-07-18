@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
 import { getCatalogExerciseName } from '../../../store/exerciseCatalogStore';
 import { useColors } from '../../../theme/useColors';
@@ -39,7 +40,7 @@ export default function SessionDetailScreen() {
   });
 
   const handleDelete = () => {
-    Alert.alert('Supprimer', 'Supprimer cette séance ?', [
+    appAlert('Supprimer', 'Supprimer cette séance ?', [
       { text: 'Annuler', style: 'cancel' },
       {
         text: 'Supprimer',

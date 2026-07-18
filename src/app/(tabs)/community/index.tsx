@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -14,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import {
@@ -172,9 +172,9 @@ export default function CommunityScreen() {
     const goToPrograms = () => router.push('/(tabs)/programs' as never);
 
     if (result.errors.length > 0 && result.importedPrograms === 0) {
-      Alert.alert('Échec de l’import', result.errors.join('\n'));
+      appAlert('Échec de l’import', result.errors.join('\n'));
     } else if (result.errors.length > 0 || result.skipped > 0) {
-      Alert.alert(
+      appAlert(
         'Import partiel',
         `${result.importedPrograms} programme(s), ${result.importedExercises} exercice(s) importé(s).\n${result.skipped} élément(s) ignoré(s).`,
         [
@@ -183,7 +183,7 @@ export default function CommunityScreen() {
         ]
       );
     } else {
-      Alert.alert(
+      appAlert(
         'Import réussi',
         `${result.importedPrograms} programme(s) et ${result.importedExercises} exercice(s) importé(s).`,
         [
@@ -200,7 +200,7 @@ export default function CommunityScreen() {
       `${result.duplicateIds.length} doublon(s) ignoré(s).\n` +
       `${result.errors.length} erreur(s).`;
 
-    Alert.alert(
+    appAlert(
       result.added > 0 ? 'Base d’aliments ajoutée' : 'Aucun aliment ajouté',
       summary,
       [
@@ -218,7 +218,7 @@ export default function CommunityScreen() {
       setDownloadingId(entry.id);
       showProgramImportResult(await downloadProgram(entry));
     } catch {
-      Alert.alert(
+      appAlert(
         'Téléchargement impossible',
         'Impossible de télécharger ce programme. Réessayez plus tard.'
       );
@@ -232,7 +232,7 @@ export default function CommunityScreen() {
       setDownloadingId(entry.id);
       showFoodImportResult(await downloadFoodDatabase(entry));
     } catch {
-      Alert.alert(
+      appAlert(
         'Téléchargement impossible',
         'Impossible de télécharger cette base d’aliments. Réessayez plus tard.'
       );

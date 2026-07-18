@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useProgramStore } from '../../../store/programStore';
 import { ProgramCard } from '../../../components/programs/ProgramCard';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 
@@ -17,7 +18,7 @@ export default function ProgramsScreen() {
   const deleteProgram = useProgramStore((s) => s.deleteProgram);
 
   const handleDelete = (id: string, name: string) => {
-    Alert.alert('Supprimer', `Supprimer "${name}" ?`, [
+    appAlert('Supprimer', `Supprimer "${name}" ?`, [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Supprimer', style: 'destructive', onPress: () => deleteProgram(id) },
     ]);

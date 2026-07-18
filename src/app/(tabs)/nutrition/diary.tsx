@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useReducer } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FoodEntryRow } from '../../../components/nutrition/FoodEntryRow';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../../constants/meals';
@@ -83,7 +84,7 @@ export default function NutritionDiaryScreen() {
   );
 
   const handleDelete = (entry: FoodEntry) => {
-    Alert.alert(
+    appAlert(
       'Supprimer ce repas ?',
       `Supprimer ${entry.foodName} du journal du jour ?`,
       [
@@ -104,7 +105,7 @@ export default function NutritionDiaryScreen() {
   const handleUpdateQuantity = (entry: FoodEntry, quantity: number) => {
     const food = getFoodById(entry.foodId);
     if (!food) {
-      Alert.alert(
+      appAlert(
         'Aliment introuvable',
         "Impossible de recalculer cette entrée car l'aliment n'existe plus."
       );

@@ -35,6 +35,7 @@ import {
 
 import { configureNotifications } from '../lib/restTimerNotifications';
 import { useColors, useThemeMode } from '../theme/useColors';
+import { AppDialog } from '../components/ui/AppDialog';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -95,6 +96,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navigationTheme}>
         <Stack screenOptions={{ headerShown: false }} />
+        <AppDialog />
         <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
       </ThemeProvider>
     </GestureHandlerRootView>

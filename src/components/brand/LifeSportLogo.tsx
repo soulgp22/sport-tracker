@@ -29,8 +29,8 @@ export function LifeSportLogo({ compact = false }: LifeSportLogoProps) {
 
       {!compact ? (
         <View style={styles.wordmark}>
-          <Text style={styles.life}>LIFE</Text>
-          <Text style={styles.sport}>SPORT TRACKER</Text>
+          <Text style={styles.sport}>LIFE SPORT</Text>
+          <Text style={styles.life}>TRACKER</Text>
         </View>
       ) : null}
     </View>
@@ -41,41 +41,33 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   lockup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 11,
+    gap: 9,
   },
   mark: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
+    width: 46,
+    height: 46,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#071A33',
-    shadowColor: c.overlay,
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 3,
   },
   markCompact: {
     width: 34,
     height: 34,
-    borderRadius: 11,
   },
-  markImage: { width: 46, height: 46 },
+  markImage: { width: 44, height: 44 },
   markImageCompact: { width: 30, height: 30 },
-  wordmark: { gap: 0 },
+  wordmark: { gap: 1 },
   life: {
-    color: c.primary,
-    fontFamily: fonts.sansHeavy,
-    fontSize: 12,
-    letterSpacing: 3.2,
-    lineHeight: 14,
+    color: c.textSecondary,
+    fontFamily: fonts.sansBold,
+    fontSize: 9,
+    letterSpacing: 3,
+    lineHeight: 11,
   },
   sport: {
     color: c.textPrimary,
-    fontFamily: fonts.serifBold,
-    fontSize: 20,
-    letterSpacing: 0.2,
-    lineHeight: 22,
+    fontFamily: fonts.sansHeavy,
+    fontSize: 18,
+    letterSpacing: 0.1,
+    lineHeight: 20,
   },
 });

@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  Alert,
   Platform,
   ScrollView,
   StyleSheet,
@@ -15,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/ui/Button';
+import { appAlert } from '../../../components/ui/AppDialog';
 import {
   assertImportFileSize,
   assertImportTextSize,
@@ -124,16 +124,16 @@ export default function FoodParamsScreen() {
 
   const showImportResult = (result: ImportFoodsResult) => {
     if (result.errors.length > 0 && result.added === 0) {
-      Alert.alert("Échec de l'import", buildImportMessage(result));
+      appAlert("Échec de l'import", buildImportMessage(result));
       return;
     }
 
     if (result.errors.length > 0 || result.duplicateIds.length > 0) {
-      Alert.alert('Import partiel', buildImportMessage(result));
+      appAlert('Import partiel', buildImportMessage(result));
       return;
     }
 
-    Alert.alert('Import réussi', buildImportMessage(result));
+    appAlert('Import réussi', buildImportMessage(result));
   };
 
   const confirmAndImport = (content: string) => {
@@ -174,7 +174,7 @@ export default function FoodParamsScreen() {
       assertImportTextSize(content);
       confirmAndImport(content);
     } catch (error) {
-      Alert.alert(
+      appAlert(
         'Erreur',
         getImportErrorMessage(
           error,
@@ -222,7 +222,7 @@ export default function FoodParamsScreen() {
       const importResult = useFoodStore.getState().importFoodsFromCsv(content);
       showImportResult(importResult);
     } catch (error) {
-      Alert.alert(
+      appAlert(
         'Erreur',
         getImportErrorMessage(error, 'Impossible de lire le fichier CSV.')
       );
@@ -232,7 +232,7 @@ export default function FoodParamsScreen() {
   };
 
   const handleDelete = (food: Food) => {
-    Alert.alert('Supprimer', `Supprimer "${food.name}" ?`, [
+    appAlert('Supprimer', `Supprimer "${food.name}" ?`, [
       { text: 'Annuler', style: 'cancel' },
       {
         text: 'Supprimer',
@@ -277,7 +277,7 @@ export default function FoodParamsScreen() {
     const count = selectedIds.size;
     if (count === 0) return;
 
-    Alert.alert(
+    appAlert(
       'Supprimer les aliments',
       `Supprimer définitivement ${count} aliment${count > 1 ? 's' : ''} personnalisé${count > 1 ? 's' : ''} ?`,
       [
@@ -288,7 +288,7 @@ export default function FoodParamsScreen() {
           onPress: () => {
             const deleted = deleteCustomFoods([...selectedIds]);
             exitSelectionMode();
-            Alert.alert(
+            appAlert(
               'Suppression terminée',
               `${deleted} aliment${deleted > 1 ? 's ont' : ' a'} été supprimé${deleted > 1 ? 's' : ''}.`
             );

@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   ScrollView,
@@ -15,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { GymBrandBadge } from '../../../../components/gyms/GymBrandBadge';
 import { Button } from '../../../../components/ui/Button';
+import { appAlert } from '../../../../components/ui/AppDialog';
 import { EmptyState } from '../../../../components/ui/EmptyState';
 import { TextInput } from '../../../../components/ui/TextInput';
 import { GYM_PROFILES, getGymProfile } from '../../../../constants/gymProfiles';
@@ -108,7 +108,7 @@ export default function ProgramDetailScreen() {
   };
 
   const handleDeleteDay = (dayId: string, dayName: string) => {
-    Alert.alert('Supprimer', `Supprimer le jour "${dayName}" ?`, [
+    appAlert('Supprimer', `Supprimer le jour "${dayName}" ?`, [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Supprimer', style: 'destructive', onPress: () => deleteDay(id, dayId) },
     ]);
@@ -118,7 +118,7 @@ export default function ProgramDetailScreen() {
     if (selectedGymId === 'all') return;
     const copy = duplicateProgramForGym(id, selectedGymId);
     if (!copy) return;
-    Alert.alert(
+    appAlert(
       t('program.convertedTitle'),
       compatibility.unresolved > 0
         ? t('program.convertedPartial', { count: compatibility.unresolved })

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Modal,
   ScrollView,
@@ -19,6 +18,7 @@ import { RestTimerModal } from '../../../components/session/RestTimerModal';
 import { ExerciseDetailView } from '../../../components/exercises/ExerciseDetailView';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
 import { Button } from '../../../components/ui/Button';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useExerciseCatalogStore } from '../../../store/exerciseCatalogStore';
 import {
@@ -182,7 +182,7 @@ export default function ActiveSessionScreen() {
   };
 
   const handleFinish = () => {
-    Alert.alert('Terminer la séance ?', 'Les séries non logguées seront ignorées.', [
+    appAlert('Terminer la séance ?', 'Les séries non logguées seront ignorées.', [
       { text: 'Continuer', style: 'cancel' },
       {
         text: 'Terminer',
@@ -198,7 +198,7 @@ export default function ActiveSessionScreen() {
   };
 
   const handleCancel = () => {
-    Alert.alert('Abandonner ?', 'La séance sera perdue.', [
+    appAlert('Abandonner ?', 'La séance sera perdue.', [
       { text: 'Non', style: 'cancel' },
       { text: 'Oui', style: 'destructive', onPress: () => { cancelSession(); router.replace('/(tabs)/session'); } },
     ]);

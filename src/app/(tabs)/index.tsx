@@ -25,8 +25,7 @@ interface HomeTile {
     | '/(tabs)/foods'
     | '/(tabs)/nutrition'
     | '/(tabs)/history'
-    | '/(tabs)/progress'
-    | '/(tabs)/settings';
+    | '/(tabs)/progress';
 }
 
 const HOME_TILES: HomeTile[] = [
@@ -72,13 +71,6 @@ const HOME_TILES: HomeTile[] = [
     icon: 'time-outline',
     href: '/(tabs)/history',
   },
-  {
-    key: 'settings',
-    labelKey: 'home.settings',
-    descriptionKey: 'home.settingsDescription',
-    icon: 'settings-outline',
-    href: '/(tabs)/settings',
-  },
 ];
 
 export default function HomeScreen() {
@@ -95,9 +87,15 @@ export default function HomeScreen() {
       <View style={[styles.content, compact ? styles.contentCompact : null]}>
         <View style={styles.brandRow}>
           <LifeSportLogo />
-          <View style={styles.brandTag}>
-            <Text style={styles.brandTagText}>{t('home.tagline')}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.settingsButton}
+            onPress={() => router.push('/(tabs)/settings')}
+            activeOpacity={0.72}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.settings')}
+            accessibilityHint={t('home.settingsDescription')}>
+            <Ionicons name="settings-outline" size={20} color={c.textPrimary} />
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
@@ -178,19 +176,15 @@ const makeStyles = (c: ThemeColors) =>
       justifyContent: 'space-between',
       gap: 10,
     },
-    brandTag: {
-      flexShrink: 1,
-      paddingHorizontal: 9,
-      paddingVertical: 6,
-      borderRadius: 999,
-      backgroundColor: c.accentSoft,
-    },
-    brandTagText: {
-      fontSize: 8,
-      letterSpacing: 0.8,
-      fontFamily: fonts.sansBold,
-      color: c.primary,
-      textAlign: 'center',
+    settingsButton: {
+      width: 42,
+      height: 42,
+      borderRadius: 14,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.surface,
+      borderWidth: 1,
+      borderColor: c.border,
     },
     sessionCard: {
       minHeight: 84,

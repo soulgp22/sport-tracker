@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Alert,
   Platform,
   ScrollView,
   Share,
@@ -18,6 +17,7 @@ import * as Sharing from 'expo-sharing';
 import { File as ExpoFile, Paths } from 'expo-file-system';
 
 import { Button } from '../../components/ui/Button';
+import { appAlert } from '../../components/ui/AppDialog';
 import { useColors } from '../../theme/useColors';
 import { PALETTES, type PaletteId, type ThemeColors } from '../../theme/palettes';
 import { FONT_THEMES, fonts, type FontId } from '../../theme/fonts';
@@ -155,14 +155,14 @@ export default function SettingsScreen() {
 
   const showImportResult = (result: ReturnType<typeof importPrograms>) => {
     if (result.errors.length > 0 && result.importedPrograms === 0) {
-      Alert.alert('Échec de l\'import', result.errors.join('\n'));
+      appAlert('Échec de l\'import', result.errors.join('\n'));
     } else if (result.errors.length > 0 || result.skipped > 0) {
-      Alert.alert(
+      appAlert(
         'Import partiel',
         `${result.importedPrograms} programme(s), ${result.importedExercises} exercice(s) importé(s).\n${result.skipped} élément(s) ignoré(s).`
       );
     } else {
-      Alert.alert(
+      appAlert(
         'Import réussi',
         `${result.importedPrograms} programme(s) et ${result.importedExercises} exercice(s) importé(s).`
       );
@@ -181,7 +181,7 @@ export default function SettingsScreen() {
       const remaining = preview.unknownExercises.length > 8
         ? `\n… et ${preview.unknownExercises.length - 8} autre(s)`
         : '';
-      Alert.alert(
+      appAlert(
         'Exercices inconnus',
         `Le fichier contient ${preview.unknownExercises.length} exercice(s) inconnu(s).\n\n${list}${remaining}\n\nImporter seulement les exercices reconnus et ignorer le reste ?`,
         [
@@ -234,7 +234,7 @@ export default function SettingsScreen() {
       assertImportTextSize(content);
       confirmAndImport(content);
     } catch (error) {
-      Alert.alert(
+      appAlert(
         'Erreur',
         getImportErrorMessage(
           error,
@@ -260,7 +260,7 @@ export default function SettingsScreen() {
         link.download = filename;
         link.click();
         URL.revokeObjectURL(url);
-        Alert.alert('Export prêt', `${programs.length} programme(s) exporté(s).`);
+        appAlert('Export prêt', `${programs.length} programme(s) exporté(s).`);
         return;
       }
 
@@ -268,9 +268,9 @@ export default function SettingsScreen() {
       if (file.exists) file.delete();
       file.create();
       file.write(content);
-      Alert.alert('Export prêt', `Fichier créé : ${file.uri}`);
+      appAlert('Export prêt', `Fichier créé : ${file.uri}`);
     } catch {
-      Alert.alert('Erreur', "Impossible d'exporter les programmes.");
+      appAlert('Erreur', "Impossible d'exporter les programmes.");
     } finally {
       setExporting(false);
     }
@@ -290,7 +290,7 @@ export default function SettingsScreen() {
         link.download = filename;
         link.click();
         URL.revokeObjectURL(url);
-        Alert.alert(
+        appAlert(
           'Sauvegarde prête',
           "Ce fichier contient vos données sport et nutrition en clair. Conservez-le dans un emplacement privé."
         );
@@ -299,7 +299,7 @@ export default function SettingsScreen() {
 
       const available = await Sharing.isAvailableAsync();
       if (!available) {
-        Alert.alert('Erreur', "Le partage de fichier n'est pas disponible sur cet appareil.");
+        appAlert('Erreur', "Le partage de fichier n'est pas disponible sur cet appareil.");
         return;
       }
 
@@ -317,14 +317,14 @@ export default function SettingsScreen() {
         if (file.exists) file.delete();
       }
     } catch {
-      Alert.alert('Erreur', 'Impossible de sauvegarder le profil.');
+      appAlert('Erreur', 'Impossible de sauvegarder le profil.');
     } finally {
       setProfileExporting(false);
     }
   };
 
   const confirmAndRestoreProfile = (backup: ProfileBackup) => {
-    Alert.alert(
+    appAlert(
       'Restaurer ce profil ?',
       `Cette restauration remplacera toutes les données actuelles (${programsCount} programme(s), ${sessionsCount} séance(s), ${customFoodsCount} aliment(s), ${foodDiaryEntriesCount} entrée(s) nutrition, objectifs ${nutritionGoals.goalType}, ${bodyWeightEntriesCount} pesée(s)).\n\nProfil à restaurer : ${profileSummary(backup.data)}\n\nContinuer ?`,
       [
@@ -334,7 +334,7 @@ export default function SettingsScreen() {
           style: 'destructive',
           onPress: () => {
             restoreProfileBackup(backup);
-            Alert.alert('Profil restauré', profileSummary(backup.data));
+            appAlert('Profil restauré', profileSummary(backup.data));
           },
         },
       ]
@@ -377,13 +377,13 @@ export default function SettingsScreen() {
 
       const backup = parseProfileBackup(content);
       if (typeof backup === 'string') {
-        Alert.alert('Échec de la restauration', backup);
+        appAlert('Échec de la restauration', backup);
         return;
       }
 
       confirmAndRestoreProfile(backup);
     } catch (error) {
-      Alert.alert(
+      appAlert(
         'Erreur',
         getImportErrorMessage(
           error,
@@ -403,13 +403,13 @@ export default function SettingsScreen() {
       try {
         await Share.share({ message: getAiProgramPrompt() });
       } catch {
-        Alert.alert('Erreur', 'Impossible de copier ou partager le prompt.');
+        appAlert('Erreur', 'Impossible de copier ou partager le prompt.');
       }
     }
   };
 
   const handleDeleteAll = () => {
-    Alert.alert(
+    appAlert(
       'Tout supprimer',
       'Supprimer tous les programmes et tout l\'historique des séances ? Cette action est irréversible.',
       [

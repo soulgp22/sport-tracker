@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useColors } from '../../theme/useColors';
@@ -8,6 +8,7 @@ import type { ThemeColors } from '../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
 import type { FoodEntry, MealType } from '../../types';
 import { TextInput } from '../ui/TextInput';
+import { appAlert } from '../ui/AppDialog';
 
 interface FoodEntryRowProps {
   entry: FoodEntry;
@@ -66,7 +67,7 @@ export function FoodEntryRow({
   };
 
   const openMoveMenu = () => {
-    Alert.alert(
+    appAlert(
       'Déplacer vers',
       undefined,
       [

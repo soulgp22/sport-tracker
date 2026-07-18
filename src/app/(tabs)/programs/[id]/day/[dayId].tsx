@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -15,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useProgramStore } from '../../../../../store/programStore';
 import { Button } from '../../../../../components/ui/Button';
+import { appAlert } from '../../../../../components/ui/AppDialog';
 import { TextInput } from '../../../../../components/ui/TextInput';
 import { EmptyState } from '../../../../../components/ui/EmptyState';
 import { ExerciseCatalogList } from '../../../../../components/exercises/ExerciseCatalogList';
@@ -315,7 +315,7 @@ export default function DayEditScreen() {
       }
 
       if (catalogExercise.id === targetExercise.exerciseId) {
-        Alert.alert('Alternative invalide', 'Choisis un exercice différent de l\'exercice principal.');
+        appAlert('Alternative invalide', 'Choisis un exercice différent de l\'exercice principal.');
         return;
       }
 
@@ -346,7 +346,7 @@ export default function DayEditScreen() {
   };
 
   const handleDeleteExercise = (exId: string, exName: string) => {
-    Alert.alert('Supprimer', `Supprimer "${exName || 'cet exercice'}" ?`, [
+    appAlert('Supprimer', `Supprimer "${exName || 'cet exercice'}" ?`, [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Supprimer', style: 'destructive', onPress: () => deleteExerciseFromDay(id, dayId, exId) },
     ]);

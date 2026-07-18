@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NutritionFacts } from '../../../components/foods/NutritionFacts';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore } from '../../../store/foodStore';
@@ -25,7 +26,7 @@ export default function FoodDetailScreen() {
   const handleDelete = () => {
     if (!food?.isCustom) return;
 
-    Alert.alert('Supprimer', `Supprimer "${food.name}" ?`, [
+    appAlert('Supprimer', `Supprimer "${food.name}" ?`, [
       { text: 'Annuler', style: 'cancel' },
       {
         text: 'Supprimer',
