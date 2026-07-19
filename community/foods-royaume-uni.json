@@ -1,0 +1,1941 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Royaume-Uni — Open Food Facts",
+    "country": "Royaume-Uni",
+    "retailers": [
+      "Tesco",
+      "Sainsbury's",
+      "Asda"
+    ],
+    "official": false,
+    "license": "ODbL — Open Food Facts",
+    "attribution": "https://world.openfoodfacts.org",
+    "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifier les valeurs sur l'emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "off_royaumeuni_8000500426494",
+      "name": "Nutella Plant-Based",
+      "brand": "Ferrero",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 534,
+        "protein": 6.8,
+        "carbs": 53.4,
+        "fat": 31.8,
+        "sugar": 45.4,
+        "salt": 0.07
+      },
+      "barcode": "8000500426494",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500426494"
+    },
+    {
+      "id": "off_royaumeuni_5411188115366",
+      "name": "Alpro smooth subtle creamy oat",
+      "brand": "alpro",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 0.8,
+        "carbs": 6.6,
+        "fat": 1.5,
+        "fiber": 0.7,
+        "sugar": 3.1,
+        "salt": 0.1
+      },
+      "barcode": "5411188115366",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115366"
+    },
+    {
+      "id": "off_royaumeuni_5025125000006",
+      "name": "White Ciabattin",
+      "brand": "Jason's Sourdough",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 230,
+        "protein": 10.1,
+        "carbs": 44.1,
+        "fat": 0.8,
+        "fiber": 2.9,
+        "sugar": 2.4,
+        "salt": 0.92
+      },
+      "barcode": "5025125000006",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5025125000006"
+    },
+    {
+      "id": "off_royaumeuni_5060088700105",
+      "name": "NAKD PROTEIN - Cacao noisette - 45g (16x1p)",
+      "brand": "nākd",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 424,
+        "protein": 16,
+        "carbs": 33,
+        "fat": 22,
+        "fiber": 16,
+        "sugar": 28,
+        "salt": 0.01
+      },
+      "barcode": "5060088700105",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060088700105"
+    },
+    {
+      "id": "off_royaumeuni_90162602",
+      "name": "Red Bull Energy Drink",
+      "brand": "Red Bull",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 45,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 0,
+        "sugar": 11,
+        "salt": 0.1
+      },
+      "barcode": "90162602",
+      "sourceUrl": "https://world.openfoodfacts.org/product/90162602"
+    },
+    {
+      "id": "off_royaumeuni_7394376616228",
+      "name": "The original oat-ly barista edition oat drink",
+      "brand": "Oatly",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 61,
+        "protein": 1.1,
+        "carbs": 7.1,
+        "fat": 3,
+        "fiber": 0.8,
+        "sugar": 3.4,
+        "salt": 0.1
+      },
+      "barcode": "7394376616228",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7394376616228"
+    },
+    {
+      "id": "off_royaumeuni_5034467000216",
+      "name": "NAKED ORGANIC TOFU",
+      "brand": "The Tofoo Co.",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 146,
+        "protein": 16.5,
+        "carbs": 1.1,
+        "fat": 7.8,
+        "fiber": 1.9,
+        "sugar": 0.1,
+        "salt": 0
+      },
+      "barcode": "5034467000216",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5034467000216"
+    },
+    {
+      "id": "off_royaumeuni_5020364010113",
+      "name": "New York Bakery Co The Original Plain Bagels",
+      "brand": "New York Bakery Co",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 270,
+        "protein": 9.2,
+        "carbs": 49.5,
+        "fat": 2.5,
+        "fiber": 3.3,
+        "sugar": 5.5,
+        "salt": 0.61
+      },
+      "barcode": "5020364010113",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5020364010113"
+    },
+    {
+      "id": "off_royaumeuni_5057967395088",
+      "name": "Rye and Mixed Seed Sourdough Bread",
+      "brand": "finest",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 203,
+        "protein": 9,
+        "carbs": 42.6,
+        "fat": 3.8,
+        "fiber": 6.8,
+        "sugar": 2.2,
+        "salt": 0.78
+      },
+      "barcode": "5057967395088",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5057967395088"
+    },
+    {
+      "id": "off_royaumeuni_5411188121213",
+      "name": "Greek Style Plain",
+      "brand": "alpro",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 65,
+        "protein": 5.6,
+        "carbs": 2.2,
+        "fat": 3.3,
+        "fiber": 1.3,
+        "sugar": 2.2,
+        "salt": 0.33
+      },
+      "barcode": "5411188121213",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188121213"
+    },
+    {
+      "id": "off_royaumeuni_5013665115373",
+      "name": "Lentil and Pea Cakes with Beetroot and Balsamic Flavour Seasoning",
+      "brand": "Kallo",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 400,
+        "protein": 25,
+        "carbs": 51,
+        "fat": 12,
+        "fiber": 6,
+        "sugar": 3.6,
+        "salt": 0.1
+      },
+      "barcode": "5013665115373",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5013665115373"
+    },
+    {
+      "id": "off_royaumeuni_5201054017432",
+      "name": "Total 5% Fat Greek Yogurt",
+      "brand": "FAGE",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 93,
+        "protein": 9,
+        "carbs": 3,
+        "fat": 5,
+        "sugar": 3,
+        "salt": 0.1
+      },
+      "barcode": "5201054017432",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5201054017432"
+    },
+    {
+      "id": "off_royaumeuni_5059697731860",
+      "name": "Dark Chocolate",
+      "brand": "Tesco finest",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 591,
+        "protein": 6.9,
+        "carbs": 34.7,
+        "fat": 44.8,
+        "fiber": 10.5,
+        "sugar": 23.6,
+        "salt": 0.01
+      },
+      "barcode": "5059697731860",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5059697731860"
+    },
+    {
+      "id": "off_royaumeuni_5057967395071",
+      "name": "White Sourdough Bread",
+      "brand": "Tesco finest",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 229,
+        "protein": 8.2,
+        "carbs": 45.1,
+        "fat": 0.9,
+        "fiber": 3.7,
+        "sugar": 2.7,
+        "salt": 0.77
+      },
+      "barcode": "5057967395071",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5057967395071"
+    },
+    {
+      "id": "off_royaumeuni_5018095011271",
+      "name": "Puy Lentils & French green lentils",
+      "brand": "Merchant Gourmet",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 148,
+        "protein": 11,
+        "carbs": 19,
+        "fat": 1.7,
+        "fiber": 5.2,
+        "sugar": 1,
+        "salt": 0.01
+      },
+      "barcode": "5018095011271",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5018095011271"
+    },
+    {
+      "id": "off_royaumeuni_5060092030977",
+      "name": "Lizis high protein granola nuts and seeds",
+      "brand": "Lizi's",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 442,
+        "protein": 26.9,
+        "carbs": 40.7,
+        "fat": 17.6,
+        "fiber": 6.8,
+        "sugar": 12,
+        "salt": 0.61
+      },
+      "barcode": "5060092030977",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060092030977"
+    },
+    {
+      "id": "off_royaumeuni_5099801003339",
+      "name": "Organic Jumbo Oats",
+      "brand": "Flahavan's",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 370,
+        "protein": 11.3,
+        "carbs": 65,
+        "fat": 5.8,
+        "fiber": 8.3,
+        "sugar": 1,
+        "salt": 0.01
+      },
+      "barcode": "5099801003339",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5099801003339"
+    },
+    {
+      "id": "off_royaumeuni_5000108022152",
+      "name": "PORRIDGE OATS",
+      "brand": "QUAKER",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 375,
+        "protein": 11,
+        "carbs": 60,
+        "fat": 8,
+        "fiber": 9,
+        "sugar": 1,
+        "salt": 0
+      },
+      "barcode": "5000108022152",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000108022152"
+    },
+    {
+      "id": "off_royaumeuni_5202390020407",
+      "name": "Greek White panetto",
+      "brand": "Violife",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 307,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 29,
+        "sugar": 0,
+        "salt": 1.7
+      },
+      "barcode": "5202390020407",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390020407"
+    },
+    {
+      "id": "off_royaumeuni_5000436857112",
+      "name": "Malt Wheats Toasty Crunch",
+      "brand": "Tesco",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 370,
+        "protein": 11,
+        "carbs": 82,
+        "fat": 1.3,
+        "fiber": 11,
+        "sugar": 10,
+        "salt": 0.27
+      },
+      "barcode": "5000436857112",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000436857112"
+    },
+    {
+      "id": "off_royaumeuni_5059697710001",
+      "name": "Dark milk chocolate",
+      "brand": "Tesco",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 597,
+        "protein": 9.9,
+        "carbs": 36.2,
+        "fat": 44.6,
+        "fiber": 5.6,
+        "sugar": 33.6,
+        "salt": 0.23
+      },
+      "barcode": "5059697710001",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5059697710001"
+    },
+    {
+      "id": "off_royaumeuni_5449000130389",
+      "name": "Coca Cola",
+      "brand": "Coca-Cola",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5449000130389",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000130389"
+    },
+    {
+      "id": "off_royaumeuni_5057753158422",
+      "name": "BRAN FLAKES",
+      "brand": "TESCO",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 10.6,
+        "carbs": 63.9,
+        "fat": 2.5,
+        "fiber": 15.7,
+        "sugar": 10.2,
+        "salt": 0.59
+      },
+      "barcode": "5057753158422",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5057753158422"
+    },
+    {
+      "id": "off_royaumeuni_7394376123337",
+      "name": "Organic oat drink",
+      "brand": "Oatly",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 39,
+        "protein": 1.1,
+        "carbs": 7.2,
+        "fat": 0.5,
+        "fiber": 0.8,
+        "sugar": 3.4,
+        "salt": 0
+      },
+      "barcode": "7394376123337",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7394376123337"
+    },
+    {
+      "id": "off_royaumeuni_5051399182506",
+      "name": "CHICKPEAS IN WATER",
+      "brand": "TESCO",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 126,
+        "protein": 7.8,
+        "carbs": 16.5,
+        "fat": 2.4,
+        "fiber": 5.2,
+        "sugar": 0.7,
+        "salt": 0
+      },
+      "barcode": "5051399182506",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5051399182506"
+    },
+    {
+      "id": "off_royaumeuni_5000436589457",
+      "name": "SEMI SKIMMED MILK",
+      "brand": "TESCO",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 50,
+        "protein": 3.6,
+        "carbs": 4.8,
+        "fat": 1.8,
+        "fiber": 0.1,
+        "sugar": 4.8,
+        "salt": 0.11
+      },
+      "barcode": "5000436589457",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000436589457"
+    },
+    {
+      "id": "off_royaumeuni_5018357804849",
+      "name": "oat granola",
+      "brand": "dorset cereals",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 442,
+        "protein": 8.7,
+        "carbs": 62.5,
+        "fat": 16.4,
+        "fiber": 5,
+        "sugar": 16.5,
+        "salt": 0.03
+      },
+      "barcode": "5018357804849",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5018357804849"
+    },
+    {
+      "id": "off_royaumeuni_5012121004336",
+      "name": "4 Greek Style Flatbreads",
+      "brand": "Deli Kitchen",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 255,
+        "protein": 11.3,
+        "carbs": 39.7,
+        "fat": 4.2,
+        "fiber": 6.7,
+        "sugar": 2.9,
+        "salt": 0.89
+      },
+      "barcode": "5012121004336",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5012121004336"
+    },
+    {
+      "id": "off_royaumeuni_5000295142893",
+      "name": "Our Mature Cheddar",
+      "brand": "Cathedral City",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 416,
+        "protein": 25.4,
+        "carbs": 0.1,
+        "fat": 34.9,
+        "sugar": 0.1,
+        "salt": 1.8
+      },
+      "barcode": "5000295142893",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000295142893"
+    },
+    {
+      "id": "off_royaumeuni_5411188124702",
+      "name": "Alpro Haferdrink, Ungesüßt 1 L, FRESH",
+      "brand": "alpro",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 44,
+        "protein": 0.8,
+        "carbs": 6.4,
+        "fat": 1.5,
+        "fiber": 0.7,
+        "sugar": 0,
+        "salt": 0.11
+      },
+      "barcode": "5411188124702",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188124702"
+    },
+    {
+      "id": "off_royaumeuni_5000116111978",
+      "name": "OMEGA 3 BREADED ALASKA POLLOCK FISH FINGERS",
+      "brand": "Birds Eye",
+      "retailer": "Tesco",
+      "country": "Royaume-Uni",
+      "category": "Poisson",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 208,
+        "protein": 12,
+        "carbs": 19,
+        "fat": 9.1,
+        "fiber": 0.9,
+        "sugar": 0.9,
+        "salt": 0.7
+      },
+      "barcode": "5000116111978",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000116111978"
+    },
+    {
+      "id": "off_royaumeuni_5025125000037",
+      "name": "Sourdough Grains & Seeds",
+      "brand": "Jason's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 237,
+        "protein": 10.7,
+        "carbs": 40.2,
+        "fat": 2.7,
+        "fiber": 4.7,
+        "sugar": 1.4,
+        "salt": 0.84
+      },
+      "barcode": "5025125000037",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5025125000037"
+    },
+    {
+      "id": "off_royaumeuni_5010029000016",
+      "name": "Weetabix",
+      "brand": "Weetabix",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 414,
+        "protein": 12,
+        "carbs": 69,
+        "fat": 2,
+        "fiber": 10,
+        "sugar": 4.2,
+        "salt": 0.28
+      },
+      "barcode": "5010029000016",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010029000016"
+    },
+    {
+      "id": "off_royaumeuni_5010003064744",
+      "name": "Seed Sensations Seven Seeds",
+      "brand": "Hovis",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 277,
+        "protein": 10,
+        "carbs": 42,
+        "fat": 6.6,
+        "fiber": 5.3,
+        "sugar": 3.8,
+        "salt": 0
+      },
+      "barcode": "5010003064744",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010003064744"
+    },
+    {
+      "id": "off_royaumeuni_5010265002911",
+      "name": "Dark Rye Crispbread",
+      "brand": "RYVITA",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 342,
+        "protein": 8.5,
+        "carbs": 66.6,
+        "fat": 1.2,
+        "fiber": 1.5,
+        "sugar": 3,
+        "salt": 0.74
+      },
+      "barcode": "5010265002911",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010265002911"
+    },
+    {
+      "id": "off_royaumeuni_5201054017418",
+      "name": "Total 0% fat",
+      "brand": "FAGE",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 54,
+        "protein": 10.3,
+        "carbs": 3,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 3,
+        "salt": 0.1
+      },
+      "barcode": "5201054017418",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5201054017418"
+    },
+    {
+      "id": "off_royaumeuni_01318180",
+      "name": "MULTISEED WHOLEMEAL FARMHOUSE LOAF",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 270,
+        "protein": 12.8,
+        "carbs": 34.2,
+        "fat": 7.5,
+        "fiber": 7.4,
+        "sugar": 4.2,
+        "salt": 0.84
+      },
+      "barcode": "01318180",
+      "sourceUrl": "https://world.openfoodfacts.org/product/01318180"
+    },
+    {
+      "id": "off_royaumeuni_5025125000105",
+      "name": "Sourdough",
+      "brand": "Jason's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 255,
+        "protein": 9.3,
+        "carbs": 46.5,
+        "fat": 2.7,
+        "fiber": 3.6,
+        "sugar": 1.8,
+        "salt": 0.99
+      },
+      "barcode": "5025125000105",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5025125000105"
+    },
+    {
+      "id": "off_royaumeuni_0061232203072",
+      "name": "Rough Oatcakes",
+      "brand": "nairn's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 445,
+        "protein": 11,
+        "carbs": 55.8,
+        "fat": 17.5,
+        "fiber": 10.4,
+        "sugar": 0.7,
+        "salt": 1.46
+      },
+      "barcode": "0061232203072",
+      "sourceUrl": "https://world.openfoodfacts.org/product/0061232203072"
+    },
+    {
+      "id": "off_royaumeuni_5010044005126",
+      "name": "Original Crumpets",
+      "brand": "Warburtons",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 176,
+        "protein": 6,
+        "carbs": 35.3,
+        "fat": 0.7,
+        "fiber": 2,
+        "sugar": 2,
+        "salt": 3.68
+      },
+      "barcode": "5010044005126",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010044005126"
+    },
+    {
+      "id": "off_royaumeuni_5060088701478",
+      "name": "cocoa orange",
+      "brand": "nakd.",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 394,
+        "protein": 8.6,
+        "carbs": 51.4,
+        "fat": 15.4,
+        "fiber": 8.6,
+        "sugar": 42.9,
+        "salt": 0.03
+      },
+      "barcode": "5060088701478",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060088701478"
+    },
+    {
+      "id": "off_royaumeuni_5014213711290",
+      "name": "Crunchy Peanut Butter",
+      "brand": "Meridian",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 606,
+        "protein": 26,
+        "carbs": 16,
+        "fat": 47,
+        "fiber": 8.1,
+        "sugar": 5.3,
+        "salt": 0.02
+      },
+      "barcode": "5014213711290",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5014213711290"
+    },
+    {
+      "id": "off_royaumeuni_7613287194374",
+      "name": "Bitesize Shredded Wheat",
+      "brand": "Nestlé",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 363,
+        "protein": 11.8,
+        "carbs": 68.7,
+        "fat": 2.2,
+        "fiber": 12.5,
+        "sugar": 0.7,
+        "salt": 0.05
+      },
+      "barcode": "7613287194374",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613287194374"
+    },
+    {
+      "id": "off_royaumeuni_5034467000223",
+      "name": "SMOKED ORGANIC TOFU",
+      "brand": "The Tofoo Co.",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 146,
+        "protein": 16.9,
+        "carbs": 2.7,
+        "fat": 7.7,
+        "fiber": 0.8,
+        "sugar": 0.1,
+        "salt": 0.41
+      },
+      "barcode": "5034467000223",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5034467000223"
+    },
+    {
+      "id": "off_royaumeuni_5018095196596",
+      "name": "5 Glorious Grains",
+      "brand": "Mexican Gourmet",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 162,
+        "protein": 5.5,
+        "carbs": 32,
+        "fat": 2.8,
+        "fiber": 4,
+        "sugar": 0.7,
+        "salt": 0.04
+      },
+      "barcode": "5018095196596",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5018095196596"
+    },
+    {
+      "id": "off_royaumeuni_5701977550554",
+      "name": "Vegan Spreadable",
+      "brand": "Naturli'",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 666,
+        "protein": 0.5,
+        "carbs": 0.5,
+        "fat": 75,
+        "sugar": 0.5,
+        "salt": 0.9
+      },
+      "barcode": "5701977550554",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5701977550554"
+    },
+    {
+      "id": "off_royaumeuni_5060088701447",
+      "name": "raw fruit & nut bar",
+      "brand": "nākd",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 394,
+        "protein": 8.6,
+        "carbs": 51.4,
+        "fat": 15.4,
+        "fiber": 8.6,
+        "sugar": 42.9,
+        "salt": 0.03
+      },
+      "barcode": "5060088701447",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060088701447"
+    },
+    {
+      "id": "off_royaumeuni_5010003000131",
+      "name": "Soft White",
+      "brand": "Hovis",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 233,
+        "protein": 8.8,
+        "carbs": 44.8,
+        "fat": 1.8,
+        "fiber": 2.5,
+        "sugar": 3.5,
+        "salt": 0.89
+      },
+      "barcode": "5010003000131",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010003000131"
+    },
+    {
+      "id": "off_royaumeuni_5060362070474",
+      "name": "Almond",
+      "brand": "Plenish",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 26,
+        "protein": 0.9,
+        "carbs": 0.4,
+        "fat": 2.2,
+        "fiber": 0.4,
+        "sugar": 0.2,
+        "salt": 0
+      },
+      "barcode": "5060362070474",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060362070474"
+    },
+    {
+      "id": "off_royaumeuni_5060482840766",
+      "name": "Peanut Butter Oat Bars",
+      "brand": "Deliciously ella",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 460,
+        "protein": 10,
+        "carbs": 50,
+        "fat": 24,
+        "fiber": 5,
+        "sugar": 21,
+        "salt": 0.47
+      },
+      "barcode": "5060482840766",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060482840766"
+    },
+    {
+      "id": "off_royaumeuni_5013665108344",
+      "name": "Smooth Organic Peanut Butter",
+      "brand": "Whole Earth",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 618,
+        "protein": 26.9,
+        "carbs": 10.5,
+        "fat": 50.3,
+        "fiber": 7.7,
+        "sugar": 5.4,
+        "salt": 0.68
+      },
+      "barcode": "5013665108344",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5013665108344"
+    },
+    {
+      "id": "off_royaumeuni_5060198820052",
+      "name": "Peter's Yard Original Sourdough Crackers",
+      "brand": "Peter's Yard",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 367,
+        "protein": 13,
+        "carbs": 69,
+        "fat": 2.8,
+        "fiber": 8.1,
+        "sugar": 4,
+        "salt": 1.6
+      },
+      "barcode": "5060198820052",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060198820052"
+    },
+    {
+      "id": "off_royaumeuni_5010338014339",
+      "name": "COCONUT MILK",
+      "brand": "BLUE DRAGON",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 143,
+        "protein": 0.6,
+        "carbs": 2.1,
+        "fat": 15,
+        "sugar": 1.4,
+        "salt": 0.15
+      },
+      "barcode": "5010338014339",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010338014339"
+    },
+    {
+      "id": "off_royaumeuni_8717677339914",
+      "name": "Milk Chocolate",
+      "brand": "Tony's Chocolonely",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 547,
+        "protein": 7.7,
+        "carbs": 52,
+        "fat": 33.3,
+        "fiber": 3.3,
+        "sugar": 50.7,
+        "salt": 0.21
+      },
+      "barcode": "8717677339914",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8717677339914"
+    },
+    {
+      "id": "off_royaumeuni_5000165024014",
+      "name": "Pure Irish Butter",
+      "brand": "Kerrygold",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 744,
+        "protein": 0.6,
+        "carbs": 0.6,
+        "fat": 80,
+        "sugar": 0.6,
+        "salt": 1.77
+      },
+      "barcode": "5000165024014",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000165024014"
+    },
+    {
+      "id": "off_royaumeuni_01117011",
+      "name": "Unsalted English Butter",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 745,
+        "protein": 0.6,
+        "carbs": 0.6,
+        "fat": 82.2,
+        "fiber": 0,
+        "sugar": 0.6,
+        "salt": 0.01
+      },
+      "barcode": "01117011",
+      "sourceUrl": "https://world.openfoodfacts.org/product/01117011"
+    },
+    {
+      "id": "off_royaumeuni_5060088702000",
+      "name": "Berry Delight",
+      "brand": "nakd.",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 380,
+        "protein": 6.7,
+        "carbs": 57,
+        "fat": 12,
+        "fiber": 8.7,
+        "sugar": 48,
+        "salt": 0.02
+      },
+      "barcode": "5060088702000",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060088702000"
+    },
+    {
+      "id": "off_royaumeuni_01206111",
+      "name": "Greek style natural yogurt",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 103,
+        "protein": 4,
+        "carbs": 4.2,
+        "fat": 7.6,
+        "fiber": 0.5,
+        "sugar": 4.2,
+        "salt": 0.1
+      },
+      "barcode": "01206111",
+      "sourceUrl": "https://world.openfoodfacts.org/product/01206111"
+    },
+    {
+      "id": "off_royaumeuni_5060719920001",
+      "name": "Absolute black dark chocolate",
+      "brand": "Montezuma's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 623,
+        "protein": 14,
+        "carbs": 18,
+        "fat": 53,
+        "fiber": 11,
+        "sugar": 0.6,
+        "salt": 0.02
+      },
+      "barcode": "5060719920001",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060719920001"
+    },
+    {
+      "id": "off_royaumeuni_5010578008020",
+      "name": "YORKSHIRE COTTAGE CHEESE NATURAL",
+      "brand": "Longley Farm",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 104,
+        "protein": 10.3,
+        "carbs": 2.2,
+        "fat": 6,
+        "sugar": 2.1,
+        "salt": 0
+      },
+      "barcode": "5010578008020",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010578008020"
+    },
+    {
+      "id": "off_royaumeuni_00351546",
+      "name": "Salted English Butter",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 745,
+        "protein": 0.6,
+        "carbs": 0.6,
+        "fat": 82.2,
+        "fiber": 0,
+        "sugar": 0.6,
+        "salt": 1.48
+      },
+      "barcode": "00351546",
+      "sourceUrl": "https://world.openfoodfacts.org/product/00351546"
+    },
+    {
+      "id": "off_royaumeuni_01504972",
+      "name": "Full Fat Soft Cheese",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 284,
+        "protein": 4.7,
+        "carbs": 3.1,
+        "fat": 24.5,
+        "fiber": 1.6,
+        "sugar": 3.1,
+        "salt": 0.49
+      },
+      "barcode": "01504972",
+      "sourceUrl": "https://world.openfoodfacts.org/product/01504972"
+    },
+    {
+      "id": "off_royaumeuni_5010171005006",
+      "name": "BUTTER WITH VEGETABLE OIL BLENDED SPREAD 66%",
+      "brand": "COUNTRY LIFE",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 600,
+        "protein": 0.3,
+        "carbs": 0.3,
+        "fat": 66,
+        "sugar": 0.3,
+        "salt": 1.3
+      },
+      "barcode": "5010171005006",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010171005006"
+    },
+    {
+      "id": "off_royaumeuni_1230000097048",
+      "name": "HAZELNUT BUTTER DARK CHOCOLATE",
+      "brand": "Hu",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 607,
+        "protein": 9.4,
+        "carbs": 33,
+        "fat": 47,
+        "fiber": 9.3,
+        "sugar": 26,
+        "salt": 0.1
+      },
+      "barcode": "1230000097048",
+      "sourceUrl": "https://world.openfoodfacts.org/product/1230000097048"
+    },
+    {
+      "id": "off_royaumeuni_01134742",
+      "name": "Wheat flour sourdough bread",
+      "brand": "Sainsbury's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 226,
+        "protein": 8.4,
+        "carbs": 44.8,
+        "fat": 1,
+        "fiber": 2.3,
+        "sugar": 1.5
+      },
+      "barcode": "01134742",
+      "sourceUrl": "https://world.openfoodfacts.org/product/01134742"
+    },
+    {
+      "id": "off_royaumeuni_0813636021932",
+      "name": "Oat Milk",
+      "brand": "Califia Farms",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 54,
+        "protein": 0.8,
+        "carbs": 6.6,
+        "fat": 2.9,
+        "fiber": 0.8,
+        "sugar": 2.8,
+        "salt": 0.12
+      },
+      "barcode": "0813636021932",
+      "sourceUrl": "https://world.openfoodfacts.org/product/0813636021932"
+    },
+    {
+      "id": "off_royaumeuni_0850004207390",
+      "name": "Beyond Burger",
+      "brand": "Beyond Meat",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 196,
+        "protein": 16,
+        "carbs": 5.6,
+        "fat": 12,
+        "fiber": 1.2,
+        "sugar": 0.6,
+        "salt": 0.74
+      },
+      "barcode": "0850004207390",
+      "sourceUrl": "https://world.openfoodfacts.org/product/0850004207390"
+    },
+    {
+      "id": "off_royaumeuni_5060069170033",
+      "name": "Agave Nectar",
+      "brand": "the-groovy-food-company",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 298,
+        "protein": 0,
+        "carbs": 77.7,
+        "fat": 0,
+        "sugar": 66.1,
+        "salt": 0
+      },
+      "barcode": "5060069170033",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060069170033"
+    },
+    {
+      "id": "off_royaumeuni_7622201693954",
+      "name": "Light Philadelphia",
+      "brand": "Philadelphia",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 147,
+        "protein": 7.2,
+        "carbs": 5.1,
+        "fat": 10,
+        "fiber": 0.3,
+        "sugar": 5.1,
+        "salt": 0.21
+      },
+      "barcode": "7622201693954",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622201693954"
+    },
+    {
+      "id": "off_royaumeuni_5000127014084",
+      "name": "CORN FLAKES 1kg",
+      "brand": "Kellogg's",
+      "retailer": "Sainsbury's",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 378,
+        "protein": 7,
+        "carbs": 84,
+        "fat": 0.9,
+        "fiber": 3,
+        "sugar": 8,
+        "salt": 1.08
+      },
+      "barcode": "5000127014084",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000127014084"
+    },
+    {
+      "id": "off_royaumeuni_5449000011527",
+      "name": "fanta Orange",
+      "brand": "Fanta",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 19,
+        "protein": 0,
+        "carbs": 4.5,
+        "fat": 0,
+        "sugar": 4.5,
+        "salt": 0.02
+      },
+      "barcode": "5449000011527",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000011527"
+    },
+    {
+      "id": "off_royaumeuni_4016241030573",
+      "name": "Skyr Natural Fat Free Icelandic Style Yogurt",
+      "brand": "Arla",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 60,
+        "protein": 10,
+        "carbs": 4,
+        "fat": 0.5,
+        "fiber": 0,
+        "sugar": 4,
+        "salt": 0.14
+      },
+      "barcode": "4016241030573",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4016241030573"
+    },
+    {
+      "id": "off_royaumeuni_3045320094008",
+      "name": "Strawberry Conserve",
+      "brand": "Bonne Maman",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 241,
+        "protein": 0.4,
+        "carbs": 59,
+        "fat": 0.1,
+        "fiber": 1.2,
+        "sugar": 59,
+        "salt": 0
+      },
+      "barcode": "3045320094008",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3045320094008"
+    },
+    {
+      "id": "off_royaumeuni_5011273040698",
+      "name": "honey",
+      "brand": "Rowse",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 329,
+        "protein": 0.5,
+        "carbs": 81.5,
+        "fat": 0.5,
+        "fiber": 0.5,
+        "sugar": 80.8,
+        "salt": 0.03
+      },
+      "barcode": "5011273040698",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5011273040698"
+    },
+    {
+      "id": "off_royaumeuni_7622202018701",
+      "name": "Bolachas Belvita Breakfast Milk & Cereals",
+      "brand": "Belvita",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 443,
+        "protein": 8.1,
+        "carbs": 68,
+        "fat": 14,
+        "fiber": 6.4,
+        "sugar": 20,
+        "salt": 0.22
+      },
+      "barcode": "7622202018701",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622202018701"
+    },
+    {
+      "id": "off_royaumeuni_5010092093441",
+      "name": "Kingsmill 50/50",
+      "brand": "Kingsmill",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 234,
+        "protein": 9,
+        "carbs": 43,
+        "fat": 2.3,
+        "fiber": 4.5,
+        "sugar": 3.3,
+        "salt": 0.93
+      },
+      "barcode": "5010092093441",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010092093441"
+    },
+    {
+      "id": "off_royaumeuni_5010115900596",
+      "name": "Lyle's Golden Syrup",
+      "brand": "Lyle's",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 317,
+        "protein": 0.3,
+        "carbs": 79,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 79,
+        "salt": 0.67
+      },
+      "barcode": "5010115900596",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010115900596"
+    },
+    {
+      "id": "off_royaumeuni_5012818160154",
+      "name": "Chopped Garlic",
+      "brand": "Very Lazy",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 78,
+        "protein": 4.7,
+        "carbs": 11.3,
+        "fat": 0.1,
+        "sugar": 0.7,
+        "salt": 0.1
+      },
+      "barcode": "5012818160154",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5012818160154"
+    },
+    {
+      "id": "off_royaumeuni_5000328376677",
+      "name": "Walkers Ready Salted Crisps 6pk",
+      "brand": "Walkers",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 500,
+        "protein": 8.3,
+        "carbs": 56,
+        "fat": 27,
+        "fiber": 0.9,
+        "sugar": 0.8,
+        "salt": 1.18
+      },
+      "barcode": "5000328376677",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000328376677"
+    },
+    {
+      "id": "off_royaumeuni_7610900037360",
+      "name": "Mango Papaya Passion Fruit",
+      "brand": "Onken",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 93,
+        "protein": 3.8,
+        "carbs": 13,
+        "fat": 2.7,
+        "sugar": 12,
+        "salt": 0.17
+      },
+      "barcode": "7610900037360",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7610900037360"
+    },
+    {
+      "id": "off_royaumeuni_5019503034165",
+      "name": "Smoky Ham Free Slices",
+      "brand": "Quorn",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 101,
+        "protein": 13.5,
+        "carbs": 1.7,
+        "fat": 2.5,
+        "fiber": 8.5,
+        "sugar": 0.3,
+        "salt": 1.7
+      },
+      "barcode": "5019503034165",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5019503034165"
+    },
+    {
+      "id": "off_royaumeuni_5060384262918",
+      "name": "Wild Strawberry Gourmet Sweets",
+      "brand": "Candy Kittens",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 340,
+        "protein": 0.4,
+        "carbs": 84,
+        "fat": 0.1,
+        "fiber": 60,
+        "sugar": 48,
+        "salt": 0.32
+      },
+      "barcode": "5060384262918",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060384262918"
+    },
+    {
+      "id": "off_royaumeuni_8000500416921",
+      "name": "Protein peanuts, almonds & salted caramel",
+      "brand": "Eat Natural",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 496,
+        "protein": 18,
+        "carbs": 31.7,
+        "fat": 28.4,
+        "fiber": 6.6,
+        "sugar": 19.3,
+        "salt": 0
+      },
+      "barcode": "8000500416921",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500416921"
+    },
+    {
+      "id": "off_royaumeuni_5013683305442",
+      "name": "Authentic Tofu",
+      "brand": "Cauldron",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 118,
+        "protein": 13,
+        "carbs": 2.9,
+        "fat": 7.1,
+        "fiber": 1.9,
+        "sugar": 0.7,
+        "salt": 0.03
+      },
+      "barcode": "5013683305442",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5013683305442"
+    },
+    {
+      "id": "off_royaumeuni_4008400203829",
+      "name": "Chocolate",
+      "brand": "Kinder",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 566,
+        "protein": 8.7,
+        "carbs": 53.5,
+        "fat": 35,
+        "fiber": 0,
+        "sugar": 53.3,
+        "salt": 0.31
+      },
+      "barcode": "4008400203829",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400203829"
+    },
+    {
+      "id": "off_royaumeuni_7622202230998",
+      "name": "Soft Bakes Choco Hazelnut Flavour",
+      "brand": "Belvita",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 398,
+        "protein": 5.3,
+        "carbs": 61,
+        "fat": 14,
+        "fiber": 6.8,
+        "sugar": 22,
+        "salt": 0.26
+      },
+      "barcode": "7622202230998",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622202230998"
+    },
+    {
+      "id": "off_royaumeuni_5063089498835",
+      "name": "Sourdough Bread",
+      "brand": "ASDA",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 237,
+        "protein": 7.5,
+        "carbs": 46,
+        "fat": 1.6,
+        "fiber": 5,
+        "sugar": 2.5,
+        "salt": 0.72
+      },
+      "barcode": "5063089498835",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5063089498835"
+    },
+    {
+      "id": "off_royaumeuni_8718300876042",
+      "name": "Plant-Based Shawarma Kebab",
+      "brand": "Vivera",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 141,
+        "protein": 15,
+        "carbs": 6.3,
+        "fat": 7.1,
+        "fiber": 5,
+        "sugar": 0.4,
+        "salt": 1.18
+      },
+      "barcode": "8718300876042",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8718300876042"
+    },
+    {
+      "id": "off_royaumeuni_5711953081354",
+      "name": "PROTEIN STRAWBERRY & RASPBERRY FLAVOUR SHAKE",
+      "brand": "Arla",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 52,
+        "protein": 5.7,
+        "carbs": 4.8,
+        "fat": 0.9,
+        "sugar": 4.7,
+        "salt": 0.18
+      },
+      "barcode": "5711953081354",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5711953081354"
+    },
+    {
+      "id": "off_royaumeuni_8008698040126",
+      "name": "Soft cookies double chocolate",
+      "brand": "Schär",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 459,
+        "protein": 3.2,
+        "carbs": 67,
+        "fat": 19,
+        "fiber": 3.5,
+        "sugar": 29,
+        "salt": 0.45
+      },
+      "barcode": "8008698040126",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8008698040126"
+    },
+    {
+      "id": "off_royaumeuni_8008698010402",
+      "name": "Rich Tea Biscuits",
+      "brand": "Schär",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 449,
+        "protein": 2.4,
+        "carbs": 77,
+        "fat": 14,
+        "fiber": 2.6,
+        "sugar": 13,
+        "salt": 0.8
+      },
+      "barcode": "8008698010402",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8008698010402"
+    },
+    {
+      "id": "off_royaumeuni_5056315501027",
+      "name": "Skinny Whip Mint",
+      "brand": "Skinny Bars",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 361,
+        "protein": 1.7,
+        "carbs": 59,
+        "fat": 7.8,
+        "fiber": 23,
+        "sugar": 49,
+        "salt": 0.11
+      },
+      "barcode": "5056315501027",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5056315501027"
+    },
+    {
+      "id": "off_royaumeuni_5000237127346",
+      "name": "DRY ROASTED PEANUTS",
+      "brand": "KP",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 597,
+        "protein": 30,
+        "carbs": 7.3,
+        "fat": 46.7,
+        "fiber": 9,
+        "sugar": 5,
+        "salt": 0
+      },
+      "barcode": "5000237127346",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000237127346"
+    },
+    {
+      "id": "off_royaumeuni_5054070234136",
+      "name": "Oatcakes",
+      "brand": "Asda",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 428,
+        "protein": 13,
+        "carbs": 54,
+        "fat": 15,
+        "fiber": 13,
+        "sugar": 0.8,
+        "salt": 1.1
+      },
+      "barcode": "5054070234136",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5054070234136"
+    },
+    {
+      "id": "off_royaumeuni_3154230045984",
+      "name": "Smoked Pork Frankfurters",
+      "brand": "Herta",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 261,
+        "protein": 12.3,
+        "carbs": 2,
+        "fat": 22.6,
+        "fiber": 0.6,
+        "sugar": 1.9,
+        "salt": 1.66
+      },
+      "barcode": "3154230045984",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3154230045984"
+    },
+    {
+      "id": "off_royaumeuni_0037600209571",
+      "name": "CHOPPED PORK AND HAM",
+      "brand": "SPAM",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 292,
+        "protein": 15,
+        "carbs": 3.2,
+        "fat": 24.3,
+        "fiber": 0,
+        "sugar": 1.3,
+        "salt": 2.4
+      },
+      "barcode": "0037600209571",
+      "sourceUrl": "https://world.openfoodfacts.org/product/0037600209571"
+    },
+    {
+      "id": "off_royaumeuni_5060051271069",
+      "name": "4 Traditional Black Pudding Slices",
+      "brand": "The Bury Black Pudding Co.",
+      "retailer": "Asda",
+      "country": "Royaume-Uni",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 121,
+        "protein": 7.6,
+        "carbs": 18.6,
+        "fat": 2.5,
+        "fiber": 3.1,
+        "sugar": 0.8,
+        "salt": 1.48
+      },
+      "barcode": "5060051271069",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060051271069"
+    }
+  ]
+}

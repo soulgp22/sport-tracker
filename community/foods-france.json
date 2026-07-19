@@ -1,0 +1,1939 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits France — Open Food Facts",
+    "country": "France",
+    "retailers": [
+      "Carrefour",
+      "Auchan",
+      "E.Leclerc"
+    ],
+    "official": false,
+    "license": "ODbL — Open Food Facts",
+    "attribution": "https://world.openfoodfacts.org",
+    "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifier les valeurs sur l'emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "off_france_7622210449283",
+      "name": "Prince Goût Chocolat au blé complet",
+      "brand": "Mondelez",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 466,
+        "protein": 6.3,
+        "carbs": 68,
+        "fat": 17,
+        "fiber": 3,
+        "sugar": 32,
+        "salt": 0.51
+      },
+      "barcode": "7622210449283",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210449283"
+    },
+    {
+      "id": "off_france_3046920022651",
+      "name": "Excellence 70% cacao noir intense",
+      "brand": "Lindt",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 566,
+        "protein": 9.5,
+        "carbs": 35,
+        "fat": 41,
+        "fiber": 12.2,
+        "sugar": 30,
+        "salt": 0.02
+      },
+      "barcode": "3046920022651",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920022651"
+    },
+    {
+      "id": "off_france_3017620425035",
+      "name": "Nutella",
+      "brand": "Nutella",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 539,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "3017620425035",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017620425035"
+    },
+    {
+      "id": "off_france_3229820100234",
+      "name": "Fourrés Chocolat Noir",
+      "brand": "Bjorg",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 476,
+        "protein": 7.6,
+        "carbs": 66,
+        "fat": 19,
+        "fiber": 5.2,
+        "sugar": 27,
+        "salt": 0.49
+      },
+      "barcode": "3229820100234",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820100234"
+    },
+    {
+      "id": "off_france_7311070032611",
+      "name": "KRISPROLLS Complets",
+      "brand": "KRISPROLLS",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 400,
+        "protein": 13,
+        "carbs": 68,
+        "fat": 6.6,
+        "fiber": 8.3,
+        "sugar": 1.1,
+        "salt": 1.1
+      },
+      "barcode": "7311070032611",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7311070032611"
+    },
+    {
+      "id": "off_france_5449000147417",
+      "name": "Cappy PULPY",
+      "brand": "Cappy",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 39,
+        "protein": 0,
+        "carbs": 9,
+        "fat": 0,
+        "sugar": 7,
+        "salt": 0.13
+      },
+      "barcode": "5449000147417",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000147417"
+    },
+    {
+      "id": "off_france_3175681851849",
+      "name": "Pomme Noisette",
+      "brand": "Gerblé",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 457,
+        "protein": 10,
+        "carbs": 63,
+        "fat": 17,
+        "fiber": 5.9,
+        "sugar": 11,
+        "salt": 0.01
+      },
+      "barcode": "3175681851849",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681851849"
+    },
+    {
+      "id": "off_france_3155250358788",
+      "name": "Margarine bio doux tartine & cuisson",
+      "brand": "Primevère",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 485,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 55,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 0.4
+      },
+      "barcode": "3155250358788",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3155250358788"
+    },
+    {
+      "id": "off_france_3608580065340",
+      "name": "Pâte à tartiner noisettes et cacao",
+      "brand": "Bonne Maman",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 551,
+        "protein": 6.7,
+        "carbs": 53,
+        "fat": 34,
+        "fiber": 3.3,
+        "sugar": 51,
+        "salt": 0.1
+      },
+      "barcode": "3608580065340",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3608580065340"
+    },
+    {
+      "id": "off_france_3480341000674",
+      "name": "Carré Frais 0% - Nature",
+      "brand": "Elle & Vire",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 84,
+        "protein": 16,
+        "carbs": 4.5,
+        "fat": 0.3,
+        "sugar": 2.9,
+        "salt": 1.3
+      },
+      "barcode": "3480341000674",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3480341000674"
+    },
+    {
+      "id": "off_france_5449000214911",
+      "name": "Coca-Cola",
+      "brand": "Coca-Cola",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5449000214911",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000214911"
+    },
+    {
+      "id": "off_france_3229820129488",
+      "name": "Muesli Raisin, Figue, Datte, Abricot",
+      "brand": "Bjorg",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 352,
+        "protein": 11,
+        "carbs": 59,
+        "fat": 5.8,
+        "fiber": 10,
+        "sugar": 14,
+        "salt": 0.03
+      },
+      "barcode": "3229820129488",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820129488"
+    },
+    {
+      "id": "off_france_5010477348678",
+      "name": "Special Muesli 30% fruits & noix",
+      "brand": "Jordans",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 360,
+        "protein": 10,
+        "carbs": 60,
+        "fat": 7.2,
+        "fiber": 8.8,
+        "sugar": 17,
+        "salt": 0.03
+      },
+      "barcode": "5010477348678",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010477348678"
+    },
+    {
+      "id": "off_france_3256540000698",
+      "name": "Pains au lait",
+      "brand": "Brioche Pasquier",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 8.6,
+        "carbs": 55,
+        "fat": 11,
+        "fiber": 3.5,
+        "sugar": 11,
+        "salt": 0
+      },
+      "barcode": "3256540000698",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3256540000698"
+    },
+    {
+      "id": "off_france_8002270014901",
+      "name": "S. Pellegrino Water",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "8002270014901",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002270014901"
+    },
+    {
+      "id": "off_france_3175680011534",
+      "name": "Biscuit lait chocolat",
+      "brand": "Gerblé",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 457,
+        "protein": 8.5,
+        "carbs": 65,
+        "fat": 17,
+        "fiber": 5,
+        "sugar": 21,
+        "salt": 0.74
+      },
+      "barcode": "3175680011534",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175680011534"
+    },
+    {
+      "id": "off_france_3272770098090",
+      "name": "St Môret",
+      "brand": "St Môret",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 205,
+        "protein": 8.3,
+        "carbs": 3,
+        "fat": 17.8,
+        "sugar": 3,
+        "salt": 1.2
+      },
+      "barcode": "3272770098090",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3272770098090"
+    },
+    {
+      "id": "off_france_7613035040823",
+      "name": "Nestlé dessert Noir",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 548,
+        "protein": 6,
+        "carbs": 50.7,
+        "fat": 34,
+        "fiber": 7.3,
+        "sugar": 46.4,
+        "salt": 0.01
+      },
+      "barcode": "7613035040823",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613035040823"
+    },
+    {
+      "id": "off_france_3228857002245",
+      "name": "Pain de mie seigle Sandwich Harrys sans sucres ajoutés",
+      "brand": "Harrys",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 293,
+        "protein": 11,
+        "carbs": 40,
+        "fat": 8,
+        "fiber": 8.7,
+        "sugar": 3,
+        "salt": 1
+      },
+      "barcode": "3228857002245",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857002245"
+    },
+    {
+      "id": "off_france_3159470000120",
+      "name": "CORN FLAKES",
+      "brand": "Kellogg's",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 377,
+        "protein": 7,
+        "carbs": 84,
+        "fat": 0.9,
+        "fiber": 3,
+        "sugar": 8,
+        "salt": 1.1
+      },
+      "barcode": "3159470000120",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3159470000120"
+    },
+    {
+      "id": "off_france_7622210601988",
+      "name": "Granola L'Original",
+      "brand": "LU",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 488,
+        "protein": 5.9,
+        "carbs": 62,
+        "fat": 23,
+        "fiber": 3.5,
+        "sugar": 28,
+        "salt": 1.2
+      },
+      "barcode": "7622210601988",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210601988"
+    },
+    {
+      "id": "off_france_3083681095296",
+      "name": "Ratatouille Cuisinée à la Provençal",
+      "brand": "Cassegrain",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 72,
+        "protein": 1.3,
+        "carbs": 5.7,
+        "fat": 4.1,
+        "fiber": 3.4,
+        "sugar": 5.5,
+        "salt": 0.81
+      },
+      "barcode": "3083681095296",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3083681095296"
+    },
+    {
+      "id": "off_france_3229820181950",
+      "name": "Fourrés Chocolat au Lait",
+      "brand": "Bjorg",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 460,
+        "protein": 7.5,
+        "carbs": 67,
+        "fat": 20,
+        "fiber": 3.8,
+        "sugar": 30,
+        "salt": 0.52
+      },
+      "barcode": "3229820181950",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820181950"
+    },
+    {
+      "id": "off_france_3228857001194",
+      "name": "Beau & bon Céréales & graines",
+      "brand": "Harrys",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 286,
+        "protein": 12,
+        "carbs": 42,
+        "fat": 6.5,
+        "fiber": 6,
+        "sugar": 3.5,
+        "salt": 1
+      },
+      "barcode": "3228857001194",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857001194"
+    },
+    {
+      "id": "off_france_3168930009078",
+      "name": "Flocons d'avoine complète",
+      "brand": "Quaker",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 395,
+        "protein": 11,
+        "carbs": 60,
+        "fat": 8,
+        "fiber": 9,
+        "sugar": 1.1,
+        "salt": 0.01
+      },
+      "barcode": "3168930009078",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930009078"
+    },
+    {
+      "id": "off_france_3228857001316",
+      "name": "Brioche Tranchée Recette Classique",
+      "brand": "Harrys",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 345,
+        "protein": 8,
+        "carbs": 51,
+        "fat": 11,
+        "fiber": 5,
+        "sugar": 15,
+        "salt": 1.1
+      },
+      "barcode": "3228857001316",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857001316"
+    },
+    {
+      "id": "off_france_3292070005161",
+      "name": "Houmous extra - Pois chiches français & graines de sésame",
+      "brand": "L'atelier Blini",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 317,
+        "protein": 6.9,
+        "carbs": 8.7,
+        "fat": 26.8,
+        "fiber": 6.2,
+        "sugar": 0.1,
+        "salt": 1.16
+      },
+      "barcode": "3292070005161",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3292070005161"
+    },
+    {
+      "id": "off_france_3046920028721",
+      "name": "Dark absolute 99% cacao",
+      "brand": "Lindt EXCELLENCE",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 565,
+        "protein": 14,
+        "carbs": 9,
+        "fat": 49,
+        "fiber": 0,
+        "sugar": 0.4,
+        "salt": 0.06
+      },
+      "barcode": "3046920028721",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920028721"
+    },
+    {
+      "id": "off_france_3240931548111",
+      "name": "Gnocchi à poêler",
+      "brand": "Lustucru",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 190,
+        "protein": 5,
+        "carbs": 35,
+        "fat": 2.7,
+        "fiber": 2.6,
+        "sugar": 1.5,
+        "salt": 1.1
+      },
+      "barcode": "3240931548111",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3240931548111"
+    },
+    {
+      "id": "off_france_3021769505602",
+      "name": "POM'POTES Compotes Gourdes Pomme Nature 1x90g",
+      "brand": "Pom' Potes",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 57,
+        "protein": 0.5,
+        "carbs": 12,
+        "fat": 0.6,
+        "fiber": 1.3,
+        "sugar": 11,
+        "salt": 0.01
+      },
+      "barcode": "3021769505602",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3021769505602"
+    },
+    {
+      "id": "off_france_7622210995087",
+      "name": "chocolat noir noisettes entieres",
+      "brand": "cote d\\'or",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 570,
+        "protein": 7.3,
+        "carbs": 43,
+        "fat": 39,
+        "fiber": 7.8,
+        "sugar": 40,
+        "salt": 0.01
+      },
+      "barcode": "7622210995087",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210995087"
+    },
+    {
+      "id": "off_france_3168930009795",
+      "name": "Muesli Croustillant Noix de pécan & noix du Brésil",
+      "brand": "Quaker",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 420,
+        "protein": 11,
+        "carbs": 62,
+        "fat": 11,
+        "fiber": 13,
+        "sugar": 13,
+        "salt": 0.24
+      },
+      "barcode": "3168930009795",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930009795"
+    },
+    {
+      "id": "off_france_8719200012608",
+      "name": "Tartine sans huile de palme",
+      "brand": "ProActiv",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 314,
+        "protein": 0.5,
+        "carbs": 0.5,
+        "fat": 35,
+        "sugar": 0.5,
+        "salt": 0.2
+      },
+      "barcode": "8719200012608",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8719200012608"
+    },
+    {
+      "id": "off_france_3083681148619",
+      "name": "Carottes rapees citron dnp 320g",
+      "brand": "Bonduelle",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 63,
+        "protein": 1,
+        "carbs": 5.5,
+        "fat": 4.5,
+        "fiber": 3,
+        "sugar": 4.5,
+        "salt": 0.71
+      },
+      "barcode": "3083681148619",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3083681148619"
+    },
+    {
+      "id": "off_france_3770016162036",
+      "name": "Nuggets Végétaux et Gourmands",
+      "brand": "HappyVore",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 252,
+        "protein": 9,
+        "carbs": 20,
+        "fat": 14,
+        "fiber": 6.8,
+        "sugar": 0.8,
+        "salt": 1.2
+      },
+      "barcode": "3770016162036",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3770016162036"
+    },
+    {
+      "id": "off_france_3017620421006",
+      "name": "Pâte à tartiner Nutella noisettes et cacao - 750g",
+      "brand": "Nutella",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 539,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "3017620421006",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017620421006"
+    },
+    {
+      "id": "off_france_3161711001971",
+      "name": "Fromage de France",
+      "brand": "Caprice des Dieux",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 339,
+        "protein": 15,
+        "carbs": 0.8,
+        "fat": 30,
+        "sugar": 0.1,
+        "salt": 1.38
+      },
+      "barcode": "3161711001971",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3161711001971"
+    },
+    {
+      "id": "off_france_7613032779566",
+      "name": "chocapic",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 384,
+        "protein": 8.5,
+        "carbs": 73.8,
+        "fat": 4.4,
+        "fiber": 7.7,
+        "sugar": 19.9,
+        "salt": 0.2
+      },
+      "barcode": "7613032779566",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613032779566"
+    },
+    {
+      "id": "off_france_3412290071801",
+      "name": "Fromage à tartiner Ail et fines herbes fouetté MADAME LOIK - 150g",
+      "brand": "Paysan Breton",
+      "retailer": "Carrefour",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 241,
+        "protein": 5.6,
+        "carbs": 3,
+        "fat": 23,
+        "fiber": 0,
+        "sugar": 2.7,
+        "salt": 1.2
+      },
+      "barcode": "3412290071801",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3412290071801"
+    },
+    {
+      "id": "off_france_3168930163480",
+      "name": "Alvalle Gazpacho l'original",
+      "brand": "ALVALLé",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 40,
+        "protein": 1.2,
+        "carbs": 3.5,
+        "fat": 2.2,
+        "fiber": 1.2,
+        "sugar": 3.3,
+        "salt": 0.67
+      },
+      "barcode": "3168930163480",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930163480"
+    },
+    {
+      "id": "off_france_7300400481588",
+      "name": "Fibres",
+      "brand": "wasa",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 333,
+        "protein": 12,
+        "carbs": 47,
+        "fat": 5,
+        "fiber": 26,
+        "sugar": 2,
+        "salt": 1.2
+      },
+      "barcode": "7300400481588",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7300400481588"
+    },
+    {
+      "id": "off_france_3229820787015",
+      "name": "Amande sans sucres",
+      "brand": "Bjorg",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 25,
+        "protein": 0.7,
+        "carbs": 1.6,
+        "fat": 1.7,
+        "sugar": 0.5,
+        "salt": 0.05
+      },
+      "barcode": "3229820787015",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820787015"
+    },
+    {
+      "id": "off_france_3587220002252",
+      "name": "La gâche tranchée",
+      "brand": "La Fournée Dorée",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 341,
+        "protein": 8.1,
+        "carbs": 49,
+        "fat": 12,
+        "sugar": 13,
+        "salt": 1.12
+      },
+      "barcode": "3587220002252",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3587220002252"
+    },
+    {
+      "id": "off_france_7300400481571",
+      "name": "wasa",
+      "brand": "wasa",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 338,
+        "protein": 9,
+        "carbs": 62,
+        "fat": 1.5,
+        "fiber": 20,
+        "sugar": 2,
+        "salt": 1
+      },
+      "barcode": "7300400481571",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7300400481571"
+    },
+    {
+      "id": "off_france_3229820021027",
+      "name": "P'tit Nature Complet",
+      "brand": "Bjorg",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 416,
+        "protein": 7.6,
+        "carbs": 70,
+        "fat": 10,
+        "fiber": 7.6,
+        "sugar": 20,
+        "salt": 0.45
+      },
+      "barcode": "3229820021027",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820021027"
+    },
+    {
+      "id": "off_france_3229820769165",
+      "name": "Muesli avoine chocolat bio",
+      "brand": "Bjorg",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 386,
+        "protein": 12,
+        "carbs": 60,
+        "fat": 8.8,
+        "fiber": 10,
+        "sugar": 8.2,
+        "salt": 0.1
+      },
+      "barcode": "3229820769165",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820769165"
+    },
+    {
+      "id": "off_france_5411188115366",
+      "name": "Alpro smooth subtle creamy oat",
+      "brand": "alpro",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 0.8,
+        "carbs": 6.6,
+        "fat": 1.5,
+        "fiber": 0.7,
+        "sugar": 3.1,
+        "salt": 0.1
+      },
+      "barcode": "5411188115366",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115366"
+    },
+    {
+      "id": "off_france_8410076601131",
+      "name": "Crunchy avoine et miel",
+      "brand": "Nature ValleyGeneral Mills",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 8.7,
+        "carbs": 64.3,
+        "fat": 18.1,
+        "fiber": 6.4,
+        "sugar": 26.8,
+        "salt": 0.84
+      },
+      "barcode": "8410076601131",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8410076601131"
+    },
+    {
+      "id": "off_france_7622201133337",
+      "name": "Figolu",
+      "brand": "LU",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 400,
+        "protein": 4.7,
+        "carbs": 71.9,
+        "fat": 8.1,
+        "fiber": 3.1,
+        "sugar": 50,
+        "salt": 0
+      },
+      "barcode": "7622201133337",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622201133337"
+    },
+    {
+      "id": "off_france_3228857000852",
+      "name": "Pain de mie 100% mie nature",
+      "brand": "Harrys",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 264,
+        "protein": 7,
+        "carbs": 48,
+        "fat": 4,
+        "fiber": 4,
+        "sugar": 7,
+        "salt": 1.1
+      },
+      "barcode": "3228857000852",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857000852"
+    },
+    {
+      "id": "off_france_3366321051983",
+      "name": "Oméga 3® Doux",
+      "brand": "St Hubert",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 468,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 52,
+        "sugar": 0,
+        "salt": 0.41
+      },
+      "barcode": "3366321051983",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3366321051983"
+    },
+    {
+      "id": "off_france_3083680613576",
+      "name": "Lentilles préparées 1/2",
+      "brand": "Cassegrain",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 94,
+        "protein": 6.6,
+        "carbs": 14,
+        "fat": 0.5,
+        "fiber": 3.1,
+        "sugar": 0.5,
+        "salt": 0.76
+      },
+      "barcode": "3083680613576",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3083680613576"
+    },
+    {
+      "id": "off_france_3017760756198",
+      "name": "Granola LU",
+      "brand": "LU",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 503,
+        "protein": 5.7,
+        "carbs": 60,
+        "fat": 26,
+        "fiber": 3.3,
+        "sugar": 36,
+        "salt": 1
+      },
+      "barcode": "3017760756198",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017760756198"
+    },
+    {
+      "id": "off_france_3412290070385",
+      "name": "Fromage à tartiner Nature sel réduit -25% MADAME LOIK - 150g",
+      "brand": "Le Fromage Fouetté Madame Loïk",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 252,
+        "protein": 5.9,
+        "carbs": 3,
+        "fat": 24,
+        "sugar": 3,
+        "salt": 0.6
+      },
+      "barcode": "3412290070385",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3412290070385"
+    },
+    {
+      "id": "off_france_5411188115472",
+      "name": "Soyamilch",
+      "brand": "alpro",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 39,
+        "protein": 3,
+        "carbs": 2.5,
+        "fat": 1.8,
+        "fiber": 0.5,
+        "sugar": 2.5,
+        "salt": 0.09
+      },
+      "barcode": "5411188115472",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115472"
+    },
+    {
+      "id": "off_france_8076809529433",
+      "name": "Whole Wheat Penne Rigate",
+      "brand": "Barilla",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 347,
+        "protein": 13,
+        "carbs": 64,
+        "fat": 2.5,
+        "fiber": 8,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076809529433",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809529433"
+    },
+    {
+      "id": "off_france_3278690085646",
+      "name": "Emprésuré chocolat intense",
+      "brand": "Malo",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 123,
+        "protein": 7.1,
+        "carbs": 19,
+        "fat": 2.1,
+        "fiber": 0,
+        "sugar": 18,
+        "salt": 0.29
+      },
+      "barcode": "3278690085646",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3278690085646"
+    },
+    {
+      "id": "off_france_3480341000704",
+      "name": "Carré Frais 0% Ail & Fines Herbes",
+      "brand": "Elle & Vire",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 85,
+        "protein": 16,
+        "carbs": 4.5,
+        "fat": 0.3,
+        "sugar": 2.9,
+        "salt": 1.3
+      },
+      "barcode": "3480341000704",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3480341000704"
+    },
+    {
+      "id": "off_france_3229820794556",
+      "name": "Muesli Proteines Soja, Dattes, Fruits Rouges",
+      "brand": "Bjorg",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 365,
+        "protein": 21,
+        "carbs": 43,
+        "fat": 9.4,
+        "fiber": 12,
+        "sugar": 10,
+        "salt": 0.02
+      },
+      "barcode": "3229820794556",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820794556"
+    },
+    {
+      "id": "off_france_3229820783338",
+      "name": "Épeautre noisette",
+      "brand": "Bjorg",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 76,
+        "protein": 1,
+        "carbs": 11,
+        "fat": 3,
+        "fiber": 0.5,
+        "sugar": 7.6,
+        "salt": 0.09
+      },
+      "barcode": "3229820783338",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820783338"
+    },
+    {
+      "id": "off_france_5411188110842",
+      "name": "Rich and indulgent Hazelnut",
+      "brand": "alpro",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 29,
+        "protein": 0.4,
+        "carbs": 3.2,
+        "fat": 1.6,
+        "fiber": 0.3,
+        "sugar": 3.2,
+        "salt": 0.14
+      },
+      "barcode": "5411188110842",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188110842"
+    },
+    {
+      "id": "off_france_3023470001015",
+      "name": "Galettes St Michel au beurre 4X5 - 130g",
+      "brand": "saint michel",
+      "retailer": "Auchan",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 470,
+        "protein": 7.4,
+        "carbs": 73,
+        "fat": 16,
+        "fiber": 2.2,
+        "sugar": 26,
+        "salt": 0.87
+      },
+      "barcode": "3023470001015",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3023470001015"
+    },
+    {
+      "id": "off_france_3760049790214",
+      "name": "Pain De Mie Bio",
+      "brand": "La Boulangère",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 268,
+        "protein": 8.1,
+        "carbs": 47,
+        "fat": 4.2,
+        "fiber": 4.9,
+        "sugar": 6.3,
+        "salt": 1.1
+      },
+      "barcode": "3760049790214",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3760049790214"
+    },
+    {
+      "id": "off_france_3760049798609",
+      "name": "Pain de mie grandes tranches Seigle & Graines 500g",
+      "brand": "la Boulangère",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 294,
+        "protein": 12,
+        "carbs": 37,
+        "fat": 9.6,
+        "fiber": 7.2,
+        "sugar": 4.2,
+        "salt": 0.96
+      },
+      "barcode": "3760049798609",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3760049798609"
+    },
+    {
+      "id": "off_france_3175680011480",
+      "name": "Sésame",
+      "brand": "Gerblé",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 10,
+        "carbs": 64,
+        "fat": 18,
+        "fiber": 4.6,
+        "sugar": 17,
+        "salt": 0.38
+      },
+      "barcode": "3175680011480",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175680011480"
+    },
+    {
+      "id": "off_france_3046920022606",
+      "name": "Excellence 85% cacao",
+      "brand": "Lindt",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 584,
+        "protein": 12.5,
+        "carbs": 22,
+        "fat": 46,
+        "fiber": 0,
+        "sugar": 15,
+        "salt": 0.02
+      },
+      "barcode": "3046920022606",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920022606"
+    },
+    {
+      "id": "off_france_3760049794298",
+      "name": "Pain de mie Bio grandes tranches céréales & graines 500g",
+      "brand": "La Boulangère Bio",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 303,
+        "protein": 8.6,
+        "carbs": 46,
+        "fat": 8.3,
+        "fiber": 5.1,
+        "sugar": 5.1,
+        "salt": 1.1
+      },
+      "barcode": "3760049794298",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3760049794298"
+    },
+    {
+      "id": "off_france_8052575090230",
+      "name": "Nocciolata",
+      "brand": "Rigoni Di Asiago",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 544,
+        "protein": 8.1,
+        "carbs": 54,
+        "fat": 32,
+        "fiber": 3.6,
+        "sugar": 51,
+        "salt": 0.12
+      },
+      "barcode": "8052575090230",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8052575090230"
+    },
+    {
+      "id": "off_france_3760091727732",
+      "name": "Beurre bio cacahuète",
+      "brand": "ETHIQUABLE",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 622,
+        "protein": 26,
+        "carbs": 13,
+        "fat": 50,
+        "fiber": 8.3,
+        "sugar": 5.8,
+        "salt": 0.03
+      },
+      "barcode": "3760091727732",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3760091727732"
+    },
+    {
+      "id": "off_france_3229820019307",
+      "name": "Flocons d'avoine",
+      "brand": "BJORG",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 363,
+        "protein": 11,
+        "carbs": 58,
+        "fat": 7.1,
+        "fiber": 11,
+        "sugar": 1.7,
+        "salt": 0.02
+      },
+      "barcode": "3229820019307",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820019307"
+    },
+    {
+      "id": "off_france_3019081238643",
+      "name": "Sardines Huile d'Olive Vierge Extra",
+      "brand": "PARMENTIER",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Poisson",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 227,
+        "protein": 23,
+        "carbs": 0,
+        "fat": 15,
+        "sugar": 0,
+        "salt": 1.2
+      },
+      "barcode": "3019081238643",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3019081238643"
+    },
+    {
+      "id": "off_france_5449000000439",
+      "name": "Coca Cola Original taste",
+      "brand": "Coca-Cola",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 45,
+        "protein": 0,
+        "carbs": 11.2,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 11.2,
+        "salt": 0
+      },
+      "barcode": "5449000000439",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000000439"
+    },
+    {
+      "id": "off_france_3284230011884",
+      "name": "8 Pains au lait frais Bio 280g",
+      "brand": "La Boulangère Bio",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 345,
+        "protein": 9.3,
+        "carbs": 51,
+        "fat": 11,
+        "fiber": 2.4,
+        "sugar": 8.7,
+        "salt": 0.9
+      },
+      "barcode": "3284230011884",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3284230011884"
+    },
+    {
+      "id": "off_france_3175681851863",
+      "name": "Biscuits Soja Figue",
+      "brand": "Gerblé",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 457,
+        "protein": 12,
+        "carbs": 56,
+        "fat": 19,
+        "fiber": 6.9,
+        "sugar": 15,
+        "salt": 0.02
+      },
+      "barcode": "3175681851863",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681851863"
+    },
+    {
+      "id": "off_france_3336971805021",
+      "name": "Chips de lentilles saveur fines herbes",
+      "brand": "Vico",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 453,
+        "protein": 13,
+        "carbs": 56.7,
+        "fat": 19,
+        "fiber": 7.3,
+        "sugar": 2.3,
+        "salt": 1.1
+      },
+      "barcode": "3336971805021",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3336971805021"
+    },
+    {
+      "id": "off_france_3272770097642",
+      "name": "Le Goût Primeur format familial",
+      "brand": "Savencia",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 205,
+        "protein": 8.3,
+        "carbs": 3,
+        "fat": 17.8,
+        "sugar": 3,
+        "salt": 1.2
+      },
+      "barcode": "3272770097642",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3272770097642"
+    },
+    {
+      "id": "off_france_3760020508012",
+      "name": "Tartines craquantes Sarrasin",
+      "brand": "NATURENVIE",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 362,
+        "protein": 11,
+        "carbs": 72,
+        "fat": 2.3,
+        "fiber": 4.5,
+        "sugar": 1,
+        "salt": 0.57
+      },
+      "barcode": "3760020508012",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3760020508012"
+    },
+    {
+      "id": "off_france_3175681257535",
+      "name": "Biscuits 3 graines Kasha, Sésame, Pavot",
+      "brand": "Gerblé",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 448,
+        "protein": 9.5,
+        "carbs": 60,
+        "fat": 17,
+        "fiber": 8.7,
+        "sugar": 17,
+        "salt": 0.42
+      },
+      "barcode": "3175681257535",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681257535"
+    },
+    {
+      "id": "off_france_3017760542890",
+      "name": "pain grillé pelletier",
+      "brand": "Lu",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 387,
+        "protein": 12,
+        "carbs": 71,
+        "fat": 4.9,
+        "fiber": 5.1,
+        "sugar": 2.6,
+        "salt": 1.8
+      },
+      "barcode": "3017760542890",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017760542890"
+    },
+    {
+      "id": "off_france_7622210713780",
+      "name": "Belvita Petit Déjeuner Chocolat",
+      "brand": "LU",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 439,
+        "protein": 7.9,
+        "carbs": 66,
+        "fat": 14,
+        "fiber": 6.8,
+        "sugar": 27,
+        "salt": 0.62
+      },
+      "barcode": "7622210713780",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210713780"
+    },
+    {
+      "id": "off_france_3478820023184",
+      "name": "Pâte à tartiner Chocolat Noisette",
+      "brand": "Jardin Bio étic",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 557,
+        "protein": 6.2,
+        "carbs": 55,
+        "fat": 34,
+        "fiber": 3.3,
+        "sugar": 52,
+        "salt": 0.06
+      },
+      "barcode": "3478820023184",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3478820023184"
+    },
+    {
+      "id": "off_france_3182180001996",
+      "name": "Biscottes Sans sucres ajoutés Blé complet",
+      "brand": "Pasquier",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 384,
+        "protein": 14,
+        "carbs": 62,
+        "fat": 6.2,
+        "fiber": 12,
+        "sugar": 3.4,
+        "salt": 1.1
+      },
+      "barcode": "3182180001996",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3182180001996"
+    },
+    {
+      "id": "off_france_7622210713889",
+      "name": "Belvita Original Petit-Déjeuner miel et pépites de chocolat",
+      "brand": "LU",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 448,
+        "protein": 7.4,
+        "carbs": 68,
+        "fat": 15,
+        "fiber": 5.6,
+        "sugar": 29,
+        "salt": 0.64
+      },
+      "barcode": "7622210713889",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210713889"
+    },
+    {
+      "id": "off_france_7622210476104",
+      "name": "Véritable Petit Beurre",
+      "brand": "LU",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 440,
+        "protein": 8,
+        "carbs": 73,
+        "fat": 12,
+        "fiber": 3,
+        "sugar": 23,
+        "salt": 1.4
+      },
+      "barcode": "7622210476104",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210476104"
+    },
+    {
+      "id": "off_france_3017760000062",
+      "name": "Véritable Petit Beurre Pocket",
+      "brand": "lu",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 440,
+        "protein": 8,
+        "carbs": 76,
+        "fat": 12,
+        "fiber": 3,
+        "sugar": 23,
+        "salt": 1.38
+      },
+      "barcode": "3017760000062",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017760000062"
+    },
+    {
+      "id": "off_france_3168930002987",
+      "name": "Cuites au four nature",
+      "brand": "Lay's",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 442,
+        "protein": 5.9,
+        "carbs": 73,
+        "fat": 13,
+        "fiber": 6.2,
+        "sugar": 5.3,
+        "salt": 0.84
+      },
+      "barcode": "3168930002987",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930002987"
+    },
+    {
+      "id": "off_france_3278693504076",
+      "name": "Emprésuré au chocolat",
+      "brand": "Malo",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 107,
+        "protein": 5.8,
+        "carbs": 17,
+        "fat": 1.8,
+        "sugar": 17,
+        "salt": 0.22
+      },
+      "barcode": "3278693504076",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3278693504076"
+    },
+    {
+      "id": "off_france_3229820798110",
+      "name": "Granola Chocolat",
+      "brand": "Bjorg",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 420,
+        "protein": 10,
+        "carbs": 62,
+        "fat": 13,
+        "fiber": 7.5,
+        "sugar": 12,
+        "salt": 0.01
+      },
+      "barcode": "3229820798110",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820798110"
+    },
+    {
+      "id": "off_france_3302740047367",
+      "name": "Le Supérieur - à l'Etouffée - Conservation sans Nitrite",
+      "brand": "Fleury Michon",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 115,
+        "protein": 22,
+        "carbs": 0.5,
+        "fat": 2.8,
+        "fiber": 0,
+        "sugar": 0.5,
+        "salt": 1.5
+      },
+      "barcode": "3302740047367",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3302740047367"
+    },
+    {
+      "id": "off_france_3175681116832",
+      "name": "Sablé saveur COCO",
+      "brand": "Gerblé SANS SUCRES",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 427,
+        "protein": 6.2,
+        "carbs": 72,
+        "fat": 15,
+        "fiber": 4.1,
+        "sugar": 0,
+        "salt": 0.2
+      },
+      "barcode": "3175681116832",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681116832"
+    },
+    {
+      "id": "off_france_7622300689124",
+      "name": "Granola L'original Gros éclats de chocolat",
+      "brand": "Granola",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 505,
+        "protein": 4.5,
+        "carbs": 61,
+        "fat": 26,
+        "fiber": 2.9,
+        "sugar": 36,
+        "salt": 1
+      },
+      "barcode": "7622300689124",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622300689124"
+    },
+    {
+      "id": "off_france_3088542506508",
+      "name": "Sirop d'agave",
+      "brand": "Sunny Bio",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 318,
+        "protein": 0,
+        "carbs": 78,
+        "fat": 0.5,
+        "fiber": 0,
+        "sugar": 73,
+        "salt": 0.07
+      },
+      "barcode": "3088542506508",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3088542506508"
+    },
+    {
+      "id": "off_france_3033491451652",
+      "name": "Le petit suisse gervais nature 9,5 % 60 g x 12",
+      "brand": "GERVAIS",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 143,
+        "protein": 9.3,
+        "carbs": 4.5,
+        "fat": 9.5,
+        "sugar": 4.5,
+        "salt": 0.08
+      },
+      "barcode": "3033491451652",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3033491451652"
+    },
+    {
+      "id": "off_france_7622210421968",
+      "name": "Véritable Petit Écolier Chocolat au Lait",
+      "brand": "Mondelez International",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 498,
+        "protein": 6.2,
+        "carbs": 65,
+        "fat": 23,
+        "fiber": 2.8,
+        "sugar": 39,
+        "salt": 0.64
+      },
+      "barcode": "7622210421968",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210421968"
+    },
+    {
+      "id": "off_france_3175681134935",
+      "name": "Sablés sans sucres saveur citron yuzu",
+      "brand": "Gerblé",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 424,
+        "protein": 6,
+        "carbs": 72,
+        "fat": 15,
+        "fiber": 5.1,
+        "sugar": 0,
+        "salt": 0.22
+      },
+      "barcode": "3175681134935",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681134935"
+    },
+    {
+      "id": "off_france_5000112611861",
+      "name": "PET 1.75L COCA",
+      "brand": "Coca-Cola",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5000112611861",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000112611861"
+    },
+    {
+      "id": "off_france_3154230802280",
+      "name": "HERTA Lardons fumés conservation sans nitrite - 2x75g",
+      "brand": "Herta",
+      "retailer": "E.Leclerc",
+      "country": "France",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 239,
+        "protein": 17,
+        "carbs": 0,
+        "fat": 19,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 2.21
+      },
+      "barcode": "3154230802280",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3154230802280"
+    }
+  ]
+}
