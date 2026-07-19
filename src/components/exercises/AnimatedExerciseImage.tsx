@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 
+import { buildExerciseMediaUrl } from '../../constants/exerciseMedia';
 import { exerciseGifs } from '../../data/exercises.gifs';
 import { exerciseMedia } from '../../data/exerciseMedia';
 import { getCatalogExercise } from '../../store/exerciseCatalogStore';
@@ -36,22 +38,32 @@ export function AnimatedExerciseImage({
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const [fade] = useState(() => new Animated.Value(0));
-  const [failedMediaId, setFailedMediaId] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
   const enhancedMedia = exerciseMedia[id];
   const bundledSource = exerciseGifs[id];
   const catalogExercise = getCatalogExercise(id);
-  const remoteBase = catalogExercise?.remoteMediaBaseUrl;
-  const sourceA = useMemo(() => bundledSource ?? (remoteBase && catalogExercise
-    ? { uri: `${remoteBase}${catalogExercise.gif.a}` }
-    : undefined), [bundledSource, catalogExercise, remoteBase]);
-  const sourceB = useMemo(() => !bundledSource && remoteBase && catalogExercise
-    ? { uri: `${remoteBase}${catalogExercise.gif.b}` }
-    : undefined, [bundledSource, catalogExercise, remoteBase]);
-  const shouldAnimate = animate && Boolean(sourceA && sourceB);
-  const shouldUseEnhancedMedia = Boolean(enhancedMedia && animate && failedMediaId !== id);
 
+  // --- Remote URL: single animated WebP, fallback to default base URL ---
+  const remoteWebpUrl = useMemo(() => {
+    if (bundledSource) return undefined;
+    return buildExerciseMediaUrl(id, catalogExercise?.remoteMediaBaseUrl);
+  }, [bundledSource, catalogExercise?.remoteMediaBaseUrl, id]);
+
+  // --- Dual-pose crossfade for bundled sources that have remote pose B ---
+  const sourceA = useMemo(() => bundledSource ?? undefined, [bundledSource]);
+  const shouldUseEnhancedMedia = Boolean(enhancedMedia && animate && !imageError);
+  const displaySource = shouldUseEnhancedMedia
+    ? { uri: enhancedMedia!.animatedUrl }
+    : bundledSource
+      ? bundledSource
+      : remoteWebpUrl
+        ? { uri: remoteWebpUrl }
+        : null;
+
+  // --- Dual-pose fade animation (only for bundled sources with remote pose B) ---
   useEffect(() => {
-    if (!shouldAnimate) {
+    if (!bundledSource) {
       fade.stopAnimation();
       fade.setValue(0);
       return;
@@ -83,9 +95,23 @@ export function AnimatedExerciseImage({
       animation.stop();
       fade.stopAnimation();
     };
-  }, [fade, shouldAnimate, sourceA, sourceB]);
+  }, [fade, bundledSource, sourceA]);
 
-  if (!sourceA && !enhancedMedia) return null;
+  if (!displaySource && !bundledSource) {
+    return (
+      <View
+        style={[
+          styles.image,
+          styles.emptyContainer,
+          size ? { width: size, height: size } : null,
+          style,
+        ]}
+        accessibilityLabel={accessibilityLabel}
+      >
+        <Text style={styles.errorText}>{t('exercise.mediaError')}</Text>
+      </View>
+    );
+  }
 
   const containerStyle = [
     styles.image,
@@ -95,42 +121,42 @@ export function AnimatedExerciseImage({
 
   return (
     <View style={containerStyle}>
-      {shouldUseEnhancedMedia && enhancedMedia ? (
+      {/* Loading overlay for remote images */}
+      {imageLoading && remoteWebpUrl && !bundledSource ? (
+        <View style={[StyleSheet.absoluteFill, styles.overlay]}>
+          <ActivityIndicator size="small" color={c.textSecondary} />
+          <Text style={styles.overlayText}>{t('exercise.mediaLoading')}</Text>
+        </View>
+      ) : null}
+
+      {/* Error overlay for failed remote images */}
+      {imageError && !bundledSource ? (
+        <View style={[StyleSheet.absoluteFill, styles.overlay]}>
+          <Text style={styles.errorIcon}>🎬</Text>
+          <Text style={styles.overlayText}>{t('exercise.mediaError')}</Text>
+        </View>
+      ) : null}
+
+      {displaySource ? (
         <Image
-          source={{ uri: enhancedMedia.animatedUrl }}
-          placeholder={enhancedMedia.posterUrl ? { uri: enhancedMedia.posterUrl } : sourceA}
+          source={displaySource}
           style={StyleSheet.absoluteFill}
           contentFit="contain"
-          autoplay
+          autoplay={animate && Boolean(bundledSource || remoteWebpUrl)}
           cachePolicy="memory-disk"
-          transition={180}
-          onError={() => setFailedMediaId(id)}
+          onLoad={() => {
+            setImageLoading(false);
+            setImageError(false);
+          }}
+          onError={() => {
+            setImageLoading(false);
+            setImageError(true);
+          }}
           accessibilityLabel={accessibilityLabel}
         />
-      ) : (
-        <>
-          <Image
-            source={sourceA}
-            style={StyleSheet.absoluteFill}
-            contentFit="contain"
-            autoplay={animate && Boolean(bundledSource)}
-            cachePolicy="memory-disk"
-            accessibilityLabel={accessibilityLabel}
-          />
-          {shouldAnimate && sourceB ? (
-            <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity: fade }]}>
-              <Image
-                source={sourceB}
-                style={StyleSheet.absoluteFill}
-                contentFit="contain"
-                autoplay={false}
-                accessible={false}
-              />
-            </Animated.View>
-          ) : null}
-        </>
-      )}
-      {animate ? (
+      ) : null}
+
+      {animate && !imageError && !imageLoading && displaySource ? (
         <View pointerEvents="none" style={styles.motionBadge}>
           <Text style={styles.motionBadgeText}>
             {shouldUseEnhancedMedia
@@ -143,20 +169,48 @@ export function AnimatedExerciseImage({
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  image: { borderRadius: 8, backgroundColor: c.surfaceAlt, overflow: 'hidden' },
-  motionBadge: {
-    position: 'absolute',
-    right: 8,
-    bottom: 8,
-    borderRadius: 999,
-    paddingHorizontal: 9,
-    paddingVertical: 5,
-    backgroundColor: c.overlay,
-  },
-  motionBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '700',
-  },
-});
+const makeStyles = (c: ThemeColors) =>
+  StyleSheet.create({
+    image: {
+      borderRadius: 8,
+      backgroundColor: c.surfaceAlt,
+      overflow: 'hidden',
+    },
+    emptyContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: 120,
+    },
+    overlay: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1,
+    },
+    overlayText: {
+      color: c.textSecondary,
+      fontSize: 11,
+      marginTop: 6,
+    },
+    errorIcon: {
+      fontSize: 24,
+      marginBottom: 4,
+    },
+    errorText: {
+      color: c.textMuted,
+      fontSize: 12,
+    },
+    motionBadge: {
+      position: 'absolute',
+      right: 8,
+      bottom: 8,
+      borderRadius: 999,
+      paddingHorizontal: 9,
+      paddingVertical: 5,
+      backgroundColor: c.overlay,
+    },
+    motionBadgeText: {
+      color: '#FFFFFF',
+      fontSize: 11,
+      fontWeight: '700',
+    },
+  });

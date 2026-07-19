@@ -60,7 +60,7 @@ manifest.exercisePacks = [
     level: 'Tous niveaux',
     exercisesCount: remoteCatalog.length,
     file: 'exercises-all.json',
-    mediaBaseUrl: 'https://raw.githubusercontent.com/soulgp22/sport-tracker/main/assets/exercises/gifs/'
+    mediaBaseUrl: 'https://raw.githubusercontent.com/soulgp22/sport-tracker/main/media/exercises/'
   }
 ];
 await fs.writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
