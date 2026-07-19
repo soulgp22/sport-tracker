@@ -41,6 +41,15 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
+function coveredRetailers(entry: CommunityFoodDatabaseEntry) {
+  if (entry.retailers?.length) return entry.retailers.join(', ');
+  return entry.retailer ?? entry.name;
+}
+
+function primaryLabel(entry: CommunityFoodDatabaseEntry) {
+  return entry.country ?? entry.retailer ?? entry.name;
+}
+
 export function RetailerPicker({
   entries,
   value,
@@ -64,7 +73,9 @@ export function RetailerPicker({
     const term = normalize(query);
     if (!term) return entries;
     return entries.filter((entry) =>
-      normalize(`${entry.name} ${entry.retailer} ${entry.country}`).includes(term)
+      normalize(
+        `${entry.name} ${entry.retailer ?? ''} ${entry.country ?? ''} ${(entry.retailers ?? []).join(' ')}`
+      ).includes(term)
     );
   }, [entries, query]);
 
@@ -88,11 +99,11 @@ export function RetailerPicker({
         </View>
         <View style={styles.triggerCopy}>
           <Text style={[styles.triggerTitle, !selected && styles.placeholder]} numberOfLines={1}>
-            {selected?.retailer ?? placeholder}
+            {selected ? primaryLabel(selected) : placeholder}
           </Text>
           {selected ? (
-            <Text style={styles.triggerMeta} numberOfLines={1}>
-              {selected.country} · {selected.foodsCount} aliments
+            <Text style={styles.triggerMeta} numberOfLines={2}>
+              {coveredRetailers(selected)} · {selected.foodsCount} aliments · {selected.license ?? githubLabel}
             </Text>
           ) : null}
         </View>
@@ -186,9 +197,9 @@ export function RetailerPicker({
                       <Ionicons name="basket-outline" size={21} color={active ? c.primaryText : c.primary} />
                     </View>
                     <View style={styles.optionCopy}>
-                      <Text style={styles.optionTitle} numberOfLines={1}>{item.retailer}</Text>
-                      <Text style={styles.optionMeta} numberOfLines={1}>
-                        {item.country} · {item.foodsCount} aliments · {githubLabel}
+                      <Text style={styles.optionTitle} numberOfLines={1}>{primaryLabel(item)}</Text>
+                      <Text style={styles.optionMeta} numberOfLines={2}>
+                        {coveredRetailers(item)} · {item.foodsCount} aliments · {item.license ?? githubLabel}
                       </Text>
                     </View>
                     {active ? <Ionicons name="checkmark-circle" size={21} color={c.primary} /> : null}

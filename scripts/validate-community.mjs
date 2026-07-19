@@ -5,7 +5,10 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const communityDir = path.join(root, 'community');
 const catalogPath = path.join(root, 'src', 'data', 'exercises.catalog.json');
+const foodsCatalogPath = path.join(root, 'src', 'data', 'foods.default.json');
 const manifestPath = path.join(communityDir, 'index.json');
+const allowedFoodUnits = new Set(['g', 'ml', 'portion', 'unité']);
+const legacyRetailerCategories = new Set(['Céréales', 'Poissons', 'Viandes', 'Oléagineux', 'Pains']);
 
 function readJson(filePath, errors) {
   try {
@@ -18,6 +21,15 @@ function readJson(filePath, errors) {
 
 function isRecord(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isFiniteInRange(value, minimum, maximum) {
+  return typeof value === 'number' && Number.isFinite(value) && value >= minimum && value <= maximum;
+}
+
+function isOpenFoodFactsDatabase(entry, payload) {
+  return [entry.license, entry.attribution, payload?.source?.license, payload?.source?.attribution]
+    .some((value) => typeof value === 'string' && /open food facts|world\.openfoodfacts\.org/i.test(value));
 }
 
 export function validateCommunity() {
@@ -33,6 +45,14 @@ export function validateCommunity() {
   const catalogNames = new Set(
     Array.isArray(catalog)
       ? catalog.filter((entry) => isRecord(entry) && typeof entry.name === 'string').map((entry) => entry.name)
+      : []
+  );
+  const foodsCatalog = readJson(foodsCatalogPath, errors);
+  const foodCategories = new Set(
+    Array.isArray(foodsCatalog)
+      ? foodsCatalog
+        .filter((entry) => isRecord(entry) && typeof entry.category === 'string')
+        .map((entry) => entry.category)
       : []
   );
   const manifest = parsedFiles.get(path.basename(manifestPath));
@@ -59,8 +79,138 @@ export function validateCommunity() {
       }
       manifestIds.add(entry.id);
 
-      if (typeof entry.file !== 'string' || !parsedFiles.has(entry.file)) {
+      if (
+        typeof entry.file !== 'string' ||
+        !fs.existsSync(path.join(communityDir, entry.file)) ||
+        (entry.file.endsWith('.json') && !parsedFiles.has(entry.file))
+      ) {
         errors.push(`community/index.json : fichier référencé introuvable « ${entry.file ?? ''} » (${entry.id}).`);
+      }
+    }
+  }
+
+  const foodIds = new Map();
+  const barcodesByCountry = new Map();
+  let foodsCount = 0;
+
+  for (const entry of manifest.foodDatabases ?? []) {
+    if (!isRecord(entry) || typeof entry.file !== 'string') continue;
+    const location = `community/${entry.file}`;
+    if (entry.format !== 'json') {
+      errors.push(`${location} : seules les bases d’aliments JSON sont validées.`);
+      continue;
+    }
+
+    const payload = parsedFiles.get(entry.file);
+    if (!isRecord(payload) || !Array.isArray(payload.foods)) {
+      errors.push(`${location} : format invalide, tableau foods manquant.`);
+      continue;
+    }
+
+    foodsCount += payload.foods.length;
+    if (!Number.isInteger(entry.foodsCount) || entry.foodsCount !== payload.foods.length) {
+      errors.push(
+        `community/index.json : ${entry.id}.foodsCount=${entry.foodsCount ?? 'invalide'}, contenu=${payload.foods.length}.`
+      );
+    }
+
+    const openFoodFacts = isOpenFoodFactsDatabase(entry, payload);
+    const legacyRetailerDatabase = typeof entry.retailer === 'string' && !Array.isArray(entry.retailers);
+    const idsInFile = new Set();
+    const barcodesInFile = new Set();
+    const country = typeof entry.country === 'string'
+      ? entry.country
+      : typeof payload.source?.country === 'string' ? payload.source.country : entry.id;
+
+    for (const [foodIndex, food] of payload.foods.entries()) {
+      const foodLocation = `${location}, aliment ${foodIndex + 1}`;
+      if (!isRecord(food)) {
+        errors.push(`${foodLocation} : entrée invalide.`);
+        continue;
+      }
+
+      if (typeof food.id !== 'string' || food.id.trim() === '') {
+        errors.push(`${foodLocation} : id manquant ou invalide.`);
+      } else {
+        if (idsInFile.has(food.id)) {
+          errors.push(`${foodLocation} : id dupliqué dans le fichier « ${food.id} ».`);
+        }
+        idsInFile.add(food.id);
+        if (foodIds.has(food.id) && foodIds.get(food.id) !== entry.file) {
+          errors.push(`${foodLocation} : id dupliqué entre fichiers « ${food.id} » (déjà dans ${foodIds.get(food.id)}).`);
+        } else if (!foodIds.has(food.id)) {
+          foodIds.set(food.id, entry.file);
+        }
+      }
+
+      if (
+        typeof food.category !== 'string' ||
+        (!foodCategories.has(food.category) &&
+          !(legacyRetailerDatabase && legacyRetailerCategories.has(food.category)))
+      ) {
+        errors.push(`${foodLocation} : catégorie hors liste de l’app « ${food.category ?? ''} ».`);
+      }
+      if (typeof food.unit !== 'string' || !allowedFoodUnits.has(food.unit)) {
+        errors.push(`${foodLocation} : unité invalide « ${food.unit ?? ''} ».`);
+      }
+
+      const nutrition = food.nutritionPer100g;
+      if (!isRecord(nutrition)) {
+        errors.push(`${foodLocation} : nutritionPer100g manquant ou invalide.`);
+      } else {
+        if (!isFiniteInRange(nutrition.calories, 0, 900)) {
+          errors.push(`${foodLocation} : calories hors plage 0–900.`);
+        }
+        for (const macro of ['protein', 'carbs', 'fat']) {
+          if (!isFiniteInRange(nutrition[macro], 0, 100)) {
+            errors.push(`${foodLocation} : ${macro} hors plage 0–100.`);
+          }
+        }
+        for (const optionalMacro of ['fiber', 'sugar', 'salt']) {
+          if (optionalMacro in nutrition && !isFiniteInRange(nutrition[optionalMacro], 0, 100)) {
+            errors.push(`${foodLocation} : ${optionalMacro} hors plage 0–100.`);
+          }
+        }
+
+        if (
+          isFiniteInRange(nutrition.calories, 0, 900) &&
+          ['protein', 'carbs', 'fat'].every((macro) => isFiniteInRange(nutrition[macro], 0, 100))
+        ) {
+          const expectedCalories = 4 * nutrition.protein + 4 * nutrition.carbs + 9 * nutrition.fat;
+          const consistent = nutrition.calories === 0
+            ? expectedCalories === 0
+            : Math.abs(nutrition.calories - expectedCalories) <= nutrition.calories * 0.35;
+          if (!consistent) {
+            errors.push(
+              `${foodLocation} : énergie incohérente (${nutrition.calories} kcal, macros=${expectedCalories.toFixed(1)} kcal).`
+            );
+          }
+        }
+      }
+
+      if (typeof food.barcode === 'string' && food.barcode.trim() !== '') {
+        const barcode = food.barcode.trim();
+        if (barcodesInFile.has(barcode)) {
+          errors.push(`${foodLocation} : code-barres dupliqué dans le fichier « ${barcode} ».`);
+        }
+        barcodesInFile.add(barcode);
+        const countryBarcode = `${country}\u0000${barcode}`;
+        if (
+          barcodesByCountry.has(countryBarcode) &&
+          barcodesByCountry.get(countryBarcode) !== entry.file
+        ) {
+          errors.push(
+            `${foodLocation} : code-barres dupliqué pour ${country} « ${barcode} » (déjà dans ${barcodesByCountry.get(countryBarcode)}).`
+          );
+        } else if (!barcodesByCountry.has(countryBarcode)) {
+          barcodesByCountry.set(countryBarcode, entry.file);
+        }
+      } else if (openFoodFacts) {
+        errors.push(`${foodLocation} : barcode obligatoire pour une base Open Food Facts.`);
+      }
+
+      if (openFoodFacts && (typeof food.sourceUrl !== 'string' || food.sourceUrl.trim() === '')) {
+        errors.push(`${foodLocation} : sourceUrl obligatoire pour une base Open Food Facts.`);
       }
     }
   }
@@ -155,7 +305,7 @@ export function validateCommunity() {
     }
   }
 
-  return { errors, jsonFilesCount: jsonFiles.length, programsCount };
+  return { errors, jsonFilesCount: jsonFiles.length, programsCount, foodsCount };
 }
 
 const result = validateCommunity();
@@ -166,6 +316,6 @@ if (result.errors.length > 0) {
 } else {
   console.log(
     `Validation Community réussie : ${result.jsonFilesCount} fichiers JSON valides, ` +
-    `${result.programsCount} programmes, tous les noms d'exercices correspondent au catalogue.`
+    `${result.programsCount} programmes et ${result.foodsCount} aliments contrôlés.`
   );
 }

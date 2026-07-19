@@ -109,10 +109,12 @@ export const useFoodStore = create<FoodState>()(
       },
 
       importFoods: (text) => {
-        const existingIds = get()
-          .getAllFoods()
-          .map((food) => food.id);
-        const result = validateFoodsJson(text, existingIds);
+        const allFoods = get().getAllFoods();
+        const existingIds = allFoods.map((food) => food.id);
+        const existingBarcodes = allFoods
+          .filter((food) => food.barcode && food.barcode.trim().length > 0)
+          .map((food) => food.barcode!.trim());
+        const result = validateFoodsJson(text, existingIds, existingBarcodes);
 
         if (result.foods.length > 0) {
           set((state) => ({ customFoods: [...result.foods, ...state.customFoods] }));
@@ -127,10 +129,12 @@ export const useFoodStore = create<FoodState>()(
 
       importFoodsFromCsv: (text) => {
         const { foods, errors: csvErrors } = parseFoodsCsv(text);
-        const existingIds = get()
-          .getAllFoods()
-          .map((food) => food.id);
-        const result = validateFoodsJson(JSON.stringify({ foods }), existingIds);
+        const allFoods = get().getAllFoods();
+        const existingIds = allFoods.map((food) => food.id);
+        const existingBarcodes = allFoods
+          .filter((food) => food.barcode && food.barcode.trim().length > 0)
+          .map((food) => food.barcode!.trim());
+        const result = validateFoodsJson(JSON.stringify({ foods }), existingIds, existingBarcodes);
 
         if (result.foods.length > 0) {
           set((state) => ({ customFoods: [...result.foods, ...state.customFoods] }));

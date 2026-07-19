@@ -9,8 +9,14 @@ Chaque fichier distant est limité à 5 Mo par l’application et son nom doit r
 fichier simple, sans sous-dossier. Les bases commerciales doivent être présentées comme
 communautaires et non officielles, avec une invitation à vérifier les valeurs sur l’emballage.
 
-Pour ajouter une enseigne, créer son fichier dans ce dossier puis ajouter une entrée dans
-`foodDatabases` avec un identifiant unique, le nombre d’aliments, le format et l’avertissement.
+Les nouvelles bases d’aliments sont organisées par pays. Une entrée `foodDatabases` décrit le
+pays, les enseignes couvertes dans `retailers`, le nombre réel d’aliments, le format, la licence,
+l’attribution et l’avertissement. Le champ historique `retailer` reste pris en charge pour les
+bases organisées par enseigne.
+
+Les packs Open Food Facts utilisent la licence ODbL et attribuent leur source à
+`https://world.openfoodfacts.org`. Après toute génération, lancer le validateur pour synchroniser
+`foodsCount` avec le contenu réel et contrôler les aliments.
 
 ## Packs de programmes
 

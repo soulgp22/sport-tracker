@@ -32,6 +32,10 @@ function formatDays(daysCount: number) {
   return `${daysCount} jour${daysCount !== 1 ? 's' : ''}`;
 }
 
+function formatRetailers(entry: CommunityFoodDatabaseEntry) {
+  return entry.retailers?.join(', ') ?? entry.retailer ?? entry.name;
+}
+
 function CommunityProgramCard({
   entry,
   disabled,
@@ -126,7 +130,7 @@ function CommunityFoodCard({
           <Text style={styles.author}>Par {entry.author}</Text>
         </View>
         <View style={styles.retailerBadge}>
-          <Text style={styles.retailerText}>{entry.retailer}</Text>
+          <Text style={styles.retailerText}>{entry.country ?? entry.retailer ?? entry.name}</Text>
         </View>
       </View>
 
@@ -139,13 +143,21 @@ function CommunityFoodCard({
             {entry.foodsCount} aliment{entry.foodsCount !== 1 ? 's' : ''}
           </Text>
         </View>
+        {entry.country ? (
+          <View style={styles.metaRow}>
+            <Ionicons name="location-outline" size={16} color={c.textSecondary} />
+            <Text style={styles.metaText}>{entry.country}</Text>
+          </View>
+        ) : null}
         <View style={styles.metaRow}>
-          <Ionicons name="location-outline" size={16} color={c.textSecondary} />
-          <Text style={styles.metaText}>{entry.country}</Text>
+          <Ionicons name="storefront-outline" size={16} color={c.textSecondary} />
+          <Text style={styles.metaText}>Enseignes : {formatRetailers(entry)}</Text>
         </View>
         <View style={styles.metaRow}>
           <Ionicons name="document-outline" size={16} color={c.textSecondary} />
-          <Text style={styles.metaText}>{entry.format.toUpperCase()}</Text>
+          <Text style={styles.metaText}>
+            {entry.format.toUpperCase()} · Source : {entry.license ?? 'GitHub'}
+          </Text>
         </View>
       </View>
 

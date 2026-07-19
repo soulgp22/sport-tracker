@@ -108,6 +108,42 @@ describe('communityStore', () => {
     });
   });
 
+  it('parses country food databases with covered retailers and Open Food Facts metadata', async () => {
+    const manifest = manifestFixture();
+    manifest.foodDatabases = [
+      {
+        id: 'foods-france',
+        name: 'Produits France — Open Food Facts',
+        description: 'Sélection par pays.',
+        author: 'Communauté Life Sport Tracker',
+        country: 'France',
+        retailers: ['Carrefour', 'Auchan', 'E.Leclerc'],
+        foodsCount: 101,
+        format: 'json',
+        file: 'foods-france.json',
+        disclaimer: 'Vérifiez les valeurs sur l’emballage.',
+        license: 'ODbL — Open Food Facts',
+        attribution: 'https://world.openfoodfacts.org',
+      },
+    ];
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result?.foodDatabases[0]).toEqual(manifest.foodDatabases[0]);
+  });
+
+  it('keeps compatibility with a food database identified by retailer only', async () => {
+    const manifest = manifestFixture();
+    const { country: _country, ...retailerOnly } = manifest.foodDatabases[0];
+    const legacyManifest = { ...manifest, foodDatabases: [retailerOnly] };
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(legacyManifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result?.foodDatabases[0]).toEqual(retailerOnly);
+  });
+
   it('keeps optional program metadata optional for legacy manifests', async () => {
     const legacyProgram = {
       id: 'legacy-program',

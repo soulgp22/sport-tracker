@@ -45,6 +45,22 @@ function readNonEmptyString(
   return value.trim();
 }
 
+function readOptionalString(
+  record: Record<string, unknown>,
+  key: 'brand' | 'retailer' | 'country' | 'barcode' | 'sourceUrl',
+  label: string,
+  errors: string[]
+) {
+  if (!(key in record)) return undefined;
+  const value = record[key];
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    errors.push(`Aliment ${label} : le champ optionnel "${key}" doit être une chaîne non vide.`);
+    return undefined;
+  }
+
+  return value.trim();
+}
+
 function readUnit(record: Record<string, unknown>, label: string, errors: string[]) {
   const value = record.unit;
   if (typeof value !== 'string' || !allowedUnits.includes(value as FoodUnit)) {
@@ -119,7 +135,11 @@ function extractFoods(parsed: unknown, errors: string[]) {
   return [];
 }
 
-export function validateFoodsJson(text: string, existingIds: string[] = []): FoodValidationResult {
+export function validateFoodsJson(
+  text: string,
+  existingIds: string[] = [],
+  existingBarcodes: string[] = [],
+): FoodValidationResult {
   const errors: string[] = [];
   const duplicateIdSet = new Set<string>();
   let parsed: unknown;
@@ -138,6 +158,10 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
   const rawFoods = extractFoods(parsed, errors);
   const fileIdCounts = new Map<string, number>();
   const existingIdSet = new Set(existingIds);
+  const existingBarcodeSet = new Set(existingBarcodes.filter((b) => b.length > 0));
+
+  // Track barcodes within the file for deduplication
+  const barcodeToIds = new Map<string, Set<string>>();
 
   rawFoods.forEach((rawFood) => {
     if (!isRecord(rawFood) || typeof rawFood.id !== 'string' || rawFood.id.trim().length === 0) {
@@ -146,6 +170,15 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
 
     const id = rawFood.id.trim();
     fileIdCounts.set(id, (fileIdCounts.get(id) ?? 0) + 1);
+
+    // Track barcodes for deduplication (only non-empty strings)
+    if (typeof rawFood.barcode === 'string' && rawFood.barcode.trim().length > 0) {
+      const barcode = rawFood.barcode.trim();
+      if (!barcodeToIds.has(barcode)) {
+        barcodeToIds.set(barcode, new Set());
+      }
+      barcodeToIds.get(barcode)!.add(id);
+    }
   });
 
   for (const [id, count] of fileIdCounts) {
@@ -154,6 +187,16 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
     }
     if (existingIdSet.has(id)) {
       addUnique(duplicateIdSet, id);
+    }
+  }
+
+  // Dedup by barcode: reject entries whose barcode already exists
+  // or appears more than once within the imported file
+  for (const [barcode, ids] of barcodeToIds) {
+    if (ids.size > 1 || existingBarcodeSet.has(barcode)) {
+      for (const id of ids) {
+        addUnique(duplicateIdSet, id);
+      }
     }
   }
 
@@ -179,6 +222,11 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
     const category = readNonEmptyString(rawFood, 'category', label, itemErrors);
     const unit = readUnit(rawFood, label, itemErrors);
     const nutritionPer100g = readNutrition(rawFood, label, itemErrors);
+    const brand = readOptionalString(rawFood, 'brand', label, itemErrors);
+    const retailer = readOptionalString(rawFood, 'retailer', label, itemErrors);
+    const country = readOptionalString(rawFood, 'country', label, itemErrors);
+    const barcode = readOptionalString(rawFood, 'barcode', label, itemErrors);
+    const sourceUrl = readOptionalString(rawFood, 'sourceUrl', label, itemErrors);
 
     if (id && duplicateIdSet.has(id)) {
       itemErrors.push(`Aliment ${label} : l'id "${id}" est déjà utilisé.`);
@@ -192,9 +240,14 @@ export function validateFoodsJson(text: string, existingIds: string[] = []): Foo
     validFoods.push({
       id: id as string,
       name: name as string,
+      ...(brand ? { brand } : {}),
+      ...(retailer ? { retailer } : {}),
+      ...(country ? { country } : {}),
       category: category as string,
       unit: unit as FoodUnit,
       nutritionPer100g: nutritionPer100g as FoodNutrition,
+      ...(barcode ? { barcode } : {}),
+      ...(sourceUrl ? { sourceUrl } : {}),
       isCustom: true,
     });
   });

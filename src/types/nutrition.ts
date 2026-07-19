@@ -13,9 +13,14 @@ export interface FoodNutrition {
 export interface Food {
   id: string;
   name: string;
+  brand?: string;
+  retailer?: string;
+  country?: string;
   category: string;
   unit: FoodUnit;
   nutritionPer100g: FoodNutrition;
+  barcode?: string;
+  sourceUrl?: string;
   isCustom: boolean;
 }
 
