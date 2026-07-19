@@ -12,6 +12,7 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 interface FoodSection {
   title: string;
@@ -20,6 +21,7 @@ interface FoodSection {
 
 export default function FoodsScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
@@ -44,11 +46,11 @@ export default function FoodsScreen() {
     const nextSections: FoodSection[] = [];
 
     if (custom.length > 0) {
-      nextSections.push({ title: `Mes aliments (${custom.length})`, data: custom });
+      nextSections.push({ title: t('foods.myFoods', { count: custom.length }), data: custom });
     }
 
     if (defaults.length > 0) {
-      nextSections.push({ title: `Par défaut (${defaults.length})`, data: defaults });
+      nextSections.push({ title: t('foods.defaultFoods', { count: defaults.length }), data: defaults });
     }
 
     return nextSections;
@@ -63,7 +65,7 @@ export default function FoodsScreen() {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Rechercher un aliment"
+            placeholder={t('foods.searchPlaceholder')}
             autoCapitalize="none"
           />
         </View>
@@ -94,8 +96,8 @@ export default function FoodsScreen() {
           ListEmptyComponent={
             <EmptyState
               icon="search-outline"
-              title="Aucun aliment"
-              subtitle="Essayez une autre recherche ou un autre filtre"
+              title={t('foods.noFoods')}
+              subtitle={t('foods.noFoodsHelp')}
             />
           }
           contentContainerStyle={hasResults ? styles.list : styles.empty}
@@ -105,7 +107,7 @@ export default function FoodsScreen() {
 
         <View style={styles.footer}>
           <Button
-            title="+ Ajouter un aliment"
+            title={t('foods.addFood')}
             variant="secondary"
             onPress={() => router.push('/(tabs)/foods/new' as never)}
           />

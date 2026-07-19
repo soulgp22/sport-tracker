@@ -6,7 +6,7 @@
       "name": "Full Body Débutant",
       "description": "Programme corps entier 3 séances/semaine, idéal pour démarrer la musculation sur les mouvements de base.",
       "author": "Life Sport Tracker",
-      "level": "Débutant",
+      "level": "beginner",
       "daysCount": 3,
       "exercisesCount": 15,
       "file": "full-body-3.json",
@@ -19,14 +19,32 @@
         "débutant",
         "full body",
         "3 jours"
-      ]
+      ],
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Full Body Beginner",
+        "es": "Full Body Principiante",
+        "de": "Ganzkörper für Einsteiger"
+      },
+      "descriptionI18n": {
+        "en": "Full body program, 3 sessions/week, ideal to start weight training on basic movements.",
+        "es": "Programa de cuerpo completo 3 sesiones/semana, ideal para comenzar la musculación con movimientos básicos.",
+        "de": "Ganzkörperprogramm, 3 Einheiten/Woche, ideal für den Einstieg ins Krafttraining mit Grundübungen."
+      },
+      "goalI18n": {
+        "en": "Full body initiation",
+        "es": "Iniciación full body",
+        "de": "Ganzkörper-Einführung"
+      }
     },
     {
       "id": "ppl-3",
       "name": "Push Pull Legs",
       "description": "Le grand classique : Poussée / Tirage / Jambes. À enchaîner 3 à 6 jours/semaine selon ta récupération.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "daysCount": 3,
       "exercisesCount": 16,
       "file": "ppl-3.json",
@@ -39,14 +57,31 @@
         "PPL",
         "3 jours",
         "hypertrophie"
-      ]
+      ],
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "es": "Push Pull Legs",
+        "de": "Push Pull Legs"
+      },
+      "descriptionI18n": {
+        "en": "The classic: Push / Pull / Legs. Chain 3 to 6 days/week based on your recovery.",
+        "es": "El gran clásico: Empuje / Tirón / Piernas. Encadena de 3 a 6 días/semana según tu recuperación.",
+        "de": "Der große Klassiker: Push / Pull / Beine. 3 bis 6 Tage/Woche je nach Erholung."
+      },
+      "goalI18n": {
+        "en": "Hypertrophy in Push / Pull / Legs",
+        "es": "Hipertrofia en Push / Pull / Legs",
+        "de": "Hypertrophie in Push / Pull / Beine"
+      }
     },
     {
       "id": "upper-lower-4",
       "name": "Upper / Lower",
       "description": "Haut / Bas sur 4 séances : bon équilibre volume et récupération pour progresser en force.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "daysCount": 4,
       "exercisesCount": 21,
       "file": "upper-lower-4.json",
@@ -59,14 +94,31 @@
         "upper lower",
         "4 jours",
         "force"
-      ]
+      ],
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "es": "Upper / Lower",
+        "de": "Upper / Lower"
+      },
+      "descriptionI18n": {
+        "en": "Upper / Lower over 4 sessions: good balance of volume and recovery for strength progression.",
+        "es": "Tren superior / inferior en 4 sesiones: buen equilibrio entre volumen y recuperación para progresar en fuerza.",
+        "de": "Oberkörper / Unterkörper auf 4 Einheiten: gute Balance aus Volumen und Erholung für Kraftzuwachs."
+      },
+      "goalI18n": {
+        "en": "Upper / lower strength and hypertrophy",
+        "es": "Fuerza e hipertrofia tren superior / inferior",
+        "de": "Kraft und Hypertrophie Ober-/Unterkörper"
+      }
     },
     {
       "id": "sans-materiel-integral",
       "name": "Sans matériel intégral",
       "description": "Trois séances au poids du corps : jambes, poussées, tirages accessibles et chaîne postérieure. Travaillez à RIR 1–3. Pour Plank et Side Bridge, reps indique des secondes.",
       "author": "Life Sport Tracker",
-      "level": "Débutant",
+      "level": "beginner",
       "goal": "Force relative et hypertrophie au poids du corps",
       "equipment": "Aucun matériel",
       "sessionsPerWeek": 3,
@@ -80,14 +132,32 @@
       ],
       "file": "sans-materiel-integral.json",
       "daysCount": 3,
-      "exercisesCount": 16
+      "exercisesCount": 16,
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "nameI18n": {
+        "en": "Bodyweight Only — Complete",
+        "es": "Solo Peso Corporal — Completo",
+        "de": "Nur Körpergewicht — Komplett"
+      },
+      "descriptionI18n": {
+        "en": "Three bodyweight sessions: legs, pushes, accessible pulls and posterior chain. Work at RIR 1–3.",
+        "es": "Tres sesiones al peso corporal: piernas, empujes, tirones accesibles y cadena posterior.",
+        "de": "Drei Körpergewichtseinheiten: Beine, Drücken, Ziehen und hintere Kette."
+      },
+      "goalI18n": {
+        "en": "Relative strength and bodyweight hypertrophy",
+        "es": "Fuerza relativa e hipertrofia al peso corporal",
+        "de": "Relative Kraft und Hypertrophie mit Körpergewicht"
+      }
     },
     {
       "id": "debutant-fondamentaux",
       "name": "Débutant — Fondamentaux",
       "description": "Initiation en trois séances aux patrons squat, charnière, poussée et tirage, avec volume progressif et technique prioritaire à RIR 2–3. Plank est compté en secondes.",
       "author": "Life Sport Tracker",
-      "level": "Débutant",
+      "level": "beginner",
       "goal": "Apprendre les mouvements de base",
       "equipment": "Barre, haltères, poulie et machines",
       "sessionsPerWeek": 3,
@@ -101,14 +171,32 @@
       ],
       "file": "debutant-fondamentaux.json",
       "daysCount": 3,
-      "exercisesCount": 17
+      "exercisesCount": 17,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Beginner — Fundamentals",
+        "es": "Principiante — Fundamentos",
+        "de": "Einsteiger — Grundlagen"
+      },
+      "descriptionI18n": {
+        "en": "Learn the fundamental movements: squat, bench, deadlift, row and press.",
+        "es": "Aprende los movimientos fundamentales: sentadilla, press banca, peso muerto, remo y press.",
+        "de": "Lerne die Grundbewegungen: Kniebeuge, Bankdrücken, Kreuzheben, Rudern und Drücken."
+      },
+      "goalI18n": {
+        "en": "Learn basic movements",
+        "es": "Aprender los movimientos básicos",
+        "de": "Grundbewegungen erlernen"
+      }
     },
     {
       "id": "perte-poids-resistance-densite",
       "name": "Perte de poids — Résistance & densité",
       "description": "Quatre séances alternant résistance lourde pour préserver la masse maigre et blocs métaboliques denses. Gardez RIR 1–3 sur la force ; les mouvements de circuit utilisent 45–90 s de repos. Pour la corde et les sprints, reps indique des secondes.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Perte de poids et maintien musculaire",
       "equipment": "Barre, haltères, poulie et poids du corps",
       "sessionsPerWeek": 4,
@@ -122,14 +210,32 @@
       ],
       "file": "perte-poids-resistance-densite.json",
       "daysCount": 4,
-      "exercisesCount": 22
+      "exercisesCount": 22,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Weight Loss — Resistance & Density",
+        "es": "Pérdida de Peso — Resistencia y Densidad",
+        "de": "Gewichtsverlust — Widerstand & Dichte"
+      },
+      "descriptionI18n": {
+        "en": "Program designed to preserve muscle mass during a caloric deficit.",
+        "es": "Programa diseñado para preservar la masa muscular durante un déficit calórico.",
+        "de": "Programm zum Muskelerhalt im Kaloriendefizit."
+      },
+      "goalI18n": {
+        "en": "Weight loss and muscle preservation",
+        "es": "Pérdida de peso y mantenimiento muscular",
+        "de": "Gewichtsverlust und Muskelerhalt"
+      }
     },
     {
       "id": "remise-en-forme-progressive",
       "name": "Remise en forme progressive",
       "description": "Reprise graduelle en trois séances : stabilité et amplitude, puis renforcement global sans aller à l’échec (RIR 3 au départ, puis 2). Plank est compté en secondes.",
       "author": "Life Sport Tracker",
-      "level": "Débutant",
+      "level": "beginner",
       "goal": "Reprendre une activité régulière sans surcharge brutale",
       "equipment": "Haltères légers, élastique et poids du corps",
       "sessionsPerWeek": 3,
@@ -143,14 +249,32 @@
       ],
       "file": "remise-en-forme-progressive.json",
       "daysCount": 3,
-      "exercisesCount": 16
+      "exercisesCount": 16,
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "nameI18n": {
+        "en": "Progressive Fitness Comeback",
+        "es": "Vuelta al Deporte Progresiva",
+        "de": "Progressiver Wiedereinstieg"
+      },
+      "descriptionI18n": {
+        "en": "Gradual return to regular physical activity without excessive strain.",
+        "es": "Retorno gradual a la actividad física regular sin sobrecarga brusca.",
+        "de": "Schrittweise Rückkehr zu regelmäßiger Aktivität ohne Überlastung."
+      },
+      "goalI18n": {
+        "en": "Return to regular activity without sudden overload",
+        "es": "Volver a una actividad regular sin sobrecarga brusca",
+        "de": "Rückkehr zu regelmäßiger Aktivität"
+      }
     },
     {
       "id": "musculation-complete-hypertrophie",
       "name": "Musculation complète — Hypertrophie",
       "description": "Split haut/bas sur quatre jours, 10–20 séries dures par grand groupe musculaire, 6–20 répétitions, repos 90–150 s et RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Hypertrophie de l’ensemble du corps",
       "equipment": "Barre, haltères, poulies et machines",
       "sessionsPerWeek": 4,
@@ -164,14 +288,32 @@
       ],
       "file": "musculation-complete-hypertrophie.json",
       "daysCount": 4,
-      "exercisesCount": 26
+      "exercisesCount": 26,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Complete Bodybuilding — Hypertrophy",
+        "es": "Musculación Completa — Hipertrofia",
+        "de": "Komplettes Bodybuilding — Hypertrophie"
+      },
+      "descriptionI18n": {
+        "en": "Full body hypertrophy program with varied exercises for balanced muscle development.",
+        "es": "Programa de hipertrofia de cuerpo completo con ejercicios variados.",
+        "de": "Ganzkörper-Hypertrophieprogramm mit abwechslungsreichen Übungen."
+      },
+      "goalI18n": {
+        "en": "Full body hypertrophy",
+        "es": "Hipertrofia del cuerpo completo",
+        "de": "Ganzkörper-Hypertrophie"
+      }
     },
     {
       "id": "preparation-physique",
       "name": "Préparation physique — Force & puissance",
       "description": "Quatre séances ordonnées explosivité à l’état frais, force lourde, accessoires puis conditionnement. Les séries de force utilisent 3–6 reps et 180–300 s de repos. Pour les carries, sprints et poussées de traîneau, reps indique des secondes.",
       "author": "Life Sport Tracker",
-      "level": "Avancé",
+      "level": "advanced",
       "goal": "Force, explosivité et conditionnement athlétique",
       "equipment": "Barre, medecine-ball, box, traîneau et poids du corps",
       "sessionsPerWeek": 4,
@@ -185,14 +327,32 @@
       ],
       "file": "preparation-physique.json",
       "daysCount": 4,
-      "exercisesCount": 22
+      "exercisesCount": 22,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Athletic Prep — Strength & Power",
+        "es": "Preparación Atlética — Fuerza y Potencia",
+        "de": "Athletiktraining — Kraft & Leistung"
+      },
+      "descriptionI18n": {
+        "en": "Advanced program combining strength, explosiveness and athletic conditioning.",
+        "es": "Programa avanzado de fuerza, explosividad y acondicionamiento atlético.",
+        "de": "Fortgeschrittenes Programm für Kraft, Explosivität und athletisches Konditionstraining."
+      },
+      "goalI18n": {
+        "en": "Strength, explosiveness and athletic conditioning",
+        "es": "Fuerza, explosividad y acondicionamiento atlético",
+        "de": "Kraft, Explosivität und athletische Konditionierung"
+      }
     },
     {
       "id": "full-body-2-jours",
       "name": "Full body condensé — 2 jours",
       "description": "Deux longues séances corps entier complémentaires pour progresser avec peu de disponibilité. Mouvements prioritaires en premier, poussée/tirage équilibrés, RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Force et hypertrophie avec deux créneaux",
       "equipment": "Barre, haltères, poulie et machines",
       "sessionsPerWeek": 2,
@@ -206,14 +366,32 @@
       ],
       "file": "full-body-2-jours.json",
       "daysCount": 2,
-      "exercisesCount": 14
+      "exercisesCount": 14,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Condensed Full Body — 2 Days",
+        "es": "Full Body Condensado — 2 Días",
+        "de": "Kompakter Ganzkörper — 2 Tage"
+      },
+      "descriptionI18n": {
+        "en": "Optimised full body program for 2 weekly slots, targeting all muscle groups with compound movements.",
+        "es": "Programa full body optimizado para 2 huecos semanales con movimientos compuestos.",
+        "de": "Optimiertes Ganzkörperprogramm für 2 Termine/Woche mit Grundübungen."
+      },
+      "goalI18n": {
+        "en": "Strength and hypertrophy in two weekly sessions",
+        "es": "Fuerza e hipertrofia en dos sesiones semanales",
+        "de": "Kraft und Hypertrophie in zwei Einheiten/Woche"
+      }
     },
     {
       "id": "progression-3-jours",
       "name": "Progression structurée — 3 jours",
       "description": "Organisation jambes / poussée / tirage sur trois jours, avec rappels antagonistes et chaîne postérieure pour un ratio poussée-tirage proche de 1:1. RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Hypertrophie équilibrée sur trois séances",
       "equipment": "Barre, haltères, poulies et machines",
       "sessionsPerWeek": 3,
@@ -227,14 +405,32 @@
       ],
       "file": "progression-3-jours.json",
       "daysCount": 3,
-      "exercisesCount": 18
+      "exercisesCount": 18,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Structured Progression — 3 Days",
+        "es": "Progresión Estructurada — 3 Días",
+        "de": "Strukturierte Progression — 3 Tage"
+      },
+      "descriptionI18n": {
+        "en": "Balanced hypertrophy program over three sessions with progressive overload planning.",
+        "es": "Programa de hipertrofia equilibrado en tres sesiones.",
+        "de": "Ausgewogenes Hypertrophieprogramm über drei Einheiten."
+      },
+      "goalI18n": {
+        "en": "Balanced hypertrophy across three sessions",
+        "es": "Hipertrofia equilibrada en tres sesiones",
+        "de": "Ausgewogene Hypertrophie über drei Einheiten"
+      }
     },
     {
       "id": "torso-jambes-4-jours",
       "name": "Torso / Jambes — 4 jours",
       "description": "Quatre jours ondulant force puis hypertrophie : deux séances torso et deux jambes avec exercices et fourchettes distincts, RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Développer force et masse sur quatre jours",
       "equipment": "Barre, haltères, poulies et machines",
       "sessionsPerWeek": 4,
@@ -248,14 +444,32 @@
       ],
       "file": "torso-jambes-4-jours.json",
       "daysCount": 4,
-      "exercisesCount": 23
+      "exercisesCount": 23,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Torso / Legs — 4 Days",
+        "es": "Torso / Piernas — 4 Días",
+        "de": "Torso / Beine — 4 Tage"
+      },
+      "descriptionI18n": {
+        "en": "Split alternating torso and leg sessions over four days to develop strength and mass.",
+        "es": "División alternando sesiones de torso y piernas en cuatro días.",
+        "de": "Split mit abwechselnden Torso- und Beineinheiten über vier Tage."
+      },
+      "goalI18n": {
+        "en": "Develop strength and mass over four days",
+        "es": "Desarrollar fuerza y masa en cuatro días",
+        "de": "Kraft und Masse an vier Tagen aufbauen"
+      }
     },
     {
       "id": "split-5-jours",
       "name": "Split spécialisé — 5 jours",
       "description": "Cinq séances spécialisées poitrine-dos-jambes-épaules-bras, avec rappels antagonistes pour répartir 10–20 séries hebdomadaires et préserver l’équilibre poussée/tirage. RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Avancé",
+      "level": "advanced",
       "goal": "Hypertrophie à haut volume réparti",
       "equipment": "Salle complète : barres, haltères, câbles et machines",
       "sessionsPerWeek": 5,
@@ -269,14 +483,32 @@
       ],
       "file": "split-5-jours.json",
       "daysCount": 5,
-      "exercisesCount": 27
+      "exercisesCount": 27,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Specialised Split — 5 Days",
+        "es": "Split Especializado — 5 Días",
+        "de": "Spezialisierter Split — 5 Tage"
+      },
+      "descriptionI18n": {
+        "en": "High-volume hypertrophy split over five days for advanced lifters.",
+        "es": "Split de hipertrofia de alto volumen en cinco días para avanzados.",
+        "de": "High-Volume-Hypertrophie-Split über fünf Tage."
+      },
+      "goalI18n": {
+        "en": "High-volume hypertrophy split",
+        "es": "Hipertrofia de alto volumen repartido",
+        "de": "High-Volume-Hypertrophie verteilt"
+      }
     },
     {
       "id": "domicile-minimal",
       "name": "À domicile — Matériel minimal",
       "description": "Quatre séances maison avec une paire d’haltères et un élastique : deux full body, un haut, un bas. RIR 1–3. Plank et Side Bridge utilisent des secondes dans reps.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Hypertrophie et condition physique à domicile",
       "equipment": "Haltères, élastique et poids du corps",
       "sessionsPerWeek": 4,
@@ -290,14 +522,32 @@
       ],
       "file": "domicile-minimal.json",
       "daysCount": 4,
-      "exercisesCount": 23
+      "exercisesCount": 23,
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "nameI18n": {
+        "en": "At Home — Minimal Equipment",
+        "es": "En Casa — Material Mínimo",
+        "de": "Zuhause — Minimale Ausstattung"
+      },
+      "descriptionI18n": {
+        "en": "Home program with dumbbells, bands and bodyweight for hypertrophy and fitness.",
+        "es": "Programa en casa con mancuernas, banda y peso corporal.",
+        "de": "Heimprogramm mit Kurzhanteln, Band und Körpergewicht."
+      },
+      "goalI18n": {
+        "en": "Home hypertrophy and conditioning",
+        "es": "Hipertrofia y condición física en casa",
+        "de": "Hypertrophie und Kondition zuhause"
+      }
     },
     {
       "id": "salle-complete",
       "name": "Salle de sport — Accès complet",
       "description": "Cinq séances exploitant barres, machines et poulies : trois hauts/bas orientés performance et deux séances de volume ciblé, à RIR 1–3.",
       "author": "Life Sport Tracker",
-      "level": "Avancé",
+      "level": "advanced",
       "goal": "Force et hypertrophie avec équipement complet",
       "equipment": "Salle complète : rack, barres, haltères, câbles et machines",
       "sessionsPerWeek": 5,
@@ -311,14 +561,32 @@
       ],
       "file": "salle-complete.json",
       "daysCount": 5,
-      "exercisesCount": 30
+      "exercisesCount": 30,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Full Gym — Complete Access",
+        "es": "Gimnasio — Acceso Completo",
+        "de": "Fitnessstudio — Vollzugang"
+      },
+      "descriptionI18n": {
+        "en": "Full program using all gym equipment for strength and hypertrophy.",
+        "es": "Programa completo con todo el equipamiento del gimnasio.",
+        "de": "Komplettes Programm mit allen Studiogeräten."
+      },
+      "goalI18n": {
+        "en": "Strength and hypertrophy with full equipment",
+        "es": "Fuerza e hipertrofia con equipamiento completo",
+        "de": "Kraft und Hypertrophie mit voller Ausstattung"
+      }
     },
     {
       "id": "halteres-uniquement",
       "name": "Haltères uniquement",
       "description": "Quatre séances intégralement aux haltères, organisées haut/bas puis full body en antagonistes. RIR 1–3, répétitions 8–15 et repos 90–150 s.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Hypertrophie complète avec une paire d’haltères",
       "equipment": "Haltères uniquement",
       "sessionsPerWeek": 4,
@@ -332,14 +600,32 @@
       ],
       "file": "halteres-uniquement.json",
       "daysCount": 4,
-      "exercisesCount": 25
+      "exercisesCount": 25,
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "nameI18n": {
+        "en": "Dumbbells Only",
+        "es": "Solo Mancuernas",
+        "de": "Nur Kurzhanteln"
+      },
+      "descriptionI18n": {
+        "en": "Complete hypertrophy with just a pair of dumbbells. All exercises adapted for dumbbell work.",
+        "es": "Hipertrofia completa solo con un par de mancuernas.",
+        "de": "Komplette Hypertrophie nur mit einem Paar Kurzhanteln."
+      },
+      "goalI18n": {
+        "en": "Complete hypertrophy with a pair of dumbbells",
+        "es": "Hipertrofia completa con un par de mancuernas",
+        "de": "Komplette Hypertrophie mit Kurzhanteln"
+      }
     },
     {
       "id": "machines-uniquement",
       "name": "Machines uniquement",
       "description": "Quatre séances haut/bas utilisant exclusivement des entrées machine du catalogue, adaptées à une hypertrophie stable et proche de l’échec contrôlé (RIR 1–3).",
       "author": "Life Sport Tracker",
-      "level": "Débutant",
+      "level": "beginner",
       "goal": "Hypertrophie guidée avec machines",
       "equipment": "Machines guidées uniquement",
       "sessionsPerWeek": 4,
@@ -353,14 +639,32 @@
       ],
       "file": "machines-uniquement.json",
       "daysCount": 4,
-      "exercisesCount": 25
+      "exercisesCount": 25,
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "nameI18n": {
+        "en": "Machines Only",
+        "es": "Solo Máquinas",
+        "de": "Nur Maschinen"
+      },
+      "descriptionI18n": {
+        "en": "Guided hypertrophy with machines for safe, controlled progression.",
+        "es": "Hipertrofia guiada con máquinas para una progresión segura.",
+        "de": "Geführte Hypertrophie mit Maschinen für sichere Progression."
+      },
+      "goalI18n": {
+        "en": "Guided hypertrophy with machines",
+        "es": "Hipertrofia guiada con máquinas",
+        "de": "Geführte Hypertrophie mit Maschinen"
+      }
     },
     {
       "id": "seances-express-30",
       "name": "Séances express — 30 min",
       "description": "Trois séances de 30 minutes maximum, cinq mouvements chacune et repos courts de 45–90 s. Les antagonistes et circuits maintiennent une forte densité à RIR 1–3. Plank est compté en secondes.",
       "author": "Life Sport Tracker",
-      "level": "Intermédiaire",
+      "level": "intermediate",
       "goal": "Entretenir force et masse avec des séances courtes",
       "equipment": "Haltères, poulie et poids du corps",
       "sessionsPerWeek": 3,
@@ -374,7 +678,25 @@
       ],
       "file": "seances-express-30.json",
       "daysCount": 3,
-      "exercisesCount": 15
+      "exercisesCount": 15,
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "nameI18n": {
+        "en": "Express Sessions — 30 min",
+        "es": "Sesiones Express — 30 min",
+        "de": "Express-Einheiten — 30 Min."
+      },
+      "descriptionI18n": {
+        "en": "Short and effective 30-minute sessions to maintain strength and mass.",
+        "es": "Sesiones cortas de 30 minutos para mantener fuerza y masa.",
+        "de": "Kurze 30-Minuten-Einheiten zum Erhalt von Kraft und Masse."
+      },
+      "goalI18n": {
+        "en": "Maintain strength and mass with short sessions",
+        "es": "Mantener fuerza y masa con sesiones cortas",
+        "de": "Kraft und Masse mit kurzen Einheiten erhalten"
+      }
     }
   ],
   "foodDatabases": [
@@ -384,13 +706,27 @@
       "description": "Une sélection communautaire de produits vendus en France, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "France",
-      "retailers": ["Carrefour", "Auchan", "E.Leclerc"],
+      "retailers": [
+        "Carrefour",
+        "Auchan",
+        "E.Leclerc"
+      ],
       "foodsCount": 97,
       "format": "json",
       "file": "foods-france.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products France — Open Food Facts",
+        "es": "Productos Francia — Open Food Facts",
+        "de": "Produkte Frankreich — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in France, grouped by country.",
+        "es": "Una selección comunitaria de productos vendidos en Francia, agrupada por país.",
+        "de": "Eine Community-Auswahl von in Frankreich verkauften Produkten."
+      }
     },
     {
       "id": "foods-espagne",
@@ -398,13 +734,27 @@
       "description": "Une sélection communautaire de produits vendus en Espagne, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "Espagne",
-      "retailers": ["Mercadona", "Carrefour", "Lidl"],
+      "retailers": [
+        "Mercadona",
+        "Carrefour",
+        "Lidl"
+      ],
       "foodsCount": 103,
       "format": "json",
       "file": "foods-espagne.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products Spain — Open Food Facts",
+        "es": "Productos España — Open Food Facts",
+        "de": "Produkte Spanien — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in Spain, grouped by country.",
+        "es": "Una selección comunitaria de productos vendidos en España.",
+        "de": "Eine Community-Auswahl von in Spanien verkauften Produkten."
+      }
     },
     {
       "id": "foods-allemagne",
@@ -412,13 +762,27 @@
       "description": "Une sélection communautaire de produits vendus en Allemagne, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "Allemagne",
-      "retailers": ["Edeka", "Rewe", "Aldi"],
+      "retailers": [
+        "Edeka",
+        "Rewe",
+        "Aldi"
+      ],
       "foodsCount": 66,
       "format": "json",
       "file": "foods-allemagne.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products Germany — Open Food Facts",
+        "es": "Productos Alemania — Open Food Facts",
+        "de": "Produkte Deutschland — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in Germany.",
+        "es": "Una selección comunitaria de productos vendidos en Alemania.",
+        "de": "Eine Community-Auswahl von in Deutschland verkauften Produkten."
+      }
     },
     {
       "id": "foods-italie",
@@ -426,13 +790,27 @@
       "description": "Une sélection communautaire de produits vendus en Italie, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "Italie",
-      "retailers": ["Coop", "Conad", "Esselunga"],
+      "retailers": [
+        "Coop",
+        "Conad",
+        "Esselunga"
+      ],
       "foodsCount": 87,
       "format": "json",
       "file": "foods-italie.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products Italy — Open Food Facts",
+        "es": "Productos Italia — Open Food Facts",
+        "de": "Produkte Italien — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in Italy.",
+        "es": "Una selección comunitaria de productos vendidos en Italia.",
+        "de": "Eine Community-Auswahl von in Italien verkauften Produkten."
+      }
     },
     {
       "id": "foods-belgique",
@@ -440,13 +818,27 @@
       "description": "Une sélection communautaire de produits vendus en Belgique, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "Belgique",
-      "retailers": ["Delhaize", "Colruyt", "Carrefour"],
+      "retailers": [
+        "Delhaize",
+        "Colruyt",
+        "Carrefour"
+      ],
       "foodsCount": 101,
       "format": "json",
       "file": "foods-belgique.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products Belgium — Open Food Facts",
+        "es": "Productos Bélgica — Open Food Facts",
+        "de": "Produkte Belgien — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in Belgium.",
+        "es": "Una selección comunitaria de productos vendidos en Bélgica.",
+        "de": "Eine Community-Auswahl von in Belgien verkauften Produkten."
+      }
     },
     {
       "id": "foods-royaume-uni",
@@ -454,13 +846,27 @@
       "description": "Une sélection communautaire de produits vendus au Royaume-Uni, regroupée par pays.",
       "author": "Communauté Life Sport Tracker",
       "country": "Royaume-Uni",
-      "retailers": ["Tesco", "Sainsbury's", "Asda"],
+      "retailers": [
+        "Tesco",
+        "Sainsbury's",
+        "Asda"
+      ],
       "foodsCount": 97,
       "format": "json",
       "file": "foods-royaume-uni.json",
       "license": "ODbL — Open Food Facts",
       "attribution": "https://world.openfoodfacts.org",
-      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation."
+      "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifiez les valeurs sur l'emballage avant utilisation.",
+      "nameI18n": {
+        "en": "Products United Kingdom — Open Food Facts",
+        "es": "Productos Reino Unido — Open Food Facts",
+        "de": "Produkte Vereinigtes Königreich — Open Food Facts"
+      },
+      "descriptionI18n": {
+        "en": "A community selection of products sold in the UK.",
+        "es": "Una selección comunitaria de productos vendidos en el Reino Unido.",
+        "de": "Eine Community-Auswahl von im UK verkauften Produkten."
+      }
     },
     {
       "id": "foods-auchan-fr-starter",
@@ -472,7 +878,17 @@
       "foodsCount": 8,
       "format": "json",
       "file": "foods-auchan-fr.json",
-      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit."
+      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit.",
+      "nameI18n": {
+        "en": "Auchan France Products — Essentials",
+        "es": "Productos Auchan Francia — Esenciales",
+        "de": "Auchan Frankreich — Grundausstattung"
+      },
+      "descriptionI18n": {
+        "en": "A sports-oriented starter selection: starches, proteins, dairy and snacks.",
+        "es": "Una selección de inicio orientada al deporte: féculas, proteínas, lácteos y snacks.",
+        "de": "Sportorientierte Starter-Auswahl: Stärke, Proteine, Milchprodukte und Snacks."
+      }
     },
     {
       "id": "foods-carrefour-fr-starter",
@@ -484,7 +900,17 @@
       "foodsCount": 8,
       "format": "json",
       "file": "foods-carrefour-fr.json",
-      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit."
+      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit.",
+      "nameI18n": {
+        "en": "Carrefour France Products — Essentials",
+        "es": "Productos Carrefour Francia — Esenciales",
+        "de": "Carrefour Frankreich — Grundausstattung"
+      },
+      "descriptionI18n": {
+        "en": "A selection of everyday products for daily nutritional tracking.",
+        "es": "Una selección de productos cotidianos para el seguimiento nutricional.",
+        "de": "Eine Auswahl alltäglicher Produkte für das Ernährungstracking."
+      }
     }
   ],
   "exercisePacks": [

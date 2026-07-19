@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 import { FoodForm, type FoodFormValues } from '../../../components/foods/FoodForm';
 import { useColors } from '../../../theme/useColors';
@@ -26,6 +27,7 @@ function buildUniqueFoodId(name: string, foods: Food[]) {
 
 export default function NewFoodScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
@@ -56,7 +58,7 @@ export default function NewFoodScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Nouvel aliment</Text>
+        <Text style={styles.heading}>{t('foods.newFood')}</Text>
         <View style={{ width: 24 }} />
       </View>
 

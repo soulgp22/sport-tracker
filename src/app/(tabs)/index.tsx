@@ -174,7 +174,6 @@ export default function HomeScreen() {
               key={tile.key}
               style={{
                 width: tileWidth,
-                height: '31.5%',
                 opacity: animations[index],
                 transform: [{ translateY: animations[index].interpolate({ inputRange: [0, 1], outputRange: [8, 0] }) }],
               }}>
@@ -254,10 +253,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   sectionTitle: { fontSize: 19, lineHeight: 22, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   goalPill: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 9, paddingVertical: 6, borderRadius: 999, backgroundColor: c.accentSoft },
   goalPillText: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primary },
-  grid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch', justifyContent: 'space-between', rowGap: 8 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', alignContent: 'flex-start', justifyContent: 'space-between', rowGap: 10 },
   tile: {
     width: '100%',
-    height: '100%',
     minHeight: 76,
     flexDirection: 'row',
     alignItems: 'center',

@@ -80,7 +80,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 368,
         "protein": 14,
@@ -100,7 +100,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 378,
         "protein": 7,
@@ -120,7 +120,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 13,
@@ -140,7 +140,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 13,
@@ -180,7 +180,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 614,
         "protein": 25.8,
@@ -200,7 +200,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 356,
         "protein": 14.5,
@@ -220,7 +220,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 426,
         "protein": 2.1,
@@ -260,7 +260,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 246,
         "protein": 11,
@@ -320,7 +320,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 385,
         "protein": 12,
@@ -340,7 +340,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 221,
         "protein": 15,
@@ -360,7 +360,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 484,
         "protein": 7.2,
@@ -380,7 +380,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 100,
         "protein": 9.8,
@@ -400,7 +400,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 84,
         "protein": 10.2,
@@ -419,7 +419,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Fruits",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 198,
         "protein": 0.5,
@@ -458,7 +458,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 12.8,
@@ -498,7 +498,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Fruits",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 157,
         "protein": 0,
@@ -538,7 +538,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 73,
         "protein": 3.8,
@@ -557,7 +557,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 279,
         "protein": 22.6,
@@ -577,7 +577,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 221,
         "protein": 13,
@@ -597,7 +597,7 @@
       "retailer": "Coop",
       "country": "Italie",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 220,
         "protein": 15,
@@ -656,7 +656,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 13,
@@ -676,7 +676,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 307,
         "protein": 0,
@@ -695,7 +695,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 484,
         "protein": 8.3,
@@ -715,7 +715,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 467,
         "protein": 8.5,
@@ -755,7 +755,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 372,
         "protein": 13,
@@ -795,7 +795,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 490,
         "protein": 11,
@@ -815,7 +815,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 422,
         "protein": 14,
@@ -835,7 +835,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 601,
         "protein": 28,
@@ -855,7 +855,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 345,
         "protein": 11,
@@ -875,7 +875,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 62,
         "protein": 3.7,
@@ -915,7 +915,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 293,
         "protein": 14,
@@ -935,7 +935,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 386,
         "protein": 13,
@@ -955,7 +955,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 83,
         "protein": 13,
@@ -975,7 +975,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 430,
         "protein": 6,
@@ -995,7 +995,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 347,
         "protein": 13,
@@ -1055,7 +1055,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 58,
         "protein": 10,
@@ -1115,7 +1115,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 151,
         "protein": 5.4,
@@ -1135,7 +1135,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 42,
         "protein": 4.1,
@@ -1154,7 +1154,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 469,
         "protein": 4.3,
@@ -1174,7 +1174,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 354,
         "protein": 6.7,
@@ -1194,7 +1194,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 385,
         "protein": 13,
@@ -1234,7 +1234,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 362,
         "protein": 11.3,
@@ -1254,7 +1254,7 @@
       "retailer": "Conad",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 353,
         "protein": 12.8,
@@ -1411,7 +1411,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 443,
         "protein": 7.6,
@@ -1491,7 +1491,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 54,
         "protein": 10.3,
@@ -1510,7 +1510,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Fruits",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 190,
         "protein": 0.4,
@@ -1530,7 +1530,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 428,
         "protein": 34,
@@ -1569,7 +1569,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Boissons",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 66,
         "protein": 1.3,
@@ -1608,7 +1608,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 111,
         "protein": 0.6,
@@ -1628,7 +1628,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 553,
         "protein": 7.8,
@@ -1648,7 +1648,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 314,
         "protein": 14,
@@ -1668,7 +1668,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 53,
         "protein": 9,
@@ -1687,7 +1687,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 319,
         "protein": 22,
@@ -1706,7 +1706,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 353,
         "protein": 15,
@@ -1726,7 +1726,7 @@
       "retailer": "Esselunga",
       "country": "Italie",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 450,
         "protein": 11.2,

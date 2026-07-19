@@ -41,7 +41,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 250,
         "protein": 7.5,
@@ -61,7 +61,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 377,
         "protein": 7,
@@ -101,7 +101,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 252,
         "protein": 5.9,
@@ -141,7 +141,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 443,
         "protein": 12,
@@ -161,7 +161,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 241,
         "protein": 5.6,
@@ -201,7 +201,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 406,
         "protein": 8.1,
@@ -221,7 +221,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 333,
         "protein": 15,
@@ -240,7 +240,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 242,
         "protein": 5.5,
@@ -260,7 +260,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 266,
         "protein": 7,
@@ -300,7 +300,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 134,
         "protein": 6.9,
@@ -319,7 +319,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 160,
         "protein": 4.2,
@@ -339,7 +339,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 389,
         "protein": 12,
@@ -379,7 +379,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 65,
         "protein": 5.6,
@@ -399,7 +399,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 280,
         "protein": 9,
@@ -439,7 +439,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 13,
@@ -459,7 +459,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 293,
         "protein": 14.6,
@@ -478,7 +478,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 307,
         "protein": 0,
@@ -517,7 +517,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 93,
         "protein": 3.6,
@@ -537,7 +537,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 220,
         "protein": 17,
@@ -616,7 +616,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 342,
         "protein": 26,
@@ -635,7 +635,7 @@
       "retailer": "Delhaize",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 359,
         "protein": 12,
@@ -675,7 +675,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 360,
         "protein": 10,
@@ -695,7 +695,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 386,
         "protein": 10,
@@ -755,7 +755,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 300,
         "protein": 0.1,
@@ -774,7 +774,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 252,
         "protein": 5.9,
@@ -794,7 +794,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 213,
         "protein": 0.3,
@@ -833,7 +833,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 900,
         "protein": 0,
@@ -853,7 +853,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 900,
         "protein": 0,
@@ -912,7 +912,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 349,
         "protein": 0.5,
@@ -1049,7 +1049,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 426,
         "protein": 12,
@@ -1109,7 +1109,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 599,
         "protein": 6,
@@ -1129,7 +1129,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 336,
         "protein": 2.2,
@@ -1169,7 +1169,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 441,
         "protein": 9.1,
@@ -1189,7 +1189,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 244,
         "protein": 19,
@@ -1209,7 +1209,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 336,
         "protein": 14,
@@ -1249,7 +1249,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 51,
         "protein": 4,
@@ -1288,7 +1288,7 @@
       "retailer": "Colruyt",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 245,
         "protein": 8.4,
@@ -1387,7 +1387,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 485,
         "protein": 0,
@@ -1446,7 +1446,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 352,
         "protein": 11,
@@ -1466,7 +1466,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 353,
         "protein": 8.6,
@@ -1545,7 +1545,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 293,
         "protein": 11,
@@ -1585,7 +1585,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 395,
         "protein": 11,
@@ -1605,7 +1605,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 420,
         "protein": 11,
@@ -1625,7 +1625,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 63,
         "protein": 1,
@@ -1664,7 +1664,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 339,
         "protein": 15,
@@ -1703,7 +1703,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 393,
         "protein": 6.7,
@@ -1763,7 +1763,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 269,
         "protein": 20,
@@ -1783,7 +1783,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 424,
         "protein": 9.1,
@@ -1843,7 +1843,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 320,
         "protein": 0,
@@ -1862,7 +1862,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 371,
         "protein": 12,
@@ -1882,7 +1882,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 253,
         "protein": 8.2,
@@ -1922,7 +1922,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 214,
         "protein": 7.1,
@@ -2002,7 +2002,7 @@
       "retailer": "Carrefour",
       "country": "Belgique",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 402,
         "protein": 32,

@@ -100,7 +100,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 400,
         "protein": 13,
@@ -159,7 +159,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 485,
         "protein": 0,
@@ -199,7 +199,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 84,
         "protein": 16,
@@ -237,7 +237,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 352,
         "protein": 11,
@@ -257,7 +257,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 360,
         "protein": 10,
@@ -277,7 +277,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 353,
         "protein": 8.6,
@@ -336,7 +336,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 205,
         "protein": 8.3,
@@ -375,7 +375,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 293,
         "protein": 11,
@@ -395,7 +395,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 377,
         "protein": 7,
@@ -435,7 +435,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 72,
         "protein": 1.3,
@@ -455,7 +455,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 460,
         "protein": 7.5,
@@ -475,7 +475,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 286,
         "protein": 12,
@@ -495,7 +495,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 395,
         "protein": 11,
@@ -535,7 +535,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 317,
         "protein": 6.9,
@@ -575,7 +575,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 190,
         "protein": 5,
@@ -595,7 +595,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 57,
         "protein": 0.5,
@@ -635,7 +635,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 420,
         "protein": 11,
@@ -655,7 +655,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 314,
         "protein": 0.5,
@@ -674,7 +674,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 63,
         "protein": 1,
@@ -694,7 +694,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 252,
         "protein": 9,
@@ -733,7 +733,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 339,
         "protein": 15,
@@ -752,7 +752,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 384,
         "protein": 8.5,
@@ -772,7 +772,7 @@
       "retailer": "Carrefour",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 241,
         "protein": 5.6,
@@ -812,7 +812,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 333,
         "protein": 12,
@@ -870,7 +870,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 338,
         "protein": 9,
@@ -910,7 +910,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 386,
         "protein": 12,
@@ -990,7 +990,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 264,
         "protein": 7,
@@ -1010,7 +1010,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 468,
         "protein": 0,
@@ -1029,7 +1029,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 94,
         "protein": 6.6,
@@ -1069,7 +1069,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 252,
         "protein": 5.9,
@@ -1108,7 +1108,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 347,
         "protein": 13,
@@ -1128,7 +1128,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 123,
         "protein": 7.1,
@@ -1148,7 +1148,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 85,
         "protein": 16,
@@ -1167,7 +1167,7 @@
       "retailer": "Auchan",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 365,
         "protein": 21,
@@ -1247,7 +1247,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 268,
         "protein": 8.1,
@@ -1267,7 +1267,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 294,
         "protein": 12,
@@ -1327,7 +1327,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 303,
         "protein": 8.6,
@@ -1367,7 +1367,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 622,
         "protein": 26,
@@ -1387,7 +1387,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 363,
         "protein": 11,
@@ -1446,7 +1446,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 345,
         "protein": 9.3,
@@ -1506,7 +1506,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 205,
         "protein": 8.3,
@@ -1525,7 +1525,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 362,
         "protein": 11,
@@ -1565,7 +1565,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 387,
         "protein": 12,
@@ -1625,7 +1625,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 384,
         "protein": 14,
@@ -1705,7 +1705,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 442,
         "protein": 5.9,
@@ -1725,7 +1725,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 107,
         "protein": 5.8,
@@ -1744,7 +1744,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 420,
         "protein": 10,
@@ -1844,7 +1844,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 143,
         "protein": 9.3,
@@ -1863,7 +1863,7 @@
       "retailer": "E.Leclerc",
       "country": "France",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 498,
         "protein": 6.2,

@@ -22,13 +22,14 @@ import { calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food, MealType } from '../../../types';
+import { useTranslation } from '../../../i18n/useTranslation';
 
-const mealTypes: { label: string; value: MealType }[] = [
-  { label: 'Petit-déjeuner', value: 'breakfast' },
-  { label: 'Déjeuner', value: 'lunch' },
-  { label: 'Dîner', value: 'dinner' },
-  { label: 'Collation', value: 'snack' },
-];
+const MEAL_TYPE_KEYS: Record<MealType, string> = {
+  breakfast: 'nutrition.add.meal.breakfast',
+  lunch: 'nutrition.add.meal.lunch',
+  dinner: 'nutrition.add.meal.dinner',
+  snack: 'nutrition.add.meal.snack',
+};
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -76,6 +77,7 @@ function FoodResultRow({ food, onPress }: { food: Food; onPress: () => void }) {
 
 export default function AddMealScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
@@ -140,7 +142,7 @@ export default function AddMealScreen() {
               <TextInput
                 value={query}
                 onChangeText={setQuery}
-                placeholder="Rechercher un aliment"
+                placeholder={t('foods.searchPlaceholder')}
                 autoCapitalize="none"
               />
             </View>
@@ -165,7 +167,7 @@ export default function AddMealScreen() {
         ) : (
           <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
             <View style={styles.selectedCard}>
-              <Text style={styles.selectedLabel}>Aliment sélectionné</Text>
+              <Text style={styles.selectedLabel}>{t('nutrition.add.selectedFood')}</Text>
               <Text style={styles.selectedName}>{selectedFood.name}</Text>
               <Text style={styles.selectedMeta}>
                 {selectedFood.category} · {Math.round(selectedFood.nutritionPer100g.calories)} kcal/100g
@@ -183,17 +185,17 @@ export default function AddMealScreen() {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Repas</Text>
               <View style={styles.mealTypeRow}>
-                {mealTypes.map((item) => {
-                  const selected = item.value === mealType;
+                {Object.entries(MEAL_TYPE_KEYS).map(([value, key]) => {
+                  const selected = value === mealType;
 
                   return (
                     <TouchableOpacity
-                      key={item.value}
+                      key={value}
                       style={[styles.chip, selected && styles.chipSelected]}
-                      onPress={() => setMealType(item.value)}
+                      onPress={() => setMealType(value as MealType)}
                       activeOpacity={0.75}>
                       <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                        {item.label}
+                        {t(key)}
                       </Text>
                     </TouchableOpacity>
                   );
@@ -202,7 +204,7 @@ export default function AddMealScreen() {
             </View>
 
             <View style={styles.previewCard}>
-              <Text style={styles.previewTitle}>Aperçu</Text>
+              <Text style={styles.previewTitle}>{t('nutrition.add.preview')}</Text>
               <Text style={styles.previewCalories}>{calculatedNutrition.calories} kcal</Text>
               <Text style={styles.previewMacros}>
                 P {formatNumber(calculatedNutrition.protein)} g · G{' '}
@@ -212,9 +214,9 @@ export default function AddMealScreen() {
             </View>
 
             <View style={styles.actions}>
-              <Button title="Ajouter au journal" onPress={handleSubmit} disabled={!canSubmit} />
+              <Button title={t('nutrition.add.submit')} onPress={handleSubmit} disabled={!canSubmit} />
               <Button
-                title="Changer d'aliment"
+                title={t('nutrition.add.changeFood')}
                 variant="secondary"
                 onPress={() => setSelectedFood(null)}
               />

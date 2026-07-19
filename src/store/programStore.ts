@@ -8,12 +8,15 @@ import {
   getCatalogExercise,
   getCatalogExerciseName,
 } from './exerciseCatalogStore';
-import { getGymProfile } from '../constants/gymProfiles';
+import {
+  getEquipmentProfile,
+  migrateGymProfileId,
+} from '../constants/equipmentProfiles';
 import {
   analyzeProgramCompatibility,
   getRelatedExerciseIds,
 } from '../lib/exerciseRelations';
-import type { GymProfileId } from '../types/gym';
+import type { EquipmentProfileId } from '../types/equipment';
 
 const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
 
@@ -91,9 +94,9 @@ interface ProgramState {
   addProgram: (name: string) => Program;
   updateProgram: (
     id: string,
-    patch: Partial<Pick<Program, 'name' | 'days' | 'gymProfileId'>>
+    patch: Partial<Pick<Program, 'name' | 'days' | 'equipmentProfileId'>>
   ) => void;
-  duplicateProgramForGym: (id: string, gymId: GymProfileId) => Program | null;
+  duplicateProgramForEquipment: (id: string, equipmentProfileId: EquipmentProfileId) => Program | null;
   deleteProgram: (id: string) => void;
 
   addDay: (programId: string, name: string) => ProgramDay;
@@ -131,21 +134,22 @@ export const useProgramStore = create<ProgramState>()(
         }));
       },
 
-      duplicateProgramForGym: (id, gymId) => {
+      duplicateProgramForEquipment: (id, equipmentProfileId) => {
         const source = get().programs.find((program) => program.id === id);
         if (!source) return null;
 
-        const compatibility = analyzeProgramCompatibility(source, gymId);
+        const compatibility = analyzeProgramCompatibility(source, equipmentProfileId);
         const replacements = new Map(
           compatibility.issues
             .filter((issue) => issue.replacementId)
             .map((issue) => [issue.programExerciseId, issue.replacementId!])
         );
         const now = new Date().toISOString();
+        const profile = getEquipmentProfile(equipmentProfileId);
         const copy: Program = {
           id: uid(),
-          name: `${source.name} · ${getGymProfile(gymId).name}`,
-          gymProfileId: gymId,
+          name: `${source.name} · ${profile.i18nKey}`,
+          equipmentProfileId,
           days: source.days.map((day, dayIndex) => ({
             ...day,
             id: uid(),
@@ -156,7 +160,7 @@ export const useProgramStore = create<ProgramState>()(
               const linkedAlternatives = [
                 exercise.exerciseId,
                 ...(exercise.alternativeExerciseIds ?? []),
-                ...getRelatedExerciseIds(nextExerciseId, gymId, 5),
+                ...getRelatedExerciseIds(nextExerciseId, equipmentProfileId, 5),
               ].filter(
                 (alternativeId, index, values) =>
                   alternativeId !== nextExerciseId && values.indexOf(alternativeId) === index
@@ -412,6 +416,21 @@ export const useProgramStore = create<ProgramState>()(
     {
       name: 'programs-store',
       storage: createJSONStorage(() => asyncStorageAdapter),
+      merge: (persisted, current) => {
+        const saved = persisted as Partial<ProgramState>;
+        const programs = (saved.programs ?? []).map((program) => {
+          const legacy = (program as unknown as Record<string, unknown>).gymProfileId;
+          const equipmentProfileId = migrateGymProfileId(
+            typeof legacy === 'string' ? legacy : undefined
+          );
+          const { gymProfileId: _, ...rest } = program as unknown as Record<string, unknown>;
+          return {
+            ...(rest as unknown as Program),
+            equipmentProfileId,
+          };
+        });
+        return { ...current, programs };
+      },
     }
   )
 );

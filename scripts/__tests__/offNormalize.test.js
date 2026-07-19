@@ -75,9 +75,16 @@ assert(buildFoodId('France', '3017620422003') === 'off_france_3017620422003', 'b
 assert(buildFoodId('ESPAÑA', '12345') === 'off_espana_12345', 'buildFoodId ESPAÑA');
 assert(buildFoodId('United Kingdom', '999') === 'off_unitedkingdom_999', 'buildFoodId UK');
 
-// pickUnit
-assert(pickUnit(['en:beverages', 'en:water']) === 'ml', 'pickUnit beverages → ml');
-assert(pickUnit(['en:meats']) === 'g', 'pickUnit meats → g');
+// pickUnit — strict whitelist: exact slug equality after language-prefix strip, solids first
+assert(pickUnit(['en:dairies','en:fats','en:spreads','en:spreadable-fats','en:animal-fats','en:dairy-spreads','en:milkfat','en:butters']) === 'g', 'pickUnit Kerrygold butter → g');
+assert(pickUnit(['en:dairies','en:fermented-foods','en:fermented-milk-products','en:desserts','en:yogurts','en:fermented-dairy-desserts']) === 'g', 'pickUnit yogurts → g');
+assert(pickUnit(['en:dairies','en:cheeses','en:hard-cheeses','en:cows-milk-cheeses']) === 'g', 'pickUnit cheeses → g');
+assert(pickUnit(['en:plant-based-foods-and-beverages','en:beverages','en:plant-based-beverages','en:plant-based-milks','en:soy-milks']) === 'ml', 'pickUnit soy milks → ml');
+assert(pickUnit(['en:beverages','en:waters','en:spring-waters','en:natural-mineral-waters']) === 'ml', 'pickUnit waters → ml');
+assert(pickUnit(['en:beverages','en:carbonated-drinks','en:sodas','en:colas']) === 'ml', 'pickUnit sodas → ml');
+assert(pickUnit(['en:dairies','en:milks','en:whole-milks']) === 'ml', 'pickUnit whole milks → ml');
+assert(pickUnit(['en:cereals-and-potatoes','en:cereals-and-their-products','en:breakfast-cereals']) === 'g', 'pickUnit breakfast cereals → g');
+assert(pickUnit(['en:fats','en:spreads','en:vegetable-fats','en:margarines']) === 'g', 'pickUnit margarines → g');
 assert(pickUnit([]) === 'g', 'pickUnit empty → g');
 assert(pickUnit(null) === 'g', 'pickUnit null → g');
 

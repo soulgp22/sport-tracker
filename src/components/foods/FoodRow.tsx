@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useColors } from '../../theme/useColors';
+import { useTranslation } from '../../i18n/useTranslation';
 import type { ThemeColors } from '../../theme/palettes';
 import type { Food } from '../../types';
 
@@ -18,6 +19,7 @@ function formatNumber(value: number) {
 
 export function FoodRow({ food, onPress }: FoodRowProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const nutrition = food.nutritionPer100g;
 
@@ -30,7 +32,7 @@ export function FoodRow({ food, onPress }: FoodRowProps) {
           </Text>
           {food.isCustom ? (
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>Perso</Text>
+              <Text style={styles.badgeText}>{food.sourceUrl ? t('foods.badge.community') : t('foods.badge.custom')}</Text>
             </View>
           ) : null}
         </View>

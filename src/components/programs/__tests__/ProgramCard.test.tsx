@@ -42,16 +42,15 @@ describe('ProgramCard', () => {
     expect(screen.getByText(/1 exercice/)).toBeTruthy();
   });
 
-  it('renders the selected gym logo and name', () => {
+  it('renders the selected equipment profile icon and name', () => {
     render(
       <ProgramCard
-        program={makeProgram({ gymProfileId: 'basic-fit' })}
+        program={makeProgram({ equipmentProfileId: 'dumbbells' })}
         onPress={jest.fn()}
         onDelete={jest.fn()}
       />
     );
 
-    expect(screen.getAllByLabelText('Basic-Fit').length).toBeGreaterThan(0);
-    expect(screen.getByText('Basic-Fit')).toBeTruthy();
+    expect(screen.getByText('Haltères uniquement')).toBeTruthy();
   });
 });

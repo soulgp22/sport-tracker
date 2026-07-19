@@ -10,22 +10,32 @@ beforeAll(() => {
 });
 
 describe('exercise relations', () => {
-  it('suggests an available movement alternative for a gym', () => {
-    const suggestions = getRelatedExerciseIds(SLED_ROW_ID, 'basic-fit', 5);
+  it('suggests an available movement alternative for an equipment profile', () => {
+    const suggestions = getRelatedExerciseIds(SLED_ROW_ID, 'machines', 5);
 
     expect(suggestions.length).toBeGreaterThan(0);
     expect(suggestions).not.toContain(SLED_ROW_ID);
     expect(suggestions.every((id) => getCatalogExercise(id))).toBe(true);
   });
 
+  it('suggests alternatives with the right equipment when profile is restrictive', () => {
+    const suggestions = getRelatedExerciseIds(SLED_ROW_ID, 'bodyweight', 10);
+
+    for (const id of suggestions) {
+      const exercise = getCatalogExercise(id);
+      expect(exercise).toBeDefined();
+      expect(exercise!.equipment).toBe('body only');
+    }
+  });
+
   it('prioritizes a manually linked alternative during compatibility analysis', () => {
-    const manualAlternativeId = getRelatedExerciseIds(SLED_ROW_ID, 'basic-fit', 1)[0];
+    const manualAlternativeId = getRelatedExerciseIds(SLED_ROW_ID, 'machines', 1)[0];
     expect(manualAlternativeId).toBeDefined();
 
     const program: Program = {
       id: 'program',
       name: 'Pull',
-      gymProfileId: 'all',
+      equipmentProfileId: 'full-gym',
       createdAt: '2026-01-01T00:00:00.000Z',
       updatedAt: '2026-01-01T00:00:00.000Z',
       days: [
@@ -47,7 +57,7 @@ describe('exercise relations', () => {
       ],
     };
 
-    const result = analyzeProgramCompatibility(program, 'basic-fit');
+    const result = analyzeProgramCompatibility(program, 'machines');
 
     expect(result.compatible).toBe(0);
     expect(result.replaceable).toBe(1);

@@ -20,8 +20,8 @@ import { EmptyState } from '../../../../../components/ui/EmptyState';
 import { ExerciseCatalogList } from '../../../../../components/exercises/ExerciseCatalogList';
 import { ExerciseThumbnail } from '../../../../../components/exercises/ExerciseThumbnail';
 import { ExerciseDetailView } from '../../../../../components/exercises/ExerciseDetailView';
-import { GymBrandBadge } from '../../../../../components/gyms/GymBrandBadge';
-import { isExerciseAvailableAtGym } from '../../../../../constants/gymProfiles';
+import { EquipmentProfileBadge } from '../../../../../components/equipment/EquipmentProfileBadge';
+import { isExerciseCompatibleWithProfile } from '../../../../../constants/equipmentProfiles';
 import { useExerciseCatalogStore } from '../../../../../store/exerciseCatalogStore';
 import {
   getExerciseDisplayName,
@@ -34,7 +34,7 @@ import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../..
 import { useTranslation } from '../../../../../i18n/useTranslation';
 import { getRelatedExerciseIds } from '../../../../../lib/exerciseRelations';
 import type { CatalogExercise, ProgramExercise, ProgramSet } from '../../../../../types';
-import type { GymProfileId } from '../../../../../types/gym';
+import type { EquipmentProfileId } from '../../../../../types/equipment';
 
 const DEFAULT_SET: ProgramSet = { reps: 10, weight: 0, restSeconds: 90 };
 
@@ -96,7 +96,7 @@ function ExerciseCard({
   onAddAlternative,
   onLinkAlternative,
   onOpenDetail,
-  gymId,
+  equipmentProfileId,
 }: {
   exercise: ProgramExercise;
   onUpdate: (patch: Partial<ProgramExercise>) => void;
@@ -105,7 +105,7 @@ function ExerciseCard({
   onAddAlternative: () => void;
   onLinkAlternative: (exerciseId: string) => void;
   onOpenDetail: () => void;
-  gymId: GymProfileId;
+  equipmentProfileId: EquipmentProfileId;
 }) {
   const c = useColors();
   const { t } = useTranslation();
@@ -118,13 +118,15 @@ function ExerciseCard({
   );
   const suggestedExerciseIds = useMemo(
     () =>
-      getRelatedExerciseIds(exercise.exerciseId, gymId, 4).filter(
+      getRelatedExerciseIds(exercise.exerciseId, equipmentProfileId, 4).filter(
         (exerciseId) => !alternativeExerciseIds.includes(exerciseId)
       ),
-    [alternativeExerciseIds, exercise.exerciseId, gymId]
+    [alternativeExerciseIds, exercise.exerciseId, equipmentProfileId]
   );
   const isAvailable =
-    !catalogExercise || gymId === 'all' || isExerciseAvailableAtGym(catalogExercise, gymId);
+    !catalogExercise ||
+    equipmentProfileId === 'full-gym' ||
+    isExerciseCompatibleWithProfile(catalogExercise, equipmentProfileId);
   const exerciseName = catalogExercise
     ? getExerciseDisplayName(catalogExercise)
     : exercise.exerciseName;
@@ -183,10 +185,10 @@ function ExerciseCard({
       ) : null}
 
       {!isAvailable ? (
-        <View style={styles.gymWarning}>
-          <GymBrandBadge gymId={gymId} size={24} />
+        <View style={styles.equipmentWarning}>
+          <EquipmentProfileBadge profileId={equipmentProfileId} size={24} />
           <Ionicons name="alert-circle" size={16} color={c.danger} />
-          <Text style={styles.gymWarningText}>{t('program.incompatibleGym')}</Text>
+          <Text style={styles.equipmentWarningText}>{t('program.incompatibleEquipment')}</Text>
         </View>
       ) : null}
 
@@ -405,7 +407,7 @@ export default function DayEditScreen() {
               onAddAlternative={() => openAlternativeSelector(item.id)}
               onLinkAlternative={(alternativeId) => linkAlternative(item.id, alternativeId)}
               onOpenDetail={() => setDetailId(item.exerciseId)}
-              gymId={program.gymProfileId ?? 'all'}
+              equipmentProfileId={program.equipmentProfileId ?? 'full-gym'}
             />
           )}
           ListEmptyComponent={
@@ -443,7 +445,7 @@ export default function DayEditScreen() {
                   : undefined
               }
               onSelect={handleSelectCatalogExercise}
-              targetGymId={program.gymProfileId}
+              targetEquipmentProfileId={program.equipmentProfileId}
             />
           </SafeAreaView>
         </Modal>
@@ -501,7 +503,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   exercisePickerMeta: { fontSize: 12, color: c.textSecondary },
   changeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', paddingVertical: 2 },
   changeLabel: { color: c.primary, fontSize: 13, fontWeight: '600' },
-  gymWarning: {
+  equipmentWarning: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
@@ -511,7 +513,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: c.danger,
   },
-  gymWarningText: { flex: 1, fontSize: 12, fontWeight: '700', color: c.danger },
+  equipmentWarningText: { flex: 1, fontSize: 12, fontWeight: '700', color: c.danger },
   alternativesBlock: { gap: 6, paddingVertical: 2 },
   alternativesTitle: { fontSize: 11, fontWeight: '700', color: c.textSecondary, textTransform: 'uppercase' },
   alternativesRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },

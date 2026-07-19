@@ -1,7 +1,7 @@
-import { isExerciseAvailableAtGym } from '../constants/gymProfiles';
+import { isExerciseCompatibleWithProfile } from '../constants/equipmentProfiles';
 import { getCatalogExercise, useExerciseCatalogStore } from '../store/exerciseCatalogStore';
 import type { CatalogExercise, Program, ProgramExercise } from '../types';
-import type { GymProfileId } from '../types/gym';
+import type { EquipmentProfileId } from '../types/equipment';
 
 export type MovementPattern =
   | 'horizontal-press'
@@ -84,7 +84,7 @@ function relationScore(source: CatalogExercise, candidate: CatalogExercise) {
 
 export function getRelatedExerciseIds(
   exerciseId: string,
-  gymId: GymProfileId = 'all',
+  equipmentProfileId: EquipmentProfileId = 'full-gym',
   limit = 6
 ) {
   const source = getCatalogExercise(exerciseId);
@@ -95,7 +95,7 @@ export function getRelatedExerciseIds(
     .all()
     .filter(
       (candidate) =>
-        candidate.id !== source.id && isExerciseAvailableAtGym(candidate, gymId)
+        candidate.id !== source.id && isExerciseCompatibleWithProfile(candidate, equipmentProfileId)
     )
     .map((candidate) => ({ id: candidate.id, score: relationScore(source, candidate) }))
     .filter(({ score }) => score >= 65)
@@ -113,7 +113,7 @@ export interface ExerciseCompatibilityIssue {
 }
 
 export interface ProgramCompatibility {
-  gymId: GymProfileId;
+  equipmentProfileId: EquipmentProfileId;
   total: number;
   compatible: number;
   percentage: number;
@@ -124,17 +124,17 @@ export interface ProgramCompatibility {
 
 function findReplacement(
   exercise: ProgramExercise,
-  gymId: GymProfileId
+  equipmentProfileId: EquipmentProfileId
 ): Pick<ExerciseCompatibilityIssue, 'replacementId' | 'replacementSource'> {
   const manualReplacement = exercise.alternativeExerciseIds
     ?.map((id) => getCatalogExercise(id))
-    .find((candidate) => candidate && isExerciseAvailableAtGym(candidate, gymId));
+    .find((candidate) => candidate && isExerciseCompatibleWithProfile(candidate, equipmentProfileId));
 
   if (manualReplacement) {
     return { replacementId: manualReplacement.id, replacementSource: 'manual' };
   }
 
-  const automaticReplacementId = getRelatedExerciseIds(exercise.exerciseId, gymId, 1)[0];
+  const automaticReplacementId = getRelatedExerciseIds(exercise.exerciseId, equipmentProfileId, 1)[0];
   return automaticReplacementId
     ? { replacementId: automaticReplacementId, replacementSource: 'automatic' }
     : {};
@@ -142,7 +142,7 @@ function findReplacement(
 
 export function analyzeProgramCompatibility(
   program: Program,
-  gymId: GymProfileId
+  equipmentProfileId: EquipmentProfileId
 ): ProgramCompatibility {
   const issues: ExerciseCompatibilityIssue[] = [];
   let total = 0;
@@ -152,7 +152,7 @@ export function analyzeProgramCompatibility(
     for (const exercise of day.exercises) {
       total += 1;
       const catalogExercise = getCatalogExercise(exercise.exerciseId);
-      if (catalogExercise && isExerciseAvailableAtGym(catalogExercise, gymId)) {
+      if (catalogExercise && isExerciseCompatibleWithProfile(catalogExercise, equipmentProfileId)) {
         compatible += 1;
         continue;
       }
@@ -161,14 +161,14 @@ export function analyzeProgramCompatibility(
         dayId: day.id,
         programExerciseId: exercise.id,
         exerciseId: exercise.exerciseId,
-        ...findReplacement(exercise, gymId),
+        ...findReplacement(exercise, equipmentProfileId),
       });
     }
   }
 
   const replaceable = issues.filter((issue) => issue.replacementId).length;
   return {
-    gymId,
+    equipmentProfileId,
     total,
     compatible,
     percentage: total === 0 ? 100 : Math.round((compatible / total) * 100),

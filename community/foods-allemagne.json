@@ -40,7 +40,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 347,
         "protein": 13,
@@ -176,7 +176,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 333,
         "protein": 9,
@@ -196,7 +196,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 748,
         "protein": 0.7,
@@ -215,7 +215,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Snacks/Sucré",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 479,
         "protein": 11,
@@ -273,7 +273,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 307,
         "protein": 0,
@@ -370,7 +370,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Fruits",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 338,
         "protein": 0.3,
@@ -469,7 +469,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 315,
         "protein": 0.5,
@@ -488,7 +488,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 406,
         "protein": 8.1,
@@ -508,7 +508,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 589,
         "protein": 0.5,
@@ -567,7 +567,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 41,
         "protein": 1.2,
@@ -587,7 +587,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 300,
         "protein": 0.1,
@@ -645,7 +645,7 @@
       "retailer": "Edeka",
       "country": "Allemagne",
       "category": "Matières grasses",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 727,
         "protein": 0.7,
@@ -763,7 +763,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 350,
         "protein": 10,
@@ -783,7 +783,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 402,
         "protein": 32,
@@ -862,7 +862,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 369,
         "protein": 11.1,
@@ -902,7 +902,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 60,
         "protein": 5.8,
@@ -1000,7 +1000,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 76,
         "protein": 10,
@@ -1020,7 +1020,7 @@
       "retailer": "Rewe",
       "country": "Allemagne",
       "category": "Noix & graines",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 643,
         "protein": 20,
@@ -1079,7 +1079,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 241,
         "protein": 5.4,
@@ -1099,7 +1099,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Légumes",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 22,
         "protein": 1.5,
@@ -1118,7 +1118,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 357,
         "protein": 17,
@@ -1156,7 +1156,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 103,
         "protein": 12,
@@ -1176,7 +1176,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Viande",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 209,
         "protein": 12,
@@ -1196,7 +1196,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Produits laitiers",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 212,
         "protein": 5.2,
@@ -1216,7 +1216,7 @@
       "retailer": "Aldi",
       "country": "Allemagne",
       "category": "Féculents",
-      "unit": "ml",
+      "unit": "g",
       "nutritionPer100g": {
         "calories": 376,
         "protein": 11,

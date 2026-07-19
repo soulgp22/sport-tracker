@@ -8,15 +8,13 @@ import {
   translateEquipment,
   translateMuscle,
 } from '../../constants/exerciseI18n';
-import {
-  isExerciseAvailableAtGym,
-} from '../../constants/gymProfiles';
+import { isExerciseCompatibleWithProfile } from '../../constants/equipmentProfiles';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import type { CatalogExercise } from '../../types';
-import type { GymProfileId } from '../../types/gym';
+import type { EquipmentProfileId } from '../../types/equipment';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { TextInput } from '../ui/TextInput';
 import { EmptyState } from '../ui/EmptyState';
@@ -24,7 +22,7 @@ import { EmptyState } from '../ui/EmptyState';
 interface ExerciseCatalogListProps {
   onSelect: (exercise: CatalogExercise) => void;
   selectedId?: string;
-  targetGymId?: GymProfileId;
+  targetEquipmentProfileId?: EquipmentProfileId;
   onBrowseDownloads?: () => void;
 }
 
@@ -32,12 +30,12 @@ function ExerciseRow({
   exercise,
   selected,
   onPress,
-  targetGymId,
+  targetEquipmentProfileId,
 }: {
   exercise: CatalogExercise;
   selected: boolean;
   onPress: () => void;
-  targetGymId?: GymProfileId;
+  targetEquipmentProfileId?: EquipmentProfileId;
 }) {
   const c = useColors();
   const { language } = useTranslation();
@@ -45,9 +43,9 @@ function ExerciseRow({
   const displayName = getExerciseDisplayName(exercise, language);
   const aliases = getExerciseAliases(exercise.id, language);
   const compatible =
-    !targetGymId ||
-    targetGymId === 'all' ||
-    isExerciseAvailableAtGym(exercise, targetGymId);
+    !targetEquipmentProfileId ||
+    targetEquipmentProfileId === 'full-gym' ||
+    isExerciseCompatibleWithProfile(exercise, targetEquipmentProfileId);
 
   return (
     <TouchableOpacity
@@ -63,14 +61,14 @@ function ExerciseRow({
       <View style={styles.cardBody}>
         <Text style={styles.name} numberOfLines={2}>{displayName}</Text>
         <Text style={styles.meta} numberOfLines={1}>
-          {translateMuscle(exercise.target, language)} ·{' '}
+          {translateMuscle(exercise.target, language)} · {' '}
           {translateEquipment(exercise.equipment, language)}
         </Text>
         {aliases.length > 0 ? (
           <Text style={styles.alias} numberOfLines={1}>{aliases[0]}</Text>
         ) : null}
       </View>
-      {targetGymId && targetGymId !== 'all' ? (
+      {targetEquipmentProfileId && targetEquipmentProfileId !== 'full-gym' ? (
         <Ionicons
           name={compatible ? 'checkmark-circle' : 'alert-circle'}
           size={20}
@@ -85,7 +83,7 @@ function ExerciseRow({
 export function ExerciseCatalogList({
   onSelect,
   selectedId,
-  targetGymId,
+  targetEquipmentProfileId,
   onBrowseDownloads,
 }: ExerciseCatalogListProps) {
   const c = useColors();
@@ -102,13 +100,13 @@ export function ExerciseCatalogList({
     const filtered = bodyPart
       ? searched.filter((exercise) => exercise.bodyPart === bodyPart)
       : searched;
-    if (!targetGymId || targetGymId === 'all') return filtered;
+    if (!targetEquipmentProfileId || targetEquipmentProfileId === 'full-gym') return filtered;
     return [...filtered].sort(
       (a, b) =>
-        Number(isExerciseAvailableAtGym(b, targetGymId)) -
-        Number(isExerciseAvailableAtGym(a, targetGymId))
+        Number(isExerciseCompatibleWithProfile(b, targetEquipmentProfileId)) -
+        Number(isExerciseCompatibleWithProfile(a, targetEquipmentProfileId))
     );
-  }, [bodyPart, query, searchCatalog, targetGymId]);
+  }, [bodyPart, query, searchCatalog, targetEquipmentProfileId]);
 
   return (
     <View style={styles.wrapper}>
@@ -156,7 +154,7 @@ export function ExerciseCatalogList({
             exercise={item}
             selected={selectedId === item.id}
             onPress={() => onSelect(item)}
-            targetGymId={targetGymId}
+            targetEquipmentProfileId={targetEquipmentProfileId}
           />
         )}
         ListEmptyComponent={

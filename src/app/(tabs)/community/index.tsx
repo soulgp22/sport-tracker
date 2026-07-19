@@ -18,6 +18,11 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import {
   useCommunityStore,
+  resolveEntryName,
+  resolveEntryDescription,
+  resolveEntryGoal,
+  resolveEntryLevel,
+  resolveEquipmentLabels,
   type CommunityFoodDatabaseEntry,
   type CommunityExercisePackEntry,
   type CommunityProgramEntry,
@@ -25,11 +30,13 @@ import {
 import type { ImportResult } from '../../../types';
 import type { ImportFoodsResult } from '../../../store/foodStore';
 import { useExerciseCatalogStore } from '../../../store/exerciseCatalogStore';
+import { useTranslation } from '../../../i18n/useTranslation';
+
 
 type CommunityTab = 'programs' | 'exercises' | 'foods';
 
-function formatDays(daysCount: number) {
-  return `${daysCount} jour${daysCount !== 1 ? 's' : ''}`;
+function formatDays(daysCount: number, t: (key: string, vars?: Record<string, string | number>) => string) {
+  return t('community.days', { count: daysCount });
 }
 
 function formatRetailers(entry: CommunityFoodDatabaseEntry) {
@@ -48,30 +55,39 @@ function CommunityProgramCard({
   onDownload: () => void;
 }) {
   const c = useColors();
+  const { t, language } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const resolvedName = resolveEntryName(entry, language);
+  const resolvedGoal = resolveEntryGoal(entry, language);
+  const equipmentLabels = resolveEquipmentLabels(entry.equipmentProfileIds, language);
 
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.cardTitleBlock}>
-          <Text style={styles.cardTitle} numberOfLines={2}>{entry.name}</Text>
-          <Text style={styles.author}>Par {entry.author}</Text>
+          <Text style={styles.cardTitle} numberOfLines={2}>{resolvedName}</Text>
+          <Text style={styles.author}>{t('community.by')} {entry.author}</Text>
         </View>
         <View style={styles.levelBadge}>
-          <Text style={styles.levelText}>{entry.level}</Text>
+          <Text style={styles.levelText}>{resolveEntryLevel(entry.level, language)}</Text>
         </View>
       </View>
 
-      <Text style={styles.description}>{entry.description}</Text>
+      <Text style={styles.description}>{resolveEntryDescription(entry, language)}</Text>
 
       <View style={styles.programMeta}>
-        {entry.goal ? (
+        {resolvedGoal ? (
           <View style={styles.metaRow}>
             <Ionicons name="flag-outline" size={16} color={c.textSecondary} />
-            <Text style={styles.metaText}>{entry.goal}</Text>
+            <Text style={styles.metaText}>{resolvedGoal}</Text>
           </View>
         ) : null}
-        {entry.equipment ? (
+        {equipmentLabels.length > 0 ? (
+          <View style={styles.metaRow}>
+            <Ionicons name="barbell-outline" size={16} color={c.textSecondary} />
+            <Text style={styles.metaText}>{equipmentLabels.join(', ')}</Text>
+          </View>
+        ) : entry.equipment ? (
           <View style={styles.metaRow}>
             <Ionicons name="barbell-outline" size={16} color={c.textSecondary} />
             <Text style={styles.metaText}>{entry.equipment}</Text>
@@ -80,12 +96,12 @@ function CommunityProgramCard({
         <View style={styles.metaWrap}>
           <View style={styles.metaRow}>
             <Ionicons name="calendar-outline" size={16} color={c.textSecondary} />
-            <Text style={styles.metaText}>{formatDays(entry.daysCount)}</Text>
+            <Text style={styles.metaText}>{formatDays(entry.daysCount, t)}</Text>
           </View>
           {entry.sessionsPerWeek ? (
             <View style={styles.metaRow}>
               <Ionicons name="repeat-outline" size={16} color={c.textSecondary} />
-              <Text style={styles.metaText}>{entry.sessionsPerWeek} séance{entry.sessionsPerWeek > 1 ? 's' : ''}/sem.</Text>
+              <Text style={styles.metaText}>{t('community.sessionsPerWeek', { count: entry.sessionsPerWeek })}</Text>
             </View>
           ) : null}
           {entry.sessionMinutes ? (
@@ -98,7 +114,7 @@ function CommunityProgramCard({
       </View>
 
       <Button
-        title="Télécharger le programme"
+        title={t('community.downloadProgram')}
         onPress={onDownload}
         loading={loading}
         disabled={disabled}
@@ -120,27 +136,28 @@ function CommunityFoodCard({
   onDownload: () => void;
 }) {
   const c = useColors();
+  const { language, t } =  useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
 
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.cardTitleBlock}>
-          <Text style={styles.cardTitle} numberOfLines={2}>{entry.name}</Text>
-          <Text style={styles.author}>Par {entry.author}</Text>
+          <Text style={styles.cardTitle} numberOfLines={2}>{resolveEntryName(entry, language)}</Text>
+          <Text style={styles.author}>{t('community.by')} {entry.author}</Text>
         </View>
         <View style={styles.retailerBadge}>
           <Text style={styles.retailerText}>{entry.country ?? entry.retailer ?? entry.name}</Text>
         </View>
       </View>
 
-      <Text style={styles.description}>{entry.description}</Text>
+      <Text style={styles.description}>{resolveEntryDescription(entry, language)}</Text>
 
       <View style={styles.metaWrap}>
         <View style={styles.metaRow}>
           <Ionicons name="restaurant-outline" size={16} color={c.textSecondary} />
           <Text style={styles.metaText}>
-            {entry.foodsCount} aliment{entry.foodsCount !== 1 ? 's' : ''}
+            {t('community.foodsCount', { count: entry.foodsCount })}{entry.foodsCount !== 1 ? 's' : ''}
           </Text>
         </View>
         {entry.country ? (
@@ -151,12 +168,12 @@ function CommunityFoodCard({
         ) : null}
         <View style={styles.metaRow}>
           <Ionicons name="storefront-outline" size={16} color={c.textSecondary} />
-          <Text style={styles.metaText}>Enseignes : {formatRetailers(entry)}</Text>
+          <Text style={styles.metaText}>{t('community.retailers')} : {formatRetailers(entry)}</Text>
         </View>
         <View style={styles.metaRow}>
           <Ionicons name="document-outline" size={16} color={c.textSecondary} />
           <Text style={styles.metaText}>
-            {entry.format.toUpperCase()} · Source : {entry.license ?? 'GitHub'}
+            {entry.format.toUpperCase()} · {t('community.source')} : {entry.license ?? 'GitHub'}
           </Text>
         </View>
       </View>
@@ -167,7 +184,7 @@ function CommunityFoodCard({
       </View>
 
       <Button
-        title="Ajouter à mes aliments"
+        title={t('community.addToMyFoods')}
         onPress={onDownload}
         loading={loading}
         disabled={disabled}
@@ -185,17 +202,19 @@ function CommunityExerciseCard({ entry, disabled, loading, installed, onDownload
   onDownload: () => void;
 }) {
   const c = useColors();
+  const { language, t } =  useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return <View style={styles.card}>
-    <View style={styles.cardHeader}><View style={styles.cardTitleBlock}><Text style={styles.cardTitle}>{entry.name}</Text><Text style={styles.author}>Par {entry.author}</Text></View><View style={styles.levelBadge}><Text style={styles.levelText}>{entry.level}</Text></View></View>
-    <Text style={styles.description}>{entry.description}</Text>
-    <View style={styles.metaRow}><Ionicons name="fitness-outline" size={16} color={c.textSecondary} /><Text style={styles.metaText}>{entry.exercisesCount} exercices · animations incluses</Text></View>
-    <Button title={installed ? 'Mettre à jour le catalogue' : 'Télécharger les exercices'} onPress={onDownload} loading={loading} disabled={disabled} style={styles.downloadButton} />
+    <View style={styles.cardHeader}><View style={styles.cardTitleBlock}><Text style={styles.cardTitle}>{resolveEntryName(entry, language)}</Text><Text style={styles.author}>{t('community.by')} {entry.author}</Text></View><View style={styles.levelBadge}><Text style={styles.levelText}>{entry.level}</Text></View></View>
+    <Text style={styles.description}>{resolveEntryDescription(entry, language)}</Text>
+    <View style={styles.metaRow}><Ionicons name="fitness-outline" size={16} color={c.textSecondary} /><Text style={styles.metaText}>{t('community.exercisesCount', { count: entry.exercisesCount })}</Text></View>
+    <Button title={installed ? t('community.updateCatalog') : t('community.downloadExercises')} onPress={onDownload} loading={loading} disabled={disabled} style={styles.downloadButton} />
   </View>;
 }
 
 export default function CommunityScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const params = useLocalSearchParams<{ tab?: string }>();
@@ -234,41 +253,38 @@ export default function CommunityScreen() {
     const goToPrograms = () => router.push('/(tabs)/programs' as never);
 
     if (result.errors.length > 0 && result.importedPrograms === 0) {
-      appAlert('Échec de l’import', result.errors.join('\n'));
+      appAlert(t('community.importFailed'), result.errors.join('\n'));
     } else if (result.errors.length > 0 || result.skipped > 0) {
       appAlert(
-        'Import partiel',
-        `${result.importedPrograms} programme(s), ${result.importedExercises} exercice(s) importé(s).\n${result.skipped} élément(s) ignoré(s).`,
+        t('community.importPartial'),
+        t('community.importPartialMsg', { programs: result.importedPrograms, exercises: result.importedExercises, skipped: result.skipped }),
         [
           { text: 'OK', style: 'cancel' },
-          { text: 'Voir Programmes', onPress: goToPrograms },
+          { text: t('community.seePrograms'), onPress: goToPrograms },
         ]
       );
     } else {
       appAlert(
-        'Import réussi',
-        `${result.importedPrograms} programme(s) et ${result.importedExercises} exercice(s) importé(s).`,
+        t('community.importSuccess'),
+        t('community.importSuccessMsg', { programs: result.importedPrograms, exercises: result.importedExercises }),
         [
-          { text: 'Rester ici', style: 'cancel' },
-          { text: 'Voir Programmes', onPress: goToPrograms },
+          { text: t('community.stayHere'), style: 'cancel' },
+          { text: t('community.seePrograms'), onPress: goToPrograms },
         ]
       );
     }
   };
 
   const showFoodImportResult = (result: ImportFoodsResult) => {
-    const summary =
-      `${result.added} aliment(s) ajouté(s).\n` +
-      `${result.duplicateIds.length} doublon(s) ignoré(s).\n` +
-      `${result.errors.length} erreur(s).`;
+    const summary = t('community.foodImportSummary', { added: result.added, duplicates: result.duplicateIds.length, errors: result.errors.length });
 
     appAlert(
       result.added > 0 ? 'Base d’aliments ajoutée' : 'Aucun aliment ajouté',
       summary,
       [
-        { text: 'Rester ici', style: 'cancel' },
+        { text: t('community.stayHere'), style: 'cancel' },
         {
-          text: 'Voir Aliments',
+          text: t('community.seeFoods'),
           onPress: () => router.push('/(tabs)/foods' as never),
         },
       ]
@@ -281,8 +297,8 @@ export default function CommunityScreen() {
       showProgramImportResult(await downloadProgram(entry));
     } catch {
       appAlert(
-        'Téléchargement impossible',
-        'Impossible de télécharger ce programme. Réessayez plus tard.'
+        t('community.downloadFailed'),
+        t('community.programDownloadFailed')
       );
     } finally {
       setDownloadingId(null);
@@ -307,9 +323,9 @@ export default function CommunityScreen() {
     try {
       setDownloadingId(entry.id);
       const count = await downloadExercisePack(entry);
-      appAlert('Catalogue installé', `${count} exercices sont maintenant disponibles, avec leur animation.`);
+      appAlert(t('community.catalogInstalled'), `${count} `);
     } catch {
-      appAlert('Téléchargement impossible', 'Impossible de télécharger les exercices. Réessayez plus tard.');
+      appAlert(t('community.downloadFailed'), t('community.exerciseDownloadFailed'));
     } finally {
       setDownloadingId(null);
     }
@@ -317,12 +333,12 @@ export default function CommunityScreen() {
 
   const emptyTitle =
     selectedTab === 'programs'
-      ? 'Aucun programme communautaire'
-      : selectedTab === 'exercises' ? 'Aucun pack d’exercices' : 'Aucune base d’aliments';
+      ? t('community.noPrograms')
+      : selectedTab === 'exercises' ? t('community.noExercises') : t('community.noFoods');
   const loadingLabel =
     selectedTab === 'programs'
-      ? 'Chargement des programmes...'
-      : selectedTab === 'exercises' ? 'Chargement des exercices...' : 'Chargement des bases d’aliments...';
+      ? t('community.loadingPrograms')
+      : selectedTab === 'exercises' ? t('community.loadingExercises') : t('community.loadingFoods');
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -331,8 +347,8 @@ export default function CommunityScreen() {
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <View style={styles.headerCopy}>
-          <Text style={styles.heading}>Communauté</Text>
-          <Text style={styles.headerSubtitle}>Contenus hébergés sur GitHub</Text>
+          <Text style={styles.heading}>{t('community.heading')}</Text>
+          <Text style={styles.headerSubtitle}>{t('community.subtitle')}</Text>
         </View>
         <TouchableOpacity
           onPress={() => void fetchManifest()}
@@ -352,15 +368,15 @@ export default function CommunityScreen() {
             size={17}
             color={selectedTab === 'programs' ? c.primaryText : c.textSecondary}
           />
-          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'programs' ? styles.tabTextActive : null]}>
-            Programmes
+          <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.55} style={[styles.tabText, selectedTab === 'programs' ? styles.tabTextActive : null]}>
+            {t('community.tabs.programs')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setSelectedTab('exercises')}
           style={[styles.tab, selectedTab === 'exercises' ? styles.tabActive : null]}>
           <Ionicons name="fitness-outline" size={17} color={selectedTab === 'exercises' ? c.primaryText : c.textSecondary} />
-          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'exercises' ? styles.tabTextActive : null]}>Exercices</Text>
+          <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.55} style={[styles.tabText, selectedTab === 'exercises' ? styles.tabTextActive : null]}>{t('community.tabs.exercises')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setSelectedTab('foods')}
@@ -370,8 +386,8 @@ export default function CommunityScreen() {
             size={17}
             color={selectedTab === 'foods' ? c.primaryText : c.textSecondary}
           />
-          <Text numberOfLines={1} adjustsFontSizeToFit style={[styles.tabText, selectedTab === 'foods' ? styles.tabTextActive : null]}>
-            Aliments
+          <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.55} style={[styles.tabText, selectedTab === 'foods' ? styles.tabTextActive : null]}>
+            {t('community.tabs.foods')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -379,7 +395,7 @@ export default function CommunityScreen() {
       {offline ? (
         <View style={styles.offlineBanner}>
           <Ionicons name="cloud-offline-outline" size={18} color={c.primary} />
-          <Text style={styles.offlineText}>Hors-ligne, liste en cache.</Text>
+          <Text style={styles.offlineText}>{t('community.offlineBanner')}</Text>
         </View>
       ) : null}
 
@@ -406,8 +422,8 @@ export default function CommunityScreen() {
           ListEmptyComponent={
             <EmptyState
               icon={error ? 'cloud-offline-outline' : 'cloud-download-outline'}
-              title={error ? 'Contenus indisponibles' : emptyTitle}
-              subtitle={error ?? 'La liste distante est vide pour le moment.'}
+              title={error ? t('community.unavailable') : emptyTitle}
+              subtitle={error ? t(error) : t('community.emptyList')}
             />
           }
           contentContainerStyle={programs.length > 0 ? styles.list : styles.emptyList}
@@ -420,7 +436,7 @@ export default function CommunityScreen() {
           renderItem={({ item }) => <CommunityExerciseCard entry={item} loading={downloadingId === item.id} disabled={!!downloadingId && downloadingId !== item.id} installed={installedPackIds.includes(item.id)} onDownload={() => void handleExerciseDownload(item)} />}
           refreshing={loading}
           onRefresh={() => void fetchManifest()}
-          ListEmptyComponent={<EmptyState icon={error ? 'cloud-offline-outline' : 'fitness-outline'} title={error ? 'Contenus indisponibles' : emptyTitle} subtitle={error ?? 'La liste distante est vide pour le moment.'} />}
+          ListEmptyComponent={<EmptyState icon={error ? 'cloud-offline-outline' : 'fitness-outline'} title={error ? t('community.unavailable') : emptyTitle} subtitle={error ? t(error) : t('community.emptyList')} />}
           contentContainerStyle={exercisePacks.length > 0 ? styles.list : styles.emptyList}
         />
       ) : (
@@ -441,8 +457,8 @@ export default function CommunityScreen() {
           ListEmptyComponent={
             <EmptyState
               icon={error ? 'cloud-offline-outline' : 'basket-outline'}
-              title={error ? 'Contenus indisponibles' : emptyTitle}
-              subtitle={error ?? 'La liste distante est vide pour le moment.'}
+              title={error ? t('community.unavailable') : emptyTitle}
+              subtitle={error ? t(error) : t('community.emptyList')}
             />
           }
           contentContainerStyle={foodDatabases.length > 0 ? styles.list : styles.emptyList}
@@ -481,12 +497,13 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   tab: {
     flex: 1,
+    minWidth: 70,
     minHeight: 42,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    paddingHorizontal: 4,
+    paddingHorizontal: 6,
     borderRadius: 10,
   },
   tabActive: { backgroundColor: c.primary },

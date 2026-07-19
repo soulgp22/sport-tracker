@@ -12,8 +12,15 @@ import type { ImportFoodsResult } from './foodStore';
 import { useFoodStore } from './foodStore';
 import { useProgramStore } from './programStore';
 import { useExerciseCatalogStore } from './exerciseCatalogStore';
+import { EQUIPMENT_PROFILES, type EquipmentProfile } from '../constants/equipmentProfiles';
+import type { LanguageId } from '../i18n/translations';
+import { translate } from '../i18n/translations';
+import type { EquipmentProfileId } from '../types/equipment';
 
-export type CommunityProgramLevel = 'Débutant' | 'Intermédiaire' | 'Avancé';
+export type CommunityProgramLevel = 'beginner' | 'intermediate' | 'advanced';
+
+/** Objet de variantes i18n : chaque langue est optionnelle, fallback sur le français. */
+export type I18nMap = Partial<Record<Exclude<LanguageId, 'fr'>, string>>;
 
 export interface CommunityProgramEntry {
   id: string;
@@ -26,10 +33,15 @@ export interface CommunityProgramEntry {
   file: string;
   goal?: string;
   equipment?: string;
+  equipmentProfileIds?: EquipmentProfileId[];
   sessionsPerWeek?: number;
   sessionMinutes?: number;
   progression?: string;
   tags?: string[];
+  nameI18n?: I18nMap;
+  descriptionI18n?: I18nMap;
+  goalI18n?: I18nMap;
+  progressionI18n?: I18nMap;
 }
 
 export type CommunityFoodFormat = 'json' | 'csv';
@@ -48,6 +60,8 @@ export interface CommunityFoodDatabaseEntry {
   disclaimer: string;
   license?: string;
   attribution?: string;
+  nameI18n?: I18nMap;
+  descriptionI18n?: I18nMap;
 }
 
 export interface CommunityExercisePackEntry {
@@ -79,14 +93,37 @@ interface CommunityState {
   downloadExercisePack: (entry: CommunityExercisePackEntry) => Promise<number>;
 }
 
-const COMMUNITY_LEVELS: CommunityProgramLevel[] = ['Débutant', 'Intermédiaire', 'Avancé'];
-const OFFLINE_CACHE_MESSAGE = 'Hors-ligne, liste en cache.';
-const LOAD_ERROR_MESSAGE = 'Impossible de charger les contenus communautaires.';
-const DOWNLOAD_ERROR_MESSAGE = 'Impossible de télécharger ce programme.';
+const COMMUNITY_LEVELS: CommunityProgramLevel[] = ['beginner', 'intermediate', 'advanced'];
+const OFFLINE_CACHE_MESSAGE = 'community.offlineBanner';
+const LOAD_ERROR_MESSAGE = 'community.loadError';
+const DOWNLOAD_ERROR_MESSAGE = 'community.programDownloadFailed';
 const MAX_COMMUNITY_PROGRAMS = 200;
 const MAX_COMMUNITY_FOOD_DATABASES = 100;
 const MAX_COMMUNITY_EXERCISE_PACKS = 20;
 const SAFE_COMMUNITY_FILE_PATTERN = /^[a-z0-9][a-z0-9._-]*\.(json|csv)$/i;
+
+function normalizeLevel(raw: unknown): CommunityProgramLevel {
+  if (typeof raw !== 'string') return 'beginner';
+  const normalized = raw
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // retire les accents
+    .toLowerCase();
+  const LEGACY_MAP: Record<string, CommunityProgramLevel> = {
+    'débutant': 'beginner',
+    'debutant': 'beginner',
+    'intermédiaire': 'intermediate',
+    'intermediaire': 'intermediate',
+    'avancé': 'advanced',
+    'avance': 'advanced',
+  };
+  if (LEGACY_MAP[normalized] !== undefined) return LEGACY_MAP[normalized];
+  if (COMMUNITY_LEVELS.includes(normalized as CommunityProgramLevel)) {
+    return normalized as CommunityProgramLevel;
+  }
+  return 'beginner'; // repli par défaut
+}
+
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
@@ -117,7 +154,7 @@ function readOptionalCount(
   if (!(key in record)) return undefined;
   const value = record[key];
   if (typeof value !== 'number' || !Number.isInteger(value) || value < minimum) {
-    throw new Error('Manifeste communautaire invalide.');
+    return undefined;
   }
   return value;
 }
@@ -130,11 +167,85 @@ function readOptionalTags(record: Record<string, unknown>): string[] | undefined
     value.length > 20 ||
     value.some((tag) => typeof tag !== 'string' || tag.trim().length === 0)
   ) {
-    throw new Error('Manifeste communautaire invalide.');
+    return undefined;
   }
 
   return value.map((tag) => (tag as string).trim());
 }
+
+function readOptionalI18nMap(
+  record: Record<string, unknown>,
+  key: string
+): I18nMap | undefined {
+  if (!(key in record)) return undefined;
+  const value = record[key];
+  if (!isRecord(value)) return undefined;
+  const map: I18nMap = {};
+  let hasAny = false;
+  for (const lang of ['en', 'es', 'de'] as const) {
+    if (lang in value) {
+      const v = (value as Record<string, unknown>)[lang];
+      if (typeof v === 'string' && v.trim().length > 0) {
+        map[lang] = v.trim();
+        hasAny = true;
+      }
+    }
+  }
+  return hasAny ? map : undefined;
+}
+
+function readOptionalEquipmentProfileIds(
+  record: Record<string, unknown>
+): EquipmentProfileId[] | undefined {
+  if (!('equipmentProfileIds' in record)) return undefined;
+  const value = record.equipmentProfileIds;
+  if (!Array.isArray(value) || value.length === 0) return undefined;
+  const validIds = new Set(EQUIPMENT_PROFILES.map((p) => p.id));
+  const ids = value.map((v) => {
+    if (typeof v !== 'string' || !validIds.has(v as EquipmentProfileId)) {
+      throw new Error('Manifeste communautaire invalide.');
+    }
+    return v as EquipmentProfileId;
+  });
+  return ids.length > 0 ? ids : undefined;
+}
+
+/** Résout le nom d'une entrée selon la langue, avec repli sur le français. */
+export function resolveEntryName(entry: { name: string; nameI18n?: I18nMap }, lang: LanguageId): string {
+  if (lang === 'fr') return entry.name;
+  return entry.nameI18n?.[lang as Exclude<LanguageId, 'fr'>] ?? entry.name;
+}
+
+/** Résout la description selon la langue, avec repli sur le français. */
+export function resolveEntryDescription(entry: { description: string; descriptionI18n?: I18nMap }, lang: LanguageId): string {
+  if (lang === 'fr') return entry.description;
+  return entry.descriptionI18n?.[lang as Exclude<LanguageId, 'fr'>] ?? entry.description;
+}
+
+/** Résout le goal selon la langue, avec repli sur le français. */
+export function resolveEntryGoal(entry: { goal?: string; goalI18n?: I18nMap }, lang: LanguageId): string | undefined {
+  if (!entry.goal) return undefined;
+  if (lang === 'fr') return entry.goal;
+  return entry.goalI18n?.[lang as Exclude<LanguageId, 'fr'>] ?? entry.goal;
+}
+
+/** Résout le niveau avec la traduction. */
+export function resolveEntryLevel(level: CommunityProgramLevel, lang: LanguageId): string {
+  return translate(lang, `level.${level}`);
+}
+
+/** Résout les libellés des profils d'équipement. */
+export function resolveEquipmentLabels(
+  profileIds: EquipmentProfileId[] | undefined,
+  lang: LanguageId
+): string[] {
+  if (!profileIds || profileIds.length === 0) return [];
+  const profiles = profileIds
+    .map((id) => EQUIPMENT_PROFILES.find((p) => p.id === id))
+    .filter((p): p is EquipmentProfile => !!p);
+  return profiles.map((p) => translate(lang, p.i18nKey));
+}
+
 
 function readOptionalStrings(
   record: Record<string, unknown>,
@@ -149,12 +260,12 @@ function readOptionalStrings(
     value.length > maximum ||
     value.some((item) => typeof item !== 'string' || item.trim().length === 0)
   ) {
-    throw new Error('Manifeste communautaire invalide.');
+    return undefined;
   }
 
   const strings = value.map((item) => (item as string).trim());
   if (new Set(strings).size !== strings.length) {
-    throw new Error('Manifeste communautaire invalide.');
+    return undefined;
   }
   return strings;
 }
@@ -162,7 +273,7 @@ function readOptionalStrings(
 function readDaysCount(record: Record<string, unknown>): number {
   const value = record.daysCount;
   if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
-    throw new Error('Manifeste communautaire invalide.');
+    return 1;
   }
 
   return value;
@@ -170,11 +281,10 @@ function readDaysCount(record: Record<string, unknown>): number {
 
 function readLevel(record: Record<string, unknown>): CommunityProgramLevel {
   const value = record.level;
-  if (typeof value !== 'string' || !COMMUNITY_LEVELS.includes(value as CommunityProgramLevel)) {
-    throw new Error('Manifeste communautaire invalide.');
+  if (typeof value !== 'string') {
+    return 'beginner';
   }
-
-  return value as CommunityProgramLevel;
+  return normalizeLevel(value);
 }
 
 function readProgramFile(record: Record<string, unknown>): string {
@@ -189,7 +299,7 @@ function readProgramFile(record: Record<string, unknown>): string {
 function readPositiveCount(record: Record<string, unknown>, key: string): number {
   const value = record[key];
   if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
-    throw new Error('Manifeste communautaire invalide.');
+    return 0;
   }
 
   return value;
@@ -198,11 +308,11 @@ function readPositiveCount(record: Record<string, unknown>, key: string): number
 function readFoodFormat(record: Record<string, unknown>, file: string): CommunityFoodFormat {
   const value = record.format;
   if (value !== 'json' && value !== 'csv') {
-    throw new Error('Manifeste communautaire invalide.');
+    return file.toLowerCase().endsWith('.csv') ? 'csv' : 'json';
   }
 
   if (!file.toLowerCase().endsWith(`.${value}`)) {
-    throw new Error('Manifeste communautaire invalide.');
+    return file.toLowerCase().endsWith('.csv') ? 'csv' : 'json';
   }
 
   return value;
@@ -228,119 +338,122 @@ function parseManifest(text: string): CommunityManifest {
   }
 
   const ids = new Set<string>();
-  const programs = parsed.programs.map((program) => {
-      if (!isRecord(program)) {
-        throw new Error('Manifeste communautaire invalide.');
-      }
+
+  // Parse programs: each entry wrapped in try-catch;
+  // seuls les champs vitaux (id, name, file) invalident une entree.
+  const programs: CommunityProgramEntry[] = [];
+  for (const program of parsed.programs) {
+    try {
+      if (!isRecord(program)) continue;
 
       const id = readString(program, 'id');
-      if (ids.has(id)) {
-        throw new Error('Manifeste communautaire invalide.');
-      }
+      if (ids.has(id)) continue;
       ids.add(id);
+
+      const name = readString(program, 'name');
+      const file = readProgramFile(program);
 
       const exercisesCount = readOptionalCount(program, 'exercisesCount', 0);
       const goal = readOptionalString(program, 'goal');
       const equipment = readOptionalString(program, 'equipment');
+      const equipmentProfileIds = readOptionalEquipmentProfileIds(program);
       const sessionsPerWeek = readOptionalCount(program, 'sessionsPerWeek', 1);
       const sessionMinutes = readOptionalCount(program, 'sessionMinutes', 1);
       const progression = readOptionalString(program, 'progression');
       const tags = readOptionalTags(program);
 
-      return {
+      programs.push({
         id,
-        name: readString(program, 'name'),
-        description: readString(program, 'description'),
-        author: readString(program, 'author'),
+        name,
+        description: readOptionalString(program, 'description') ?? '',
+        author: readOptionalString(program, 'author') ?? '',
         level: readLevel(program),
         daysCount: readDaysCount(program),
         ...(exercisesCount !== undefined ? { exercisesCount } : {}),
-        file: readProgramFile(program),
+        file,
         ...(goal !== undefined ? { goal } : {}),
         ...(equipment !== undefined ? { equipment } : {}),
+        ...(equipmentProfileIds !== undefined ? { equipmentProfileIds } : {}),
         ...(sessionsPerWeek !== undefined ? { sessionsPerWeek } : {}),
         ...(sessionMinutes !== undefined ? { sessionMinutes } : {}),
         ...(progression !== undefined ? { progression } : {}),
         ...(tags !== undefined ? { tags } : {}),
-      };
-    });
+      });
+    } catch {
+      // ignore l'entree individuelle, continuer avec les autres
+    }
+  }
 
   const rawFoodDatabases = Array.isArray(parsed.foodDatabases) ? parsed.foodDatabases : [];
-  if (rawFoodDatabases.length > MAX_COMMUNITY_FOOD_DATABASES) {
-    throw new Error('Manifeste communautaire invalide.');
+  const foodDatabases: CommunityFoodDatabaseEntry[] = [];
+  for (const database of rawFoodDatabases) {
+    try {
+      if (!isRecord(database)) continue;
+
+      const id = readString(database, 'id');
+      if (ids.has(id)) continue;
+      ids.add(id);
+
+      const name = readString(database, 'name');
+      const file = readString(database, 'file');
+      if (!SAFE_COMMUNITY_FILE_PATTERN.test(file)) continue;
+
+      const retailer = readOptionalString(database, 'retailer');
+      const country = readOptionalString(database, 'country');
+      const retailers = readOptionalStrings(database, 'retailers', 20);
+      const license = readOptionalString(database, 'license');
+      const attribution = readOptionalString(database, 'attribution');
+
+      foodDatabases.push({
+        id,
+        name,
+        description: readOptionalString(database, 'description') ?? '',
+        author: readOptionalString(database, 'author') ?? '',
+        ...(retailer ? { retailer } : {}),
+        ...(country ? { country } : {}),
+        ...(retailers ? { retailers } : {}),
+        foodsCount: readPositiveCount(database, 'foodsCount'),
+        format: readFoodFormat(database, file),
+        file,
+        disclaimer: readOptionalString(database, 'disclaimer') ?? '',
+        ...(license ? { license } : {}),
+        ...(attribution ? { attribution } : {}),
+      });
+    } catch {
+      // ignore l'entree individuelle
+    }
   }
-
-  const foodDatabases = rawFoodDatabases.map((database) => {
-    if (!isRecord(database)) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-
-    const id = readString(database, 'id');
-    if (ids.has(id)) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-    ids.add(id);
-
-    const file = readString(database, 'file');
-    if (!SAFE_COMMUNITY_FILE_PATTERN.test(file)) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-
-    const retailer = readOptionalString(database, 'retailer');
-    const country = readOptionalString(database, 'country');
-    const retailers = readOptionalStrings(database, 'retailers', 20);
-    const license = readOptionalString(database, 'license');
-    const attribution = readOptionalString(database, 'attribution');
-
-    if (!retailer && !country) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-
-    return {
-      id,
-      name: readString(database, 'name'),
-      description: readString(database, 'description'),
-      author: readString(database, 'author'),
-      ...(retailer ? { retailer } : {}),
-      ...(country ? { country } : {}),
-      ...(retailers ? { retailers } : {}),
-      foodsCount: readPositiveCount(database, 'foodsCount'),
-      format: readFoodFormat(database, file),
-      file,
-      disclaimer: readString(database, 'disclaimer'),
-      ...(license ? { license } : {}),
-      ...(attribution ? { attribution } : {}),
-    };
-  });
 
   const rawExercisePacks = Array.isArray(parsed.exercisePacks) ? parsed.exercisePacks : [];
-  if (rawExercisePacks.length > MAX_COMMUNITY_EXERCISE_PACKS) {
-    throw new Error('Manifeste communautaire invalide.');
+  const exercisePacks: CommunityExercisePackEntry[] = [];
+  for (const pack of rawExercisePacks) {
+    try {
+      if (!isRecord(pack)) continue;
+      const id = readString(pack, 'id');
+      if (ids.has(id)) continue;
+      ids.add(id);
+
+      const name = readString(pack, 'name');
+      const file = readString(pack, 'file');
+      if (!SAFE_COMMUNITY_FILE_PATTERN.test(file) || !file.endsWith('.json')) continue;
+
+      const mediaBaseUrl = readOptionalString(pack, 'mediaBaseUrl');
+      if (!mediaBaseUrl || !mediaBaseUrl.startsWith('https://raw.githubusercontent.com/soulgp22/sport-tracker/')) continue;
+
+      exercisePacks.push({
+        id,
+        name,
+        description: readOptionalString(pack, 'description') ?? '',
+        author: readOptionalString(pack, 'author') ?? '',
+        level: readOptionalString(pack, 'level') ?? 'beginner',
+        exercisesCount: readPositiveCount(pack, 'exercisesCount'),
+        file,
+        mediaBaseUrl,
+      });
+    } catch {
+      // ignore l'entree individuelle
+    }
   }
-  const exercisePacks = rawExercisePacks.map((pack) => {
-    if (!isRecord(pack)) throw new Error('Manifeste communautaire invalide.');
-    const id = readString(pack, 'id');
-    if (ids.has(id)) throw new Error('Manifeste communautaire invalide.');
-    ids.add(id);
-    const file = readString(pack, 'file');
-    if (!SAFE_COMMUNITY_FILE_PATTERN.test(file) || !file.endsWith('.json')) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-    const mediaBaseUrl = readString(pack, 'mediaBaseUrl');
-    if (!mediaBaseUrl.startsWith('https://raw.githubusercontent.com/soulgp22/sport-tracker/')) {
-      throw new Error('Manifeste communautaire invalide.');
-    }
-    return {
-      id,
-      name: readString(pack, 'name'),
-      description: readString(pack, 'description'),
-      author: readString(pack, 'author'),
-      level: readString(pack, 'level'),
-      exercisesCount: readPositiveCount(pack, 'exercisesCount'),
-      file,
-      mediaBaseUrl,
-    };
-  });
 
   return {
     version: parsed.version,
@@ -349,7 +462,6 @@ function parseManifest(text: string): CommunityManifest {
     ...(Array.isArray(parsed.exercisePacks) ? { exercisePacks } : {}),
   };
 }
-
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url);
   if (!response.ok) {

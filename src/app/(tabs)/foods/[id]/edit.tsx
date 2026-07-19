@@ -9,9 +9,11 @@ import { EmptyState } from '../../../../components/ui/EmptyState';
 import { useColors } from '../../../../theme/useColors';
 import type { ThemeColors } from '../../../../theme/palettes';
 import { useFoodStore } from '../../../../store/foodStore';
+import { useTranslation } from '../../../../i18n/useTranslation';
 
 export default function EditFoodScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -44,18 +46,18 @@ export default function EditFoodScreen() {
       </View>
 
       {!food ? (
-        <EmptyState icon="alert-circle-outline" title="Aliment introuvable" />
+        <EmptyState icon="alert-circle-outline" title={t('foods.notFound')} />
       ) : !food.isCustom ? (
         <EmptyState
           icon="lock-closed-outline"
-          title="Aliment non modifiable"
-          subtitle="Les aliments par défaut ne peuvent pas être modifiés."
+          title={t('foods.notEditable')}
+          subtitle={t('foods.notEditableHelp')}
         />
       ) : (
         <FoodForm
           initialFood={food}
           categories={categories}
-          submitLabel="Enregistrer"
+          submitLabel={t('common.save')}
           onSubmit={handleSubmit}
         />
       )}

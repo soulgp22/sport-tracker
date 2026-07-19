@@ -8,6 +8,7 @@ import { Button } from '../ui/Button';
 import { TextInput } from '../ui/TextInput';
 import { CategoryChips } from './CategoryChips';
 import type { Food, FoodNutrition, FoodUnit } from '../../types';
+import { useTranslation } from '../../i18n/useTranslation';
 
 export interface FoodFormValues {
   name: string;
@@ -51,33 +52,40 @@ function parseNumberInput(value: string) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function labelForNumberField(field: (typeof requiredNumberFields)[number] | (typeof optionalNumberFields)[number]) {
+function labelForNumberField(
+  field: (typeof requiredNumberFields)[number] | (typeof optionalNumberFields)[number],
+  t: (key: string, vars?: Record<string, string | number>) => string
+) {
   switch (field) {
     case 'calories':
-      return 'Calories';
+      return t('nutrition.form.calories');
     case 'protein':
-      return 'Protéines';
+      return t('nutrition.form.protein');
     case 'carbs':
-      return 'Glucides';
+      return t('nutrition.form.carbs');
     case 'fat':
-      return 'Lipides';
+      return t('nutrition.form.fat');
     case 'fiber':
-      return 'Fibres';
+      return t('nutrition.form.fiber');
     case 'sugar':
-      return 'Sucre';
+      return t('nutrition.form.sugar');
     case 'salt':
-      return 'Sel';
+      return t('nutrition.form.salt');
   }
 }
 
-function nutritionTitle(unit: FoodUnit) {
-  if (unit === 'g' || unit === 'ml') return `Nutrition pour 100 ${unit}`;
-  if (unit === 'unité') return 'Nutrition par unité';
-  return 'Nutrition par portion';
+function nutritionTitle(
+  unit: FoodUnit,
+  t: (key: string, vars?: Record<string, string | number>) => string
+) {
+  if (unit === 'g' || unit === 'ml') return t('nutrition.form.per100', { unit });
+  if (unit === 'unité') return t('nutrition.form.perUnit', { unit: 'unité' });
+  return t('nutrition.form.perUnit', { unit: 'portion' });
 }
 
 export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: FoodFormProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const [name, setName] = useState(initialFood?.name ?? '');
   const [category, setCategory] = useState(initialFood?.category ?? '');
@@ -121,7 +129,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
 
     requiredNumberFields.forEach((field) => {
       const value = numberValues[field].trim();
-      const label = labelForNumberField(field);
+      const label = labelForNumberField(field, t);
 
       if (!value) {
         nextErrors[field] = `${label} est requis.`;
@@ -146,7 +154,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
       const value = numberValues[field].trim();
       if (!value) return;
 
-      const label = labelForNumberField(field);
+      const label = labelForNumberField(field, t);
       const parsed = parseNumberInput(value);
       if (parsed === null) {
         nextErrors[field] = `${label} doit être un nombre.`;
@@ -204,7 +212,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
 
           <View style={styles.categoryBlock}>
             <TextInput
-              label="Catégorie"
+              label={t('nutrition.form.category')}
               placeholder="Ex : Produits laitiers"
               value={category}
               onChangeText={(value) => {
@@ -229,7 +237,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
           </View>
 
           <View style={styles.fieldBlock}>
-            <Text style={styles.label}>Unité</Text>
+            <Text style={styles.label}>{t('nutrition.form.unit')}</Text>
             <View style={styles.unitRow}>
               {units.map((item) => {
                 const selected = item === unit;
@@ -251,7 +259,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{nutritionTitle(unit)}</Text>
+          <Text style={styles.sectionTitle}>{nutritionTitle(unit, t)}</Text>
 
           <TextInput
             label="Calories"
@@ -265,7 +273,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
           <View style={styles.twoColumns}>
             <View style={styles.columnField}>
               <TextInput
-                label="Protéines (g)"
+                label={t('nutrition.form.protein')}
                 value={numberValues.protein}
                 onChangeText={(value) => setNumberValue('protein', value)}
                 error={errors.protein}
@@ -275,7 +283,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
             </View>
             <View style={styles.columnField}>
               <TextInput
-                label="Glucides (g)"
+                label={t('nutrition.form.carbs')}
                 value={numberValues.carbs}
                 onChangeText={(value) => setNumberValue('carbs', value)}
                 error={errors.carbs}
@@ -286,7 +294,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
           </View>
 
           <TextInput
-            label="Lipides (g)"
+            label={t('nutrition.form.fat')}
             value={numberValues.fat}
             onChangeText={(value) => setNumberValue('fat', value)}
             error={errors.fat}
@@ -296,12 +304,12 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Optionnel</Text>
+          <Text style={styles.sectionTitle}>{t('nutrition.form.optional')}</Text>
 
           <View style={styles.twoColumns}>
             <View style={styles.columnField}>
               <TextInput
-                label="Fibres (g)"
+                label={t('nutrition.form.fiber')}
                 value={numberValues.fiber}
                 onChangeText={(value) => setNumberValue('fiber', value)}
                 error={errors.fiber}
@@ -311,7 +319,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
             </View>
             <View style={styles.columnField}>
               <TextInput
-                label="Sucre (g)"
+                label={t('nutrition.form.sugar')}
                 value={numberValues.sugar}
                 onChangeText={(value) => setNumberValue('sugar', value)}
                 error={errors.sugar}
@@ -322,7 +330,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
           </View>
 
           <TextInput
-            label="Sel (g)"
+            label={t('nutrition.form.salt')}
             value={numberValues.salt}
             onChangeText={(value) => setNumberValue('salt', value)}
             error={errors.salt}

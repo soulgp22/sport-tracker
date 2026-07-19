@@ -5,7 +5,7 @@ import {
   COMMUNITY_MANIFEST_CACHE_KEY,
   COMMUNITY_MANIFEST_URL,
 } from '../../constants/community';
-import { useCommunityStore, type CommunityManifest } from '../communityStore';
+import { useCommunityStore, resolveEntryName, resolveEntryDescription, resolveEntryGoal, resolveEntryLevel, resolveEquipmentLabels, type CommunityManifest } from '../communityStore';
 import { useFoodStore } from '../foodStore';
 import { useProgramStore } from '../programStore';
 
@@ -32,7 +32,7 @@ function manifestFixture(id = 'ppl-6'): CommunityManifest {
         name: 'Push Pull Legs',
         description: 'Programme prêt à importer.',
         author: 'Life Sport Tracker',
-        level: 'Intermédiaire',
+        level: 'intermediate',
         daysCount: 6,
         exercisesCount: 36,
         file: `${id}.json`,
@@ -150,7 +150,7 @@ describe('communityStore', () => {
       name: 'Programme historique',
       description: 'Sans nouvelles métadonnées.',
       author: 'Life Sport Tracker',
-      level: 'Débutant' as const,
+      level: 'beginner' as const,
       daysCount: 2,
       file: 'legacy-program.json',
     };
@@ -164,17 +164,17 @@ describe('communityStore', () => {
     expect(result?.programs[0]).toEqual(legacyProgram);
   });
 
-  it('rejects malformed optional program metadata', async () => {
+  it('survives malformed optional program metadata with fallback', async () => {
     const manifest = manifestFixture();
     manifest.programs[0].sessionMinutes = 0;
     fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
 
     const result = await useCommunityStore.getState().fetchManifest();
 
-    expect(result).toBeNull();
-    expect(useCommunityStore.getState().error).toBe(
-      'Impossible de charger les contenus communautaires.'
-    );
+    expect(result).not.toBeNull();
+    expect(result!.programs).toHaveLength(1);
+    expect(result!.programs[0].sessionMinutes).toBeUndefined();
+    expect(useCommunityStore.getState().error).toBeNull();
   });
 
   it('falls back to the cached manifest when the network fails', async () => {
@@ -188,7 +188,7 @@ describe('communityStore', () => {
     expect(useCommunityStore.getState()).toMatchObject({
       data: cachedManifest,
       loading: false,
-      error: 'Hors-ligne, liste en cache.',
+      error: 'community.offlineBanner',
       offline: true,
     });
   });
@@ -202,35 +202,35 @@ describe('communityStore', () => {
     expect(useCommunityStore.getState()).toMatchObject({
       data: null,
       loading: false,
-      error: 'Impossible de charger les contenus communautaires.',
+      error: 'community.loadError',
       offline: false,
     });
   });
 
-  it('rejects unsafe program paths from the remote manifest', async () => {
+  it('skips program entries with unsafe file paths, loads the rest', async () => {
     const manifest = manifestFixture();
     manifest.programs[0].file = '../profile.json';
     fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
 
     const result = await useCommunityStore.getState().fetchManifest();
 
-    expect(result).toBeNull();
-    expect(useCommunityStore.getState().error).toBe(
-      'Impossible de charger les contenus communautaires.'
-    );
+    expect(result).not.toBeNull();
+    expect(result!.programs).toHaveLength(0);
+    expect(result!.foodDatabases).toHaveLength(1);
+    expect(useCommunityStore.getState().error).toBeNull();
   });
 
-  it('rejects unsafe food database paths from the remote manifest', async () => {
+  it('skips food database entries with unsafe file paths, loads the rest', async () => {
     const manifest = manifestFixture();
     manifest.foodDatabases[0].file = '../foods.json';
     fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
 
     const result = await useCommunityStore.getState().fetchManifest();
 
-    expect(result).toBeNull();
-    expect(useCommunityStore.getState().error).toBe(
-      'Impossible de charger les contenus communautaires.'
-    );
+    expect(result).not.toBeNull();
+    expect(result!.foodDatabases).toHaveLength(0);
+    expect(result!.programs).toHaveLength(1);
+    expect(useCommunityStore.getState().error).toBeNull();
   });
 
   it('downloads a program and imports it through the program store', async () => {
@@ -276,4 +276,63 @@ describe('communityStore', () => {
     expect(result.added).toBe(1);
     expect(result.errors).toEqual([]);
   });
+  describe('entry i18n resolution', () => {
+    const entry = {
+      name: 'Push Pull Legs',
+      description: 'Un programme.',
+      goal: 'Hypertrophie',
+      nameI18n: { en: 'Push Pull Legs EN', de: 'Push Pull Legs DE' },
+      descriptionI18n: { en: 'A program.', de: 'Ein Programm.' },
+      goalI18n: { en: 'Hypertrophy', de: 'Hypertrophie DE' },
+    };
+
+    it('returns the French value when language is fr', () => {
+      expect(resolveEntryName(entry, 'fr')).toBe('Push Pull Legs');
+      expect(resolveEntryDescription(entry, 'fr')).toBe('Un programme.');
+      expect(resolveEntryGoal(entry, 'fr')).toBe('Hypertrophie');
+    });
+
+    it('returns the translated value when language is available in i18n map', () => {
+      expect(resolveEntryName(entry, 'en')).toBe('Push Pull Legs EN');
+      expect(resolveEntryDescription(entry, 'en')).toBe('A program.');
+      expect(resolveEntryGoal(entry, 'en')).toBe('Hypertrophy');
+    });
+
+    it('falls back to French when the requested language is missing from i18n map', () => {
+      expect(resolveEntryName(entry, 'es')).toBe('Push Pull Legs');
+      expect(resolveEntryDescription(entry, 'es')).toBe('Un programme.');
+      expect(resolveEntryGoal(entry, 'es')).toBe('Hypertrophie');
+    });
+
+    it('handles legacy entries without i18n fields', () => {
+      const legacy = { name: 'Legacy Program', description: 'Legacy desc.' };
+      expect(resolveEntryName(legacy, 'en')).toBe('Legacy Program');
+      expect(resolveEntryDescription(legacy, 'en')).toBe('Legacy desc.');
+    });
+
+    it('returns undefined goal when entry has no goal', () => {
+      const entry = { name: 'Test', description: 'Desc' };
+      expect(resolveEntryGoal(entry as { goal?: string }, 'en')).toBeUndefined();
+    });
+
+    it('resolves level translations', () => {
+      expect(resolveEntryLevel('beginner', 'fr')).toBe('Débutant');
+      expect(resolveEntryLevel('beginner', 'en')).toBe('Beginner');
+      expect(resolveEntryLevel('advanced', 'de')).toBe('Experte');
+    });
+
+    it('resolves equipment labels from profile IDs', () => {
+      const labels = resolveEquipmentLabels(['bodyweight', 'dumbbells'], 'fr');
+      expect(labels).toHaveLength(2);
+      expect(labels[0]).toBeTruthy();
+      expect(labels[1]).toBeTruthy();
+    });
+
+    it('returns empty array for undefined or empty equipmentProfileIds', () => {
+      expect(resolveEquipmentLabels(undefined, 'fr')).toEqual([]);
+      expect(resolveEquipmentLabels([], 'fr')).toEqual([]);
+    });
+  });
+
+
 });

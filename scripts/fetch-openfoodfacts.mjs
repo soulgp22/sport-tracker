@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 
 import { normalizeName, mapCategory, isPlausibleNutrition, energyConsistent, buildFoodId, pickUnit, dedupe } from './lib/offNormalize.mjs';
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -360,6 +360,61 @@ for (const cfg of CONFIG) {
   // Rate limit between countries
   if (CONFIG.indexOf(cfg) < CONFIG.length - 1) {
     await sleep(2000);
+  }
+}
+
+
+// ---------------------------------------------------------------------------
+// Update community/index.json foodsCount for each processed country
+// ---------------------------------------------------------------------------
+{
+  const indexPath = resolve(communityDir, 'index.json');
+
+  if (!existsSync(indexPath)) {
+    console.log('\n⚠ WARNING: community/index.json not found – cannot update foodsCount.');
+  } else {
+    const manifestRaw = readFileSync(indexPath, 'utf-8');
+    const manifest = JSON.parse(manifestRaw);
+    const foodDatabases = manifest.foodDatabases || [];
+    let manifestModified = false;
+    const warnings = [];
+
+    for (const r of report) {
+      const fileName = COUNTRY_FILE[r.country];
+      if (!fileName) {
+        warnings.push(`No COUNTRY_FILE mapping for "${r.country}" – cannot match manifest entry`);
+        continue;
+      }
+
+      const entry = foodDatabases.find(p => p.file === fileName);
+      if (!entry) {
+        warnings.push(`No manifest entry with file="${fileName}" for ${r.country} — foodsCount not updated`);
+        continue;
+      }
+
+      const actualCount = r.totalAccepted;
+      if (entry.foodsCount !== actualCount) {
+        if (DRY_RUN) {
+          console.log(`  [dry-run] would update ${fileName} foodsCount: ${entry.foodsCount} → ${actualCount}`);
+        } else {
+          entry.foodsCount = actualCount;
+        }
+        manifestModified = true;
+      }
+    }
+
+    if (!DRY_RUN && manifestModified) {
+      writeFileSync(indexPath, JSON.stringify(manifest, null, 2) + '\n', 'utf-8');
+      console.log('\n✓ Updated community/index.json foodsCount values.');
+    } else if (DRY_RUN && manifestModified) {
+      console.log('\n[dry-run] community/index.json would be updated with new foodsCount values.');
+    } else if (!manifestModified) {
+      console.log('\n  ✓ community/index.json foodsCount values already up to date.');
+    }
+
+    for (const w of warnings) {
+      console.log(`⚠ WARNING: ${w}`);
+    }
   }
 }
 

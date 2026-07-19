@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { GymBrandBadge } from '../gyms/GymBrandBadge';
-import { getGymProfile } from '../../constants/gymProfiles';
+import { EquipmentProfileBadge } from '../equipment/EquipmentProfileBadge';
+import { getEquipmentProfile } from '../../constants/equipmentProfiles';
 import { useTranslation } from '../../i18n/useTranslation';
 import type { Program } from '../../types';
 import { useColors } from '../../theme/useColors';
@@ -20,13 +20,13 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const totalExercises = program.days.reduce((sum, day) => sum + day.exercises.length, 0);
-  const gymId = program.gymProfileId ?? 'all';
-  const gym = getGymProfile(gymId);
+  const equipmentProfileId = program.equipmentProfileId ?? 'bodyweight';
+  const profile = getEquipmentProfile(equipmentProfileId);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.logoColumn}>
-        <GymBrandBadge gymId={gymId} size={54} width={68} />
+        <EquipmentProfileBadge profileId={equipmentProfileId} size={54} />
       </View>
 
       <View style={styles.body}>
@@ -37,10 +37,8 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
           {program.days.length} jour{program.days.length !== 1 ? 's' : ''} · {totalExercises}{' '}
           exercice{totalExercises !== 1 ? 's' : ''}
         </Text>
-        <Text
-          style={[styles.gymName, gymId === 'all' ? styles.gymNameMuted : null]}
-          numberOfLines={1}>
-          {gymId === 'all' ? t('program.noGym') : gym.name}
+        <Text style={styles.profileName} numberOfLines={1}>
+          {t(profile.i18nKey)}
         </Text>
       </View>
 
@@ -95,8 +93,7 @@ const makeStyles = (c: ThemeColors) =>
       color: c.textPrimary,
     },
     meta: { fontSize: 13, color: c.textSecondary },
-    gymName: { fontSize: 11, fontWeight: '700', color: c.primary },
-    gymNameMuted: { color: c.textMuted, fontWeight: '600' },
+    profileName: { fontSize: 11, fontWeight: '700', color: c.primary },
     actions: {
       flexDirection: 'row',
       alignItems: 'center',

@@ -1,4 +1,4 @@
-// ---------------------------------------------------------------------------
+﻿// ---------------------------------------------------------------------------
 // offNormalize – pure helper functions for Open Food Facts data normalisation
 // ---------------------------------------------------------------------------
 
@@ -191,24 +191,56 @@ export function buildFoodId(country, barcode) {
   return `off_${cc}_${barcode}`;
 }
 
-/** Pick the appropriate unit: "ml" for beverages, "g" otherwise. */
+/**
+ * Pick the appropriate unit: "ml" for beverages, "g" otherwise.
+ *
+ * Algorithm (strict whitelist, exact equality after stripping language prefix):
+ *   1. If any slug matches an explicit SOLID set → "g" (overrides beverages).
+ *   2. Else if any slug matches the BEVERAGES set → "ml".
+ *   3. Otherwise → "g".
+ *
+ * No substring / includes / partial matches are used.
+ * "dairies" is NOT a beverage — only explicit drinkable-milk slugs count.
+ */
 export function pickUnit(categoriesTags) {
   if (!Array.isArray(categoriesTags)) return 'g';
-  const tags = categoriesTags.map(t => (typeof t === 'string' ? t.toLowerCase() : ''));
-  const beveragePatterns = [
-    'beverages', 'drinks', 'sodas', 'juices', 'water', 'smoothies',
-    'milkshakes', 'coffees', 'teas', 'hot-drinks', 'syrups',
-    'iced-tea', 'energy-drinks', 'beers', 'wines', 'alcohol',
-    'plant-milks', 'milk', 'dairies',
-  ];
-  if (beveragePatterns.some(p => tags.some(t => t.includes(p)))) return 'ml';
+
+  // Strip language prefix (e.g. "en:dairies" → "dairies", "fr:pates" → "pates")
+  const slugs = categoriesTags
+    .map(t => (typeof t === 'string' ? t.toLowerCase() : ''))
+    .map(t => (t.includes(':') ? t.slice(t.indexOf(':') + 1) : t))
+    .filter(Boolean);
+
+  // -- 1. Explicit solid-category slugs → always "g" ---------------------------
+  const SOLIDS = new Set([
+    'milkfat', 'dairy-spreads', 'butters', 'butter', 'cheeses', 'cheese',
+    'yogurts', 'yogurt', 'yoghurt', 'creams', 'cream',
+  ]);
+  if (slugs.some(s => SOLIDS.has(s))) return 'g';
+
+  // -- 2. Beverage slugs (exact match only) ------------------------------------
+  const BEVERAGES = new Set([
+    'beverages', 'drinks', 'sodas', 'juices', 'water', 'waters',
+    'smoothies', 'milkshakes', 'coffees', 'coffee', 'teas', 'tea',
+    'hot-drinks', 'syrups', 'iced-tea', 'iced-teas', 'energy-drinks',
+    'beers', 'wines', 'alcohol', 'plant-milks',
+    'milks', 'whole-milks', 'semi-skimmed-milks', 'skimmed-milks',
+    'plant-based-milks', 'soy-milks', 'plant-based-beverages',
+    'almond-milks', 'oat-milks', 'rice-milks', 'coconut-milks',
+    'soft-drinks', 'fruit-juices', 'vegetable-juices', 'cola', 'colas',
+    'lemonades', 'herbal-teas', 'coconut-water',
+    'non-alcoholic-beverages', 'alcoholic-beverages',
+    'cocktails', 'liqueurs', 'ciders', 'whiskies', 'vodkas', 'rums',
+    'champagne', 'sparkling-waters', 'mineral-waters', 'still-waters',
+    'carbonated-drinks', 'tonic-water', 'kombucha', 'fermented-drinks',
+    'fruit-nectars', 'smoothie', 'orange-juices', 'spirits',
+    'spring-waters', 'natural-mineral-waters',
+  ]);
+  if (slugs.some(s => BEVERAGES.has(s))) return 'ml';
+
+  // -- 3. Default --------------------------------------------------------------
   return 'g';
 }
-
-// ---------------------------------------------------------------------------
-// Deduplication
-// ---------------------------------------------------------------------------
-
 /**
  * Deduplicate an array of food objects.
  * - First by barcode (keep first occurrence)

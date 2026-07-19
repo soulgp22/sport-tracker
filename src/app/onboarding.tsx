@@ -13,7 +13,7 @@ import { useCommunityStore } from '../store/communityStore';
 import {
   useOnboardingStore,
   type OnboardingGoal,
-  type OnboardingGym,
+  type OnboardingEquipmentProfileId,
   type OnboardingLevel,
   type OnboardingRetailer,
 } from '../store/onboardingStore';
@@ -22,30 +22,37 @@ import type { ThemeColors } from '../theme/palettes';
 import { useColors } from '../theme/useColors';
 
 const copy: Record<LanguageId, Record<string, string>> = {
-  fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', goal: 'Quel est ton objectif principal ?', level: 'Quel est ton niveau actuel ?', rhythm: 'Comment vas-tu t’entraîner ?', nutrition: 'Personnalisons aussi la nutrition', result: 'Ton espace est prêt', resultHelp: 'Voici les contenus conseillés. Tu peux les télécharger maintenant ou plus tard.', next: 'Continuer', back: 'Retour', finish: 'Installer ma sélection', skip: 'Commencer sans téléchargement', downloading: 'Installation de tes contenus…', days: 'séances par semaine', gym: 'Lieu principal', retailer: 'Base d’aliments par pays', coreFoods: '142 aliments essentiels sont déjà disponibles hors ligne.', recommended: 'Programme conseillé · GitHub', catalog: 'Catalogue complet', extraExercises: '851 exercices supplémentaires' },
-  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', goal: 'What is your main goal?', level: 'What is your current level?', rhythm: 'How will you train?', nutrition: 'Let’s tailor nutrition too', result: 'Your space is ready', resultHelp: 'These are your recommended downloads. Get them now or anytime later.', next: 'Continue', back: 'Back', finish: 'Install my selection', skip: 'Start without downloads', downloading: 'Installing your content…', days: 'sessions per week', gym: 'Main training place', retailer: 'Food database by country', coreFoods: '142 essential foods are already available offline.', recommended: 'Recommended program · GitHub', catalog: 'Full exercise catalog', extraExercises: '851 extra exercises' },
-  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', goal: '¿Cuál es tu objetivo principal?', level: '¿Cuál es tu nivel actual?', rhythm: '¿Cómo vas a entrenar?', nutrition: 'Personalicemos también la nutrición', result: 'Tu espacio está listo', resultHelp: 'Estas son tus descargas recomendadas. Puedes instalarlas ahora o más tarde.', next: 'Continuar', back: 'Atrás', finish: 'Instalar mi selección', skip: 'Empezar sin descargar', downloading: 'Instalando tu contenido…', days: 'sesiones por semana', gym: 'Lugar principal', retailer: 'Base de alimentos por país', coreFoods: '142 alimentos esenciales ya están disponibles sin conexión.', recommended: 'Programa recomendado · GitHub', catalog: 'Catálogo completo', extraExercises: '851 ejercicios adicionales' },
-  de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', goal: 'Was ist dein Hauptziel?', level: 'Wie ist dein aktuelles Niveau?', rhythm: 'Wie wirst du trainieren?', nutrition: 'Auch Ernährung personalisieren', result: 'Dein Bereich ist bereit', resultHelp: 'Das sind deine empfohlenen Downloads. Jetzt oder später installieren.', next: 'Weiter', back: 'Zurück', finish: 'Auswahl installieren', skip: 'Ohne Download starten', downloading: 'Inhalte werden installiert…', days: 'Einheiten pro Woche', gym: 'Haupttrainingsort', retailer: 'Lebensmitteldatenbank nach Land', coreFoods: '142 wichtige Lebensmittel sind bereits offline verfügbar.', recommended: 'Empfohlenes Programm · GitHub', catalog: 'Vollständiger Katalog', extraExercises: '851 zusätzliche Übungen' },
+  fr: { welcome: 'Construisons ton point de d·part', intro: 'Quelques r·ponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', goal: 'Quel est ton objectif principal ?', level: 'Quel est ton niveau actuel ?', rhythm: 'Comment vas-tu t·entra·ner ?', nutrition: 'Personnalisons aussi la nutrition', result: 'Ton espace est pr·t', resultHelp: 'Voici les contenus conseill·s. Tu peux les t·l·charger maintenant ou plus tard.', next: 'Continuer', back: 'Retour', finish: 'Installer ma s·lection', skip: 'Commencer sans t·l·chargement', downloading: 'Installation de tes contenus·', days: 's·ances par semaine', equipment: 'Matériel disponible', retailer: 'Base d·aliments par pays', coreFoods: '142 aliments essentiels sont d·j· disponibles hors ligne.', recommended: 'Programme conseill· · GitHub', catalog: 'Catalogue complet', extraExercises: '851 exercices suppl·mentaires' },
+  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', goal: 'What is your main goal?', level: 'What is your current level?', rhythm: 'How will you train?', nutrition: 'Let·s tailor nutrition too', result: 'Your space is ready', resultHelp: 'These are your recommended downloads. Get them now or anytime later.', next: 'Continue', back: 'Back', finish: 'Install my selection', skip: 'Start without downloads', downloading: 'Installing your content·', days: 'sessions per week', equipment: 'Available equipment', retailer: 'Food database by country', coreFoods: '142 essential foods are already available offline.', recommended: 'Recommended program · GitHub', catalog: 'Full exercise catalog', extraExercises: '851 extra exercises' },
+  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', goal: '·Cu·l es tu objetivo principal?', level: '·Cu·l es tu nivel actual?', rhythm: '·C·mo vas a entrenar?', nutrition: 'Personalicemos tambi·n la nutrici·n', result: 'Tu espacio est· listo', resultHelp: 'Estas son tus descargas recomendadas. Puedes instalarlas ahora o m·s tarde.', next: 'Continuar', back: 'Atr·s', finish: 'Instalar mi selecci·n', skip: 'Empezar sin descargar', downloading: 'Instalando tu contenido·', days: 'sesiones por semana', equipment: 'Equipo disponible', retailer: 'Base de alimentos por pa·s', coreFoods: '142 alimentos esenciales ya est·n disponibles sin conexi·n.', recommended: 'Programa recomendado · GitHub', catalog: 'Cat·logo completo', extraExercises: '851 ejercicios adicionales' },
+  de: { welcome: 'Dein pers·nlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, ·bungen und Lebensmittel an.', language: 'Deine Sprache', goal: 'Was ist dein Hauptziel?', level: 'Wie ist dein aktuelles Niveau?', rhythm: 'Wie wirst du trainieren?', nutrition: 'Auch Ern·hrung personalisieren', result: 'Dein Bereich ist bereit', resultHelp: 'Das sind deine empfohlenen Downloads. Jetzt oder sp·ter installieren.', next: 'Weiter', back: 'Zur·ck', finish: 'Auswahl installieren', skip: 'Ohne Download starten', downloading: 'Inhalte werden installiert·', days: 'Einheiten pro Woche', equipment: 'Verfügbare Geräte', retailer: 'Lebensmitteldatenbank nach Land', coreFoods: '142 wichtige Lebensmittel sind bereits offline verf·gbar.', recommended: 'Empfohlenes Programm · GitHub', catalog: 'Vollst·ndiger Katalog', extraExercises: '851 zus·tzliche ·bungen' },
 };
 
 const retailerCopy: Record<LanguageId, Record<string, string>> = {
-  fr: { placeholder: 'Choisir un pays', search: 'Rechercher un pays ou une enseigne', none: 'Aucune / plus tard', github: 'GitHub', close: 'Fermer', empty: 'Aucun pays trouvé' },
+  fr: { placeholder: 'Choisir un pays', search: 'Rechercher un pays ou une enseigne', none: 'Aucune / plus tard', github: 'GitHub', close: 'Fermer', empty: 'Aucun pays trouv·' },
   en: { placeholder: 'Choose a country', search: 'Search a country or supermarket', none: 'None / later', github: 'GitHub', close: 'Close', empty: 'No country found' },
-  es: { placeholder: 'Elegir un país', search: 'Buscar país o supermercado', none: 'Ninguno / más tarde', github: 'GitHub', close: 'Cerrar', empty: 'No se encontró ningún país' },
-  de: { placeholder: 'Land auswählen', search: 'Land oder Supermarkt suchen', none: 'Keine / später', github: 'GitHub', close: 'Schließen', empty: 'Kein Land gefunden' },
+  es: { placeholder: 'Elegir un pa·s', search: 'Buscar pa·s o supermercado', none: 'Ninguno / m·s tarde', github: 'GitHub', close: 'Cerrar', empty: 'No se encontr· ning·n pa·s' },
+  de: { placeholder: 'Land ausw·hlen', search: 'Land oder Supermarkt suchen', none: 'Keine / später', github: 'GitHub', close: 'Schlie·en', empty: 'Kein Land gefunden' },
 };
 
 type ChoiceLabelGroups = {
   goals: Record<OnboardingGoal, readonly [string, string]>;
   levels: Record<OnboardingLevel, readonly [string, string]>;
-  gyms: Record<OnboardingGym, readonly [string, string]>;
+  equipmentProfiles: Record<OnboardingEquipmentProfileId, readonly [string, string]>;
   retailers: Record<OnboardingRetailer, readonly [string, string]>;
 };
 
 const labels: ChoiceLabelGroups = {
   goals: { muscle: ['barbell-outline', 'Prise de muscle'], strength: ['trending-up-outline', 'Force'], weight_loss: ['flame-outline', 'Perte de poids'], fitness: ['heart-outline', 'Forme & santé'] },
   levels: { beginner: ['sparkles-outline', 'Je débute'], intermediate: ['fitness-outline', 'Intermédiaire'], advanced: ['trophy-outline', 'Avancé'] },
-  gyms: { commercial: ['business-outline', 'Salle de sport'], home: ['home-outline', 'À la maison'], other: ['location-outline', 'Autre / mixte'] },
+  equipmentProfiles: {
+    bodyweight: ['body-outline', 'Maison, sans matériel'],
+    'home-basic': ['home-outline', 'Maison, petit matériel'],
+    dumbbells: ['barbell-outline', 'Haltères uniquement'],
+    machines: ['settings-outline', 'Machines uniquement'],
+    barbell: ['fitness-outline', 'Barre et haltères'],
+    'full-gym': ['business-outline', 'Salle complète'],
+  },
   retailers: { auchan: ['basket-outline', 'Auchan France'], carrefour: ['cart-outline', 'Carrefour France'], none: ['remove-circle-outline', 'Aucune / plus tard'] },
 };
 
@@ -54,19 +61,40 @@ const translatedLabels: Record<LanguageId, ChoiceLabelGroups> = {
   en: {
     goals: { muscle: ['barbell-outline', 'Build muscle'], strength: ['trending-up-outline', 'Strength'], weight_loss: ['flame-outline', 'Lose weight'], fitness: ['heart-outline', 'Fitness & health'] },
     levels: { beginner: ['sparkles-outline', 'I am starting'], intermediate: ['fitness-outline', 'Intermediate'], advanced: ['trophy-outline', 'Advanced'] },
-    gyms: { commercial: ['business-outline', 'Commercial gym'], home: ['home-outline', 'At home'], other: ['location-outline', 'Other / mixed'] },
+    equipmentProfiles: {
+      bodyweight: ['body-outline', 'Home, no equipment'],
+      'home-basic': ['home-outline', 'Home, minimal kit'],
+      dumbbells: ['barbell-outline', 'Dumbbells only'],
+      machines: ['settings-outline', 'Machines only'],
+      barbell: ['fitness-outline', 'Barbell & dumbbells'],
+      'full-gym': ['business-outline', 'Full gym'],
+    },
     retailers: { auchan: ['basket-outline', 'Auchan France'], carrefour: ['cart-outline', 'Carrefour France'], none: ['remove-circle-outline', 'None / later'] },
   },
   es: {
-    goals: { muscle: ['barbell-outline', 'Ganar músculo'], strength: ['trending-up-outline', 'Fuerza'], weight_loss: ['flame-outline', 'Perder peso'], fitness: ['heart-outline', 'Forma y salud'] },
+    goals: { muscle: ['barbell-outline', 'Ganar m·sculo'], strength: ['trending-up-outline', 'Fuerza'], weight_loss: ['flame-outline', 'Perder peso'], fitness: ['heart-outline', 'Forma y salud'] },
     levels: { beginner: ['sparkles-outline', 'Estoy empezando'], intermediate: ['fitness-outline', 'Intermedio'], advanced: ['trophy-outline', 'Avanzado'] },
-    gyms: { commercial: ['business-outline', 'Gimnasio'], home: ['home-outline', 'En casa'], other: ['location-outline', 'Otro / mixto'] },
-    retailers: { auchan: ['basket-outline', 'Auchan Francia'], carrefour: ['cart-outline', 'Carrefour Francia'], none: ['remove-circle-outline', 'Ninguno / más tarde'] },
+    equipmentProfiles: {
+      bodyweight: ['body-outline', 'Casa, sin material'],
+      'home-basic': ['home-outline', 'Casa, equipo básico'],
+      dumbbells: ['barbell-outline', 'Solo mancuernas'],
+      machines: ['settings-outline', 'Solo máquinas'],
+      barbell: ['fitness-outline', 'Barra y mancuernas'],
+      'full-gym': ['business-outline', 'Gimnasio completo'],
+    },
+    retailers: { auchan: ['basket-outline', 'Auchan Francia'], carrefour: ['cart-outline', 'Carrefour Francia'], none: ['remove-circle-outline', 'Ninguno / m·s tarde'] },
   },
   de: {
     goals: { muscle: ['barbell-outline', 'Muskelaufbau'], strength: ['trending-up-outline', 'Kraft'], weight_loss: ['flame-outline', 'Gewicht verlieren'], fitness: ['heart-outline', 'Fitness & Gesundheit'] },
     levels: { beginner: ['sparkles-outline', 'Ich fange an'], intermediate: ['fitness-outline', 'Fortgeschritten'], advanced: ['trophy-outline', 'Sehr erfahren'] },
-    gyms: { commercial: ['business-outline', 'Fitnessstudio'], home: ['home-outline', 'Zu Hause'], other: ['location-outline', 'Andere / gemischt'] },
+    equipmentProfiles: {
+      bodyweight: ['body-outline', 'Zuhause, kein Gerät'],
+      'home-basic': ['home-outline', 'Zuhause, kleines Set'],
+      dumbbells: ['barbell-outline', 'Nur Kurzhanteln'],
+      machines: ['settings-outline', 'Nur Maschinen'],
+      barbell: ['fitness-outline', 'Lang- & Kurzhanteln'],
+      'full-gym': ['business-outline', 'Vollständiges Studio'],
+    },
     retailers: { auchan: ['basket-outline', 'Auchan Frankreich'], carrefour: ['cart-outline', 'Carrefour Frankreich'], none: ['remove-circle-outline', 'Keine / später'] },
   },
 };
@@ -157,7 +185,7 @@ export default function OnboardingScreen() {
       {step === 0 ? <><Text style={styles.subtitle}>{text.intro}</Text><Text style={styles.sectionLabel}>{text.language}</Text><View style={styles.languageRow}>{LANGUAGE_OPTIONS.map((option) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: language === option.id }} key={option.id} style={[styles.language, language === option.id && styles.languageSelected]} onPress={() => setLanguage(option.id)}><Text style={[styles.languageText, language === option.id && styles.languageTextSelected]}>{option.id.toUpperCase()}</Text></TouchableOpacity>)}</View></> : null}
       {step === 1 ? <ChoiceGrid items={options.goals} value={profile.goal} onChange={(goal) => updateProfile({ goal: goal as OnboardingGoal })} /> : null}
       {step === 2 ? <ChoiceGrid items={options.levels} value={profile.level} onChange={(level) => { updateProfile({ level: level as OnboardingLevel }); setWithExercises(level !== 'beginner'); }} /> : null}
-      {step === 3 ? <><Text style={styles.sectionLabel}>{text.days}</Text><View style={styles.daysRow}>{[2,3,4,5,6].map((days) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: profile.daysPerWeek === days }} key={days} style={[styles.day, profile.daysPerWeek === days && styles.daySelected]} onPress={() => updateProfile({ daysPerWeek: days })}><Text style={[styles.dayText, profile.daysPerWeek === days && styles.dayTextSelected]}>{days}</Text></TouchableOpacity>)}</View><Text style={styles.sectionLabel}>{text.gym}</Text><ChoiceGrid items={options.gyms} value={profile.gym} onChange={(gym) => updateProfile({ gym: gym as OnboardingGym })} /></> : null}
+      {step === 3 ? <><Text style={styles.sectionLabel}>{text.days}</Text><View style={styles.daysRow}>{[2,3,4,5,6].map((days) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: profile.daysPerWeek === days }} key={days} style={[styles.day, profile.daysPerWeek === days && styles.daySelected]} onPress={() => updateProfile({ daysPerWeek: days })}><Text style={[styles.dayText, profile.daysPerWeek === days && styles.dayTextSelected]}>{days}</Text></TouchableOpacity>)}</View><Text style={styles.sectionLabel}>{text.equipment}</Text><ChoiceGrid items={options.equipmentProfiles} value={profile.equipmentProfileId} onChange={(equipmentProfileId) => updateProfile({ equipmentProfileId: equipmentProfileId as OnboardingEquipmentProfileId })} /></> : null}
       {step === 4 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><RetailerPicker entries={communityData?.foodDatabases ?? []} value={selectedFoodDatabaseId} loading={communityLoading} label={text.retailer} placeholder={retailerText.placeholder} searchPlaceholder={retailerText.search} noneLabel={retailerText.none} githubLabel={retailerText.github} closeLabel={retailerText.close} emptyLabel={retailerText.empty} onChange={(id) => updateProfile({ retailer: id ?? 'none' })} onRefresh={() => void fetchManifest()} /></> : null}
       {step === 5 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.country ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.retailers?.join(', ') ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name} · {selectedFoodDatabase.foodsCount} aliments · {selectedFoodDatabase.license ?? 'GitHub'}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
       {installing ? <View style={styles.installing}><ActivityIndicator color={c.primary} /><Text style={styles.installingText}>{text.downloading}</Text></View> : null}

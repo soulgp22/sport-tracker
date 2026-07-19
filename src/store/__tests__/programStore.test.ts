@@ -47,7 +47,7 @@ describe('programs', () => {
 
   it('creates a gym-compatible copy without changing the original program', () => {
     const sourceExerciseId = 'offline-497';
-    const replacementId = getRelatedExerciseIds(sourceExerciseId, 'basic-fit', 1)[0];
+    const replacementId = getRelatedExerciseIds(sourceExerciseId, 'machines', 1)[0];
     expect(replacementId).toBeDefined();
 
     const program = useProgramStore.getState().addProgram('Pull');
@@ -61,10 +61,10 @@ describe('programs', () => {
 
     const copy = useProgramStore
       .getState()
-      .duplicateProgramForGym(program.id, 'basic-fit');
+      .duplicateProgramForEquipment(program.id, 'machines');
 
     expect(copy).not.toBeNull();
-    expect(copy?.gymProfileId).toBe('basic-fit');
+    expect(copy?.equipmentProfileId).toBe('machines');
     expect(copy?.id).not.toBe(program.id);
     expect(copy?.days[0].exercises[0].exerciseId).toBe(replacementId);
     expect(copy?.days[0].exercises[0].alternativeExerciseIds).toContain(sourceExerciseId);

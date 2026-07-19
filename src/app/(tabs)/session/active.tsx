@@ -26,7 +26,7 @@ import {
   translateEquipment,
   translateMuscle,
 } from '../../../constants/exerciseI18n';
-import { isExerciseAvailableAtGym } from '../../../constants/gymProfiles';
+import { isExerciseCompatibleWithProfile } from '../../../constants/equipmentProfiles';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
@@ -249,7 +249,7 @@ export default function ActiveSessionScreen() {
           ...(replacementExercise.alternativeExerciseIds ?? []),
           ...getRelatedExerciseIds(
             replacementExercise.exerciseId,
-            active.gymProfileId ?? 'all',
+            active.equipmentProfileId ?? 'full-gym',
             6
           ),
         ])
@@ -258,7 +258,7 @@ export default function ActiveSessionScreen() {
           const candidate = getCatalogExercise(exerciseId);
           return (
             candidate &&
-            isExerciseAvailableAtGym(candidate, active.gymProfileId ?? 'all')
+            isExerciseCompatibleWithProfile(candidate, active.equipmentProfileId ?? 'full-gym')
           );
         })
     : [];
@@ -314,10 +314,10 @@ export default function ActiveSessionScreen() {
                 return (
                   candidate &&
                   alternativeId !== ex.exerciseId &&
-                  isExerciseAvailableAtGym(candidate, active.gymProfileId ?? 'all')
+                  isExerciseCompatibleWithProfile(candidate, active.equipmentProfileId ?? 'full-gym')
                 );
               }) ||
-              getRelatedExerciseIds(ex.exerciseId, active.gymProfileId ?? 'all', 1).length > 0;
+              getRelatedExerciseIds(ex.exerciseId, active.equipmentProfileId ?? 'full-gym', 1).length > 0;
             return (
               <TouchableOpacity
                 key={ei}

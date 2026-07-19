@@ -9,10 +9,12 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 export default function ProgramsScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const router = useRouter();
   const programs = useProgramStore((s) => s.programs);
   const deleteProgram = useProgramStore((s) => s.deleteProgram);
@@ -39,8 +41,8 @@ export default function ProgramsScreen() {
         ListEmptyComponent={
           <EmptyState
             icon="barbell-outline"
-            title="Aucun programme"
-            subtitle="Créez votre premier programme d'entraînement"
+            title={t('community.noPrograms')}
+            subtitle={t('community.emptyList')}
           />
         }
         contentContainerStyle={programs.length === 0 ? styles.emptyContainer : styles.list}

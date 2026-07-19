@@ -52,7 +52,7 @@ export interface ProgramDay {
 export interface Program {
   id: string;
   name: string;
-  gymProfileId?: import('./gym').GymProfileId;
+  equipmentProfileId?: import('./equipment').EquipmentProfileId;
   days: ProgramDay[];
   createdAt: string;
   updatedAt: string;
@@ -93,7 +93,7 @@ export interface ActiveSession {
   programDayId: string;
   programName: string;
   dayName: string;
-  gymProfileId?: import('./gym').GymProfileId;
+  equipmentProfileId?: import('./equipment').EquipmentProfileId;
   startedAt: string;
   currentExerciseIndex: number;
   currentSetIndex: number;
@@ -114,4 +114,4 @@ export type {
   WeightEntry,
 } from './nutrition';
 
-export type { GymProfileId } from './gym';
+export type { EquipmentProfileId } from './equipment';

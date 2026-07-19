@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import type { FoodNutrition } from '../../types';
+import { useTranslation } from '../../i18n/useTranslation';
 
 interface NutritionFactsProps {
   nutrition: FoodNutrition;
@@ -41,18 +42,19 @@ function DetailRow({ label, value }: { label: string; value: number }) {
 
 export function NutritionFacts({ nutrition }: NutritionFactsProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const details = [
-    nutrition.fiber !== undefined ? { label: 'Fibres', value: nutrition.fiber } : null,
-    nutrition.sugar !== undefined ? { label: 'Sucres', value: nutrition.sugar } : null,
-    nutrition.salt !== undefined ? { label: 'Sel', value: nutrition.salt } : null,
+    nutrition.fiber !== undefined ? { label: t('nutrition.facts.fiber'), value: nutrition.fiber } : null,
+    nutrition.sugar !== undefined ? { label: t('nutrition.facts.sugar'), value: nutrition.sugar } : null,
+    nutrition.salt !== undefined ? { label: t('nutrition.facts.salt'), value: nutrition.salt } : null,
   ].filter((item): item is { label: string; value: number } => item !== null);
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.title}>Nutrition</Text>
-        <Text style={styles.subtitle}>pour 100 g</Text>
+        <Text style={styles.title}>{t('nutrition.facts.title')}</Text>
+        <Text style={styles.subtitle}>{t('nutrition.facts.per100g')}</Text>
       </View>
 
       <View style={styles.caloriesRow}>
@@ -61,9 +63,9 @@ export function NutritionFacts({ nutrition }: NutritionFactsProps) {
       </View>
 
       <View style={styles.macroGrid}>
-        <MacroCell label="Protéines" value={nutrition.protein} suffix=" g" />
-        <MacroCell label="Glucides" value={nutrition.carbs} suffix=" g" />
-        <MacroCell label="Lipides" value={nutrition.fat} suffix=" g" />
+        <MacroCell label="t('nutrition.facts.protein')" value={nutrition.protein} suffix=" g" />
+        <MacroCell label="t('nutrition.facts.carbs')" value={nutrition.carbs} suffix=" g" />
+        <MacroCell label="t('nutrition.facts.fat')" value={nutrition.fat} suffix=" g" />
       </View>
 
       {details.length > 0 ? (

@@ -12,12 +12,15 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-import { GymBrandBadge } from '../../../../components/gyms/GymBrandBadge';
+import { EquipmentProfileBadge } from '../../../../components/equipment/EquipmentProfileBadge';
 import { Button } from '../../../../components/ui/Button';
 import { appAlert } from '../../../../components/ui/AppDialog';
 import { EmptyState } from '../../../../components/ui/EmptyState';
 import { TextInput } from '../../../../components/ui/TextInput';
-import { GYM_PROFILES, getGymProfile } from '../../../../constants/gymProfiles';
+import {
+  EQUIPMENT_PROFILES,
+  getEquipmentProfile,
+} from '../../../../constants/equipmentProfiles';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../constants/keyboard';
 import { getExerciseDisplayName } from '../../../../constants/exerciseI18n';
 import { useTranslation } from '../../../../i18n/useTranslation';
@@ -27,7 +30,7 @@ import { useProgramStore } from '../../../../store/programStore';
 import { useColors } from '../../../../theme/useColors';
 import type { ThemeColors } from '../../../../theme/palettes';
 import type { ProgramDay } from '../../../../types';
-import type { GymProfileId } from '../../../../types/gym';
+import type { EquipmentProfileId } from '../../../../types/equipment';
 
 function DayRow({
   day,
@@ -73,17 +76,21 @@ export default function ProgramDetailScreen() {
   const getCatalogExercise = useExerciseCatalogStore((state) => state.getById);
   const program = useProgramStore((state) => state.programs.find((item) => item.id === id));
   const updateProgram = useProgramStore((state) => state.updateProgram);
-  const duplicateProgramForGym = useProgramStore((state) => state.duplicateProgramForGym);
+  const duplicateProgramForEquipment = useProgramStore((state) => state.duplicateProgramForEquipment);
   const addDay = useProgramStore((state) => state.addDay);
   const deleteDay = useProgramStore((state) => state.deleteDay);
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState(program?.name ?? '');
   const [addingDay, setAddingDay] = useState(false);
   const [newDayName, setNewDayName] = useState('');
-  const selectedGymId: GymProfileId = program?.gymProfileId ?? 'all';
+  const selectedEquipmentProfileId: EquipmentProfileId =
+    program?.equipmentProfileId ?? 'full-gym';
   const compatibility = useMemo(
-    () => (program ? analyzeProgramCompatibility(program, selectedGymId) : null),
-    [program, selectedGymId]
+    () =>
+      program
+        ? analyzeProgramCompatibility(program, selectedEquipmentProfileId)
+        : null,
+    [program, selectedEquipmentProfileId]
   );
 
   if (!program || !compatibility) {
@@ -115,8 +122,8 @@ export default function ProgramDetailScreen() {
   };
 
   const handleConvert = () => {
-    if (selectedGymId === 'all') return;
-    const copy = duplicateProgramForGym(id, selectedGymId);
+    if (selectedEquipmentProfileId === 'full-gym') return;
+    const copy = duplicateProgramForEquipment(id, selectedEquipmentProfileId);
     if (!copy) return;
     appAlert(
       t('program.convertedTitle'),
@@ -127,7 +134,7 @@ export default function ProgramDetailScreen() {
     );
   };
 
-  const selectedGym = getGymProfile(selectedGymId);
+  const selectedProfile = getEquipmentProfile(selectedEquipmentProfileId);
   const issuesByDay = new Map<string, number>();
   compatibility.issues.forEach((issue) => {
     issuesByDay.set(issue.dayId, (issuesByDay.get(issue.dayId) ?? 0) + 1);
@@ -138,47 +145,51 @@ export default function ProgramDetailScreen() {
       <View style={styles.compatibilityCard}>
         <View style={styles.compatibilityTitleRow}>
           <View style={styles.compatibilityTitleCopy}>
-            <Text style={styles.compatibilityTitle}>{t('program.gymCompatibility')}</Text>
-            <Text style={styles.compatibilityHelp}>{t('program.gymCompatibilityHelp')}</Text>
+            <Text style={styles.compatibilityTitle}>{t('program.equipmentCompatibility')}</Text>
+            <Text style={styles.compatibilityHelp}>{t('program.equipmentCompatibilityHelp')}</Text>
           </View>
-          <GymBrandBadge gymId={selectedGymId} size={46} />
+          <EquipmentProfileBadge profileId={selectedEquipmentProfileId} size={46} />
         </View>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.gymRow}>
-          {GYM_PROFILES.map((profile) => {
-            const selected = profile.id === selectedGymId;
+          contentContainerStyle={styles.equipmentRow}>
+          {EQUIPMENT_PROFILES.map((profile) => {
+            const selected = profile.id === selectedEquipmentProfileId;
             return (
               <TouchableOpacity
                 key={profile.id}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: selected }}
-                onPress={() => updateProgram(id, { gymProfileId: profile.id })}
+                onPress={() => updateProgram(id, { equipmentProfileId: profile.id })}
                 activeOpacity={0.75}
-                style={[styles.gymChoice, selected ? styles.gymChoiceSelected : null]}>
-                <GymBrandBadge gymId={profile.id} size={40} />
+                style={[
+                  styles.equipmentChoice,
+                  selected ? styles.equipmentChoiceSelected : null,
+                ]}>
+                <EquipmentProfileBadge profileId={profile.id} size={40} />
                 <Text
-                  style={[styles.gymChoiceText, selected ? styles.gymChoiceTextSelected : null]}
-                  numberOfLines={1}>
-                  {profile.shortName}
+                  style={[
+                    styles.equipmentChoiceText,
+                    selected ? styles.equipmentChoiceTextSelected : null,
+                  ]}
+                  numberOfLines={2}>
+                  {t(profile.i18nKey)}
                 </Text>
               </TouchableOpacity>
             );
           })}
         </ScrollView>
 
-        {selectedGymId === 'all' ? (
-          <Text style={styles.noGymText}>{t('program.chooseGym')}</Text>
-        ) : (
+        {selectedEquipmentProfileId === 'full-gym' ? null : (
           <>
             <View style={styles.scoreRow}>
               <View style={styles.scoreCircle}>
                 <Text style={styles.scoreValue}>{compatibility.percentage}%</Text>
               </View>
               <View style={styles.scoreCopy}>
-                <Text style={styles.scoreTitle}>{selectedGym.name}</Text>
+                <Text style={styles.scoreTitle}>{t(selectedProfile.i18nKey)}</Text>
                 <Text style={styles.scoreMeta}>
                   {t('program.compatibleCount', {
                     compatible: compatibility.compatible,
@@ -354,10 +365,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   compatibilityTitleCopy: { flex: 1, gap: 3 },
   compatibilityTitle: { fontSize: 17, fontWeight: '800', color: c.textPrimary },
   compatibilityHelp: { fontSize: 12, lineHeight: 17, color: c.textSecondary },
-  gymRow: { gap: 8, paddingRight: 4 },
-  gymChoice: {
-    width: 82,
-    minHeight: 76,
+  equipmentRow: { gap: 8, paddingRight: 4 },
+  equipmentChoice: {
+    width: 90,
+    minHeight: 84,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
@@ -365,11 +376,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: c.border,
     backgroundColor: c.surfaceAlt,
+    paddingHorizontal: 6,
   },
-  gymChoiceSelected: { borderWidth: 2, borderColor: c.primary, backgroundColor: c.accentSoft },
-  gymChoiceText: { fontSize: 10, fontWeight: '700', color: c.textSecondary },
-  gymChoiceTextSelected: { color: c.primary },
-  noGymText: { fontSize: 12, color: c.textMuted, textAlign: 'center' },
+  equipmentChoiceSelected: { borderWidth: 2, borderColor: c.primary, backgroundColor: c.accentSoft },
+  equipmentChoiceText: { fontSize: 10, fontWeight: '700', color: c.textSecondary, textAlign: 'center' },
+  equipmentChoiceTextSelected: { color: c.primary },
   scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   scoreCircle: {
     width: 62,
