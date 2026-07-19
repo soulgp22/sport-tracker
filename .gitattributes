@@ -1,1 +1,5 @@
 assets/exercises/gifs/*.jpg filter=lfs diff=lfs merge=lfs -text
+
+# Do NOT track generated exercise media with Git LFS — GitHub raw must
+# return real image bytes, not LFS pointer files.
+media/** -text

@@ -3,8 +3,11 @@ import { AppState } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {
   cancelRestEndNotification,
+  dismissOngoingRestTimerNotification,
+  presentOngoingRestTimerNotification,
   requestNotificationPermission,
   scheduleRestEndNotification,
+  updateOngoingRestTimerNotification,
 } from '../lib/restTimerNotifications';
 import { getRemainingRestSeconds, useActiveSessionStore } from '../store/activeSessionStore';
 
@@ -36,6 +39,9 @@ export function useRestTimer() {
 
   useEffect(() => {
     if (restTimerActive) {
+      const initialSeconds = getRemainingRestSeconds(useActiveSessionStore.getState().active);
+      void presentOngoingRestTimerNotification(initialSeconds);
+
       intervalRef.current = setInterval(() => {
         const seconds = getRemainingRestSeconds(useActiveSessionStore.getState().active);
         if (seconds <= 3 && lastHapticSecondRef.current !== seconds) {
@@ -43,9 +49,11 @@ export function useRestTimer() {
           void playRestHaptic(seconds);
         }
         syncRestTimer();
+        void updateOngoingRestTimerNotification(seconds);
       }, 1000);
     } else {
       lastHapticSecondRef.current = null;
+      void dismissOngoingRestTimerNotification();
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;

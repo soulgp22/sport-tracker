@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
@@ -37,6 +38,7 @@ export function FoodEntryRow({
   drag,
   isActive,
 }: FoodEntryRowProps) {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const [isEditing, setIsEditing] = useState(false);
@@ -68,14 +70,14 @@ export function FoodEntryRow({
 
   const openMoveMenu = () => {
     appAlert(
-      'Déplacer vers',
+      t('dialog.moveTo'),
       undefined,
       [
         ...MEAL_ORDER.filter((mealType) => mealType !== entry.mealType).map((mealType) => ({
           text: MEAL_LABELS[mealType],
           onPress: () => onMoveEntry(entry, mealType),
         })),
-        { text: 'Annuler', style: 'cancel' as const },
+        { text: t('common.cancel'), style: 'cancel' as const },
       ]
     );
   };

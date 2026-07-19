@@ -34,6 +34,7 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 
 import { configureNotifications } from '../lib/restTimerNotifications';
+import { RestTimerBanner } from '../components/session/RestTimerBanner';
 import { useColors, useThemeMode } from '../theme/useColors';
 import { AppDialog } from '../components/ui/AppDialog';
 
@@ -96,6 +97,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navigationTheme}>
         <Stack screenOptions={{ headerShown: false }} />
+        <RestTimerBanner />
         <AppDialog />
         <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
       </ThemeProvider>

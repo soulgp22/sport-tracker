@@ -922,7 +922,7 @@
       "level": "Tous niveaux",
       "exercisesCount": 851,
       "file": "exercises-all.json",
-      "mediaBaseUrl": "https://raw.githubusercontent.com/soulgp22/sport-tracker/main/assets/exercises/gifs/"
+      "mediaBaseUrl": "https://raw.githubusercontent.com/soulgp22/sport-tracker/main/media/exercises/"
     }
   ]
 }

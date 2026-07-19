@@ -11,6 +11,7 @@ import {
 } from './performanceEngine';
 
 const PERFORMANCE_CHANNEL_ID = 'performance-v1';
+const PERFORMANCE_NOTIFICATION_ID = 'perf-notification';
 
 export interface PerformanceNotificationInsight {
   kind: 'level' | 'record' | 'close-to-level' | 'weekly-goal';
@@ -179,6 +180,7 @@ export async function schedulePerformanceNotification(
 
     await configurePerformanceChannel();
     return await Notifications.scheduleNotificationAsync({
+      identifier: PERFORMANCE_NOTIFICATION_ID,
       content: {
         title: insight.title,
         body: insight.body,

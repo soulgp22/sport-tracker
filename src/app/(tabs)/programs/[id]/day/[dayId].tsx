@@ -258,6 +258,7 @@ function ExerciseCard({
 }
 
 export default function DayEditScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { id, dayId } = useLocalSearchParams<{ id: string; dayId: string }>();
@@ -317,7 +318,7 @@ export default function DayEditScreen() {
       }
 
       if (catalogExercise.id === targetExercise.exerciseId) {
-        appAlert('Alternative invalide', 'Choisis un exercice différent de l\'exercice principal.');
+        appAlert(t('dialog.invalidAlternative'), t('dialog.invalidAlternativeMessage'));
         return;
       }
 
@@ -348,9 +349,9 @@ export default function DayEditScreen() {
   };
 
   const handleDeleteExercise = (exId: string, exName: string) => {
-    appAlert('Supprimer', `Supprimer "${exName || 'cet exercice'}" ?`, [
-      { text: 'Annuler', style: 'cancel' },
-      { text: 'Supprimer', style: 'destructive', onPress: () => deleteExerciseFromDay(id, dayId, exId) },
+    appAlert(t('foods.deleteTitle'), t('dialog.deleteExerciseMessage', { name: exName || 'cet exercice' }), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('common.delete'), style: 'destructive', onPress: () => deleteExerciseFromDay(id, dayId, exId) },
     ]);
   };
 

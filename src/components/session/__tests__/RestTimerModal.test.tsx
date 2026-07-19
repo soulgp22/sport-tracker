@@ -33,7 +33,7 @@ describe('RestTimerModal', () => {
   it('renders timer when visible and timer is set', async () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
     useActiveSessionStore.getState().setRestTimer(90);
-    render(<RestTimerModal visible onDismiss={jest.fn()} />);
+    render(<RestTimerModal visible onDismiss={jest.fn()} onMinimize={jest.fn()} />);
     expect(screen.getByText('01:30')).toBeTruthy();
     expect(screen.getByText('REPOS')).toBeTruthy();
     expect(screen.getByText('RESTANT')).toBeTruthy();
@@ -43,7 +43,7 @@ describe('RestTimerModal', () => {
     useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
     useActiveSessionStore.getState().setRestTimer(90);
     const onDismiss = jest.fn();
-    render(<RestTimerModal visible onDismiss={onDismiss} />);
+    render(<RestTimerModal visible onDismiss={onDismiss} onMinimize={jest.fn()} />);
     fireEvent.press(screen.getByText('Passer'));
     expect(useActiveSessionStore.getState().active!.restTimerActive).toBe(false);
     expect(onDismiss).toHaveBeenCalled();
@@ -56,6 +56,7 @@ describe('RestTimerModal', () => {
       <RestTimerModal
         visible
         onDismiss={jest.fn()}
+        onMinimize={jest.fn()}
         exerciseName="Bench"
         currentSetNumber={1}
         totalSets={1}

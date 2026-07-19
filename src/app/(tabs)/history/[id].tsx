@@ -9,6 +9,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
 import { getCatalogExerciseName } from '../../../store/exerciseCatalogStore';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 
@@ -19,6 +20,7 @@ function fmt(secs: number) {
 }
 
 export default function SessionDetailScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,10 +42,10 @@ export default function SessionDetailScreen() {
   });
 
   const handleDelete = () => {
-    appAlert('Supprimer', 'Supprimer cette séance ?', [
-      { text: 'Annuler', style: 'cancel' },
+    appAlert(t('foods.deleteTitle'), t('dialog.deleteSessionMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Supprimer',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: () => { deleteSession(id); router.back(); },
       },

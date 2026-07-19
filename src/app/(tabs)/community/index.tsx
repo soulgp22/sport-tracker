@@ -279,7 +279,7 @@ export default function CommunityScreen() {
     const summary = t('community.foodImportSummary', { added: result.added, duplicates: result.duplicateIds.length, errors: result.errors.length });
 
     appAlert(
-      result.added > 0 ? 'Base d’aliments ajoutée' : 'Aucun aliment ajouté',
+      result.added > 0 ? t('community.foodDbAdded') : t('community.foodDbNotAdded'),
       summary,
       [
         { text: t('community.stayHere'), style: 'cancel' },
@@ -311,8 +311,8 @@ export default function CommunityScreen() {
       showFoodImportResult(await downloadFoodDatabase(entry));
     } catch {
       appAlert(
-        'Téléchargement impossible',
-        'Impossible de télécharger cette base d’aliments. Réessayez plus tard.'
+        t('community.downloadFailed'),
+        t('community.foodDownloadFailed')
       );
     } finally {
       setDownloadingId(null);
