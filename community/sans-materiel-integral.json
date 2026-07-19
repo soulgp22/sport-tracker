@@ -1,0 +1,438 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Sans matériel intégral",
+      "days": [
+        {
+          "name": "Fondations",
+          "exercises": [
+            {
+              "exerciseName": "Bodyweight Squat",
+              "alternativeExerciseNames": [
+                "Split Squats"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Pushups",
+              "alternativeExerciseNames": [
+                "Incline Push-Up"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Inverted Row",
+              "alternativeExerciseNames": [
+                "Scapular Pull-Up"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Single Leg Glute Bridge",
+              "alternativeExerciseNames": [
+                "Butt Lift (Bridge)"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "alternativeExerciseNames": [
+                "Dead Bug"
+              ],
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Unilatéral",
+          "exercises": [
+            {
+              "exerciseName": "Bodyweight Walking Lunge",
+              "alternativeExerciseNames": [
+                "Split Squats"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Decline Push-Up",
+              "alternativeExerciseNames": [
+                "Push-Up Wide"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Chin-Up",
+              "alternativeExerciseNames": [
+                "Inverted Row"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Floor Glute-Ham Raise",
+              "alternativeExerciseNames": [
+                "Natural Glute Ham Raise"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "alternativeExerciseNames": [
+                "Russian Twist"
+              ],
+              "sets": [
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Athlétique",
+          "exercises": [
+            {
+              "exerciseName": "Freehand Jump Squat",
+              "alternativeExerciseNames": [
+                "Standing Long Jump"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Split Squats",
+              "alternativeExerciseNames": [
+                "Bodyweight Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Push-Ups - Close Triceps Position",
+              "alternativeExerciseNames": [
+                "Incline Push-Up Close-Grip"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Pullups",
+              "alternativeExerciseNames": [
+                "Wide-Grip Rear Pull-Up"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Single Leg Glute Bridge",
+              "alternativeExerciseNames": [
+                "Rear Leg Raises"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dead Bug",
+              "alternativeExerciseNames": [
+                "Plank"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

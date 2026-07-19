@@ -34,7 +34,14 @@ function manifestFixture(id = 'ppl-6'): CommunityManifest {
         author: 'Life Sport Tracker',
         level: 'Intermédiaire',
         daysCount: 6,
+        exercisesCount: 36,
         file: `${id}.json`,
+        goal: 'Hypertrophie',
+        equipment: 'Barre, haltères et poulies',
+        sessionsPerWeek: 6,
+        sessionMinutes: 70,
+        progression: 'Double progression puis deload.',
+        tags: ['PPL', 'hypertrophie'],
       },
     ],
     foodDatabases: [
@@ -99,6 +106,75 @@ describe('communityStore', () => {
       programs: manifest.programs,
       foodDatabases: [],
     });
+  });
+
+  it('parses country food databases with covered retailers and Open Food Facts metadata', async () => {
+    const manifest = manifestFixture();
+    manifest.foodDatabases = [
+      {
+        id: 'foods-france',
+        name: 'Produits France — Open Food Facts',
+        description: 'Sélection par pays.',
+        author: 'Communauté Life Sport Tracker',
+        country: 'France',
+        retailers: ['Carrefour', 'Auchan', 'E.Leclerc'],
+        foodsCount: 101,
+        format: 'json',
+        file: 'foods-france.json',
+        disclaimer: 'Vérifiez les valeurs sur l’emballage.',
+        license: 'ODbL — Open Food Facts',
+        attribution: 'https://world.openfoodfacts.org',
+      },
+    ];
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result?.foodDatabases[0]).toEqual(manifest.foodDatabases[0]);
+  });
+
+  it('keeps compatibility with a food database identified by retailer only', async () => {
+    const manifest = manifestFixture();
+    const { country: _country, ...retailerOnly } = manifest.foodDatabases[0];
+    const legacyManifest = { ...manifest, foodDatabases: [retailerOnly] };
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(legacyManifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result?.foodDatabases[0]).toEqual(retailerOnly);
+  });
+
+  it('keeps optional program metadata optional for legacy manifests', async () => {
+    const legacyProgram = {
+      id: 'legacy-program',
+      name: 'Programme historique',
+      description: 'Sans nouvelles métadonnées.',
+      author: 'Life Sport Tracker',
+      level: 'Débutant' as const,
+      daysCount: 2,
+      file: 'legacy-program.json',
+    };
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify({
+      version: 1,
+      programs: [legacyProgram],
+    })));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result?.programs[0]).toEqual(legacyProgram);
+  });
+
+  it('rejects malformed optional program metadata', async () => {
+    const manifest = manifestFixture();
+    manifest.programs[0].sessionMinutes = 0;
+    fetchMock.mockResolvedValueOnce(textResponse(JSON.stringify(manifest)));
+
+    const result = await useCommunityStore.getState().fetchManifest();
+
+    expect(result).toBeNull();
+    expect(useCommunityStore.getState().error).toBe(
+      'Impossible de charger les contenus communautaires.'
+    );
   });
 
   it('falls back to the cached manifest when the network fails', async () => {

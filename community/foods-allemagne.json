@@ -1,0 +1,1310 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Allemagne — Open Food Facts",
+    "country": "Allemagne",
+    "retailers": [
+      "Edeka",
+      "Rewe",
+      "Aldi"
+    ],
+    "official": false,
+    "license": "ODbL — Open Food Facts",
+    "attribution": "https://world.openfoodfacts.org",
+    "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifier les valeurs sur l'emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "off_allemagne_8000500426494",
+      "name": "Nutella Plant-Based",
+      "brand": "Ferrero",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 534,
+        "protein": 6.8,
+        "carbs": 53.4,
+        "fat": 31.8,
+        "sugar": 45.4,
+        "salt": 0.07
+      },
+      "barcode": "8000500426494",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500426494"
+    },
+    {
+      "id": "off_allemagne_8076809529419",
+      "name": "Pâtes spaghetti au blé complet integral 500g",
+      "brand": "Barilla",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 347,
+        "protein": 13,
+        "carbs": 64,
+        "fat": 2.5,
+        "fiber": 8,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076809529419",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809529419"
+    },
+    {
+      "id": "off_allemagne_4008400163826",
+      "name": "Ferrero Rocher x 16",
+      "brand": "Ferrero",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 603,
+        "protein": 8.2,
+        "carbs": 44.4,
+        "fat": 42.7,
+        "sugar": 39.9,
+        "salt": 0.15
+      },
+      "barcode": "4008400163826",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400163826"
+    },
+    {
+      "id": "off_allemagne_4008400404127",
+      "name": "Nutella Nuss-Nugat-Creme",
+      "brand": "Nutella",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 538,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "4008400404127",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400404127"
+    },
+    {
+      "id": "off_allemagne_8000500267035",
+      "name": "Kinder Delice paquete individual",
+      "brand": "Ferrero",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 452,
+        "protein": 5.5,
+        "carbs": 58.3,
+        "fat": 22.8,
+        "sugar": 43,
+        "salt": 0.32
+      },
+      "barcode": "8000500267035",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500267035"
+    },
+    {
+      "id": "off_allemagne_8000500217078",
+      "name": "Nutella B-ready",
+      "brand": "Nutella",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 521,
+        "protein": 7.2,
+        "carbs": 60.7,
+        "fat": 27,
+        "fiber": 0,
+        "sugar": 47.1,
+        "salt": 0.56
+      },
+      "barcode": "8000500217078",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500217078"
+    },
+    {
+      "id": "off_allemagne_4008400409627",
+      "name": "Nutella",
+      "brand": "FERRERO",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 539,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "fiber": 0,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "4008400409627",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400409627"
+    },
+    {
+      "id": "off_allemagne_8000500425183",
+      "name": "Glace au Nutella",
+      "brand": "Nutella",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 344,
+        "protein": 4.1,
+        "carbs": 29.8,
+        "fat": 23,
+        "sugar": 29,
+        "salt": 0.11
+      },
+      "barcode": "8000500425183",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500425183"
+    },
+    {
+      "id": "off_allemagne_7300400114714",
+      "name": "Knäckebrot Vollkorn Roggen",
+      "brand": "wasa",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 333,
+        "protein": 9,
+        "carbs": 60,
+        "fat": 1.5,
+        "fiber": 20,
+        "sugar": 1.5,
+        "salt": 1.2
+      },
+      "barcode": "7300400114714",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7300400114714"
+    },
+    {
+      "id": "off_allemagne_4001954161010",
+      "name": "Butter Kerrygold",
+      "brand": "Kerrygold",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 748,
+        "protein": 0.7,
+        "carbs": 0.7,
+        "fat": 82.5,
+        "sugar": 0.7,
+        "salt": 0.03
+      },
+      "barcode": "4001954161010",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4001954161010"
+    },
+    {
+      "id": "off_allemagne_4008258051030",
+      "name": "Nuts'n Berries",
+      "brand": "Seeberger",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 479,
+        "protein": 11,
+        "carbs": 44,
+        "fat": 27,
+        "sugar": 36,
+        "salt": 0.02
+      },
+      "barcode": "4008258051030",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008258051030"
+    },
+    {
+      "id": "off_allemagne_5411188134985",
+      "name": "not milk",
+      "brand": "alpro",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 59,
+        "protein": 0.7,
+        "carbs": 5.7,
+        "fat": 3.5,
+        "fiber": 1,
+        "sugar": 0,
+        "salt": 0.12
+      },
+      "barcode": "5411188134985",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188134985"
+    },
+    {
+      "id": "off_allemagne_5000112546415",
+      "name": "Coca-Cola Original",
+      "brand": "Coca-Cola",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5000112546415",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000112546415"
+    },
+    {
+      "id": "off_allemagne_5202390020407",
+      "name": "Greek White panetto",
+      "brand": "Violife",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 307,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 29,
+        "sugar": 0,
+        "salt": 1.7
+      },
+      "barcode": "5202390020407",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390020407"
+    },
+    {
+      "id": "off_allemagne_3057640186158",
+      "name": "Wasser Volvic naturelle, 6erPack",
+      "brand": "Volvic",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 0.03
+      },
+      "barcode": "3057640186158",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3057640186158"
+    },
+    {
+      "id": "off_allemagne_4008400221021",
+      "name": "Kinder Maxi",
+      "brand": "Ferrero",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 566,
+        "protein": 8.7,
+        "carbs": 53.5,
+        "fat": 35,
+        "sugar": 53.3,
+        "salt": 0.31
+      },
+      "barcode": "4008400221021",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400221021"
+    },
+    {
+      "id": "off_allemagne_4014400932959",
+      "name": "Toffifee weiße Schokolade",
+      "brand": "Storck",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 541,
+        "protein": 6.4,
+        "carbs": 55.9,
+        "fat": 32.7,
+        "sugar": 46.5,
+        "salt": 0.3
+      },
+      "barcode": "4014400932959",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4014400932959"
+    },
+    {
+      "id": "off_allemagne_7622201127206",
+      "name": "Haselnusscreme",
+      "brand": "Milka",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 553,
+        "protein": 3.8,
+        "carbs": 58,
+        "fat": 34,
+        "fiber": 2.1,
+        "sugar": 57,
+        "salt": 0.18
+      },
+      "barcode": "7622201127206",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622201127206"
+    },
+    {
+      "id": "off_allemagne_4008258185001",
+      "name": "Cranberries gesüßt",
+      "brand": "Seeberger",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 338,
+        "protein": 0.3,
+        "carbs": 78,
+        "fat": 1.3,
+        "sugar": 68,
+        "salt": 0.03
+      },
+      "barcode": "4008258185001",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008258185001"
+    },
+    {
+      "id": "off_allemagne_4017100370007",
+      "name": "Leibniz Butterkeks",
+      "brand": "Bahlsen",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 435,
+        "protein": 8.4,
+        "carbs": 72,
+        "fat": 12,
+        "fiber": 2.8,
+        "sugar": 21,
+        "salt": 1.48
+      },
+      "barcode": "4017100370007",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4017100370007"
+    },
+    {
+      "id": "off_allemagne_4017100376108",
+      "name": "Kipferl",
+      "brand": "Bahlsen",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 542,
+        "protein": 8.4,
+        "carbs": 56,
+        "fat": 31,
+        "fiber": 2.5,
+        "sugar": 23,
+        "salt": 0.23
+      },
+      "barcode": "4017100376108",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4017100376108"
+    },
+    {
+      "id": "off_allemagne_5711953068881",
+      "name": "Chocolate Flavour Shake",
+      "brand": "Arla PROTEIN",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 51,
+        "protein": 5.7,
+        "carbs": 4.9,
+        "fat": 0.9,
+        "fiber": 0.2,
+        "sugar": 4.7,
+        "salt": 0
+      },
+      "barcode": "5711953068881",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5711953068881"
+    },
+    {
+      "id": "off_allemagne_90162565",
+      "name": "Red Bull Energydrink Classic",
+      "brand": "Red Bull",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 11,
+        "salt": 0.1
+      },
+      "barcode": "90162565",
+      "sourceUrl": "https://world.openfoodfacts.org/product/90162565"
+    },
+    {
+      "id": "off_allemagne_8719200261464",
+      "name": "Becel Classic",
+      "brand": "Becel",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 315,
+        "protein": 0.5,
+        "carbs": 0.5,
+        "fat": 35,
+        "sugar": 0.5,
+        "salt": 0.2
+      },
+      "barcode": "8719200261464",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8719200261464"
+    },
+    {
+      "id": "off_allemagne_7613035544482",
+      "name": "NESTLE LION Céréales 1,05 kg",
+      "brand": "Nestlé",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 406,
+        "protein": 8.1,
+        "carbs": 73.2,
+        "fat": 7.4,
+        "fiber": 7,
+        "sugar": 24.5,
+        "salt": 0.4
+      },
+      "barcode": "7613035544482",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613035544482"
+    },
+    {
+      "id": "off_allemagne_4001954165018",
+      "name": "Kerrygold extra Butter & Rapsöl - ungesalzen",
+      "brand": "Kerrygold",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 589,
+        "protein": 0.5,
+        "carbs": 0.5,
+        "fat": 65,
+        "sugar": 0.5,
+        "salt": 0
+      },
+      "barcode": "4001954165018",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4001954165018"
+    },
+    {
+      "id": "off_allemagne_4017100706004",
+      "name": "Lorenz Saltletts Sticks",
+      "brand": "Lorenz",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 392,
+        "protein": 12,
+        "carbs": 71,
+        "fat": 5.9,
+        "fiber": 3,
+        "sugar": 2.4,
+        "salt": 3.8
+      },
+      "barcode": "4017100706004",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4017100706004"
+    },
+    {
+      "id": "off_allemagne_40084725",
+      "name": "Milchschnitte Einzelpackung",
+      "brand": "Kinder",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 487,
+        "protein": 4.9,
+        "carbs": 41.5,
+        "fat": 33.4,
+        "fiber": 1.1,
+        "sugar": 30,
+        "salt": 0.18
+      },
+      "barcode": "40084725",
+      "sourceUrl": "https://world.openfoodfacts.org/product/40084725"
+    },
+    {
+      "id": "off_allemagne_8005110060007",
+      "name": "Geschälte Tomaten",
+      "brand": "Mutti",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 41,
+        "protein": 1.2,
+        "carbs": 6.9,
+        "fat": 0.6,
+        "fiber": 1.6,
+        "sugar": 3.4,
+        "salt": 0.1
+      },
+      "barcode": "8005110060007",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8005110060007"
+    },
+    {
+      "id": "off_allemagne_5202390024214",
+      "name": "Tranches saveur Emmental",
+      "brand": "Violife",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 300,
+        "protein": 0.1,
+        "carbs": 23,
+        "fat": 23,
+        "sugar": 0.6,
+        "salt": 1.97
+      },
+      "barcode": "5202390024214",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390024214"
+    },
+    {
+      "id": "off_allemagne_40084015",
+      "name": "Duplo Einzelriegel",
+      "brand": "Duplo",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 551,
+        "protein": 6.1,
+        "carbs": 56,
+        "fat": 33,
+        "sugar": 50.4,
+        "salt": 0.19
+      },
+      "barcode": "40084015",
+      "sourceUrl": "https://world.openfoodfacts.org/product/40084015"
+    },
+    {
+      "id": "off_allemagne_4001518117316",
+      "name": "Prinzenrolle Schoko",
+      "brand": "De Beukelaer",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 469,
+        "protein": 6.5,
+        "carbs": 66,
+        "fat": 19,
+        "fiber": 4.1,
+        "sugar": 30,
+        "salt": 0.33
+      },
+      "barcode": "4001518117316",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4001518117316"
+    },
+    {
+      "id": "off_allemagne_3228021000084",
+      "name": "Meersalz-Butter",
+      "brand": "Lactalis",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 727,
+        "protein": 0.7,
+        "carbs": 1,
+        "fat": 80,
+        "fiber": 0,
+        "sugar": 1,
+        "salt": 2.5
+      },
+      "barcode": "3228021000084",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228021000084"
+    },
+    {
+      "id": "off_allemagne_4008400221823",
+      "name": "Kinderriegel",
+      "brand": "Kinder",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 566,
+        "protein": 8.7,
+        "carbs": 53.5,
+        "fat": 35,
+        "sugar": 53.3,
+        "salt": 0.31
+      },
+      "barcode": "4008400221823",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400221823"
+    },
+    {
+      "id": "off_allemagne_4025500186821",
+      "name": "Kalinka Kefir",
+      "brand": "müller",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 3.4,
+        "carbs": 4.1,
+        "fat": 1.5,
+        "sugar": 4.1,
+        "salt": 0.12
+      },
+      "barcode": "4025500186821",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4025500186821"
+    },
+    {
+      "id": "off_allemagne_4008452027602",
+      "name": "H-Milch 3,5%",
+      "brand": "Weihenstephan",
+      "retailer": "Edeka",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 64,
+        "protein": 3.5,
+        "carbs": 4.7,
+        "fat": 3.5,
+        "fiber": 0,
+        "sugar": 4.7,
+        "salt": 0.13
+      },
+      "barcode": "4008452027602",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008452027602"
+    },
+    {
+      "id": "off_allemagne_3046920028721",
+      "name": "Dark absolute 99% cacao",
+      "brand": "Lindt EXCELLENCE",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 565,
+        "protein": 14,
+        "carbs": 9,
+        "fat": 49,
+        "fiber": 0,
+        "sugar": 0.4,
+        "salt": 0.06
+      },
+      "barcode": "3046920028721",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920028721"
+    },
+    {
+      "id": "off_allemagne_5411188115472",
+      "name": "Soyamilch",
+      "brand": "alpro",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 39,
+        "protein": 3,
+        "carbs": 2.5,
+        "fat": 1.8,
+        "fiber": 0.5,
+        "sugar": 2.5,
+        "salt": 0.09
+      },
+      "barcode": "5411188115472",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115472"
+    },
+    {
+      "id": "off_allemagne_6410500090014",
+      "name": "Finn Crisp",
+      "brand": "Finn Crisp",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 350,
+        "protein": 10,
+        "carbs": 61,
+        "fat": 2.6,
+        "fiber": 20,
+        "sugar": 1.6,
+        "salt": 1.4
+      },
+      "barcode": "6410500090014",
+      "sourceUrl": "https://world.openfoodfacts.org/product/6410500090014"
+    },
+    {
+      "id": "off_allemagne_8010721001509",
+      "name": "Parmigiano Reggiano Revet Fersk Parmesan DOP 60g",
+      "brand": "OLUF LORENTZEN AS",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 402,
+        "protein": 32,
+        "carbs": 0,
+        "fat": 30,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 1.6
+      },
+      "barcode": "8010721001509",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8010721001509"
+    },
+    {
+      "id": "off_allemagne_3046920042932",
+      "name": "Création Rocher Noir",
+      "brand": "Lindt",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 564,
+        "protein": 6.6,
+        "carbs": 48,
+        "fat": 37,
+        "sugar": 44,
+        "salt": 0.08
+      },
+      "barcode": "3046920042932",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920042932"
+    },
+    {
+      "id": "off_allemagne_5411188122661",
+      "name": "Alpro Mandeldrink Weiß Ungesüßt, Ungeröstet 1 LT",
+      "brand": "alpro",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 13,
+        "protein": 0.5,
+        "carbs": 0,
+        "fat": 1.1,
+        "fiber": 0.2,
+        "sugar": 0,
+        "salt": 0.14
+      },
+      "barcode": "5411188122661",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188122661"
+    },
+    {
+      "id": "off_allemagne_3178530402995",
+      "name": "Tartelettes framboise",
+      "brand": "Bonne Maman",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 422,
+        "protein": 4.2,
+        "carbs": 73,
+        "fat": 12,
+        "fiber": 2.6,
+        "sugar": 52,
+        "salt": 0.25
+      },
+      "barcode": "3178530402995",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3178530402995"
+    },
+    {
+      "id": "off_allemagne_5010029201246",
+      "name": "Swiss Style Muesli",
+      "brand": "Weetabix",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 369,
+        "protein": 11.1,
+        "carbs": 64.4,
+        "fat": 5.6,
+        "fiber": 8,
+        "sugar": 18,
+        "salt": 0.26
+      },
+      "barcode": "5010029201246",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010029201246"
+    },
+    {
+      "id": "off_allemagne_3178530403022",
+      "name": "Tartelettes chocolat caramel",
+      "brand": "Bonne Maman",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 493,
+        "protein": 6.7,
+        "carbs": 64,
+        "fat": 23.3,
+        "fiber": 2,
+        "sugar": 38,
+        "salt": 0.71
+      },
+      "barcode": "3178530403022",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3178530403022"
+    },
+    {
+      "id": "off_allemagne_5411188128588",
+      "name": "Alpro Fermentiertes Sojaprodukt, Ungesüßt, Skyr style 400g",
+      "brand": "alpro",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 60,
+        "protein": 5.8,
+        "carbs": 0,
+        "fat": 3.4,
+        "fiber": 1.3,
+        "sugar": 0,
+        "salt": 0.33
+      },
+      "barcode": "5411188128588",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188128588"
+    },
+    {
+      "id": "off_allemagne_4006040007999",
+      "name": "Nuss-Nougat-Creme",
+      "brand": "Bionella",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 598,
+        "protein": 6.9,
+        "carbs": 42,
+        "fat": 44,
+        "sugar": 40,
+        "salt": 0.01
+      },
+      "barcode": "4006040007999",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4006040007999"
+    },
+    {
+      "id": "off_allemagne_4000177211311",
+      "name": "Capri-Sun Tropical",
+      "brand": "CAPRI-SUN.",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 21,
+        "protein": 0,
+        "carbs": 5,
+        "fat": 0,
+        "sugar": 4.9,
+        "salt": 0
+      },
+      "barcode": "4000177211311",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4000177211311"
+    },
+    {
+      "id": "off_allemagne_5411188124726",
+      "name": "Alpro Hafer-Mandeldrink 1L",
+      "brand": "alpro",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 23,
+        "protein": 0.4,
+        "carbs": 2.4,
+        "fat": 1,
+        "fiber": 1.5,
+        "sugar": 1.8,
+        "salt": 0.11
+      },
+      "barcode": "5411188124726",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188124726"
+    },
+    {
+      "id": "off_allemagne_3178530412697",
+      "name": "Doonuts",
+      "brand": "St Michel",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 453,
+        "protein": 5.7,
+        "carbs": 54,
+        "fat": 25,
+        "fiber": 1.1,
+        "sugar": 31,
+        "salt": 0.33
+      },
+      "barcode": "3178530412697",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3178530412697"
+    },
+    {
+      "id": "off_allemagne_4002971243703",
+      "name": "High-Protein-Pudding - Chocolate Flavour",
+      "brand": "Ehrmann",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 76,
+        "protein": 10,
+        "carbs": 5.5,
+        "fat": 1.5,
+        "fiber": 0,
+        "sugar": 4,
+        "salt": 0.12
+      },
+      "barcode": "4002971243703",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4002971243703"
+    },
+    {
+      "id": "off_allemagne_4008258150108",
+      "name": "Nüsse-Nusskernmischung",
+      "brand": "Seeberger",
+      "retailer": "Rewe",
+      "country": "Allemagne",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 643,
+        "protein": 20,
+        "carbs": 11,
+        "fat": 57,
+        "fiber": 5.7,
+        "sugar": 4.6,
+        "salt": 0.02
+      },
+      "barcode": "4008258150108",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008258150108"
+    },
+    {
+      "id": "off_allemagne_5449000267412",
+      "name": "Coca-Cola goût original",
+      "brand": "Coca-Cola",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5449000267412",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000267412"
+    },
+    {
+      "id": "off_allemagne_4000607852008",
+      "name": "Dark Chocolate",
+      "brand": "Schogetten",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 525,
+        "protein": 6.4,
+        "carbs": 50,
+        "fat": 31,
+        "sugar": 47,
+        "salt": 0.01
+      },
+      "barcode": "4000607852008",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4000607852008"
+    },
+    {
+      "id": "off_allemagne_4061458047685",
+      "name": "Frischkäse",
+      "brand": "Milsani",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 241,
+        "protein": 5.4,
+        "carbs": 3,
+        "fat": 23,
+        "fiber": 0,
+        "sugar": 3,
+        "salt": 0.8
+      },
+      "barcode": "4061458047685",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4061458047685"
+    },
+    {
+      "id": "off_allemagne_4008100151611",
+      "name": "Chucrut al estilo bávaro",
+      "brand": "Hengstenberg",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 22,
+        "protein": 1.5,
+        "carbs": 1.9,
+        "fat": 0.5,
+        "sugar": 1.7,
+        "salt": 1.1
+      },
+      "barcode": "4008100151611",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008100151611"
+    },
+    {
+      "id": "off_allemagne_3161710000678",
+      "name": "Weichkäse",
+      "brand": "Géramont",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 357,
+        "protein": 17,
+        "carbs": 0.5,
+        "fat": 32,
+        "sugar": 0.5,
+        "salt": 1.38
+      },
+      "barcode": "3161710000678",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3161710000678"
+    },
+    {
+      "id": "off_allemagne_4008400551920",
+      "name": "Maxi King 3er-Pack",
+      "brand": "Kinder",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 436,
+        "protein": 6.7,
+        "carbs": 38.2,
+        "fat": 37.5,
+        "sugar": 35.6,
+        "salt": 0.19
+      },
+      "barcode": "4008400551920",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4008400551920"
+    },
+    {
+      "id": "off_allemagne_4061458047692",
+      "name": "Körniger Frischkäse, Halbfettstufe",
+      "brand": "Milsani",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 103,
+        "protein": 12,
+        "carbs": 2.7,
+        "fat": 4.6,
+        "fiber": 0,
+        "sugar": 2.7,
+        "salt": 0.75
+      },
+      "barcode": "4061458047692",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4061458047692"
+    },
+    {
+      "id": "off_allemagne_4000405005026",
+      "name": "Veganes Mühlen Cordon Bleu auf Basis von Soja",
+      "brand": "Rügenwalder Mühle",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 209,
+        "protein": 12,
+        "carbs": 13,
+        "fat": 11,
+        "fiber": 5,
+        "sugar": 0.6,
+        "salt": 1.5
+      },
+      "barcode": "4000405005026",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4000405005026"
+    },
+    {
+      "id": "off_allemagne_7622300318116",
+      "name": "Philadelphia Kräuter Doppelrahmstufe",
+      "brand": "Philadelphia",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 212,
+        "protein": 5.2,
+        "carbs": 4.5,
+        "fat": 19,
+        "fiber": 0.3,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "7622300318116",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622300318116"
+    },
+    {
+      "id": "off_allemagne_5057545744765",
+      "name": "PORRIDGE OATS",
+      "brand": "THE GROWER'S HARVEST",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 376,
+        "protein": 11,
+        "carbs": 60.4,
+        "fat": 8.1,
+        "fiber": 8.5,
+        "sugar": 1.5,
+        "salt": 3.94
+      },
+      "barcode": "5057545744765",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5057545744765"
+    },
+    {
+      "id": "off_allemagne_4061462842986",
+      "name": "H-Vollmilch 3,5 % Fett",
+      "brand": "Milsani",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 64,
+        "protein": 3.3,
+        "carbs": 4.8,
+        "fat": 3.5,
+        "sugar": 4.8,
+        "salt": 0.13
+      },
+      "barcode": "4061462842986",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4061462842986"
+    },
+    {
+      "id": "off_allemagne_4001513007704",
+      "name": "Gerolsteiner Medium 1,5 Liter",
+      "brand": "Gerolsteiner",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "sugar": 0,
+        "salt": 0.03
+      },
+      "barcode": "4001513007704",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4001513007704"
+    },
+    {
+      "id": "off_allemagne_4066600103448",
+      "name": "Spezi Dose",
+      "brand": "Paulaner",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 37,
+        "protein": 0,
+        "carbs": 10,
+        "fat": 0,
+        "sugar": 9.2,
+        "salt": 0.04
+      },
+      "barcode": "4066600103448",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4066600103448"
+    },
+    {
+      "id": "off_allemagne_7311070346916",
+      "name": "Gifflar Cannelle",
+      "brand": "Pågen",
+      "retailer": "Aldi",
+      "country": "Allemagne",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 373,
+        "protein": 7.3,
+        "carbs": 52,
+        "fat": 14,
+        "fiber": 0,
+        "sugar": 19,
+        "salt": 0.03
+      },
+      "barcode": "7311070346916",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7311070346916"
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Perte de poids — Résistance & densité",
+      "days": [
+        {
+          "name": "Force bas + finisher",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Full Squat",
+              "alternativeExerciseNames": [
+                "Leg Press"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                }
+              ]
+            },
+            {
+              "exerciseName": "Romanian Deadlift",
+              "alternativeExerciseNames": [
+                "Stiff-Legged Dumbbell Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Lunges",
+              "alternativeExerciseNames": [
+                "Bodyweight Walking Lunge"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Mountain Climbers",
+              "alternativeExerciseNames": [
+                "Star Jump"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "Rope Jumping",
+              "alternativeExerciseNames": [
+                "Fast Skipping"
+              ],
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Force haut + circuit",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Bench Press - Medium Grip",
+              "alternativeExerciseNames": [
+                "Dumbbell Bench Press"
+              ],
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 210
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Barbell Row",
+              "alternativeExerciseNames": [
+                "Seated Cable Rows"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Shoulder Press",
+              "alternativeExerciseNames": [
+                "Shoulder Press - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Wide-Grip Lat Pulldown",
+              "alternativeExerciseNames": [
+                "Pullups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Pushups",
+              "alternativeExerciseNames": [
+                "Incline Push-Up"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Mountain Climbers",
+              "alternativeExerciseNames": [
+                "Fast Skipping"
+              ],
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Densité corps entier",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Clean",
+              "alternativeExerciseNames": [
+                "Vertical Swing"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Squat",
+              "alternativeExerciseNames": [
+                "Goblet Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Floor Press",
+              "alternativeExerciseNames": [
+                "Pushups"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "One-Arm Dumbbell Row",
+              "alternativeExerciseNames": [
+                "Bent Over Two-Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Rear Lunge",
+              "alternativeExerciseNames": [
+                "Bodyweight Walking Lunge"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Russian Twist",
+              "alternativeExerciseNames": [
+                "Cross-Body Crunch"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Chaîne postérieure + intervalles",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Deadlift",
+              "alternativeExerciseNames": [
+                "Trap Bar Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 240
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 240
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 240
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 240
+                }
+              ]
+            },
+            {
+              "exerciseName": "Barbell Glute Bridge",
+              "alternativeExerciseNames": [
+                "Hip Lift with Band"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Face Pull",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Wind Sprints",
+              "alternativeExerciseNames": [
+                "Running, Treadmill"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dead Bug",
+              "alternativeExerciseNames": [
+                "Plank"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

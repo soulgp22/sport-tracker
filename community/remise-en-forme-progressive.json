@@ -1,0 +1,358 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Remise en forme progressive",
+      "days": [
+        {
+          "name": "Reprise A",
+          "exercises": [
+            {
+              "exerciseName": "Chair Squat",
+              "alternativeExerciseNames": [
+                "Bodyweight Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Incline Push-Up",
+              "alternativeExerciseNames": [
+                "Pushups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "One-Arm Dumbbell Row",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Butt Lift (Bridge)",
+              "alternativeExerciseNames": [
+                "Hip Lift with Band"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dead Bug",
+              "alternativeExerciseNames": [
+                "Plank"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Reprise B",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Squat To A Bench",
+              "alternativeExerciseNames": [
+                "Chair Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Floor Press",
+              "alternativeExerciseNames": [
+                "Incline Push-Up"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Band Pull Apart",
+              "alternativeExerciseNames": [
+                "Back Flyes - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Band Good Morning",
+              "alternativeExerciseNames": [
+                "Stiff-Legged Dumbbell Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "alternativeExerciseNames": [
+                "Dead Bug"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Reprise C",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Step Ups",
+              "alternativeExerciseNames": [
+                "Step-up with Knee Raise"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Shoulder Press",
+              "alternativeExerciseNames": [
+                "Shoulder Press - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Two-Dumbbell Row",
+              "alternativeExerciseNames": [
+                "One-Arm Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Single Leg Glute Bridge",
+              "alternativeExerciseNames": [
+                "Butt Lift (Bridge)"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "External Rotation with Band",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "alternativeExerciseNames": [
+                "Dead Bug"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

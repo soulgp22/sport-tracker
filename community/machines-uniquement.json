@@ -1,0 +1,700 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Machines uniquement",
+      "days": [
+        {
+          "name": "Haut machines A",
+          "exercises": [
+            {
+              "exerciseName": "Machine Bench Press",
+              "alternativeExerciseNames": [
+                "Leverage Chest Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leverage Iso Row",
+              "alternativeExerciseNames": [
+                "Leverage High Row"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leverage Shoulder Press",
+              "alternativeExerciseNames": [
+                "Machine Shoulder (Military) Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Reverse Machine Flyes",
+              "alternativeExerciseNames": [
+                "Smith Machine Bent Over Row"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Machine Bicep Curl",
+              "alternativeExerciseNames": [
+                "Machine Preacher Curls"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Machine Triceps Extension",
+              "alternativeExerciseNames": [
+                "Dip Machine"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Bas machines A",
+          "exercises": [
+            {
+              "exerciseName": "Leg Press",
+              "alternativeExerciseNames": [
+                "Hack Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Leg Curl",
+              "alternativeExerciseNames": [
+                "Lying Leg Curls"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leg Extensions",
+              "alternativeExerciseNames": [
+                "Single-Leg Leg Extension"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Hip Raise",
+              "alternativeExerciseNames": [
+                "Reverse Hyperextension"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
+              "alternativeExerciseNames": [
+                "Calf Press"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Thigh Abductor",
+              "alternativeExerciseNames": [
+                "Thigh Adductor"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Haut machines B",
+          "exercises": [
+            {
+              "exerciseName": "Leverage Incline Chest Press",
+              "alternativeExerciseNames": [
+                "Smith Machine Incline Bench Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leverage High Row",
+              "alternativeExerciseNames": [
+                "Lying T-Bar Row"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Machine Shoulder (Military) Press",
+              "alternativeExerciseNames": [
+                "Smith Machine Overhead Shoulder Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Leverage Chest Press",
+              "alternativeExerciseNames": [
+                "Machine Bench Press"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Reverse Machine Flyes",
+              "alternativeExerciseNames": [
+                "Smith Machine One-Arm Upright Row"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Machine Preacher Curls",
+              "alternativeExerciseNames": [
+                "Machine Bicep Curl"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dip Machine",
+              "alternativeExerciseNames": [
+                "Machine Triceps Extension"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Bas machines B",
+          "exercises": [
+            {
+              "exerciseName": "Hack Squat",
+              "alternativeExerciseNames": [
+                "Narrow Stance Leg Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Stiff-Legged Deadlift",
+              "alternativeExerciseNames": [
+                "Lying Leg Curls"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 150
+                }
+              ]
+            },
+            {
+              "exerciseName": "Smith Single-Leg Split Squat",
+              "alternativeExerciseNames": [
+                "Smith Machine Pistol Squat"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Lying Leg Curls",
+              "alternativeExerciseNames": [
+                "Standing Leg Curl"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Single-Leg Leg Extension",
+              "alternativeExerciseNames": [
+                "Leg Extensions"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Calf Press On The Leg Press Machine",
+              "alternativeExerciseNames": [
+                "Standing Calf Raises"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

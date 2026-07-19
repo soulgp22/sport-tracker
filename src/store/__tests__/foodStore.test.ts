@@ -107,4 +107,81 @@ describe('foodStore', () => {
     expect(useFoodStore.getState().getCustomFoods().map((food) => food.id)).toContain('custom_barre_maison');
     expect(useFoodStore.getState().getCustomFoods().map((food) => food.id)).not.toContain('riz_cuit');
   });
+
+  it('ignore un aliment importé dont le barcode existe déjà (doublon par barcode)', () => {
+    // First, add a food with a known barcode
+    useFoodStore.getState().addCustomFood(
+      makeFood({ id: 'custom_nutella_fr', name: 'Nutella France', barcode: '3017620425035' }),
+    );
+
+    const payload = JSON.stringify([
+      makeFood({ id: 'custom_nutella_be', name: 'Nutella Belgique', barcode: '3017620425035' }),
+      makeFood({ id: 'custom_coca_be', name: 'Coca-Cola Belgique', barcode: '5449000000996' }),
+    ]);
+
+    const result = useFoodStore.getState().importFoods(payload);
+
+    expect(result.added).toBe(1);
+    expect(result.duplicateIds).toContain('custom_nutella_be');
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).toContain('custom_nutella_fr');
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).toContain('custom_coca_be');
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).not.toContain('custom_nutella_be');
+  });
+
+  it('importe deux bases pays successives sans doublon produit (même barcode)', () => {
+    // Import base France
+    const francePayload = JSON.stringify([
+      makeFood({ id: 'off_france_3017620425035', name: 'Nutella', barcode: '3017620425035' }),
+      makeFood({ id: 'off_france_5449000000996', name: 'Coca-Cola', barcode: '5449000000996' }),
+    ]);
+    const resultFrance = useFoodStore.getState().importFoods(francePayload);
+    expect(resultFrance.added).toBe(2);
+    expect(useFoodStore.getState().getCustomFoods()).toHaveLength(2);
+
+    // Import base Belgique — même barcodes, IDs différents
+    const belgiquePayload = JSON.stringify([
+      makeFood({ id: 'off_belgique_3017620425035', name: 'Nutella BE', barcode: '3017620425035' }),
+      makeFood({ id: 'off_belgique_9990000000001', name: 'Produit unique BE', barcode: '9990000000001' }),
+    ]);
+    const resultBelgique = useFoodStore.getState().importFoods(belgiquePayload);
+
+    // Only the unique product should be added
+    expect(resultBelgique.added).toBe(1);
+    expect(resultBelgique.duplicateIds).toContain('off_belgique_3017620425035');
+    expect(useFoodStore.getState().getCustomFoods()).toHaveLength(3);
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).toContain('off_belgique_9990000000001');
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).not.toContain('off_belgique_3017620425035');
+  });
+
+  it("n'affecte pas les aliments sans barcode lors de la déduplication barcode", () => {
+    useFoodStore.getState().addCustomFood(
+      makeFood({ id: 'existing_with_barcode', barcode: '1234567890123' }),
+    );
+
+    const payload = JSON.stringify([
+      makeFood({ id: 'no_barcode_food', name: 'Sans code-barres' }),
+    ]);
+
+    const result = useFoodStore.getState().importFoods(payload);
+
+    expect(result.added).toBe(1);
+    expect(result.duplicateIds).toEqual([]);
+    expect(useFoodStore.getState().getCustomFoods().map((f) => f.id)).toContain('no_barcode_food');
+  });
+
+  it('reconnaît un barcode avec espaces parasites comme doublon à l import', () => {
+    useFoodStore.getState().addCustomFood(
+      makeFood({ id: 'existing_nutella', barcode: '3017620425035' }),
+    );
+
+    const payload = JSON.stringify([
+      makeFood({ id: 'spaces_test', name: 'Avec espaces', barcode: ' 3017620425035 ' }),
+    ]);
+
+    const result = useFoodStore.getState().importFoods(payload);
+
+    expect(result.added).toBe(0);
+    expect(result.duplicateIds).toContain('spaces_test');
+    expect(useFoodStore.getState().getCustomFoods()).toHaveLength(1);
+  });
 });

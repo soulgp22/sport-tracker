@@ -65,6 +65,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --runInBand",
+    "validate:community": "node scripts/validate-community.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint"
   },

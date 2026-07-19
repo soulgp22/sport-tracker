@@ -1,0 +1,2019 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Belgique — Open Food Facts",
+    "country": "Belgique",
+    "retailers": [
+      "Delhaize",
+      "Colruyt",
+      "Carrefour"
+    ],
+    "official": false,
+    "license": "ODbL — Open Food Facts",
+    "attribution": "https://world.openfoodfacts.org",
+    "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifier les valeurs sur l'emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "off_belgique_3175681851849",
+      "name": "Pomme Noisette",
+      "brand": "Gerblé",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 457,
+        "protein": 10,
+        "carbs": 63,
+        "fat": 17,
+        "fiber": 5.9,
+        "sugar": 11,
+        "salt": 0.01
+      },
+      "barcode": "3175681851849",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175681851849"
+    },
+    {
+      "id": "off_belgique_3228857000166",
+      "name": "100% mie complet 500g",
+      "brand": "Harris",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 250,
+        "protein": 7.5,
+        "carbs": 42,
+        "fat": 4.3,
+        "fiber": 6.5,
+        "sugar": 5.5,
+        "salt": 1.1
+      },
+      "barcode": "3228857000166",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857000166"
+    },
+    {
+      "id": "off_belgique_3159470000120",
+      "name": "CORN FLAKES",
+      "brand": "Kellogg's",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 377,
+        "protein": 7,
+        "carbs": 84,
+        "fat": 0.9,
+        "fiber": 3,
+        "sugar": 8,
+        "salt": 1.1
+      },
+      "barcode": "3159470000120",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3159470000120"
+    },
+    {
+      "id": "off_belgique_5411188115366",
+      "name": "Alpro smooth subtle creamy oat",
+      "brand": "alpro",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 0.8,
+        "carbs": 6.6,
+        "fat": 1.5,
+        "fiber": 0.7,
+        "sugar": 3.1,
+        "salt": 0.1
+      },
+      "barcode": "5411188115366",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115366"
+    },
+    {
+      "id": "off_belgique_3412290070071",
+      "name": "Fromage à tartiner Nature fouetté MADAME LOIK - 320g",
+      "brand": "Paysan Breton",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 252,
+        "protein": 5.9,
+        "carbs": 3,
+        "fat": 24,
+        "fiber": 0,
+        "sugar": 3,
+        "salt": 1.1
+      },
+      "barcode": "3412290070071",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3412290070071"
+    },
+    {
+      "id": "off_belgique_3046920028721",
+      "name": "Dark absolute 99% cacao",
+      "brand": "Lindt EXCELLENCE",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 565,
+        "protein": 14,
+        "carbs": 9,
+        "fat": 49,
+        "fiber": 0,
+        "sugar": 0.4,
+        "salt": 0.06
+      },
+      "barcode": "3046920028721",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920028721"
+    },
+    {
+      "id": "off_belgique_5060088706022",
+      "name": "NAKD Cacahuètes - 140g (4x1p)",
+      "brand": "Naked.",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 443,
+        "protein": 12,
+        "carbs": 42,
+        "fat": 23,
+        "fiber": 9.3,
+        "sugar": 35,
+        "salt": 0.58
+      },
+      "barcode": "5060088706022",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5060088706022"
+    },
+    {
+      "id": "off_belgique_3412290071801",
+      "name": "Fromage à tartiner Ail et fines herbes fouetté MADAME LOIK - 150g",
+      "brand": "Paysan Breton",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 241,
+        "protein": 5.6,
+        "carbs": 3,
+        "fat": 23,
+        "fiber": 0,
+        "sugar": 2.7,
+        "salt": 1.2
+      },
+      "barcode": "3412290071801",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3412290071801"
+    },
+    {
+      "id": "off_belgique_5411188110842",
+      "name": "Rich and indulgent Hazelnut",
+      "brand": "alpro",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 29,
+        "protein": 0.4,
+        "carbs": 3.2,
+        "fat": 1.6,
+        "fiber": 0.3,
+        "sugar": 3.2,
+        "salt": 0.14
+      },
+      "barcode": "5411188110842",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188110842"
+    },
+    {
+      "id": "off_belgique_3387390019995",
+      "name": "NESTLE LION Céréales 400g",
+      "brand": "Nestlé",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 406,
+        "protein": 8.1,
+        "carbs": 73.2,
+        "fat": 7.4,
+        "fiber": 7,
+        "sugar": 24.5,
+        "salt": 0.4
+      },
+      "barcode": "3387390019995",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3387390019995"
+    },
+    {
+      "id": "off_belgique_3161711000622",
+      "name": "Caprice des Dieux",
+      "brand": "Caprice des dieux",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 333,
+        "protein": 15,
+        "carbs": 0.8,
+        "fat": 30,
+        "sugar": 0.1,
+        "salt": 1.4
+      },
+      "barcode": "3161711000622",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3161711000622"
+    },
+    {
+      "id": "off_belgique_3236240070405",
+      "name": "Fromage à tartiner Echalote et Ciboulette fouetté MADAME LOIK - 150g",
+      "brand": "Madame Loïk",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 242,
+        "protein": 5.5,
+        "carbs": 3.2,
+        "fat": 23,
+        "fiber": 0,
+        "sugar": 2.9,
+        "salt": 1.2
+      },
+      "barcode": "3236240070405",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3236240070405"
+    },
+    {
+      "id": "off_belgique_3228857000869",
+      "name": "100% mie",
+      "brand": "Harrys",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 266,
+        "protein": 7,
+        "carbs": 48,
+        "fat": 4.2,
+        "fiber": 4,
+        "sugar": 7.7,
+        "salt": 1.1
+      },
+      "barcode": "3228857000869",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857000869"
+    },
+    {
+      "id": "off_belgique_7622200002290",
+      "name": "Mignonnette noir de noir",
+      "brand": "Côte d'Or",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 520,
+        "protein": 5.5,
+        "carbs": 55,
+        "fat": 29,
+        "fiber": 7.6,
+        "sugar": 52,
+        "salt": 0.01
+      },
+      "barcode": "7622200002290",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622200002290"
+    },
+    {
+      "id": "off_belgique_3033490165000",
+      "name": "Gervita",
+      "brand": "Danone",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 134,
+        "protein": 6.9,
+        "carbs": 3.7,
+        "fat": 10.2,
+        "sugar": 3.7,
+        "salt": 0.09
+      },
+      "barcode": "3033490165000",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3033490165000"
+    },
+    {
+      "id": "off_belgique_3023290007310",
+      "name": "Petit nesquik",
+      "brand": "Nestlé",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 160,
+        "protein": 4.2,
+        "carbs": 21.6,
+        "fat": 6.1,
+        "fiber": 0.5,
+        "sugar": 17.8,
+        "salt": 0.53
+      },
+      "barcode": "3023290007310",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3023290007310"
+    },
+    {
+      "id": "off_belgique_3041090063152",
+      "name": "cracotte",
+      "brand": "lu",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 389,
+        "protein": 12,
+        "carbs": 78,
+        "fat": 2.6,
+        "fiber": 2.8,
+        "sugar": 12,
+        "salt": 1.4
+      },
+      "barcode": "3041090063152",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3041090063152"
+    },
+    {
+      "id": "off_belgique_5411188122661",
+      "name": "Alpro Mandeldrink Weiß Ungesüßt, Ungeröstet 1 LT",
+      "brand": "alpro",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 13,
+        "protein": 0.5,
+        "carbs": 0,
+        "fat": 1.1,
+        "fiber": 0.2,
+        "sugar": 0,
+        "salt": 0.14
+      },
+      "barcode": "5411188122661",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188122661"
+    },
+    {
+      "id": "off_belgique_5411188121213",
+      "name": "Greek Style Plain",
+      "brand": "alpro",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 65,
+        "protein": 5.6,
+        "carbs": 2.2,
+        "fat": 3.3,
+        "fiber": 1.3,
+        "sugar": 2.2,
+        "salt": 0.33
+      },
+      "barcode": "5411188121213",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188121213"
+    },
+    {
+      "id": "off_belgique_3073780968997",
+      "name": "Kiri® Goûter 5 barquettes",
+      "brand": "Bel",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 280,
+        "protein": 9,
+        "carbs": 23,
+        "fat": 17,
+        "fiber": 1,
+        "sugar": 2.5,
+        "salt": 1.2
+      },
+      "barcode": "3073780968997",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3073780968997"
+    },
+    {
+      "id": "off_belgique_4029764001807",
+      "name": "Club-Mate Original",
+      "brand": "Club Mate",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 20,
+        "protein": 0,
+        "carbs": 5,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 5,
+        "salt": 0
+      },
+      "barcode": "4029764001807",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4029764001807"
+    },
+    {
+      "id": "off_belgique_8076800195019",
+      "name": "Capellini Nr. 1",
+      "brand": "Barilla",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 13,
+        "carbs": 71,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076800195019",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076800195019"
+    },
+    {
+      "id": "off_belgique_3023260005872",
+      "name": "Salakis Herbes de Provence",
+      "brand": "Salakis",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 293,
+        "protein": 14.6,
+        "carbs": 0.8,
+        "fat": 25.8,
+        "sugar": 0.8,
+        "salt": 2.65
+      },
+      "barcode": "3023260005872",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3023260005872"
+    },
+    {
+      "id": "off_belgique_5202390020407",
+      "name": "Greek White panetto",
+      "brand": "Violife",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 307,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 29,
+        "sugar": 0,
+        "salt": 1.7
+      },
+      "barcode": "5202390020407",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390020407"
+    },
+    {
+      "id": "off_belgique_5411188120742",
+      "name": "Mandel Vanille Geschmack",
+      "brand": "alpro",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 29,
+        "protein": 0.4,
+        "carbs": 3.8,
+        "fat": 1.1,
+        "fiber": 1.3,
+        "sugar": 3.8,
+        "salt": 0.14
+      },
+      "barcode": "5411188120742",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188120742"
+    },
+    {
+      "id": "off_belgique_3033491350863",
+      "name": "Activia bifidus saveur noix de coco sans arome artificiel 125 gx 4",
+      "brand": "Activia",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 93,
+        "protein": 3.6,
+        "carbs": 12.6,
+        "fat": 3.1,
+        "fiber": 0,
+        "sugar": 12.6,
+        "salt": 0.13
+      },
+      "barcode": "3033491350863",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3033491350863"
+    },
+    {
+      "id": "off_belgique_8000430135268",
+      "name": "Galbani mozzarella - maxi 250g",
+      "brand": "Galbani",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 220,
+        "protein": 17,
+        "carbs": 2,
+        "fat": 16,
+        "sugar": 1,
+        "salt": 0.7
+      },
+      "barcode": "8000430135268",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000430135268"
+    },
+    {
+      "id": "off_belgique_5410041423600",
+      "name": "Prince goût chocolat",
+      "brand": "LU",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 6.3,
+        "carbs": 69,
+        "fat": 17,
+        "fiber": 4.2,
+        "sugar": 32,
+        "salt": 0.49
+      },
+      "barcode": "5410041423600",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5410041423600"
+    },
+    {
+      "id": "off_belgique_3124480204127",
+      "name": "Oasis Pomme-Cassis-Framboise",
+      "brand": "Oasis",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 26,
+        "protein": 0,
+        "carbs": 6,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 6,
+        "salt": 0.01
+      },
+      "barcode": "3124480204127",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3124480204127"
+    },
+    {
+      "id": "off_belgique_3061990141118",
+      "name": "BN - Cookies - Mini Strawberry x 5, 175g (6.2oz)",
+      "brand": "BN",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 431,
+        "protein": 5.3,
+        "carbs": 74.3,
+        "fat": 12.4,
+        "fiber": 2.4,
+        "sugar": 32.8,
+        "salt": 0.53
+      },
+      "barcode": "3061990141118",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3061990141118"
+    },
+    {
+      "id": "off_belgique_3123930617777",
+      "name": "Comté 8 tranches",
+      "brand": "Entremont",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 342,
+        "protein": 26,
+        "carbs": 0.5,
+        "fat": 34,
+        "sugar": 0.5,
+        "salt": 0.8
+      },
+      "barcode": "3123930617777",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3123930617777"
+    },
+    {
+      "id": "off_belgique_8076809521581",
+      "name": "Pâtes mini penne rigate piccolini 500g",
+      "brand": "Barilla",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 12,
+        "carbs": 72,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076809521581",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809521581"
+    },
+    {
+      "id": "off_belgique_3017760002707",
+      "name": "Mikado Chocolat Noir",
+      "brand": "Lu",
+      "retailer": "Delhaize",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 468,
+        "protein": 7.1,
+        "carbs": 66,
+        "fat": 18,
+        "fiber": 5,
+        "sugar": 32,
+        "salt": 0.78
+      },
+      "barcode": "3017760002707",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017760002707"
+    },
+    {
+      "id": "off_belgique_5010477348678",
+      "name": "Special Muesli 30% fruits & noix",
+      "brand": "Jordans",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 360,
+        "protein": 10,
+        "carbs": 60,
+        "fat": 7.2,
+        "fiber": 8.8,
+        "sugar": 17,
+        "salt": 0.03
+      },
+      "barcode": "5010477348678",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010477348678"
+    },
+    {
+      "id": "off_belgique_5010029229110",
+      "name": "Crispy Minis Choco",
+      "brand": "Weetabix",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 386,
+        "protein": 10,
+        "carbs": 70,
+        "fat": 5,
+        "fiber": 10,
+        "sugar": 17,
+        "salt": 0.16
+      },
+      "barcode": "5010029229110",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5010029229110"
+    },
+    {
+      "id": "off_belgique_3017760038409",
+      "name": "Lulu La Barquette Fraise",
+      "brand": "LU",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 3.8,
+        "carbs": 78,
+        "fat": 2.4,
+        "fiber": 1.7,
+        "sugar": 59,
+        "salt": 0.11
+      },
+      "barcode": "3017760038409",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017760038409"
+    },
+    {
+      "id": "off_belgique_5411188134985",
+      "name": "not milk",
+      "brand": "alpro",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 59,
+        "protein": 0.7,
+        "carbs": 5.7,
+        "fat": 3.5,
+        "fiber": 1,
+        "sugar": 0,
+        "salt": 0.12
+      },
+      "barcode": "5411188134985",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188134985"
+    },
+    {
+      "id": "off_belgique_5202390024214",
+      "name": "Tranches saveur Emmental",
+      "brand": "Violife",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 300,
+        "protein": 0.1,
+        "carbs": 23,
+        "fat": 23,
+        "sugar": 0.6,
+        "salt": 1.97
+      },
+      "barcode": "5202390024214",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390024214"
+    },
+    {
+      "id": "off_belgique_3236240070306",
+      "name": "Madame Loïk Nature",
+      "brand": "Paysan Breton",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 252,
+        "protein": 5.9,
+        "carbs": 3,
+        "fat": 24,
+        "fiber": 0,
+        "sugar": 3,
+        "salt": 1.1
+      },
+      "barcode": "3236240070306",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3236240070306"
+    },
+    {
+      "id": "off_belgique_5202390021510",
+      "name": "Creamy with garlic & herbs",
+      "brand": "Violife",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 213,
+        "protein": 0.3,
+        "carbs": 7.7,
+        "fat": 20,
+        "fiber": 0,
+        "sugar": 1.5,
+        "salt": 2
+      },
+      "barcode": "5202390021510",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390021510"
+    },
+    {
+      "id": "off_belgique_0613008730734",
+      "name": "Originale tè verde con miele",
+      "brand": "Arizona",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 19,
+        "protein": 0,
+        "carbs": 5,
+        "fat": 0,
+        "sugar": 4.7,
+        "salt": 0
+      },
+      "barcode": "0613008730734",
+      "sourceUrl": "https://world.openfoodfacts.org/product/0613008730734"
+    },
+    {
+      "id": "off_belgique_5400141550672",
+      "name": "Huile d'olive vierge extra bio",
+      "brand": "Boni Bio",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 900,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 100,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "5400141550672",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141550672"
+    },
+    {
+      "id": "off_belgique_5400141192391",
+      "name": "Huile d'olive vierge extra",
+      "brand": "boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 900,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 100,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "5400141192391",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141192391"
+    },
+    {
+      "id": "off_belgique_5400141681895",
+      "name": "chocolat noir 72%",
+      "brand": "Colruyt Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 568,
+        "protein": 8.5,
+        "carbs": 32,
+        "fat": 43,
+        "fiber": 11,
+        "sugar": 27,
+        "salt": 0.01
+      },
+      "barcode": "5400141681895",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141681895"
+    },
+    {
+      "id": "off_belgique_3159470204429",
+      "name": "Spécial K Barres Croustillantes fruits rouges",
+      "brand": "Kellogg's",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 387,
+        "protein": 6,
+        "carbs": 68,
+        "fat": 8.2,
+        "fiber": 9.9,
+        "sugar": 27,
+        "salt": 0.6
+      },
+      "barcode": "3159470204429",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3159470204429"
+    },
+    {
+      "id": "off_belgique_5400141624083",
+      "name": "Margarine oméga 3",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 349,
+        "protein": 0.5,
+        "carbs": 1.8,
+        "fat": 38,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 0.2
+      },
+      "barcode": "5400141624083",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141624083"
+    },
+    {
+      "id": "off_belgique_5400141506051",
+      "name": "Muesli barres",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 389,
+        "protein": 8.2,
+        "carbs": 47,
+        "fat": 13,
+        "fiber": 24,
+        "sugar": 10,
+        "salt": 0.25
+      },
+      "barcode": "5400141506051",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141506051"
+    },
+    {
+      "id": "off_belgique_5400141822090",
+      "name": "lait entier",
+      "brand": "Everyday",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 65,
+        "protein": 3.4,
+        "carbs": 4.8,
+        "fat": 3.6,
+        "fiber": 0,
+        "sugar": 4.8,
+        "salt": 0.12
+      },
+      "barcode": "5400141822090",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141822090"
+    },
+    {
+      "id": "off_belgique_5000112638783",
+      "name": "Fanta orange 33cl",
+      "brand": "Fanta",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 48,
+        "protein": 0,
+        "carbs": 11.7,
+        "fat": 0,
+        "sugar": 11.7,
+        "salt": 0
+      },
+      "barcode": "5000112638783",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000112638783"
+    },
+    {
+      "id": "off_belgique_5410256700008",
+      "name": "Cassonade Graeffe",
+      "brand": "Raffinerie Tirlemontoise",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 385,
+        "protein": 1.9,
+        "carbs": 94.4,
+        "fat": 0,
+        "sugar": 94,
+        "salt": 0.16
+      },
+      "barcode": "5410256700008",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5410256700008"
+    },
+    {
+      "id": "off_belgique_5400141404685",
+      "name": "Milk",
+      "brand": "Everyday",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 33,
+        "protein": 3.4,
+        "carbs": 4.7,
+        "fat": 0.5,
+        "fiber": 0,
+        "sugar": 4.7,
+        "salt": 0.13
+      },
+      "barcode": "5400141404685",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141404685"
+    },
+    {
+      "id": "off_belgique_5410056186682",
+      "name": "Royco suprême de tomates/tomatensuprême",
+      "brand": "Royco",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Légumes",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 48,
+        "protein": 0.7,
+        "carbs": 6.4,
+        "fat": 2.1,
+        "sugar": 3.1,
+        "salt": 1
+      },
+      "barcode": "5410056186682",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5410056186682"
+    },
+    {
+      "id": "off_belgique_5410041188400",
+      "name": "Parovita, Froment",
+      "brand": "LU",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 426,
+        "protein": 12,
+        "carbs": 63,
+        "fat": 13,
+        "fiber": 8.3,
+        "sugar": 4.4,
+        "salt": 1.5
+      },
+      "barcode": "5410041188400",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5410041188400"
+    },
+    {
+      "id": "off_belgique_8710412545045",
+      "name": "Sultana Pomme",
+      "brand": "Sultana",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 372,
+        "protein": 5.3,
+        "carbs": 71.2,
+        "fat": 7.2,
+        "fiber": 6.5,
+        "sugar": 25.6,
+        "salt": 0.35
+      },
+      "barcode": "8710412545045",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8710412545045"
+    },
+    {
+      "id": "off_belgique_5400141616231",
+      "name": "Jus de pomme",
+      "brand": "Everyday",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 44,
+        "protein": 0.5,
+        "carbs": 11,
+        "fat": 0.5,
+        "fiber": 0.5,
+        "sugar": 10,
+        "salt": 0.01
+      },
+      "barcode": "5400141616231",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141616231"
+    },
+    {
+      "id": "off_belgique_5400141359589",
+      "name": "Geroosterde Uitjes",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 599,
+        "protein": 6,
+        "carbs": 42,
+        "fat": 44,
+        "fiber": 5.4,
+        "sugar": 8.4,
+        "salt": 1.48
+      },
+      "barcode": "5400141359589",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141359589"
+    },
+    {
+      "id": "off_belgique_5400141332926",
+      "name": "Crème entière 35% mg",
+      "brand": "Colruyt",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 336,
+        "protein": 2.2,
+        "carbs": 3.1,
+        "fat": 35,
+        "fiber": 0,
+        "sugar": 3.1,
+        "salt": 0.09
+      },
+      "barcode": "5400141332926",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141332926"
+    },
+    {
+      "id": "off_belgique_5400141933802",
+      "name": "Sirop d'érable",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 270,
+        "protein": 0,
+        "carbs": 67,
+        "fat": 0.5,
+        "fiber": 0,
+        "sugar": 59,
+        "salt": 0.03
+      },
+      "barcode": "5400141933802",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141933802"
+    },
+    {
+      "id": "off_belgique_5400141701159",
+      "name": "Crunchy muesli aux fruits, graines et noisettes",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 441,
+        "protein": 9.1,
+        "carbs": 65,
+        "fat": 15,
+        "fiber": 6.6,
+        "sugar": 19,
+        "salt": 0.06
+      },
+      "barcode": "5400141701159",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141701159"
+    },
+    {
+      "id": "off_belgique_3258561430898",
+      "name": "Mozzarella",
+      "brand": "Belle France",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 244,
+        "protein": 19,
+        "carbs": 0.7,
+        "fat": 18.5,
+        "fiber": 0,
+        "sugar": 0.7,
+        "salt": 0.4
+      },
+      "barcode": "3258561430898",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3258561430898"
+    },
+    {
+      "id": "off_belgique_5400141768534",
+      "name": "spaghetti blé complet",
+      "brand": "boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 336,
+        "protein": 14,
+        "carbs": 62,
+        "fat": 2,
+        "fiber": 8,
+        "sugar": 3.5,
+        "salt": 0.03
+      },
+      "barcode": "5400141768534",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141768534"
+    },
+    {
+      "id": "off_belgique_5400141444117",
+      "name": "Jus de légumes à base de concentrés",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 25,
+        "protein": 0.5,
+        "carbs": 5.4,
+        "fat": 0,
+        "fiber": 0.5,
+        "sugar": 5.4,
+        "salt": 0.5
+      },
+      "barcode": "5400141444117",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141444117"
+    },
+    {
+      "id": "off_belgique_5411188110675",
+      "name": "Mild & Creamy Nature",
+      "brand": "alpro",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 51,
+        "protein": 4,
+        "carbs": 2.2,
+        "fat": 2.3,
+        "fiber": 0.9,
+        "sugar": 2.2,
+        "salt": 0.24
+      },
+      "barcode": "5411188110675",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188110675"
+    },
+    {
+      "id": "off_belgique_5400141387636",
+      "name": "Filets de maquereau",
+      "brand": "Colruyt",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Poisson",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 160,
+        "protein": 14,
+        "carbs": 3.6,
+        "fat": 10,
+        "sugar": 1.9,
+        "salt": 0.8
+      },
+      "barcode": "5400141387636",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141387636"
+    },
+    {
+      "id": "off_belgique_5400141944907",
+      "name": "Pita Bread",
+      "brand": "BONI",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 245,
+        "protein": 8.4,
+        "carbs": 49,
+        "fat": 1,
+        "fiber": 3,
+        "sugar": 1.9,
+        "salt": 1
+      },
+      "barcode": "5400141944907",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141944907"
+    },
+    {
+      "id": "off_belgique_5400141686876",
+      "name": "Choconuts",
+      "brand": "Boni",
+      "retailer": "Colruyt",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 556,
+        "protein": 5.6,
+        "carbs": 52,
+        "fat": 35,
+        "fiber": 3.2,
+        "sugar": 5.1,
+        "salt": 0.12
+      },
+      "barcode": "5400141686876",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5400141686876"
+    },
+    {
+      "id": "off_belgique_7622210449283",
+      "name": "Prince Goût Chocolat au blé complet",
+      "brand": "Mondelez",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 466,
+        "protein": 6.3,
+        "carbs": 68,
+        "fat": 17,
+        "fiber": 3,
+        "sugar": 32,
+        "salt": 0.51
+      },
+      "barcode": "7622210449283",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210449283"
+    },
+    {
+      "id": "off_belgique_3046920022651",
+      "name": "Excellence 70% cacao noir intense",
+      "brand": "Lindt",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 566,
+        "protein": 9.5,
+        "carbs": 35,
+        "fat": 41,
+        "fiber": 12.2,
+        "sugar": 30,
+        "salt": 0.02
+      },
+      "barcode": "3046920022651",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920022651"
+    },
+    {
+      "id": "off_belgique_3017620425035",
+      "name": "Nutella",
+      "brand": "Nutella",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 539,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "3017620425035",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017620425035"
+    },
+    {
+      "id": "off_belgique_3155250358788",
+      "name": "Margarine bio doux tartine & cuisson",
+      "brand": "Primevère",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Matières grasses",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 485,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 55,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 0.4
+      },
+      "barcode": "3155250358788",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3155250358788"
+    },
+    {
+      "id": "off_belgique_3608580065340",
+      "name": "Pâte à tartiner noisettes et cacao",
+      "brand": "Bonne Maman",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 551,
+        "protein": 6.7,
+        "carbs": 53,
+        "fat": 34,
+        "fiber": 3.3,
+        "sugar": 51,
+        "salt": 0.1
+      },
+      "barcode": "3608580065340",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3608580065340"
+    },
+    {
+      "id": "off_belgique_5449000214911",
+      "name": "Coca-Cola",
+      "brand": "Coca-Cola",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5449000214911",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000214911"
+    },
+    {
+      "id": "off_belgique_3229820129488",
+      "name": "Muesli Raisin, Figue, Datte, Abricot",
+      "brand": "Bjorg",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 352,
+        "protein": 11,
+        "carbs": 59,
+        "fat": 5.8,
+        "fiber": 10,
+        "sugar": 14,
+        "salt": 0.03
+      },
+      "barcode": "3229820129488",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3229820129488"
+    },
+    {
+      "id": "off_belgique_3256540000698",
+      "name": "Pains au lait",
+      "brand": "Brioche Pasquier",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 8.6,
+        "carbs": 55,
+        "fat": 11,
+        "fiber": 3.5,
+        "sugar": 11,
+        "salt": 0
+      },
+      "barcode": "3256540000698",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3256540000698"
+    },
+    {
+      "id": "off_belgique_8002270014901",
+      "name": "S. Pellegrino Water",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "8002270014901",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002270014901"
+    },
+    {
+      "id": "off_belgique_3175680011534",
+      "name": "Biscuit lait chocolat",
+      "brand": "Gerblé",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 457,
+        "protein": 8.5,
+        "carbs": 65,
+        "fat": 17,
+        "fiber": 5,
+        "sugar": 21,
+        "salt": 0.74
+      },
+      "barcode": "3175680011534",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3175680011534"
+    },
+    {
+      "id": "off_belgique_7613035040823",
+      "name": "Nestlé dessert Noir",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 548,
+        "protein": 6,
+        "carbs": 50.7,
+        "fat": 34,
+        "fiber": 7.3,
+        "sugar": 46.4,
+        "salt": 0.01
+      },
+      "barcode": "7613035040823",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613035040823"
+    },
+    {
+      "id": "off_belgique_3228857002245",
+      "name": "Pain de mie seigle Sandwich Harrys sans sucres ajoutés",
+      "brand": "Harrys",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 293,
+        "protein": 11,
+        "carbs": 40,
+        "fat": 8,
+        "fiber": 8.7,
+        "sugar": 3,
+        "salt": 1
+      },
+      "barcode": "3228857002245",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228857002245"
+    },
+    {
+      "id": "off_belgique_7622210601988",
+      "name": "Granola L'Original",
+      "brand": "LU",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 488,
+        "protein": 5.9,
+        "carbs": 62,
+        "fat": 23,
+        "fiber": 3.5,
+        "sugar": 28,
+        "salt": 1.2
+      },
+      "barcode": "7622210601988",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210601988"
+    },
+    {
+      "id": "off_belgique_3168930009078",
+      "name": "Flocons d'avoine complète",
+      "brand": "Quaker",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 395,
+        "protein": 11,
+        "carbs": 60,
+        "fat": 8,
+        "fiber": 9,
+        "sugar": 1.1,
+        "salt": 0.01
+      },
+      "barcode": "3168930009078",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930009078"
+    },
+    {
+      "id": "off_belgique_3168930009795",
+      "name": "Muesli Croustillant Noix de pécan & noix du Brésil",
+      "brand": "Quaker",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 420,
+        "protein": 11,
+        "carbs": 62,
+        "fat": 11,
+        "fiber": 13,
+        "sugar": 13,
+        "salt": 0.24
+      },
+      "barcode": "3168930009795",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3168930009795"
+    },
+    {
+      "id": "off_belgique_3083681148619",
+      "name": "Carottes rapees citron dnp 320g",
+      "brand": "Bonduelle",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Légumes",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 63,
+        "protein": 1,
+        "carbs": 5.5,
+        "fat": 4.5,
+        "fiber": 3,
+        "sugar": 4.5,
+        "salt": 0.71
+      },
+      "barcode": "3083681148619",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3083681148619"
+    },
+    {
+      "id": "off_belgique_3017620421006",
+      "name": "Pâte à tartiner Nutella noisettes et cacao - 750g",
+      "brand": "Nutella",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 539,
+        "protein": 6.3,
+        "carbs": 57.5,
+        "fat": 30.9,
+        "sugar": 56.3,
+        "salt": 0.11
+      },
+      "barcode": "3017620421006",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3017620421006"
+    },
+    {
+      "id": "off_belgique_3161711001971",
+      "name": "Fromage de France",
+      "brand": "Caprice des Dieux",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 339,
+        "protein": 15,
+        "carbs": 0.8,
+        "fat": 30,
+        "sugar": 0.1,
+        "salt": 1.38
+      },
+      "barcode": "3161711001971",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3161711001971"
+    },
+    {
+      "id": "off_belgique_5411188115472",
+      "name": "Soyamilch",
+      "brand": "alpro",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 39,
+        "protein": 3,
+        "carbs": 2.5,
+        "fat": 1.8,
+        "fiber": 0.5,
+        "sugar": 2.5,
+        "salt": 0.09
+      },
+      "barcode": "5411188115472",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115472"
+    },
+    {
+      "id": "off_belgique_3387390326574",
+      "name": "Céréales Cookie Crisp",
+      "brand": "Nestlé",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 393,
+        "protein": 6.7,
+        "carbs": 78,
+        "fat": 5.2,
+        "fiber": 6,
+        "sugar": 22.4,
+        "salt": 0.66
+      },
+      "barcode": "3387390326574",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3387390326574"
+    },
+    {
+      "id": "off_belgique_7622210869616",
+      "name": "Chocolat Bio noir 85%",
+      "brand": "Côte d'Or",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 109,
+        "protein": 1.8,
+        "carbs": 4.2,
+        "fat": 8.9,
+        "fiber": 2.3,
+        "sugar": 2.6,
+        "salt": 0.02
+      },
+      "barcode": "7622210869616",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210869616"
+    },
+    {
+      "id": "off_belgique_5449000267412",
+      "name": "Coca-Cola goût original",
+      "brand": "Coca-Cola",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0,
+        "carbs": 10.6,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 10.6,
+        "salt": 0
+      },
+      "barcode": "5449000267412",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5449000267412"
+    },
+    {
+      "id": "off_belgique_3228021170039",
+      "name": "PRESIDENT CAMEMBERT 250g",
+      "brand": "PRÉSIDENT",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 269,
+        "protein": 20,
+        "carbs": 0,
+        "fat": 21,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 1.4
+      },
+      "barcode": "3228021170039",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3228021170039"
+    },
+    {
+      "id": "off_belgique_3560071407650",
+      "name": "Muesli de quinoa y chocolate",
+      "brand": "Carrefour BIO",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 424,
+        "protein": 9.1,
+        "carbs": 67,
+        "fat": 12,
+        "fiber": 6.8,
+        "sugar": 16,
+        "salt": 0.08
+      },
+      "barcode": "3560071407650",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3560071407650"
+    },
+    {
+      "id": "off_belgique_7622210100917",
+      "name": "Milka galette choco",
+      "brand": "Milka",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 505,
+        "protein": 5.7,
+        "carbs": 65,
+        "fat": 24,
+        "fiber": 2.7,
+        "sugar": 35,
+        "salt": 0.59
+      },
+      "barcode": "7622210100917",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210100917"
+    },
+    {
+      "id": "off_belgique_8410076901026",
+      "name": "Protein Nut Bar Fruit & Chocolate",
+      "brand": "Nature Valley",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 429,
+        "protein": 25.6,
+        "carbs": 22.9,
+        "fat": 30.1,
+        "fiber": 13.6,
+        "sugar": 15.4,
+        "salt": 0.95
+      },
+      "barcode": "8410076901026",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8410076901026"
+    },
+    {
+      "id": "off_belgique_3088540004440",
+      "name": "Honey",
+      "brand": "Lune de Miel",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 320,
+        "protein": 0,
+        "carbs": 80,
+        "fat": 0,
+        "sugar": 80,
+        "salt": 0
+      },
+      "barcode": "3088540004440",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3088540004440"
+    },
+    {
+      "id": "off_belgique_3421557910203",
+      "name": "Flocons d'avoine complets",
+      "brand": "Terres & Céréales",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 371,
+        "protein": 12,
+        "carbs": 60,
+        "fat": 7,
+        "fiber": 10,
+        "sugar": 0.9,
+        "salt": 0.01
+      },
+      "barcode": "3421557910203",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3421557910203"
+    },
+    {
+      "id": "off_belgique_3560071010058",
+      "name": "Le pain aux Céréales",
+      "brand": "Carrefour Original",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 253,
+        "protein": 8.2,
+        "carbs": 36,
+        "fat": 6.9,
+        "fiber": 6.9,
+        "sugar": 2.3,
+        "salt": 1.2
+      },
+      "barcode": "3560071010058",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3560071010058"
+    },
+    {
+      "id": "off_belgique_3245413451804",
+      "name": "Avoine",
+      "brand": "Carrefour BIO",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 43,
+        "protein": 0.5,
+        "carbs": 7.2,
+        "fat": 1.2,
+        "fiber": 0.8,
+        "sugar": 5,
+        "salt": 0.08
+      },
+      "barcode": "3245413451804",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3245413451804"
+    },
+    {
+      "id": "off_belgique_3560070879762",
+      "name": "Le pain au Seigle",
+      "brand": "Original",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 214,
+        "protein": 7.1,
+        "carbs": 42,
+        "fat": 1.2,
+        "fiber": 6.3,
+        "sugar": 3.4,
+        "salt": 1.2
+      },
+      "barcode": "3560070879762",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3560070879762"
+    },
+    {
+      "id": "off_belgique_5410126806069",
+      "name": "LOTUS BISCOFF Original - 250g (2x125g)",
+      "brand": "Lotus",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 484,
+        "protein": 4.9,
+        "carbs": 72.6,
+        "fat": 19,
+        "fiber": 1.3,
+        "sugar": 38.1,
+        "salt": 0.92
+      },
+      "barcode": "5410126806069",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5410126806069"
+    },
+    {
+      "id": "off_belgique_7622210444141",
+      "name": "Moelleux chocolat",
+      "brand": "Belvita",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 200,
+        "protein": 3,
+        "carbs": 31,
+        "fat": 7,
+        "fiber": 3.4,
+        "sugar": 9.2,
+        "salt": 0.22
+      },
+      "barcode": "7622210444141",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210444141"
+    },
+    {
+      "id": "off_belgique_7622210422163",
+      "name": "La Paille d'Or aux framboises",
+      "brand": "Lu",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 363,
+        "protein": 4.5,
+        "carbs": 82,
+        "fat": 1.2,
+        "fiber": 2.4,
+        "sugar": 51,
+        "salt": 0.12
+      },
+      "barcode": "7622210422163",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622210422163"
+    },
+    {
+      "id": "off_belgique_3560070157198",
+      "name": "Queso rallado parmesano",
+      "brand": "Carrefour",
+      "retailer": "Carrefour",
+      "country": "Belgique",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 402,
+        "protein": 32,
+        "carbs": 0,
+        "fat": 30,
+        "fiber": 0,
+        "sugar": 0,
+        "salt": 1.6
+      },
+      "barcode": "3560070157198",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3560070157198"
+    }
+  ]
+}

@@ -1,0 +1,644 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "À domicile — Matériel minimal",
+      "days": [
+        {
+          "name": "Maison A",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Squat",
+              "alternativeExerciseNames": [
+                "Squats - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Floor Press",
+              "alternativeExerciseNames": [
+                "Pushups"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Two-Dumbbell Row",
+              "alternativeExerciseNames": [
+                "One-Arm Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Band Good Morning",
+              "alternativeExerciseNames": [
+                "Stiff-Legged Dumbbell Deadlift"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "alternativeExerciseNames": [
+                "Dead Bug"
+              ],
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Maison haut",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Shoulder Press",
+              "alternativeExerciseNames": [
+                "Shoulder Press - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "One-Arm Dumbbell Row",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Pushups",
+              "alternativeExerciseNames": [
+                "Dumbbell Floor Press"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Band Pull Apart",
+              "alternativeExerciseNames": [
+                "Back Flyes - With Bands"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Bicep Curl",
+              "alternativeExerciseNames": [
+                "Hammer Curls"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Band Skull Crusher",
+              "alternativeExerciseNames": [
+                "Standing Dumbbell Triceps Extension"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Maison bas",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Rear Lunge",
+              "alternativeExerciseNames": [
+                "Split Squat with Dumbbells"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Stiff-Legged Dumbbell Deadlift",
+              "alternativeExerciseNames": [
+                "Band Good Morning"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Step Ups",
+              "alternativeExerciseNames": [
+                "Step-up with Knee Raise"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Hip Lift with Band",
+              "alternativeExerciseNames": [
+                "Single Leg Glute Bridge"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Calf Raises - With Bands",
+              "alternativeExerciseNames": [
+                "Standing Dumbbell Calf Raise"
+              ],
+              "sets": [
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 20,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "alternativeExerciseNames": [
+                "Russian Twist"
+              ],
+              "sets": [
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 25,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Maison B",
+          "exercises": [
+            {
+              "exerciseName": "Dumbbell Clean",
+              "alternativeExerciseNames": [
+                "Vertical Swing"
+              ],
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Lunges",
+              "alternativeExerciseNames": [
+                "Bodyweight Walking Lunge"
+              ],
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Bench Press with Neutral Grip",
+              "alternativeExerciseNames": [
+                "Dumbbell Floor Press"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Bent Over Two-Dumbbell Row With Palms In",
+              "alternativeExerciseNames": [
+                "One-Arm Dumbbell Row"
+              ],
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ]
+            },
+            {
+              "exerciseName": "Lateral Raise - With Bands",
+              "alternativeExerciseNames": [
+                "Side Lateral Raise"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            },
+            {
+              "exerciseName": "External Rotation with Band",
+              "alternativeExerciseNames": [
+                "Band Pull Apart"
+              ],
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1743 @@
+{
+  "version": 1,
+  "source": {
+    "name": "Produits Italie — Open Food Facts",
+    "country": "Italie",
+    "retailers": [
+      "Coop",
+      "Conad",
+      "Esselunga"
+    ],
+    "official": false,
+    "license": "ODbL — Open Food Facts",
+    "attribution": "https://world.openfoodfacts.org",
+    "disclaimer": "Sélection communautaire indicative issue d'Open Food Facts. Vérifier les valeurs sur l'emballage avant utilisation."
+  },
+  "foods": [
+    {
+      "id": "off_italie_3088542500285",
+      "name": "Sirop d'érable",
+      "brand": "Maple Joe",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 268,
+        "protein": 0,
+        "carbs": 67,
+        "fat": 0,
+        "sugar": 66,
+        "salt": 0.02
+      },
+      "barcode": "3088542500285",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3088542500285"
+    },
+    {
+      "id": "off_italie_5411188115366",
+      "name": "Alpro smooth subtle creamy oat",
+      "brand": "alpro",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 46,
+        "protein": 0.8,
+        "carbs": 6.6,
+        "fat": 1.5,
+        "fiber": 0.7,
+        "sugar": 3.1,
+        "salt": 0.1
+      },
+      "barcode": "5411188115366",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188115366"
+    },
+    {
+      "id": "off_italie_3046920028721",
+      "name": "Dark absolute 99% cacao",
+      "brand": "Lindt EXCELLENCE",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 565,
+        "protein": 14,
+        "carbs": 9,
+        "fat": 49,
+        "fiber": 0,
+        "sugar": 0.4,
+        "salt": 0.06
+      },
+      "barcode": "3046920028721",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3046920028721"
+    },
+    {
+      "id": "off_italie_8076800376999",
+      "name": "Lasagne all'uovo",
+      "brand": "Barilla",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 368,
+        "protein": 14,
+        "carbs": 68,
+        "fat": 4,
+        "fiber": 3,
+        "sugar": 3,
+        "salt": 0.08
+      },
+      "barcode": "8076800376999",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076800376999"
+    },
+    {
+      "id": "off_italie_8010265640202",
+      "name": "Corn Flakes",
+      "brand": "Kellogg's",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 378,
+        "protein": 7,
+        "carbs": 84,
+        "fat": 0.9,
+        "fiber": 3,
+        "sugar": 8,
+        "salt": 1.1
+      },
+      "barcode": "8010265640202",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8010265640202"
+    },
+    {
+      "id": "off_italie_8076800195019",
+      "name": "Capellini Nr. 1",
+      "brand": "Barilla",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 13,
+        "carbs": 71,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076800195019",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076800195019"
+    },
+    {
+      "id": "off_italie_8076809523738",
+      "name": "Lasagne",
+      "brand": "Barilla",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 13,
+        "carbs": 71,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076809523738",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809523738"
+    },
+    {
+      "id": "off_italie_80841197",
+      "name": "La crema zero",
+      "brand": "Valsoia",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 430,
+        "protein": 3.6,
+        "carbs": 55,
+        "fat": 30,
+        "fiber": 3.4,
+        "sugar": 3.7,
+        "salt": 0.03
+      },
+      "barcode": "80841197",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80841197"
+    },
+    {
+      "id": "off_italie_8002885004557",
+      "name": "PEANUT BUTTER",
+      "brand": "FIORENTINI",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 614,
+        "protein": 25.8,
+        "carbs": 14,
+        "fat": 49,
+        "fiber": 8.2,
+        "sugar": 5.9,
+        "salt": 0
+      },
+      "barcode": "8002885004557",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002885004557"
+    },
+    {
+      "id": "off_italie_8008343200516",
+      "name": "RUMMO Mezzi Rigatoni No 51",
+      "brand": "Rummo",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 356,
+        "protein": 14.5,
+        "carbs": 69.5,
+        "fat": 1.6,
+        "fiber": 2.9,
+        "sugar": 3.1,
+        "salt": 0.01
+      },
+      "barcode": "8008343200516",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8008343200516"
+    },
+    {
+      "id": "off_italie_5000189983281",
+      "name": "After Eight Dark Chocolate Thins",
+      "brand": "Nestlé",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 426,
+        "protein": 2.1,
+        "carbs": 73.5,
+        "fat": 12.9,
+        "fiber": 2.8,
+        "sugar": 67.8,
+        "salt": 0.03
+      },
+      "barcode": "5000189983281",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5000189983281"
+    },
+    {
+      "id": "off_italie_8076809580670",
+      "name": "Cuor di Mela Mulino Bianco",
+      "brand": "Mulino Bianco",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 409,
+        "protein": 5.5,
+        "carbs": 66,
+        "fat": 13,
+        "fiber": 2.8,
+        "sugar": 31,
+        "salt": 0
+      },
+      "barcode": "8076809580670",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809580670"
+    },
+    {
+      "id": "off_italie_8027890009175",
+      "name": "Mini burger vegetale agli spinaci",
+      "brand": "kioene",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 246,
+        "protein": 11,
+        "carbs": 13,
+        "fat": 15,
+        "fiber": 3.7,
+        "sugar": 3.6,
+        "salt": 1.4
+      },
+      "barcode": "8027890009175",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8027890009175"
+    },
+    {
+      "id": "off_italie_8013355998702",
+      "name": "Gocciole Extra Dark",
+      "brand": "Pavesi",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 489,
+        "protein": 6.7,
+        "carbs": 60.8,
+        "fat": 23.3,
+        "fiber": 5,
+        "sugar": 24.2,
+        "salt": 0.42
+      },
+      "barcode": "8013355998702",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8013355998702"
+    },
+    {
+      "id": "off_italie_8002190001395",
+      "name": "Turco",
+      "brand": "Galbusera",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 471,
+        "protein": 8.3,
+        "carbs": 62.5,
+        "fat": 19.5,
+        "fiber": 6,
+        "sugar": 17.2,
+        "salt": 1.3
+      },
+      "barcode": "8002190001395",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002190001395"
+    },
+    {
+      "id": "off_italie_8001120828958",
+      "name": "Fiocchi d'avena integrale",
+      "brand": "Vivi verde Bio",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 385,
+        "protein": 12,
+        "carbs": 60,
+        "fat": 8.5,
+        "fiber": 10,
+        "sugar": 1,
+        "salt": 0
+      },
+      "barcode": "8001120828958",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8001120828958"
+    },
+    {
+      "id": "off_italie_8002670504019",
+      "name": "Burger vegetale classico",
+      "brand": "UNCONVENTIONAL",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 221,
+        "protein": 15,
+        "carbs": 7,
+        "fat": 14,
+        "fiber": 3.7,
+        "sugar": 0.5,
+        "salt": 1.28
+      },
+      "barcode": "8002670504019",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002670504019"
+    },
+    {
+      "id": "off_italie_8003130142260",
+      "name": "1936 Antica Ricetta",
+      "brand": "San Carlo",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 484,
+        "protein": 7.2,
+        "carbs": 57,
+        "fat": 24,
+        "fiber": 5.5,
+        "sugar": 0.6,
+        "salt": 1.1
+      },
+      "barcode": "8003130142260",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003130142260"
+    },
+    {
+      "id": "off_italie_8000430166101",
+      "name": "Fiocchi di latte",
+      "brand": "Galbani Santa Lucia",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 100,
+        "protein": 9.8,
+        "carbs": 1.6,
+        "fat": 6,
+        "fiber": 0,
+        "sugar": 1,
+        "salt": 0.8
+      },
+      "barcode": "8000430166101",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000430166101"
+    },
+    {
+      "id": "off_italie_8034066371714",
+      "name": "Pro High proteine crema dessert al cacao",
+      "brand": "Milk Pro",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 84,
+        "protein": 10.2,
+        "carbs": 6.5,
+        "fat": 1.5,
+        "sugar": 4.2,
+        "salt": 0.18
+      },
+      "barcode": "8034066371714",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8034066371714"
+    },
+    {
+      "id": "off_italie_80298410",
+      "name": "Confiture Fruits des Bois",
+      "brand": "ZUEGG",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 198,
+        "protein": 0.5,
+        "carbs": 48,
+        "fat": 0,
+        "fiber": 2.4,
+        "sugar": 43,
+        "salt": 0.07
+      },
+      "barcode": "80298410",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80298410"
+    },
+    {
+      "id": "off_italie_8003753900490",
+      "name": "Caffè decaffeinato",
+      "brand": "Illy",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 0
+      },
+      "barcode": "8003753900490",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003753900490"
+    },
+    {
+      "id": "off_italie_8076800195132",
+      "name": "Bavette Nº13",
+      "brand": "Barilla",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 12.8,
+        "carbs": 70.9,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076800195132",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076800195132"
+    },
+    {
+      "id": "off_italie_8013355501797",
+      "name": "Sfoglie Crispy Gusto Pepe&Lime",
+      "brand": "Gran Pavesi",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 446,
+        "protein": 6.2,
+        "carbs": 62,
+        "fat": 17,
+        "fiber": 9.9,
+        "sugar": 15,
+        "salt": 1.6
+      },
+      "barcode": "8013355501797",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8013355501797"
+    },
+    {
+      "id": "off_italie_8001505001938",
+      "name": "Fiordifrutta mirtilli neri di bosco",
+      "brand": "Rigoni di asiago",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 157,
+        "protein": 0,
+        "carbs": 38,
+        "fat": 0,
+        "fiber": 3.2,
+        "sugar": 37,
+        "salt": 0.13
+      },
+      "barcode": "8001505001938",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8001505001938"
+    },
+    {
+      "id": "off_italie_8002724003727",
+      "name": "AD latte Parzialmente scremato Alta Digeribilità",
+      "brand": "Arborea",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 47,
+        "protein": 3.3,
+        "carbs": 4.9,
+        "fat": 1.6,
+        "fiber": 0,
+        "sugar": 4.9,
+        "salt": 0.1
+      },
+      "barcode": "8002724003727",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002724003727"
+    },
+    {
+      "id": "off_italie_80321637",
+      "name": "Yogurt biologico intero da latte fieno STG - 150g - naturale",
+      "brand": "Cooperativa Latteria Vipiteno",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 73,
+        "protein": 3.8,
+        "carbs": 4.7,
+        "fat": 4.3,
+        "sugar": 3.6,
+        "salt": 0.1
+      },
+      "barcode": "80321637",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80321637"
+    },
+    {
+      "id": "off_italie_7613287530950",
+      "name": "Vuna",
+      "brand": "Garden Gourmet",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 279,
+        "protein": 22.6,
+        "carbs": 1.7,
+        "fat": 19.9,
+        "fiber": 1.1,
+        "sugar": 0,
+        "salt": 0
+      },
+      "barcode": "7613287530950",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613287530950"
+    },
+    {
+      "id": "off_italie_80019640",
+      "name": "Linea Primosale",
+      "brand": "Osella",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 221,
+        "protein": 13,
+        "carbs": 3.2,
+        "fat": 17,
+        "fiber": 0,
+        "sugar": 2.6,
+        "salt": 0.65
+      },
+      "barcode": "80019640",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80019640"
+    },
+    {
+      "id": "off_italie_8002670504057",
+      "name": "Burger vegetale al pomodoro",
+      "brand": "Unconventional",
+      "retailer": "Coop",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 220,
+        "protein": 15,
+        "carbs": 7,
+        "fat": 14,
+        "fiber": 3.7,
+        "sugar": 0.5,
+        "salt": 1.3
+      },
+      "barcode": "8002670504057",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002670504057"
+    },
+    {
+      "id": "off_italie_8000500426494",
+      "name": "Nutella Plant-Based",
+      "brand": "Ferrero",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 534,
+        "protein": 6.8,
+        "carbs": 53.4,
+        "fat": 31.8,
+        "sugar": 45.4,
+        "salt": 0.07
+      },
+      "barcode": "8000500426494",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500426494"
+    },
+    {
+      "id": "off_italie_8000500217078",
+      "name": "Nutella B-ready",
+      "brand": "Nutella",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 521,
+        "protein": 7.2,
+        "carbs": 60.7,
+        "fat": 27,
+        "fiber": 0,
+        "sugar": 47.1,
+        "salt": 0.56
+      },
+      "barcode": "8000500217078",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500217078"
+    },
+    {
+      "id": "off_italie_8076802085912",
+      "name": "Pipe Rigate",
+      "brand": "Barilla",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 359,
+        "protein": 13,
+        "carbs": 71,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076802085912",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076802085912"
+    },
+    {
+      "id": "off_italie_5202390020407",
+      "name": "Greek White panetto",
+      "brand": "Violife",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 307,
+        "protein": 0,
+        "carbs": 11,
+        "fat": 29,
+        "sugar": 0,
+        "salt": 1.7
+      },
+      "barcode": "5202390020407",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5202390020407"
+    },
+    {
+      "id": "off_italie_5053827139229",
+      "name": "Extra chocolate y avellanas",
+      "brand": "Kellogg's",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 484,
+        "protein": 8.3,
+        "carbs": 58,
+        "fat": 23,
+        "fiber": 6,
+        "sugar": 24,
+        "salt": 0.75
+      },
+      "barcode": "5053827139229",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5053827139229"
+    },
+    {
+      "id": "off_italie_8710100126402",
+      "name": "Quaker Cruesli Frutta Secca",
+      "brand": "Quaker",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 8.5,
+        "carbs": 57,
+        "fat": 19,
+        "fiber": 10,
+        "sugar": 12,
+        "salt": 0.01
+      },
+      "barcode": "8710100126402",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8710100126402"
+    },
+    {
+      "id": "off_italie_8076809572828",
+      "name": "Tarallucci mb 350g int. eu",
+      "brand": "Mulino Bianco",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 7,
+        "carbs": 70,
+        "fat": 17,
+        "fiber": 3,
+        "sugar": 23,
+        "salt": 0.68
+      },
+      "barcode": "8076809572828",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809572828"
+    },
+    {
+      "id": "off_italie_8003170055797",
+      "name": "Fiocchi di avena",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 372,
+        "protein": 13,
+        "carbs": 59,
+        "fat": 7,
+        "fiber": 10,
+        "sugar": 1.1,
+        "salt": 0
+      },
+      "barcode": "8003170055797",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170055797"
+    },
+    {
+      "id": "off_italie_8007465004019",
+      "name": "Osvego al malto e miele",
+      "brand": "Gentilini",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 444,
+        "protein": 8.5,
+        "carbs": 74.6,
+        "fat": 12,
+        "fiber": 1.4,
+        "sugar": 19,
+        "salt": 0.5
+      },
+      "barcode": "8007465004019",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8007465004019"
+    },
+    {
+      "id": "off_italie_8003000189005",
+      "name": "Vitalis",
+      "brand": "Dr. Oetker",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 490,
+        "protein": 11,
+        "carbs": 55,
+        "fat": 23,
+        "fiber": 6.9,
+        "sugar": 19,
+        "salt": 0.54
+      },
+      "barcode": "8003000189005",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003000189005"
+    },
+    {
+      "id": "off_italie_8003170080683",
+      "name": "Triangoli ai legumi",
+      "brand": "Verso Natura Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 422,
+        "protein": 14,
+        "carbs": 65,
+        "fat": 11,
+        "fiber": 6.8,
+        "sugar": 1.1,
+        "salt": 1
+      },
+      "barcode": "8003170080683",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170080683"
+    },
+    {
+      "id": "off_italie_8003170106178",
+      "name": "Crema 100% arachidi",
+      "brand": "Piacersi CONAD",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 601,
+        "protein": 28,
+        "carbs": 17,
+        "fat": 46,
+        "fiber": 3.4,
+        "sugar": 4.9,
+        "salt": 0.01
+      },
+      "barcode": "8003170106178",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170106178"
+    },
+    {
+      "id": "off_italie_8076802795019",
+      "name": "Farina Tipo &quot;00&quot; di Grano Tenero",
+      "brand": "Barilla",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 345,
+        "protein": 11,
+        "carbs": 69.9,
+        "fat": 1.7,
+        "fiber": 2.9,
+        "sugar": 0.2,
+        "salt": 0
+      },
+      "barcode": "8076802795019",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076802795019"
+    },
+    {
+      "id": "off_italie_5411188128892",
+      "name": "soy yogurt mango",
+      "brand": "alpro",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 62,
+        "protein": 3.7,
+        "carbs": 6,
+        "fat": 2.1,
+        "fiber": 1,
+        "sugar": 5.4,
+        "salt": 0.2
+      },
+      "barcode": "5411188128892",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188128892"
+    },
+    {
+      "id": "off_italie_7613287870377",
+      "name": "Nuggets di soia",
+      "brand": "Garden Gourmet",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 236,
+        "protein": 13.1,
+        "carbs": 15,
+        "fat": 12.5,
+        "fiber": 5.7,
+        "sugar": 0.7,
+        "salt": 0.98
+      },
+      "barcode": "7613287870377",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7613287870377"
+    },
+    {
+      "id": "off_italie_8003170090118",
+      "name": "Burger vegetale agli spinaci biologico",
+      "brand": "Verso Natura Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 293,
+        "protein": 14,
+        "carbs": 12,
+        "fat": 20,
+        "fiber": 3,
+        "sugar": 2.2,
+        "salt": 1.1
+      },
+      "barcode": "8003170090118",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170090118"
+    },
+    {
+      "id": "off_italie_8002885004212",
+      "name": "Gallette Bio di Grano Saraceno",
+      "brand": "Fiorentini",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 386,
+        "protein": 13,
+        "carbs": 73,
+        "fat": 3.5,
+        "fiber": 5.5,
+        "sugar": 1.1,
+        "salt": 0.58
+      },
+      "barcode": "8002885004212",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002885004212"
+    },
+    {
+      "id": "off_italie_8003170045026",
+      "name": "Piacersi fiocchi di latte",
+      "brand": "Piacersi CONAD",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 83,
+        "protein": 13,
+        "carbs": 1,
+        "fat": 3,
+        "fiber": 0,
+        "sugar": 1,
+        "salt": 0.7
+      },
+      "barcode": "8003170045026",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170045026"
+    },
+    {
+      "id": "off_italie_8003170066496",
+      "name": "Triangolini di Mais bio",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 430,
+        "protein": 6,
+        "carbs": 75,
+        "fat": 11,
+        "fiber": 2.2,
+        "sugar": 0.5,
+        "salt": 1
+      },
+      "barcode": "8003170066496",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170066496"
+    },
+    {
+      "id": "off_italie_8003170084414",
+      "name": "Cous cous integrale",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 347,
+        "protein": 13,
+        "carbs": 64,
+        "fat": 2.3,
+        "fiber": 8.9,
+        "sugar": 2,
+        "salt": 0
+      },
+      "barcode": "8003170084414",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170084414"
+    },
+    {
+      "id": "off_italie_8003170090088",
+      "name": "Quadratini vegetali",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Viande",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 203,
+        "protein": 10,
+        "carbs": 21,
+        "fat": 8.1,
+        "fiber": 3.6,
+        "sugar": 1.6,
+        "salt": 1.4
+      },
+      "barcode": "8003170090088",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170090088"
+    },
+    {
+      "id": "off_italie_8076809525022",
+      "name": "Campagnole",
+      "brand": "Barilla",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 462,
+        "protein": 6.4,
+        "carbs": 69.4,
+        "fat": 17,
+        "fiber": 3,
+        "sugar": 20,
+        "salt": 0.88
+      },
+      "barcode": "8076809525022",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809525022"
+    },
+    {
+      "id": "off_italie_8003170100152",
+      "name": "Yogurt Greco Bianco Magro",
+      "brand": "Piacersi Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 58,
+        "protein": 10,
+        "carbs": 4.5,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 3.5,
+        "salt": 0.1
+      },
+      "barcode": "8003170100152",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170100152"
+    },
+    {
+      "id": "off_italie_8003170073449",
+      "name": "FROLLINI CON FRUTTI ROSSI E FARINA DI RISO",
+      "brand": "Piacersi CONAD",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 448,
+        "protein": 6.8,
+        "carbs": 73,
+        "fat": 13,
+        "fiber": 3.7,
+        "sugar": 25,
+        "salt": 0.68
+      },
+      "barcode": "8003170073449",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170073449"
+    },
+    {
+      "id": "off_italie_8001440136054",
+      "name": "Pera Succo",
+      "brand": "Yoga",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 0.4,
+        "carbs": 9.7,
+        "fat": 0.1,
+        "fiber": 0.8,
+        "sugar": 9,
+        "salt": 0
+      },
+      "barcode": "8001440136054",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8001440136054"
+    },
+    {
+      "id": "off_italie_8003170087132",
+      "name": "Gnocchetti alla tirolese",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 151,
+        "protein": 5.4,
+        "carbs": 28,
+        "fat": 1.4,
+        "fiber": 2.3,
+        "sugar": 1,
+        "salt": 1.3
+      },
+      "barcode": "8003170087132",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170087132"
+    },
+    {
+      "id": "off_italie_8003170100008",
+      "name": "Yogurt magro 0,1% BIANCO",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 42,
+        "protein": 4.1,
+        "carbs": 6.1,
+        "fat": 0.1,
+        "sugar": 5.1,
+        "salt": 0.1
+      },
+      "barcode": "8003170100008",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170100008"
+    },
+    {
+      "id": "off_italie_8000090600205",
+      "name": "Cipster",
+      "brand": "Cipster",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 469,
+        "protein": 4.3,
+        "carbs": 66,
+        "fat": 20,
+        "fiber": 4,
+        "sugar": 0.7,
+        "salt": 3.1
+      },
+      "barcode": "8000090600205",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000090600205"
+    },
+    {
+      "id": "off_italie_8003170003866",
+      "name": "Carnaroli",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Noix & graines",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 354,
+        "protein": 6.7,
+        "carbs": 80,
+        "fat": 0.4,
+        "fiber": 1,
+        "sugar": 0.2,
+        "salt": 0.01
+      },
+      "barcode": "8003170003866",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170003866"
+    },
+    {
+      "id": "off_italie_8003170064263",
+      "name": "Gallette di Grano Saraceno",
+      "brand": "Conad",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 385,
+        "protein": 13,
+        "carbs": 72,
+        "fat": 3.5,
+        "fiber": 5.6,
+        "sugar": 1.2,
+        "salt": 0.5
+      },
+      "barcode": "8003170064263",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8003170064263"
+    },
+    {
+      "id": "off_italie_8004030855038",
+      "name": "Insalatissime",
+      "brand": "RIO mare",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Poisson",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 300,
+        "protein": 18,
+        "carbs": 22,
+        "fat": 18,
+        "fiber": 8,
+        "sugar": 2,
+        "salt": 1.3
+      },
+      "barcode": "8004030855038",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8004030855038"
+    },
+    {
+      "id": "off_italie_3226980052502",
+      "name": "Matzen",
+      "brand": "Paul Heumann",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 362,
+        "protein": 11.3,
+        "carbs": 75.3,
+        "fat": 1,
+        "fiber": 3.3,
+        "sugar": 1.2,
+        "salt": 0
+      },
+      "barcode": "3226980052502",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3226980052502"
+    },
+    {
+      "id": "off_italie_8076804215058",
+      "name": "Spaghetti",
+      "brand": "Barilla",
+      "retailer": "Conad",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 12.8,
+        "carbs": 71,
+        "fat": 2,
+        "fiber": 3,
+        "sugar": 3.5,
+        "salt": 0.01
+      },
+      "barcode": "8076804215058",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076804215058"
+    },
+    {
+      "id": "off_italie_8000500310427",
+      "name": "Biscuits NUTELLA Biscuits Noisettes et Cacao x22 - 304g",
+      "brand": "Nutella",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 515,
+        "protein": 7.9,
+        "carbs": 64,
+        "fat": 24.8,
+        "sugar": 35.8,
+        "salt": 0.56
+      },
+      "barcode": "8000500310427",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000500310427"
+    },
+    {
+      "id": "off_italie_3502110003201",
+      "name": "Tropicana Multivitamines 1 L",
+      "brand": "Tropicana",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 48,
+        "protein": 0,
+        "carbs": 12,
+        "fat": 0,
+        "fiber": 0,
+        "sugar": 10.7,
+        "salt": 0
+      },
+      "barcode": "3502110003201",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3502110003201"
+    },
+    {
+      "id": "off_italie_7622300744663",
+      "name": "Original",
+      "brand": "Mondelēz",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 476,
+        "protein": 5.3,
+        "carbs": 68,
+        "fat": 20,
+        "fiber": 2.7,
+        "sugar": 38,
+        "salt": 0.73
+      },
+      "barcode": "7622300744663",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622300744663"
+    },
+    {
+      "id": "off_italie_8076809544504",
+      "name": "Molinetti",
+      "brand": "Mulino Bianco",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 467,
+        "protein": 8,
+        "carbs": 63,
+        "fat": 19,
+        "fiber": 6,
+        "sugar": 21,
+        "salt": 0.69
+      },
+      "barcode": "8076809544504",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809544504"
+    },
+    {
+      "id": "off_italie_8008698005491",
+      "name": "CHOCO CHIP COOKIES - Biscuits aux pépites de chocolat",
+      "brand": "Schär",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 490,
+        "protein": 4.3,
+        "carbs": 62,
+        "fat": 28,
+        "fiber": 2.8,
+        "sugar": 21,
+        "salt": 0.55
+      },
+      "barcode": "8008698005491",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8008698005491"
+    },
+    {
+      "id": "off_italie_8002590077037",
+      "name": "Biscotti allo yogurt Dolcesenza",
+      "brand": "MISURA",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 421,
+        "protein": 8.5,
+        "carbs": 71,
+        "fat": 15,
+        "fiber": 4,
+        "sugar": 3.6,
+        "salt": 0.72
+      },
+      "barcode": "8002590077037",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002590077037"
+    },
+    {
+      "id": "off_italie_80412021",
+      "name": "Acqua minerale naturale frizzante Lete",
+      "brand": "Lete",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 0,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 0,
+        "salt": 0
+      },
+      "barcode": "80412021",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80412021"
+    },
+    {
+      "id": "off_italie_8076809517300",
+      "name": "Gran cereale croccante con riso",
+      "brand": "Gran cereale",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 443,
+        "protein": 7.6,
+        "carbs": 63,
+        "fat": 16,
+        "fiber": 9.2,
+        "sugar": 18,
+        "salt": 0.71
+      },
+      "barcode": "8076809517300",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809517300"
+    },
+    {
+      "id": "off_italie_3023290012079",
+      "name": "I love kefir bianco naturale",
+      "brand": "Nestlé",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 44,
+        "protein": 3.4,
+        "carbs": 3.9,
+        "fat": 1.5,
+        "fiber": 0,
+        "sugar": 3.9,
+        "salt": 0
+      },
+      "barcode": "3023290012079",
+      "sourceUrl": "https://world.openfoodfacts.org/product/3023290012079"
+    },
+    {
+      "id": "off_italie_8076809530002",
+      "name": "Mulino bianco canestrini biscuits sablés avec sucre glace 200g",
+      "brand": "Mulino Bianco",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 483,
+        "protein": 6.3,
+        "carbs": 68,
+        "fat": 20,
+        "fiber": 2.7,
+        "sugar": 23,
+        "salt": 0.17
+      },
+      "barcode": "8076809530002",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8076809530002"
+    },
+    {
+      "id": "off_italie_7622201691028",
+      "name": "Oro integrale 5 cereali",
+      "brand": "saiwa",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 423,
+        "protein": 10,
+        "carbs": 68,
+        "fat": 11,
+        "fiber": 6,
+        "sugar": 20,
+        "salt": 0.75
+      },
+      "barcode": "7622201691028",
+      "sourceUrl": "https://world.openfoodfacts.org/product/7622201691028"
+    },
+    {
+      "id": "off_italie_5201054017616",
+      "name": "Yogurt greco Total 0%",
+      "brand": "Fage",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 54,
+        "protein": 10.3,
+        "carbs": 3,
+        "fat": 0,
+        "sugar": 3,
+        "salt": 0.1
+      },
+      "barcode": "5201054017616",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5201054017616"
+    },
+    {
+      "id": "off_italie_80298342",
+      "name": "Confettura extra fragole",
+      "brand": "Zuegg",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Fruits",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 190,
+        "protein": 0.4,
+        "carbs": 46,
+        "fat": 0,
+        "fiber": 1.3,
+        "sugar": 42,
+        "salt": 0.06
+      },
+      "barcode": "80298342",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80298342"
+    },
+    {
+      "id": "off_italie_8001230002385",
+      "name": "Granmix classico grattugiato fresco",
+      "brand": "Giovanni Ferrari",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 428,
+        "protein": 34,
+        "carbs": 1,
+        "fat": 32,
+        "sugar": 0,
+        "salt": 1.6
+      },
+      "barcode": "8001230002385",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8001230002385"
+    },
+    {
+      "id": "off_italie_8100090000187",
+      "name": "Oro Ciok Fondente",
+      "brand": "Mondelez",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 491,
+        "protein": 5.4,
+        "carbs": 63,
+        "fat": 23,
+        "fiber": 4.4,
+        "sugar": 36,
+        "salt": 0.59
+      },
+      "barcode": "8100090000187",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8100090000187"
+    },
+    {
+      "id": "off_italie_8713108000682",
+      "name": "Yakult original",
+      "brand": "Yakult",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Boissons",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 66,
+        "protein": 1.3,
+        "carbs": 15.4,
+        "fat": 0,
+        "sugar": 13.6,
+        "salt": 0.04
+      },
+      "barcode": "8713108000682",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8713108000682"
+    },
+    {
+      "id": "off_italie_80804413",
+      "name": "Belle Buone",
+      "brand": "Galbusera",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Snacks/Sucré",
+      "unit": "g",
+      "nutritionPer100g": {
+        "calories": 448,
+        "protein": 13,
+        "carbs": 60.1,
+        "fat": 15.9,
+        "fiber": 6,
+        "sugar": 19,
+        "salt": 0.3
+      },
+      "barcode": "80804413",
+      "sourceUrl": "https://world.openfoodfacts.org/product/80804413"
+    },
+    {
+      "id": "off_italie_5411188134473",
+      "name": "Alpro COCONUT STRACCIATELLA PLANT LIVE CUL",
+      "brand": "alpro",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 111,
+        "protein": 0.6,
+        "carbs": 12.4,
+        "fat": 6.3,
+        "fiber": 0.6,
+        "sugar": 8.4,
+        "salt": 0.03
+      },
+      "barcode": "5411188134473",
+      "sourceUrl": "https://world.openfoodfacts.org/product/5411188134473"
+    },
+    {
+      "id": "off_italie_4009267001337",
+      "name": "Multipack buste",
+      "brand": "Fonzies",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 553,
+        "protein": 7.8,
+        "carbs": 51,
+        "fat": 35,
+        "fiber": 1.9,
+        "sugar": 4.8,
+        "salt": 1.8
+      },
+      "barcode": "4009267001337",
+      "sourceUrl": "https://world.openfoodfacts.org/product/4009267001337"
+    },
+    {
+      "id": "off_italie_8007222502215",
+      "name": "Stracchino",
+      "brand": "Nonno Nanni",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 314,
+        "protein": 14,
+        "carbs": 2.6,
+        "fat": 27,
+        "fiber": 0,
+        "sugar": 1.6,
+        "salt": 0
+      },
+      "barcode": "8007222502215",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8007222502215"
+    },
+    {
+      "id": "off_italie_8002330029302",
+      "name": "Yogurt Greco 0%",
+      "brand": "ESSELUNGA",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 53,
+        "protein": 9,
+        "carbs": 3.3,
+        "fat": 0.1,
+        "sugar": 3.3,
+        "salt": 0.1
+      },
+      "barcode": "8002330029302",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002330029302"
+    },
+    {
+      "id": "off_italie_8000430070859",
+      "name": "Galbanino",
+      "brand": "Galbanino",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Produits laitiers",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 319,
+        "protein": 22,
+        "carbs": 1.5,
+        "fat": 25,
+        "sugar": 0.5,
+        "salt": 0.89
+      },
+      "barcode": "8000430070859",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8000430070859"
+    },
+    {
+      "id": "off_italie_8004690613726",
+      "name": "Maccheron integrali n°37",
+      "brand": "La Molisana",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 353,
+        "protein": 15,
+        "carbs": 65,
+        "fat": 2,
+        "fiber": 8,
+        "sugar": 3.3,
+        "salt": 0
+      },
+      "barcode": "8004690613726",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8004690613726"
+    },
+    {
+      "id": "off_italie_8002330019167",
+      "name": "Equilibrio granola cioccolato fondente",
+      "brand": "Esselunga",
+      "retailer": "Esselunga",
+      "country": "Italie",
+      "category": "Féculents",
+      "unit": "ml",
+      "nutritionPer100g": {
+        "calories": 450,
+        "protein": 11.2,
+        "carbs": 61.1,
+        "fat": 16.4,
+        "fiber": 6.7,
+        "sugar": 17.5,
+        "salt": 0.08
+      },
+      "barcode": "8002330019167",
+      "sourceUrl": "https://world.openfoodfacts.org/product/8002330019167"
+    }
+  ]
+}
