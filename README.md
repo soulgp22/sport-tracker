@@ -2,60 +2,75 @@
 
 Application Expo / React Native de suivi de programmes, séances, historique et progression.
 
-## Développement
+## Prérequis
+
+- Node.js (compatible avec Expo SDK 56)
+- npm
+
+## Installation
 
 ```bash
 npm install
+```
+
+## Lancement
+
+```bash
 npx expo start
 ```
 
-Vérifications principales :
+Pour lancer directement sur Android (émulateur ou appareil connecté) :
+
+```bash
+npx expo start --android
+```
+
+## Tests
+
+```bash
+npm test
+```
+
+Typecheck :
 
 ```bash
 npx tsc --noEmit
-npm test
+```
+
+Validation des contenus communautaires :
+
+```bash
+npm run validate:community
+```
+
+Build Android :
+
+```bash
 npx expo export --platform android
 ```
 
-## Catalogue d'exercices offline
+## Structure du dépôt
 
-L'app embarque un catalogue read-only dans `src/data/exercises.catalog.json` et des GIFs statiques référencés par `src/data/exercises.gifs.ts`. Les programmes doivent référencer un `exerciseId` du catalogue ; le nom affiché est dérivé du catalogue avec un fallback vers le champ compatibilité `exerciseName`.
-
-Le script de génération est :
-
-```bash
-node scripts/build-exercise-catalog.mjs
+```
+community/           Contenus communautaires (programmes, bases d'aliments, index)
+docs/                Documentation
+scripts/             Scripts de maintenance (validation, fetch Open Food Facts)
+src/
+  data/              Données embarquées (catalogue d'exercices, aliments par défaut)
+  lib/               Logique métier (validation, parsers, limites)
+  store/             Stores Zustand (programs, foods, community, exerciseCatalog)
+  types/              Types TypeScript
 ```
 
-Source prévue : ExerciseDB v1 free tier (`https://oss.exercisedb.dev/api/v1/exercises`) avec GIFs 180p servis par leur CDN. Ces données et médias sont destinés à un usage personnel/offline dans cette app sideloadée ; ne pas republier les assets générés séparément.
+## Documentation
 
-Si l'API ExerciseDB renvoie des limites réseau pendant le build, le script supporte un fallback local :
+La documentation détaillée est dans le dossier `docs/` :
 
-```bash
-CATALOG_FALLBACK=1 node scripts/build-exercise-catalog.mjs
-```
+| Fichier | Contenu |
+|---------|---------|
+| [`docs/programmes.md`](docs/programmes.md) | Structure d'un pack de programme, champs, convention reps=secondes, ajout d'un programme, manifeste, repères de programmation (RIR, double progression, repos, deload). |
+| [`docs/exercices.md`](docs/exercices.md) | Le catalogue `exercises.catalog.json` (873 entrées, nameFr, gif a/b), contrainte du nom exact, comportement à l'import, ajout/modification et limite des médias. |
+| [`docs/import.md`](docs/import.md) | Import de programmes (preview, ImportResult, unknownExercises), import d'aliments (JSON, CSV, doublons), téléchargement communautaire (manifeste, cache offline, limite 5 Mo). |
+| [`docs/aliments.md`](docs/aliments.md) | Modèle Food, 12 catégories, unités, organisation par pays, enseignes, source Open Food Facts (ODbL), filtres qualité, limites. |
+| [`docs/maintenance.md`](docs/maintenance.md) | Scripts npm, tests, typecheck, toutes les validations et messages d'erreur, éviter les doublons, mise à jour, rollback, gestion des erreurs API. |
 
-Ce fallback garde l'app buildable hors réseau avec un catalogue offline et des GIFs placeholder. Relancer le script sans fallback remplacera les données par le catalogue ExerciseDB quand l'API est disponible.
-
-## Import / export
-
-Les paramètres permettent d'importer/exporter un JSON versionné :
-
-```json
-{
-  "version": 1,
-  "programs": []
-}
-```
-
-Pendant l'import, chaque exercice est validé par `exerciseId`, puis par nom normalisé. Les exercices inconnus sont ignorés après confirmation utilisateur ; les exercices connus sont importés avec leur nom catalogue.
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
