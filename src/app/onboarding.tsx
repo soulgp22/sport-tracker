@@ -116,7 +116,7 @@ export default function OnboardingScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
-  const { language, setLanguage } = useTranslation();
+  const { language, setLanguage, t } = useTranslation();
   const text = copy[language];
   const options = translatedLabels[language];
   const profile = useOnboardingStore((state) => state.profile);
@@ -167,7 +167,7 @@ export default function OnboardingScreen() {
         if (foodPack) await downloadFoodDatabase(foodPack);
       }
     } catch {
-      appAlert('Téléchargement reporté', 'Tu peux retrouver tous ces contenus dans la rubrique Communauté. Les contenus essentiels restent disponibles hors ligne.');
+      appAlert(t('onboarding.downloadDeferred'), t('onboarding.downloadDeferredMessage'));
     } finally {
       complete();
       setInstalling(false);

@@ -128,7 +128,8 @@ export function AppDialog() {
               </TouchableOpacity>
             </View>
 
-            {dialog?.message ? (
+            <View style={styles.bodyArea}>
+              {dialog?.message ? (
               <ScrollView
                 style={styles.messageScroll}
                 contentContainerStyle={styles.messageContent}
@@ -137,6 +138,7 @@ export function AppDialog() {
                 <Text style={styles.message}>{tr(dialog.message)}</Text>
               </ScrollView>
             ) : null}
+            </View>
 
             <View style={styles.actions}>
               {dialog?.buttons.map((button, index) => {
@@ -217,7 +219,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     lineHeight: 23,
     color: c.textPrimary,
   },
-  messageScroll: { maxHeight: 300, marginTop: 16 },
+  /** Wraps the message ScrollView so it flex-shrinks when the card content
+   *  overflows, keeping header and actions fully visible without overlap. */
+  bodyArea: { flexShrink: 1 },
+  messageScroll: { marginTop: 16 },
   messageContent: { padding: 14, borderRadius: 14, backgroundColor: c.surfaceAlt },
   message: {
     fontFamily: fonts.sans,

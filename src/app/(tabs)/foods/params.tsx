@@ -22,6 +22,7 @@ import {
 } from '../../../lib/importLimits';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodStore, type ImportFoodsResult } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -43,6 +44,7 @@ function CustomFoodRow({
   onLongPress: () => void;
 }) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity
@@ -74,7 +76,7 @@ function CustomFoodRow({
             hitSlop={8}
             style={styles.deleteButton}
             accessibilityRole="button"
-            accessibilityLabel={`Supprimer ${food.name}`}>
+            accessibilityLabel={`${t('common.delete')} ${food.name}`}>
             <Ionicons name="trash-outline" size={18} color={c.danger} />
           </TouchableOpacity>
           <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
@@ -112,6 +114,7 @@ function buildImportMessage(result: ImportFoodsResult) {
 export default function FoodParamsScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const router = useRouter();
   const importFoods = useFoodStore((s) => s.importFoods);
   const deleteCustomFood = useFoodStore((s) => s.deleteCustomFood);
@@ -124,16 +127,16 @@ export default function FoodParamsScreen() {
 
   const showImportResult = (result: ImportFoodsResult) => {
     if (result.errors.length > 0 && result.added === 0) {
-      appAlert("Échec de l'import", buildImportMessage(result));
+      appAlert(t('dialog.importFailed'), buildImportMessage(result));
       return;
     }
 
     if (result.errors.length > 0 || result.duplicateIds.length > 0) {
-      appAlert('Import partiel', buildImportMessage(result));
+      appAlert(t('dialog.importPartial'), buildImportMessage(result));
       return;
     }
 
-    appAlert('Import réussi', buildImportMessage(result));
+    appAlert(t('dialog.importSuccess'), buildImportMessage(result));
   };
 
   const confirmAndImport = (content: string) => {
@@ -175,7 +178,7 @@ export default function FoodParamsScreen() {
       confirmAndImport(content);
     } catch (error) {
       appAlert(
-        'Erreur',
+        t('common.error'),
         getImportErrorMessage(
           error,
           "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
@@ -223,7 +226,7 @@ export default function FoodParamsScreen() {
       showImportResult(importResult);
     } catch (error) {
       appAlert(
-        'Erreur',
+        t('common.error'),
         getImportErrorMessage(error, 'Impossible de lire le fichier CSV.')
       );
     } finally {
@@ -232,10 +235,10 @@ export default function FoodParamsScreen() {
   };
 
   const handleDelete = (food: Food) => {
-    appAlert('Supprimer', `Supprimer "${food.name}" ?`, [
-      { text: 'Annuler', style: 'cancel' },
+    appAlert(t('foods.deleteTitle'), t('foods.deleteConfirm', { name: food.name }), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Supprimer',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: () => deleteCustomFood(food.id),
       },
@@ -278,19 +281,19 @@ export default function FoodParamsScreen() {
     if (count === 0) return;
 
     appAlert(
-      'Supprimer les aliments',
-      `Supprimer définitivement ${count} aliment${count > 1 ? 's' : ''} personnalisé${count > 1 ? 's' : ''} ?`,
+      t('foods.deleteTitle'),
+      t('dialog.deleteFoodsMessage', { count }),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: () => {
             const deleted = deleteCustomFoods([...selectedIds]);
             exitSelectionMode();
             appAlert(
-              'Suppression terminée',
-              `${deleted} aliment${deleted > 1 ? 's ont' : ' a'} été supprimé${deleted > 1 ? 's' : ''}.`
+              t('dialog.deleteDone'),
+              t('dialog.deleteDoneMessage', { count: deleted })
             );
           },
         },
@@ -382,7 +385,7 @@ export default function FoodParamsScreen() {
                 accessibilityRole="button"
                 style={styles.selectionLink}>
                 <Text style={styles.selectionLinkText}>
-                  {selectionMode ? 'Annuler' : 'Sélectionner'}
+                  {selectionMode ? t('common.cancel') : t('common.select')}
                 </Text>
               </TouchableOpacity>
             ) : null}
@@ -445,7 +448,7 @@ export default function FoodParamsScreen() {
 
               {selectionMode ? (
                 <Button
-                  title={`Supprimer la sélection (${selectedIds.size})`}
+                  title={`${t('common.delete')} (${selectedIds.size})`}
                   variant="danger"
                   disabled={selectedIds.size === 0}
                   onPress={handleDeleteSelected}

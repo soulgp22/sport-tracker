@@ -40,6 +40,7 @@ import {
   evaluateBadgeUnlocks,
 } from '../../../lib/performanceEngine';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useLanguageStore } from '../../../store/languageStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
 import { useSessionStore } from '../../../store/sessionStore';
@@ -118,6 +119,7 @@ function SessionLogBar({
 export default function ActiveSessionScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const router = useRouter();
   const active = useActiveSessionStore((s) => s.active);
   const logSet = useActiveSessionStore((s) => s.logSet);
@@ -194,10 +196,10 @@ export default function ActiveSessionScreen() {
   };
 
   const handleFinish = () => {
-    appAlert('Terminer la séance ?', 'Les séries non logguées seront ignorées.', [
-      { text: 'Continuer', style: 'cancel' },
+    appAlert(t('session.finishTitle'), t('session.finishMessage'), [
+      { text: t('session.continue'), style: 'cancel' },
       {
-        text: 'Terminer',
+        text: t('session.finishButton'),
         style: 'destructive',
         onPress: () => {
           const previousSessions = useSessionStore.getState().sessions.filter(
@@ -235,9 +237,9 @@ export default function ActiveSessionScreen() {
   };
 
   const handleCancel = () => {
-    appAlert('Abandonner ?', 'La séance sera perdue.', [
-      { text: 'Non', style: 'cancel' },
-      { text: 'Oui', style: 'destructive', onPress: () => { cancelSession(); router.replace('/(tabs)/session'); } },
+    appAlert(t('session.cancelSessionTitle'), t('session.cancelSessionMessage'), [
+      { text: t('session.no'), style: 'cancel' },
+      { text: t('session.yes'), style: 'destructive', onPress: () => { cancelSession(); router.replace('/(tabs)/session'); } },
     ]);
   };
 
@@ -289,7 +291,7 @@ export default function ActiveSessionScreen() {
             <Text style={styles.topSub}>{active.dayName} · {fmt(elapsed)}</Text>
           </View>
           <TouchableOpacity onPress={handleFinish} hitSlop={8}>
-            <Text style={styles.finishLink}>Terminer</Text>
+            <Text style={styles.finishLink}>{t('session.finishButton')}</Text>
           </TouchableOpacity>
         </View>
 

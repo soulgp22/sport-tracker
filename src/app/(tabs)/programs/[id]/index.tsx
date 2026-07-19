@@ -115,9 +115,9 @@ export default function ProgramDetailScreen() {
   };
 
   const handleDeleteDay = (dayId: string, dayName: string) => {
-    appAlert('Supprimer', `Supprimer le jour "${dayName}" ?`, [
-      { text: 'Annuler', style: 'cancel' },
-      { text: 'Supprimer', style: 'destructive', onPress: () => deleteDay(id, dayId) },
+    appAlert(t('foods.deleteTitle'), t('dialog.deleteExerciseMessage', { name: dayName }), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('common.delete'), style: 'destructive', onPress: () => deleteDay(id, dayId) },
     ]);
   };
 
@@ -130,7 +130,7 @@ export default function ProgramDetailScreen() {
       compatibility.unresolved > 0
         ? t('program.convertedPartial', { count: compatibility.unresolved })
         : t('program.convertedSuccess'),
-      [{ text: 'OK', onPress: () => router.replace(`/(tabs)/programs/${copy.id}`) }]
+      [{ text: t('common.ok'), onPress: () => router.replace(`/(tabs)/programs/${copy.id}`) }]
     );
   };
 
@@ -311,7 +311,7 @@ export default function ProgramDetailScreen() {
               />
               <View style={styles.addDayBtns}>
                 <Button
-                  title="Annuler"
+                  title={t('common.cancel')}
                   variant="secondary"
                   onPress={() => {
                     setAddingDay(false);
@@ -319,12 +319,12 @@ export default function ProgramDetailScreen() {
                   }}
                   style={styles.halfBtn}
                 />
-                <Button title="Ajouter" onPress={handleAddDay} style={styles.halfBtn} />
+                <Button title={t('common.add')} onPress={handleAddDay} style={styles.halfBtn} />
               </View>
             </View>
           ) : (
             <Button
-              title="+ Ajouter un jour"
+              title={t('program.addDay')}
               variant="secondary"
               onPress={() => setAddingDay(true)}
             />

@@ -142,8 +142,6 @@ export default function SettingsScreen() {
   const c = useColors();
   const { language, t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
-  const importPrograms = useProgramStore((s) => s.importPrograms);
-  const programs = useProgramStore((s) => s.programs);
   const programsCount = useProgramStore((s) => s.programs.length);
   const sessionsCount = useSessionStore((s) => s.sessions.length);
   const customFoodsCount = useFoodStore((s) => s.customFoods.length);
@@ -172,8 +170,6 @@ export default function SettingsScreen() {
   const setNotificationsEnabled = usePerformanceStore((s) => s.setNotificationsEnabled);
   const [openAppearanceMenu, setOpenAppearanceMenu] =
     useState<'language' | 'palette' | 'font' | null>(null);
-  const [importing, setImporting] = useState(false);
-  const [exporting, setExporting] = useState(false);
   const [profileImporting, setProfileImporting] = useState(false);
   const [profileExporting, setProfileExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
@@ -191,128 +187,9 @@ export default function SettingsScreen() {
     return () => clearTimeout(timeout);
   }, [aiPromptCopyFeedback]);
 
-  const showImportResult = (result: ReturnType<typeof importPrograms>) => {
-    if (result.errors.length > 0 && result.importedPrograms === 0) {
-      appAlert('Échec de l\'import', result.errors.join('\n'));
-    } else if (result.errors.length > 0 || result.skipped > 0) {
-      appAlert(
-        'Import partiel',
-        `${result.importedPrograms} programme(s), ${result.importedExercises} exercice(s) importé(s).\n${result.skipped} élément(s) ignoré(s).`
-      );
-    } else {
-      appAlert(
-        'Import réussi',
-        `${result.importedPrograms} programme(s) et ${result.importedExercises} exercice(s) importé(s).`
-      );
-    }
-  };
 
-  const confirmAndImport = (content: string) => {
-    const preview = importPrograms(content, { commit: false });
-    if (preview.errors.length > 0 && preview.importedPrograms === 0) {
-      showImportResult(preview);
-      return;
-    }
 
-    if (preview.unknownExercises.length > 0) {
-      const list = preview.unknownExercises.slice(0, 8).join('\n');
-      const remaining = preview.unknownExercises.length > 8
-        ? `\n… et ${preview.unknownExercises.length - 8} autre(s)`
-        : '';
-      appAlert(
-        'Exercices inconnus',
-        `Le fichier contient ${preview.unknownExercises.length} exercice(s) inconnu(s).\n\n${list}${remaining}\n\nImporter seulement les exercices reconnus et ignorer le reste ?`,
-        [
-          { text: 'Annuler', style: 'cancel' },
-          {
-            text: 'Confirmer',
-            onPress: () => showImportResult(importPrograms(content)),
-          },
-        ]
-      );
-      return;
-    }
 
-    showImportResult(importPrograms(content));
-  };
-
-  const handleImport = async () => {
-    try {
-      setImporting(true);
-
-      if (Platform.OS === 'web') {
-        // Web fallback: file input
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-        const file = await new Promise<globalThis.File | null>((resolve) => {
-          input.onchange = () => resolve(input.files?.[0] ?? null);
-          input.click();
-        });
-        if (!file) return;
-
-        assertImportFileSize(file.size);
-        const text = await file.text();
-        assertImportTextSize(text);
-        confirmAndImport(text);
-        return;
-      }
-
-      // Mobile: expo-document-picker
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/json',
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) return;
-
-      const asset = result.assets[0];
-      assertImportFileSize(asset.size);
-      const content = await FileSystemLegacy.readAsStringAsync(asset.uri);
-      assertImportTextSize(content);
-      confirmAndImport(content);
-    } catch (error) {
-      appAlert(
-        'Erreur',
-        getImportErrorMessage(
-          error,
-          "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
-        )
-      );
-    } finally {
-      setImporting(false);
-    }
-  };
-
-  const handleExport = async () => {
-    try {
-      setExporting(true);
-      const content = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), programs }, null, 2);
-      const filename = `sport-tracker-programmes-${new Date().toISOString().slice(0, 10)}.json`;
-
-      if (Platform.OS === 'web') {
-        const blob = new Blob([content], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-        URL.revokeObjectURL(url);
-        appAlert('Export prêt', `${programs.length} programme(s) exporté(s).`);
-        return;
-      }
-
-      const file = new ExpoFile(Paths.document, filename);
-      if (file.exists) file.delete();
-      file.create();
-      file.write(content);
-      appAlert('Export prêt', `Fichier créé : ${file.uri}`);
-    } catch {
-      appAlert('Erreur', "Impossible d'exporter les programmes.");
-    } finally {
-      setExporting(false);
-    }
-  };
 
   const handleProfileExport = async () => {
     try {
@@ -329,15 +206,15 @@ export default function SettingsScreen() {
         link.click();
         URL.revokeObjectURL(url);
         appAlert(
-          'Sauvegarde prête',
-          "Ce fichier contient vos données sport et nutrition en clair. Conservez-le dans un emplacement privé."
+          t('dialog.backupReady'),
+          t('dialog.backupReadyMessage')
         );
         return;
       }
 
       const available = await Sharing.isAvailableAsync();
       if (!available) {
-        appAlert('Erreur', "Le partage de fichier n'est pas disponible sur cet appareil.");
+        appAlert(t('common.error'), t('dialog.shareUnavailable'));
         return;
       }
 
@@ -355,7 +232,7 @@ export default function SettingsScreen() {
         if (file.exists) file.delete();
       }
     } catch {
-      appAlert('Erreur', 'Impossible de sauvegarder le profil.');
+      appAlert(t('common.error'), t('dialog.backupError'));
     } finally {
       setProfileExporting(false);
     }
@@ -363,16 +240,24 @@ export default function SettingsScreen() {
 
   const confirmAndRestoreProfile = (backup: ProfileBackup) => {
     appAlert(
-      'Restaurer ce profil ?',
-      `Cette restauration remplacera toutes les données actuelles (${programsCount} programme(s), ${sessionsCount} séance(s), ${customFoodsCount} aliment(s), ${foodDiaryEntriesCount} entrée(s) nutrition, objectifs ${nutritionGoals.goalType}, ${bodyWeightEntriesCount} pesée(s)).\n\nProfil à restaurer : ${profileSummary(backup.data)}\n\nContinuer ?`,
+      t('dialog.restoreTitle'),
+      t('dialog.restoreMessage', {
+        programs: programsCount,
+        sessions: sessionsCount,
+        foods: customFoodsCount,
+        entries: foodDiaryEntriesCount,
+        goals: nutritionGoals.goalType,
+        weights: bodyWeightEntriesCount,
+        summary: profileSummary(backup.data)
+      }),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Restaurer',
+          text: t('dialog.restore'),
           style: 'destructive',
           onPress: () => {
             restoreProfileBackup(backup);
-            appAlert('Profil restauré', profileSummary(backup.data));
+            appAlert(t('dialog.restoreSuccess'), profileSummary(backup.data));
           },
         },
       ]
@@ -415,17 +300,17 @@ export default function SettingsScreen() {
 
       const backup = parseProfileBackup(content);
       if (typeof backup === 'string') {
-        appAlert('Échec de la restauration', backup);
+        appAlert(t('dialog.restoreFailed'), backup);
         return;
       }
 
       confirmAndRestoreProfile(backup);
     } catch (error) {
       appAlert(
-        'Erreur',
+        t('common.error'),
         getImportErrorMessage(
           error,
-          "Impossible de lire le fichier. Vérifiez qu'il s'agit d'un fichier JSON valide."
+          t('dialog.importReadError')
         )
       );
     } finally {
@@ -442,7 +327,7 @@ export default function SettingsScreen() {
       try {
         await Share.share({ message: prompt });
       } catch {
-        appAlert('Erreur', 'Impossible de copier ou partager le prompt.');
+        appAlert(t('common.error'), t('dialog.copyError'));
       }
     }
   };
@@ -465,12 +350,12 @@ export default function SettingsScreen() {
 
   const handleDeleteAll = () => {
     appAlert(
-      'Tout supprimer',
-      'Supprimer tous les programmes et tout l\'historique des séances ? Cette action est irréversible.',
+      t('dialog.deleteAllTitle'),
+      t('dialog.deleteAllMessage'),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Tout supprimer',
+          text: t('dialog.deleteAllConfirm'),
           style: 'destructive',
           onPress: () => {
             useProgramStore.getState().programs.forEach((p) =>
@@ -689,27 +574,6 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('settings.profile')}</Text>
-          <Text style={styles.helpText}>
-            La sauvegarde contient vos programmes, séances, aliments personnalisés, données nutrition et poids. Conservez le fichier hors de l&apos;app (Drive, Téléchargements…) pour qu&apos;il survive à une réinstallation.
-          </Text>
-
-          <Button
-            title={t('settings.saveProfile')}
-            onPress={handleProfileExport}
-            loading={profileExporting}
-            style={styles.actionBtn}
-          />
-
-          <Button
-            title={t('settings.restoreProfile')}
-            variant="secondary"
-            onPress={handleProfileImport}
-            loading={profileImporting}
-            style={styles.actionBtn}
-          />
-        </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('performance.profileTitle')}</Text>
@@ -826,34 +690,6 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t('settings.programs')}</Text>
-
-          <Button
-            title={t('settings.importProgram')}
-            onPress={handleImport}
-            loading={importing}
-            style={styles.actionBtn}
-          />
-
-          <Button
-            title={t('settings.exportPrograms')}
-            variant="secondary"
-            onPress={handleExport}
-            loading={exporting}
-            disabled={programsCount === 0}
-            style={styles.actionBtn}
-          />
-
-          <Button
-            title={`Tout supprimer (${programsCount} prog., ${sessionsCount} séances)`}
-            variant="danger"
-            onPress={handleDeleteAll}
-            disabled={programsCount === 0 && sessionsCount === 0}
-            style={styles.actionBtn}
-          />
-        </View>
-
-        <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.aiProgram')}</Text>
           <Text style={styles.helpText}>
             Copie ce prompt avec le bouton ci-dessous, puis colle-le dans ChatGPT/Claude pour générer un programme, et importe le JSON obtenu.
@@ -917,9 +753,39 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Personnalisation</Text>
-          <Text style={styles.aboutSubtext}>Refaire le questionnaire pour actualiser tes objectifs et tes recommandations.</Text>
-          <Button title="Refaire l’onboarding" variant="secondary" onPress={() => { restartOnboarding(); router.replace('/onboarding' as never); }} />
+          <Text style={styles.sectionTitle}>{t('settings.advanced')}</Text>
+          <Text style={styles.helpText}>
+            {t('settings.advancedDescription')}
+          </Text>
+
+          <Button
+            title={t('settings.saveProfile')}
+            onPress={handleProfileExport}
+            loading={profileExporting}
+            style={styles.actionBtn}
+          />
+
+          <Button
+            title={t('settings.restoreProfile')}
+            variant="secondary"
+            onPress={handleProfileImport}
+            loading={profileImporting}
+            style={styles.actionBtn}
+          />
+
+          <Button
+            title={`${t('dialog.deleteAllConfirm')} (${programsCount} prog., ${sessionsCount} s\u00e9ances)`}
+            variant="danger"
+            onPress={handleDeleteAll}
+            disabled={programsCount === 0 && sessionsCount === 0}
+            style={styles.actionBtn}
+          />
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('settings.personalisation')}</Text>
+          <Text style={styles.aboutSubtext}>{t('settings.redoOnboarding')}</Text>
+          <Button title={t("settings.redoOnboarding")} variant="secondary" onPress={() => { restartOnboarding(); router.replace("/onboarding" as never); }} />
         </View>
 
         <View style={styles.section}>

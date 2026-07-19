@@ -9,6 +9,7 @@ import { FoodEntryRow } from '../../../components/nutrition/FoodEntryRow';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { appAlert } from '../../../components/ui/AppDialog';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { MEAL_LABELS, MEAL_ORDER } from '../../../constants/meals';
@@ -26,6 +27,7 @@ function todayKey() {
 }
 
 export default function NutritionDiaryScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
@@ -85,12 +87,12 @@ export default function NutritionDiaryScreen() {
 
   const handleDelete = (entry: FoodEntry) => {
     appAlert(
-      'Supprimer ce repas ?',
-      `Supprimer ${entry.foodName} du journal du jour ?`,
+      t('dialog.deleteMealTitle'),
+      t('dialog.deleteMealMessage', { name: entry.foodName }),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: () => deleteFoodEntry(entry.id),
         },

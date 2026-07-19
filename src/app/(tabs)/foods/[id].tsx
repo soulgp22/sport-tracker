@@ -28,7 +28,7 @@ export default function FoodDetailScreen() {
   const handleDelete = () => {
     if (!food?.isCustom) return;
 
-    appAlert('Supprimer', `Supprimer "${food.name}" ?`, [
+    appAlert(t('foods.deleteTitle'), t('foods.deleteConfirm', { name: food.name }), [
       { text: t('common.cancel'), style: 'cancel' },
       {
         text: t('common.delete'),
