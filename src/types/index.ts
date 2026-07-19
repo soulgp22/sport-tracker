@@ -100,6 +100,7 @@ export interface ActiveSession {
   exercises: SessionExercise[];
   restTimerActive: boolean;
   restEndsAt: string | null;
+  restTimerMinimized: boolean;
 }
 
 export type {

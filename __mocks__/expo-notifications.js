@@ -37,4 +37,8 @@ module.exports = {
   requestPermissionsAsync: jest.fn(async () => ({ granted: true, status: 'granted' })),
   scheduleNotificationAsync: jest.fn(async () => 'scheduled-notification-id'),
   cancelScheduledNotificationAsync: jest.fn(async () => undefined),
+  dismissNotificationAsync: jest.fn(async () => undefined),
+  dismissAllNotificationsAsync: jest.fn(async () => undefined),
+  getAllScheduledNotificationsAsync: jest.fn(async () => []),
+  getPresentedNotificationsAsync: jest.fn(async () => []),
 };

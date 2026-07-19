@@ -127,6 +127,8 @@ export default function ActiveSessionScreen() {
   const setActivePointer = useActiveSessionStore((s) => s.setActivePointer);
   const swapExercise = useActiveSessionStore((s) => s.swapExercise);
   const restTimerActive = useActiveSessionStore((s) => s.active?.restTimerActive ?? false);
+  const restTimerMinimized = useActiveSessionStore((s) => s.active?.restTimerMinimized ?? false);
+  const minimizeRestTimer = useActiveSessionStore((s) => s.minimizeRestTimer);
   const finishSession = useActiveSessionStore((s) => s.finishSession);
   const cancelSession = useActiveSessionStore((s) => s.cancelSession);
   const getCatalogExercise = useExerciseCatalogStore((s) => s.getById);
@@ -378,8 +380,9 @@ export default function ActiveSessionScreen() {
       </KeyboardAvoidingView>
 
       <RestTimerModal
-        visible={restTimerActive}
+        visible={restTimerActive && !restTimerMinimized}
         onDismiss={() => {}}
+        onMinimize={minimizeRestTimer}
         exerciseName={restExerciseName}
         currentSetNumber={restSet ? restSetIndex + 1 : undefined}
         totalSets={currentEx.sets.length}

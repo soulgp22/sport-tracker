@@ -50,6 +50,8 @@ interface ActiveSessionState {
   skipRest: () => void;
   clearRestTimer: () => void;
   syncRestTimer: () => void;
+  minimizeRestTimer: () => void;
+  restoreRestTimer: () => void;
   finishSession: () => Session | null;
   cancelSession: () => void;
 }
@@ -90,6 +92,7 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
         exercises,
         restTimerActive: false,
         restEndsAt: null,
+        restTimerMinimized: false,
       },
     });
   },
@@ -223,7 +226,19 @@ export const useActiveSessionStore = create<ActiveSessionState>()((set, get) => 
 
   clearRestTimer: () => {
     set((s) =>
-      s.active ? { active: { ...s.active, restTimerActive: false, restEndsAt: null } } : s
+      s.active ? { active: { ...s.active, restTimerActive: false, restEndsAt: null, restTimerMinimized: false } } : s
+    );
+  },
+
+  minimizeRestTimer: () => {
+    set((s) =>
+      s.active ? { active: { ...s.active, restTimerMinimized: true } } : s
+    );
+  },
+
+  restoreRestTimer: () => {
+    set((s) =>
+      s.active ? { active: { ...s.active, restTimerMinimized: false } } : s
     );
   },
 

@@ -442,3 +442,77 @@ describe('cancelSession', () => {
     expect(() => useActiveSessionStore.getState().cancelSession()).not.toThrow();
   });
 });
+
+describe('rest timer minimize / restore consistency', () => {
+  const now = new Date('2026-03-01T12:00:00.000Z');
+
+  beforeEach(() => {
+    jest.useFakeTimers({ now });
+    useActiveSessionStore.setState({ active: null });
+    useSessionStore.setState({ sessions: [] });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('getRemainingRestSeconds uses absolute restEndsAt timestamp — no drift after minimize', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(90);
+
+    // Simulate 30s passing
+    jest.setSystemTime(new Date(now.getTime() + 30_000));
+
+    const beforeMinimize = getRemainingRestSeconds(useActiveSessionStore.getState().active);
+
+    // Minimize the modal (should not affect remaining time)
+    useActiveSessionStore.getState().minimizeRestTimer();
+    const midMinimize = getRemainingRestSeconds(useActiveSessionStore.getState().active);
+
+    // Advance another 10s while minimized
+    jest.setSystemTime(new Date(now.getTime() + 40_000));
+
+    const afterTimePass = getRemainingRestSeconds(useActiveSessionStore.getState().active);
+
+    // Restore
+    useActiveSessionStore.getState().restoreRestTimer();
+    const afterRestore = getRemainingRestSeconds(useActiveSessionStore.getState().active);
+
+    // Before minimize: 90 - 30 = 60s remaining
+    expect(beforeMinimize).toBe(60);
+    // At minimize time: same timestamp, same value
+    expect(midMinimize).toBe(60);
+    // After 10 more seconds: 60 - 10 = 50s remaining
+    expect(afterTimePass).toBe(50);
+    // After restore: still 50s (no reset, no drift)
+    expect(afterRestore).toBe(50);
+
+    // Verify the end timestamp hasn't changed
+    expect(useActiveSessionStore.getState().active!.restEndsAt).toBe(
+      new Date(now.getTime() + 90_000).toISOString()
+    );
+  });
+
+  it('minimizeRestTimer sets restTimerMinimized to true, restoreRestTimer sets to false', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(60);
+
+    expect(useActiveSessionStore.getState().active!.restTimerMinimized).toBe(false);
+
+    useActiveSessionStore.getState().minimizeRestTimer();
+    expect(useActiveSessionStore.getState().active!.restTimerMinimized).toBe(true);
+
+    useActiveSessionStore.getState().restoreRestTimer();
+    expect(useActiveSessionStore.getState().active!.restTimerMinimized).toBe(false);
+  });
+
+  it('clearRestTimer resets restTimerMinimized to false', () => {
+    useActiveSessionStore.getState().startSession(makeProgram(), makeDay());
+    useActiveSessionStore.getState().setRestTimer(60);
+    useActiveSessionStore.getState().minimizeRestTimer();
+    expect(useActiveSessionStore.getState().active!.restTimerMinimized).toBe(true);
+
+    useActiveSessionStore.getState().clearRestTimer();
+    expect(useActiveSessionStore.getState().active!.restTimerMinimized).toBe(false);
+  });
+});

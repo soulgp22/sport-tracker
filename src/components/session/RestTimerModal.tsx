@@ -23,6 +23,7 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 interface RestTimerModalProps {
   visible: boolean;
   onDismiss: () => void;
+  onMinimize: () => void;
   exerciseName?: string;
   currentSetNumber?: number;
   totalSets?: number;
@@ -44,6 +45,7 @@ function formatWeight(weight: number) {
 export function RestTimerModal({
   visible,
   onDismiss,
+  onMinimize,
   exerciseName,
   currentSetNumber,
   totalSets,
@@ -196,6 +198,14 @@ export function RestTimerModal({
               <Text style={[styles.controlLabel, styles.skipLabel]}>Passer</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              style={[styles.controlButton, styles.minimizeButton]}
+              onPress={onMinimize}
+              activeOpacity={0.8}
+              accessibilityRole="button"
+              accessibilityLabel="Réduire le minuteur">
+              <Text style={[styles.controlLabel, styles.minimizeIcon]}>⏬</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={styles.controlButton}
               onPress={() => adjustRest(15)}
               activeOpacity={0.8}
@@ -290,4 +300,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   skipButton: { backgroundColor: c.primary, borderColor: c.primary },
   controlLabel: { color: c.textPrimary, fontFamily: fonts.sansBold, fontSize: 15 },
   skipLabel: { color: c.primaryText },
+  minimizeButton: { backgroundColor: c.surfaceAlt, borderColor: c.border },
+  minimizeIcon: { fontSize: 18 },
 });
