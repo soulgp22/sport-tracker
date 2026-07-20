@@ -55,6 +55,7 @@ describe('performance notifications', () => {
       bodyweightEntries: [],
       profile,
       language: 'fr',
+      now: new Date('2026-07-18T12:00:00.000Z'),
     });
     expect(insight?.kind).toBe('weekly-goal');
   });

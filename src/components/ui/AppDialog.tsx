@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
   type AlertButton,
   type AlertOptions,
@@ -75,7 +76,9 @@ export function appAlert(
 export function AppDialog() {
   const c = useColors();
   const { tr } = useTranslation();
-  const styles = useMemo(() => makeStyles(c), [c]);
+  const { height: windowHeight } = useWindowDimensions();
+  const cardMaxHeight = windowHeight * 0.82;
+  const styles = useMemo(() => makeStyles(c, cardMaxHeight), [c, cardMaxHeight]);
   const dialog = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   const isDestructive = dialog?.buttons.some((button) => button.style === 'destructive') ?? false;
 
@@ -109,7 +112,7 @@ export function AppDialog() {
       <View style={styles.root}>
         <Pressable style={StyleSheet.absoluteFill} onPress={requestClose} />
         <SafeAreaView style={styles.safe} pointerEvents="box-none">
-          <View style={styles.card} accessibilityRole="alert">
+          <View style={styles.card} accessibilityRole="alert" testID="app-dialog-card">
             <View style={styles.grabber} />
             <View style={styles.headerRow}>
               <View style={[styles.icon, isDestructive ? styles.iconDanger : null]}>
@@ -174,7 +177,7 @@ export function AppDialog() {
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
+const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -182,7 +185,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   safe: { width: '100%', alignItems: 'center', justifyContent: 'flex-end' },
   card: {
-    maxHeight: '82%',
+    maxHeight: cardMaxHeight,
     width: '100%',
     maxWidth: 560,
     paddingHorizontal: 20,
