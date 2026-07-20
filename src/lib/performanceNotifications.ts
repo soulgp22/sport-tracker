@@ -26,6 +26,7 @@ interface BuildInsightInput {
   bodyweightEntries: WeightEntry[];
   profile: PerformanceProfile;
   language: LanguageId;
+  now?: Date;
 }
 
 function levelLabel(language: LanguageId, id: string) {
@@ -38,6 +39,7 @@ export function buildPerformanceNotificationInsight({
   bodyweightEntries,
   profile,
   language,
+  now,
 }: BuildInsightInput): PerformanceNotificationInsight | undefined {
   const afterSessions = [session, ...previousSessions.filter((item) => item.id !== session.id)];
   let bestRecord: { percent: number; exerciseName: string; exerciseId: string } | undefined;
@@ -143,7 +145,8 @@ export function buildPerformanceNotificationInsight({
   const consistency = calculateConsistencyMetrics(
     afterSessions,
     profile.weeklySessionGoal,
-    profile.monthlySessionGoal
+    profile.monthlySessionGoal,
+    now
   );
   if (consistency.thisWeek === profile.weeklySessionGoal - 1) {
     return {

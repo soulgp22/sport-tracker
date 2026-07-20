@@ -12,8 +12,8 @@ export type OnboardingEquipmentProfileId =
   | 'machines'
   | 'barbell'
   | 'full-gym';
-// L'identifiant correspond à une base pays (ou historique par enseigne) du manifeste GitHub.
-// Les anciennes valeurs `auchan` et `carrefour` restent migrées à la lecture.
+// L'identifiant correspond ï¿½ une base pays (ou historique par enseigne) du manifeste GitHub.
+// Les anciennes valeurs `auchan` et `carrefour` restent migrï¿½es ï¿½ la lecture.
 export type OnboardingRetailer = string;
 
 export interface OnboardingProfile {
@@ -54,7 +54,7 @@ function migrateLegacyGym(
   legacy: unknown
 ): OnboardingEquipmentProfileId | undefined {
   if (typeof legacy !== 'string') return undefined;
-  // Anciennes valeurs du onboarding "salle" ; tout est migré vers full-gym par défaut.
+  // Anciennes valeurs du onboarding "salle" ; tout est migrï¿½ vers full-gym par dï¿½faut.
   if (legacy === 'home') return 'bodyweight';
   if (legacy === 'commercial' || legacy === 'other') return 'full-gym';
   if (ONBOARDING_EQUIPMENT_PROFILES.includes(legacy as OnboardingEquipmentProfileId)) {
@@ -92,14 +92,18 @@ export const useOnboardingStore = create<OnboardingState>()(
             migratedProfile.equipmentProfileId = migratedEquipment;
           }
         }
-        return { ...current, profile: migratedProfile };
+        return {
+          ...current,
+          completed: typeof saved.completed === 'boolean' ? saved.completed : false,
+          profile: migratedProfile,
+        };
       },
     }
   )
 );
 
-// Zustand n'expose pas l'hydratation dans l'état : ce hook synchronise le routeur
-// sans afficher brièvement l'accueil avant l'onboarding.
+// Zustand n'expose pas l'hydratation dans l'ï¿½tat : ce hook synchronise le routeur
+// sans afficher briï¿½vement l'accueil avant l'onboarding.
 useOnboardingStore.persist.onFinishHydration(() => {
   useOnboardingStore.setState({ hasHydrated: true });
 });
