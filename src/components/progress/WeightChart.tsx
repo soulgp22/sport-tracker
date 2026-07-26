@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
+import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
@@ -11,13 +12,14 @@ interface WeightChartProps {
   title?: string;
 }
 
-export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartProps) {
+export function WeightChart({ data, title }: WeightChartProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text style={styles.emptyText}>Pas encore de données</Text>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </View>
     );
   }
@@ -26,7 +28,7 @@ export function WeightChart({ data, title = 'Poids maximum (kg)' }: WeightChartP
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{title ?? t('progress.maxWeightTitle')}</Text>
       <LineChart
         data={chartData}
         height={180}

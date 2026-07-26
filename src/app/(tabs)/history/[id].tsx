@@ -21,7 +21,7 @@ function fmt(secs: number) {
 }
 
 export default function SessionDetailScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -32,13 +32,13 @@ export default function SessionDetailScreen() {
   if (!session) {
     return (
       <SafeAreaView style={styles.safe}>
-        <EmptyState icon="alert-circle-outline" title="Séance introuvable" />
+        <EmptyState icon="alert-circle-outline" title={t('history.notFound')} />
       </SafeAreaView>
     );
   }
 
   const date = new Date(session.date);
-  const dateStr = date.toLocaleDateString('fr-FR', {
+  const dateStr = date.toLocaleDateString(locale, {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
@@ -60,7 +60,7 @@ export default function SessionDetailScreen() {
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
-          {session.programName ?? 'Séance libre'}
+          {session.programName ?? t('history.freeSession')}
         </Text>
         <TouchableOpacity onPress={handleDelete} hitSlop={8} style={styles.headerBtn}>
           <Ionicons name="trash-outline" size={20} color={c.danger} />
@@ -72,7 +72,7 @@ export default function SessionDetailScreen() {
         <View style={styles.metaCard}>
           <Text style={styles.metaDate}>{dateStr}</Text>
           {session.dayName ? <Text style={styles.metaDay}>{session.dayName}</Text> : null}
-          <Text style={styles.metaDuration}>Durée : {fmt(session.durationSeconds)}</Text>
+          <Text style={styles.metaDuration}>{t('history.duration', { duration: fmt(session.durationSeconds) })}</Text>
         </View>
 
         {/* Exercises */}
@@ -83,13 +83,13 @@ export default function SessionDetailScreen() {
               <View style={styles.exHeader}>
                 <ExerciseThumbnail id={ex.exerciseId} size={40} />
                 <Text style={styles.exName} numberOfLines={1}>
-                  {getCatalogExerciseName(ex.exerciseId, ex.exerciseName || `Exercice ${i + 1}`)}
+                  {getCatalogExerciseName(ex.exerciseId, ex.exerciseName || t('session.exerciseFallback', { index: i + 1 }))}
                 </Text>
               </View>
               <View style={styles.tableHeader}>
-                <Text style={[styles.tableCell, styles.tableCellSm]}>Série</Text>
-                <Text style={styles.tableCell}>Reps</Text>
-                <Text style={styles.tableCell}>Poids (kg)</Text>
+                <Text style={[styles.tableCell, styles.tableCellSm]}>{t('history.columnSet')}</Text>
+                <Text style={styles.tableCell}>{t('session.reps')}</Text>
+                <Text style={styles.tableCell}>{t('progress.weightPlaceholder')}</Text>
               </View>
               {doneSets.map((s, si) => (
                 <View key={si} style={[styles.tableRow, si % 2 === 1 && styles.tableRowAlt]}>
@@ -99,7 +99,7 @@ export default function SessionDetailScreen() {
                 </View>
               ))}
               {doneSets.length === 0 && (
-                <Text style={styles.noSets}>Aucune série logguée</Text>
+                <Text style={styles.noSets}>{t('history.noSets')}</Text>
               )}
             </View>
           );

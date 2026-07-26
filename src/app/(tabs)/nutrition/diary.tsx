@@ -13,7 +13,7 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
-import { MEAL_LABELS, MEAL_ORDER } from '../../../constants/meals';
+import { MEAL_ORDER } from '../../../constants/meals';
 import { calculateDailyTotals, calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
@@ -108,10 +108,7 @@ export default function NutritionDiaryScreen() {
   const handleUpdateQuantity = (entry: FoodEntry, quantity: number) => {
     const food = getFoodById(entry.foodId);
     if (!food) {
-      appAlert(
-        'Aliment introuvable',
-        "Impossible de recalculer cette entrée car l'aliment n'existe plus."
-      );
+      appAlert(t('foods.notFound'), t('nutrition.diary.recalcError'));
       return;
     }
 
@@ -145,7 +142,7 @@ export default function NutritionDiaryScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Journal du jour</Text>
+        <Text style={styles.heading}>{t('nutrition.diaryTitle')}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -153,11 +150,11 @@ export default function NutritionDiaryScreen() {
         <View style={styles.emptyContent}>
           <EmptyState
             icon="restaurant-outline"
-            title="Aucun repas aujourd'hui"
-            subtitle="Ajoutez un aliment pour commencer le journal."
+            title={t('nutrition.diary.emptyTitle')}
+            subtitle={t('nutrition.diary.emptySubtitle')}
           />
           <View style={styles.emptyButton}>
-            <Button title="Ajouter un repas" onPress={openAddMeal} />
+            <Button title={t('nutrition.addMeal')} onPress={openAddMeal} />
           </View>
         </View>
       ) : (
@@ -172,7 +169,7 @@ export default function NutritionDiaryScreen() {
               if (item.kind === 'header') {
                 return (
                   <View style={styles.mealHeader}>
-                    <Text style={styles.mealTitle}>{MEAL_LABELS[item.mealType]}</Text>
+                    <Text style={styles.mealTitle}>{t(`nutrition.add.meal.${item.mealType}`)}</Text>
                     <Text style={styles.mealSubtotal}>{mealTotals[item.mealType].calories} kcal</Text>
                   </View>
                 );
@@ -194,7 +191,7 @@ export default function NutritionDiaryScreen() {
           />
 
           <View style={styles.footer}>
-            <Button title="Ajouter un repas" onPress={openAddMeal} />
+            <Button title={t('nutrition.addMeal')} onPress={openAddMeal} />
           </View>
         </View>
       )}

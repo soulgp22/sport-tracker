@@ -35,8 +35,9 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
           {program.name}
         </Text>
         <Text style={styles.meta}>
-          {program.days.length} jour{program.days.length !== 1 ? 's' : ''} · {totalExercises}{' '}
-          exercice{totalExercises !== 1 ? 's' : ''}
+          {t(program.days.length !== 1 ? 'program.dayCount.other' : 'program.dayCount.one', { count: program.days.length })}
+          {' · '}
+          {t(totalExercises !== 1 ? 'program.exerciseCount.other' : 'program.exerciseCount.one', { count: totalExercises })}
         </Text>
         <Text style={styles.profileName} numberOfLines={1}>
           {t(profile.i18nKey)}

@@ -10,6 +10,7 @@ import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
 
@@ -28,7 +29,7 @@ function BackToHomeButton() {
       onPress={handlePress}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel="Retour à l'accueil">
+      accessibilityLabel={t('common.backHome')}>
       <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
     </TouchableOpacity>
   );
@@ -66,8 +67,8 @@ export default function ProgramsLayout() {
                   style={styles.iconButton}
                   activeOpacity={0.7}
                   accessibilityRole="button"
-                  accessibilityLabel="Programmes communautaires"
-                  accessibilityHint="Parcourir les programmes à télécharger">
+                  accessibilityLabel={t('program.communityPrograms')}
+                  accessibilityHint={t('program.communityProgramsHint')}>
                   <Ionicons name="cloud-download-outline" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>
@@ -76,7 +77,7 @@ export default function ProgramsLayout() {
                   style={styles.addButton}
                   activeOpacity={0.7}
                   accessibilityRole="button"
-                  accessibilityLabel="Créer un programme">
+                  accessibilityLabel={t('program.createProgram')}>
                   <Ionicons name="add" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>

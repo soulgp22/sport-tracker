@@ -12,9 +12,11 @@ import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
+import { useTranslation } from '../../../i18n/useTranslation';
 
 export default function NewProgramScreen() {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const addProgram = useProgramStore((s) => s.addProgram);
@@ -23,7 +25,7 @@ export default function NewProgramScreen() {
 
   const handleCreate = () => {
     if (!name.trim()) {
-      setError('Le nom est requis');
+      setError(t('program.nameRequired'));
       return;
     }
     const program = addProgram(name.trim());
@@ -36,7 +38,7 @@ export default function NewProgramScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Nouveau programme</Text>
+        <Text style={styles.heading}>{t('program.newProgram')}</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -46,8 +48,8 @@ export default function NewProgramScreen() {
         keyboardVerticalOffset={keyboardVerticalOffset}>
         <ScrollView contentContainerStyle={styles.content}>
           <TextInput
-            label="Nom du programme"
-            placeholder="Ex : PPL, Full Body, Push..."
+            label={t('program.nameLabel')}
+            placeholder={t('program.namePlaceholder')}
             value={name}
             onChangeText={(t) => { setName(t); setError(''); }}
             error={error}
@@ -56,7 +58,7 @@ export default function NewProgramScreen() {
             onSubmitEditing={handleCreate}
           />
 
-          <Button title="Créer le programme" onPress={handleCreate} style={styles.btn} />
+          <Button title={t('program.create')} onPress={handleCreate} style={styles.btn} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

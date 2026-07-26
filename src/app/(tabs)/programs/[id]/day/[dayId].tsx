@@ -51,6 +51,7 @@ function SetRow({
   onDelete: () => void;
 }) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <View style={styles.setRow}>
@@ -65,7 +66,7 @@ function SetRow({
         />
       </View>
       <View style={styles.setField}>
-        <Text style={styles.setFieldLabel}>Poids (kg)</Text>
+        <Text style={styles.setFieldLabel}>{t('progress.weightPlaceholder')}</Text>
         <TextInput
           value={String(set.weight)}
           onChangeText={(v) => onChange({ weight: parseFloat(v) || 0 })}
@@ -74,7 +75,7 @@ function SetRow({
         />
       </View>
       <View style={styles.setField}>
-        <Text style={styles.setFieldLabel}>Repos (s)</Text>
+        <Text style={styles.setFieldLabel}>{t('program.restLabel')}</Text>
         <TextInput
           value={String(set.restSeconds)}
           onChangeText={(v) => onChange({ restSeconds: parseInt(v) || 0 })}
@@ -163,12 +164,12 @@ function ExerciseCard({
           {catalogExercise ? <ExerciseThumbnail id={catalogExercise.id} size={44} /> : null}
           <View style={styles.exercisePickerBody}>
             <Text style={styles.exercisePickerName} numberOfLines={1}>
-              {exerciseName ?? 'Choisir un exercice'}
+              {exerciseName ?? t('progress.chooseExercise')}
             </Text>
             <Text style={styles.exercisePickerMeta} numberOfLines={1}>
               {catalogExercise
                 ? `${translateMuscle(catalogExercise.target)} · ${translateEquipment(catalogExercise.equipment)}`
-                : 'Appuyer pour choisir'}
+                : t('program.tapToChoose')}
             </Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
@@ -181,7 +182,7 @@ function ExerciseCard({
       {catalogExercise ? (
         <TouchableOpacity style={styles.changeBtn} onPress={onSelectExercise} activeOpacity={0.7}>
           <Ionicons name="swap-horizontal" size={15} color={c.primary} />
-          <Text style={styles.changeLabel}>Changer l&apos;exercice</Text>
+          <Text style={styles.changeLabel}>{t('program.changeExercise')}</Text>
         </TouchableOpacity>
       ) : null}
 
@@ -201,7 +202,7 @@ function ExerciseCard({
             return (
               <View key={alternativeId} style={styles.alternativeChip}>
                 <Text style={styles.alternativeChipText} numberOfLines={1}>
-                  {alternative ? getExerciseDisplayName(alternative) : 'Exercice inconnu'}
+                  {alternative ? getExerciseDisplayName(alternative) : t('program.unknownExercise')}
                 </Text>
                 <TouchableOpacity onPress={() => removeAlternative(alternativeId)} hitSlop={8}>
                   <Ionicons name="close" size={14} color={c.primary} />
@@ -211,7 +212,7 @@ function ExerciseCard({
           })}
           <TouchableOpacity style={styles.addAlternativeBtn} onPress={onAddAlternative}>
             <Ionicons name="add" size={15} color={c.primary} />
-            <Text style={styles.addAlternativeLabel}>Ajouter une alternative</Text>
+            <Text style={styles.addAlternativeLabel}>{t('program.addAlternative')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -252,7 +253,7 @@ function ExerciseCard({
 
       <TouchableOpacity style={styles.addSetBtn} onPress={addSet}>
         <Ionicons name="add" size={16} color={c.primary} />
-        <Text style={styles.addSetLabel}>Ajouter une série</Text>
+        <Text style={styles.addSetLabel}>{t('program.addSet')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -282,7 +283,7 @@ export default function DayEditScreen() {
   if (!program || !day) {
     return (
       <SafeAreaView style={styles.safe}>
-        <EmptyState icon="alert-circle-outline" title="Jour introuvable" />
+        <EmptyState icon="alert-circle-outline" title={t('program.dayNotFound')} />
       </SafeAreaView>
     );
   }
@@ -350,7 +351,7 @@ export default function DayEditScreen() {
   };
 
   const handleDeleteExercise = (exId: string, exName: string) => {
-    appAlert(t('foods.deleteTitle'), t('dialog.deleteExerciseMessage', { name: exName || 'cet exercice' }), [
+    appAlert(t('foods.deleteTitle'), t('dialog.deleteExerciseMessage', { name: exName || t('program.thisExercise') }), [
       { text: t('common.cancel'), style: 'cancel' },
       { text: t('common.delete'), style: 'destructive', onPress: () => deleteExerciseFromDay(id, dayId, exId) },
     ]);
@@ -415,8 +416,8 @@ export default function DayEditScreen() {
           ListEmptyComponent={
             <EmptyState
               icon="fitness-outline"
-              title="Aucun exercice"
-              subtitle="Ajoutez votre premier exercice"
+              title={t('exercise.none')}
+              subtitle={t('program.noExercisesHelp')}
             />
           }
           contentContainerStyle={day.exercises.length === 0 ? styles.emptyContainer : styles.list}
@@ -424,7 +425,7 @@ export default function DayEditScreen() {
         />
 
         <View style={styles.footer}>
-          <Button title="+ Ajouter un exercice" variant="secondary" onPress={() => openSelector(null)} />
+          <Button title={t('program.addExercise')} variant="secondary" onPress={() => openSelector(null)} />
         </View>
 
         <Modal visible={selectorOpen} animationType="slide" onRequestClose={closeSelector}>
@@ -434,7 +435,7 @@ export default function DayEditScreen() {
                 <Ionicons name="close" size={24} color={c.textPrimary} />
               </TouchableOpacity>
               <Text style={styles.selectorTitle}>
-                {alternativesTargetId ? 'Ajouter une alternative' : 'Choisir un exercice'}
+                {alternativesTargetId ? t('program.addAlternative') : t('progress.chooseExercise')}
               </Text>
               <View style={{ width: 24 }} />
             </View>

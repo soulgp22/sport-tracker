@@ -66,6 +66,7 @@ function SessionLogBar({
 }) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const [reps, setReps] = useState(() =>
     String(loggedSet.completed ? loggedSet.actualReps : loggedSet.targetReps)
   );
@@ -84,11 +85,11 @@ function SessionLogBar({
   return (
     <View style={styles.logBar}>
       <Text style={styles.logTitle} numberOfLines={1}>
-        {exerciseName} — Série {setIndex + 1}/{exercise.sets.length}
+        {t('session.logTitle', { name: exerciseName, index: setIndex + 1, total: exercise.sets.length })}
       </Text>
       <View style={styles.logRow}>
         <View style={styles.logField}>
-          <Text style={styles.logFieldLabel}>Reps</Text>
+          <Text style={styles.logFieldLabel}>{t('session.reps')}</Text>
           <TextInput
             value={reps}
             onChangeText={setReps}
@@ -98,7 +99,7 @@ function SessionLogBar({
           />
         </View>
         <View style={styles.logField}>
-          <Text style={styles.logFieldLabel}>Poids (kg)</Text>
+          <Text style={styles.logFieldLabel}>{t('progress.weightPlaceholder')}</Text>
           <TextInput
             value={weight}
             onChangeText={setWeight}
@@ -108,7 +109,7 @@ function SessionLogBar({
           />
         </View>
         <Button
-          title={loggedSet.completed ? 'Modifier' : 'Logger'}
+          title={loggedSet.completed ? t('common.edit') : t('session.logButton')}
           onPress={handleSubmit}
           style={styles.logBtn}
         />
@@ -302,7 +303,7 @@ export default function ActiveSessionScreen() {
         <View style={styles.progressTrack}>
           <View style={[styles.progressFill, { width: `${totalSets > 0 ? (completedSets / totalSets) * 100 : 0}%` }]} />
         </View>
-        <Text style={styles.progressLabel}>{completedSets}/{totalSets} séries · appuie sur un exercice pour le faire dans l&apos;ordre que tu veux</Text>
+        <Text style={styles.progressLabel}>{t('session.progressLabel', { done: completedSets, total: totalSets })}</Text>
 
         {/* Exercise list (ordre libre : tape un exo ou une série) */}
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -331,7 +332,7 @@ export default function ActiveSessionScreen() {
                 style={[styles.exSection, isCurrentEx && styles.exSectionActive]}>
                 <View style={styles.exRow}>
                   <Text style={[styles.exName, isCurrentEx && styles.exNameActive]} numberOfLines={1}>
-                    {exerciseName || `Exercice ${ei + 1}`}
+                    {exerciseName || t('session.exerciseFallback', { index: ei + 1 })}
                   </Text>
                   {exDone ? <Ionicons name="checkmark-circle" size={18} color={c.success} /> : null}
                   {hasAlternatives ? (
@@ -343,7 +344,7 @@ export default function ActiveSessionScreen() {
                       hitSlop={8}
                       style={styles.replaceBtn}>
                       <Ionicons name="swap-horizontal" size={16} color={c.primary} />
-                      <Text style={styles.replaceLabel}>Remplacer</Text>
+                      <Text style={styles.replaceLabel}>{t('session.replace')}</Text>
                     </TouchableOpacity>
                   ) : null}
                   <TouchableOpacity onPress={() => setDetailId(ex.exerciseId)} hitSlop={8} style={styles.infoBtn}>
@@ -407,7 +408,7 @@ export default function ActiveSessionScreen() {
             <TouchableOpacity onPress={closeReplacementModal} hitSlop={8} style={styles.headerBtn}>
               <Ionicons name="close" size={24} color={c.textPrimary} />
             </TouchableOpacity>
-            <Text style={styles.replacementTitle}>Remplacer l&apos;exercice</Text>
+            <Text style={styles.replacementTitle}>{t('session.replaceTitle')}</Text>
             <View style={{ width: 36 }} />
           </View>
           <ScrollView contentContainerStyle={styles.replacementList}>
@@ -416,7 +417,7 @@ export default function ActiveSessionScreen() {
               const selected = alternativeId === replacementExercise?.exerciseId;
               const alternativeName = alternative
                 ? getExerciseDisplayName(alternative)
-                : 'Exercice inconnu';
+                : t('session.unknownExercise');
               return (
                 <TouchableOpacity
                   key={alternativeId}

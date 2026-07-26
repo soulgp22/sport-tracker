@@ -12,11 +12,13 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 import type { Program, ProgramDay } from '../../../types';
 
 export default function SessionScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const router = useRouter();
   const programs = useProgramStore((s) => s.programs);
   const startSession = useActiveSessionStore((s) => s.startSession);
@@ -31,9 +33,9 @@ export default function SessionScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.resumeContainer}>
           <Ionicons name="play-circle" size={64} color={c.primary} />
-          <Text style={styles.resumeTitle}>Séance en cours</Text>
+          <Text style={styles.resumeTitle}>{t('session.resumeTitle')}</Text>
           <Text style={styles.resumeSub}>{active.programName} — {active.dayName}</Text>
-          <Button title="Reprendre" onPress={() => router.push('/(tabs)/session/active')} style={styles.resumeBtn} />
+          <Button title={t('session.resume')} onPress={() => router.push('/(tabs)/session/active')} style={styles.resumeBtn} />
         </View>
       </SafeAreaView>
     );
@@ -50,8 +52,8 @@ export default function SessionScreen() {
       {programs.length === 0 ? (
         <EmptyState
           icon="barbell-outline"
-          title="Aucun programme"
-          subtitle="Créez d'abord un programme dans l'onglet Programmes"
+          title={t('session.noPrograms')}
+          subtitle={t('session.noProgramsSubtitle')}
         />
       ) : (
         <FlatList
@@ -87,7 +89,7 @@ export default function SessionScreen() {
                       color={selectedDay?.id === day.id ? c.primary : c.textMuted}
                     />
                     <Text style={styles.dayName}>{day.name}</Text>
-                    <Text style={styles.dayMeta}>{day.exercises.length} exercices</Text>
+                    <Text style={styles.dayMeta}>{t('session.dayExercises', { count: day.exercises.length })}</Text>
                   </TouchableOpacity>
                 ))}
             </View>
@@ -98,7 +100,7 @@ export default function SessionScreen() {
 
       {selectedDay && (
         <View style={styles.footer}>
-          <Button title={`Démarrer — ${selectedDay.name}`} onPress={handleStart} />
+          <Button title={t('session.startDay', { day: selectedDay.name })} onPress={handleStart} />
         </View>
       )}
     </SafeAreaView>

@@ -113,7 +113,7 @@ export function ExerciseCatalogList({
     <View style={styles.wrapper}>
       {onBrowseDownloads ? <TouchableOpacity style={styles.downloadBanner} onPress={onBrowseDownloads} activeOpacity={0.78}>
         <View style={styles.downloadIcon}><Ionicons name="cloud-download-outline" size={20} color={c.primary} /></View>
-        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? 'Catalogue téléchargé' : 'Plus d’exercices'}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? `${exercises.length} exercices disponibles · vérifier les mises à jour` : 'Télécharger gratuitement le catalogue GitHub'}</Text></View>
+        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? t('exercise.catalogDownloaded') : t('exercise.moreExercises')}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? t('exercise.catalogDownloadedMeta', { count: exercises.length }) : t('exercise.catalogDownloadMeta')}</Text></View>
         <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
       </TouchableOpacity> : null}
       <View style={styles.searchBox}>

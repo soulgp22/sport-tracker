@@ -9,6 +9,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
+import { useTranslation } from '../../../i18n/useTranslation';
 import type { Session } from '../../../types';
 
 function fmt(secs: number) {
@@ -20,18 +21,19 @@ function fmt(secs: number) {
 function SessionCard({ session, onPress }: { session: Session; onPress: () => void }) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t, locale } = useTranslation();
   const date = new Date(session.date);
-  const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+  const dateStr = date.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
   const totalSets = session.exercises.reduce((sum, ex) => sum + ex.sets.filter((s) => s.completed).length, 0);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
       <View style={styles.cardLeft}>
         <Text style={styles.cardDate}>{dateStr}</Text>
-        <Text style={styles.cardTitle}>{session.programName ?? 'Séance libre'}</Text>
+        <Text style={styles.cardTitle}>{session.programName ?? t('history.freeSession')}</Text>
         {session.dayName ? <Text style={styles.cardSub}>{session.dayName}</Text> : null}
         <Text style={styles.cardMeta}>
-          {session.exercises.length} exercice{session.exercises.length !== 1 ? 's' : ''} · {totalSets} série{totalSets !== 1 ? 's' : ''} · {fmt(session.durationSeconds)}
+          {t('history.cardMeta', { exercises: session.exercises.length, sets: totalSets, duration: fmt(session.durationSeconds) })}
         </Text>
       </View>
       <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
@@ -42,6 +44,7 @@ function SessionCard({ session, onPress }: { session: Session; onPress: () => vo
 export default function HistoryScreen() {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
+  const { t } = useTranslation();
   const router = useRouter();
   const sessions = useSessionStore((s) => s.sessions);
 
@@ -56,8 +59,8 @@ export default function HistoryScreen() {
         ListEmptyComponent={
           <EmptyState
             icon="time-outline"
-            title="Aucune séance"
-            subtitle="Démarrez votre première séance"
+            title={t('history.emptyTitle')}
+            subtitle={t('history.emptySubtitle')}
           />
         }
         contentContainerStyle={sessions.length === 0 ? styles.emptyContainer : styles.list}

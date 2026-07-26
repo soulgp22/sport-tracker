@@ -45,13 +45,14 @@ function DayRow({
   onDelete: () => void;
 }) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <TouchableOpacity style={styles.dayRow} onPress={onEdit} activeOpacity={0.75}>
       <View style={styles.dayBody}>
         <Text style={styles.dayName}>{day.name}</Text>
         <Text style={styles.dayMeta}>
-          {day.exercises.length} exercice{day.exercises.length !== 1 ? 's' : ''}
+          {t(day.exercises.length !== 1 ? 'program.exerciseCount.other' : 'program.exerciseCount.one', { count: day.exercises.length })}
         </Text>
       </View>
       {issueCount > 0 ? (
@@ -97,7 +98,7 @@ export default function ProgramDetailScreen() {
   if (!program || !compatibility) {
     return (
       <SafeAreaView style={styles.safe}>
-        <EmptyState icon="alert-circle-outline" title="Programme introuvable" />
+        <EmptyState icon="alert-circle-outline" title={t('program.notFound')} />
       </SafeAreaView>
     );
   }
@@ -215,7 +216,7 @@ export default function ProgramDetailScreen() {
               return (
                 <View key={issue.programExerciseId} style={styles.replacementPreview}>
                   <Text style={styles.replacementFrom} numberOfLines={1}>
-                    {source ? getExerciseDisplayName(source, language) : 'Exercice'}
+                    {source ? getExerciseDisplayName(source, language) : t('program.exerciseFallback')}
                   </Text>
                   <Ionicons name="arrow-forward" size={15} color={c.textMuted} />
                   <Text style={styles.replacementTo} numberOfLines={1}>
@@ -238,7 +239,7 @@ export default function ProgramDetailScreen() {
         )}
       </View>
 
-      <Text style={styles.sectionLabel}>Jours d&apos;entraînement</Text>
+      <Text style={styles.sectionLabel}>{t('program.trainingDays')}</Text>
     </View>
   );
 
@@ -291,8 +292,8 @@ export default function ProgramDetailScreen() {
           ListEmptyComponent={
             <EmptyState
               icon="calendar-outline"
-              title="Aucun jour"
-              subtitle="Ajoutez un premier jour (ex : Push, Pull, Legs…)"
+              title={t('program.noDays')}
+              subtitle={t('program.noDaysHelp')}
             />
           }
           contentContainerStyle={styles.list}
@@ -302,7 +303,7 @@ export default function ProgramDetailScreen() {
           {addingDay ? (
             <View style={styles.addDayForm}>
               <TextInput
-                placeholder="Nom du jour (ex : Push)"
+                placeholder={t('program.dayNamePlaceholder')}
                 value={newDayName}
                 onChangeText={setNewDayName}
                 autoFocus

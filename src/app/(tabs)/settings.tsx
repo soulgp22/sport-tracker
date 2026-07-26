@@ -133,8 +133,17 @@ function getAiProgramPrompt(programDescription: string) {
   return combineAiProgramPrompt(cachedAiProgramPrompt, programDescription);
 }
 
-function profileSummary(data: ProfileBackup['data']) {
-  return `${data.programs.length} programme(s), ${data.sessions.length} séance(s), ${data.customFoods.length} aliment(s), ${data.foodDiaryEntries.length} entrée(s) nutrition, ${data.bodyWeightEntries.length} pesée(s).`;
+function profileSummary(
+  data: ProfileBackup['data'],
+  t: (key: string, variables?: Record<string, string | number>) => string
+) {
+  return t('dialog.restoreSummary', {
+    programs: data.programs.length,
+    sessions: data.sessions.length,
+    foods: data.customFoods.length,
+    entries: data.foodDiaryEntries.length,
+    weights: data.bodyWeightEntries.length,
+  });
 }
 
 export default function SettingsScreen() {
@@ -225,7 +234,7 @@ export default function SettingsScreen() {
       try {
         await Sharing.shareAsync(file.uri, {
           mimeType: 'application/json',
-          dialogTitle: 'Sauvegarder mon profil Life Sport Tracker',
+          dialogTitle: `${t('settings.saveProfile')} Life Sport Tracker`,
           UTI: 'public.json',
         });
       } finally {
@@ -248,7 +257,7 @@ export default function SettingsScreen() {
         entries: foodDiaryEntriesCount,
         goals: nutritionGoals.goalType,
         weights: bodyWeightEntriesCount,
-        summary: profileSummary(backup.data)
+        summary: profileSummary(backup.data, t)
       }),
       [
         { text: t('common.cancel'), style: 'cancel' },
@@ -257,7 +266,7 @@ export default function SettingsScreen() {
           style: 'destructive',
           onPress: () => {
             restoreProfileBackup(backup);
-            appAlert(t('dialog.restoreSuccess'), profileSummary(backup.data));
+            appAlert(t('dialog.restoreSuccess'), profileSummary(backup.data, t));
           },
         },
       ]
@@ -692,7 +701,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.aiProgram')}</Text>
           <Text style={styles.helpText}>
-            Copie ce prompt avec le bouton ci-dessous, puis colle-le dans ChatGPT/Claude pour générer un programme, et importe le JSON obtenu.
+            {t('settings.aiProgramHelp')}
           </Text>
 
           <TextInput
@@ -720,7 +729,7 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.importFormat')}</Text>
           <Text style={styles.helpText}>
-            Importez un fichier JSON exporté par l&apos;app. Les exercices absents du catalogue sont ignorés après confirmation. Exemple :
+            {t('settings.importFormatHelp')}
           </Text>
           <View style={styles.codeBlock}>
             <Text style={styles.code}>
@@ -774,7 +783,7 @@ export default function SettingsScreen() {
           />
 
           <Button
-            title={`${t('dialog.deleteAllConfirm')} (${programsCount} prog., ${sessionsCount} s\u00e9ances)`}
+            title={`${t('dialog.deleteAllConfirm')} (${t('settings.deleteAllCounts', { programs: programsCount, sessions: sessionsCount })})`}
             variant="danger"
             onPress={handleDeleteAll}
             disabled={programsCount === 0 && sessionsCount === 0}

@@ -18,6 +18,7 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import type { GoalType, NutritionGoals } from '../../../types';
 
@@ -25,10 +26,10 @@ type RequiredGoalField = 'dailyCalories' | 'protein' | 'carbs' | 'fat';
 type OptionalWeightField = 'currentWeight' | 'targetWeight';
 type GoalField = RequiredGoalField | OptionalWeightField;
 
-const goalTypes: { label: string; value: GoalType }[] = [
-  { label: 'Perte', value: 'loss' },
-  { label: 'Maintien', value: 'maintenance' },
-  { label: 'Prise de masse', value: 'gain' },
+const goalTypes: { labelKey: string; value: GoalType }[] = [
+  { labelKey: 'nutrition.goals.type.loss', value: 'loss' },
+  { labelKey: 'nutrition.goals.type.maintenance', value: 'maintenance' },
+  { labelKey: 'nutrition.goals.type.gain', value: 'gain' },
 ];
 
 function numberToInput(value: number | undefined) {
@@ -52,6 +53,7 @@ function parseOptionalNumber(value: string) {
 }
 
 export default function NutritionGoalsScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
@@ -89,7 +91,7 @@ export default function NutritionGoalsScreen() {
     requiredFields.forEach((field) => {
       const parsed = parseRequiredNumber(values[field]);
       if (parsed < 0) {
-        nextErrors[field] = 'La valeur doit être supérieure ou égale à 0.';
+        nextErrors[field] = t('nutrition.goals.errorNonNegative');
         return;
       }
 
@@ -99,7 +101,7 @@ export default function NutritionGoalsScreen() {
     weightFields.forEach((field) => {
       const parsed = parseOptionalNumber(values[field]);
       if (parsed !== undefined && parsed < 0) {
-        nextErrors[field] = 'La valeur doit être supérieure ou égale à 0.';
+        nextErrors[field] = t('nutrition.goals.errorNonNegative');
         return;
       }
 
@@ -125,7 +127,7 @@ export default function NutritionGoalsScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Objectifs</Text>
+        <Text style={styles.heading}>{t('nutrition.goals.title')}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -135,7 +137,7 @@ export default function NutritionGoalsScreen() {
         keyboardVerticalOffset={keyboardVerticalOffset}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Objectif</Text>
+            <Text style={styles.sectionTitle}>{t('nutrition.goals.objective')}</Text>
             <View style={styles.goalTypeRow}>
               {goalTypes.map((item) => {
                 const selected = item.value === goalType;
@@ -147,7 +149,7 @@ export default function NutritionGoalsScreen() {
                     onPress={() => setGoalType(item.value)}
                     activeOpacity={0.75}>
                     <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </Text>
                   </TouchableOpacity>
                 );
@@ -156,9 +158,9 @@ export default function NutritionGoalsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Apports quotidiens</Text>
+            <Text style={styles.sectionTitle}>{t('nutrition.goals.dailyIntake')}</Text>
             <TextInput
-              label="Calories quotidiennes"
+              label={t('nutrition.goals.dailyCalories')}
               value={values.dailyCalories}
               onChangeText={(value) => setValue('dailyCalories', value)}
               error={errors.dailyCalories}
@@ -169,7 +171,7 @@ export default function NutritionGoalsScreen() {
             <View style={styles.twoColumns}>
               <View style={styles.columnField}>
                 <TextInput
-                  label="Protéines (g)"
+                  label={t('nutrition.form.protein')}
                   value={values.protein}
                   onChangeText={(value) => setValue('protein', value)}
                   error={errors.protein}
@@ -179,7 +181,7 @@ export default function NutritionGoalsScreen() {
               </View>
               <View style={styles.columnField}>
                 <TextInput
-                  label="Glucides (g)"
+                  label={t('nutrition.form.carbs')}
                   value={values.carbs}
                   onChangeText={(value) => setValue('carbs', value)}
                   error={errors.carbs}
@@ -190,7 +192,7 @@ export default function NutritionGoalsScreen() {
             </View>
 
             <TextInput
-              label="Lipides (g)"
+              label={t('nutrition.form.fat')}
               value={values.fat}
               onChangeText={(value) => setValue('fat', value)}
               error={errors.fat}
@@ -200,32 +202,32 @@ export default function NutritionGoalsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Poids</Text>
+            <Text style={styles.sectionTitle}>{t('nutrition.goals.weightSection')}</Text>
             <View style={styles.twoColumns}>
               <View style={styles.columnField}>
                 <TextInput
-                  label="Poids actuel (kg)"
+                  label={t('nutrition.goals.currentWeight')}
                   value={values.currentWeight}
                   onChangeText={(value) => setValue('currentWeight', value)}
                   error={errors.currentWeight}
                   keyboardType="numeric"
-                  placeholder="Optionnel"
+                  placeholder={t('nutrition.form.optional')}
                 />
               </View>
               <View style={styles.columnField}>
                 <TextInput
-                  label="Poids cible (kg)"
+                  label={t('nutrition.goals.targetWeight')}
                   value={values.targetWeight}
                   onChangeText={(value) => setValue('targetWeight', value)}
                   error={errors.targetWeight}
                   keyboardType="numeric"
-                  placeholder="Optionnel"
+                  placeholder={t('nutrition.form.optional')}
                 />
               </View>
             </View>
           </View>
 
-          <Button title="Enregistrer" onPress={handleSubmit} style={styles.submitButton} />
+          <Button title={t('common.save')} onPress={handleSubmit} style={styles.submitButton} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

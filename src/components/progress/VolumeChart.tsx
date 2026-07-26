@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 import type { DataPoint } from '../../hooks/useProgressData';
+import { useTranslation } from '../../i18n/useTranslation';
 import { fonts } from '../../theme/fonts';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
@@ -12,11 +13,12 @@ interface VolumeChartProps {
 
 export function VolumeChart({ data }: VolumeChartProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text style={styles.emptyText}>Pas encore de données</Text>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </View>
     );
   }
@@ -29,7 +31,7 @@ export function VolumeChart({ data }: VolumeChartProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Volume (kg·reps)</Text>
+      <Text style={styles.title}>{t('progress.volumeTitle')}</Text>
       <BarChart
         data={chartData}
         height={180}

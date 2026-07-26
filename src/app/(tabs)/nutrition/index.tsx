@@ -13,6 +13,7 @@ import {
   calculateGoalProgress,
   calculateRemainingGoals,
 } from '../../../lib/nutritionCalc';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 
@@ -30,6 +31,7 @@ function roundedMacro(value: number) {
 }
 
 export default function NutritionScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
@@ -57,7 +59,7 @@ export default function NutritionScreen() {
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Aujourd&apos;hui</Text>
+          <Text style={styles.cardTitle}>{t('nutrition.today')}</Text>
 
           <View style={styles.caloriesBlock}>
             <Text style={styles.caloriesValue}>
@@ -65,13 +67,13 @@ export default function NutritionScreen() {
             </Text>
             <Text style={[styles.remaining, remaining.calories < 0 ? styles.overGoal : null]}>
               {remaining.calories >= 0
-                ? `Restant : ${remaining.calories} kcal`
-                : `Dépassé de ${Math.abs(remaining.calories)} kcal`}
+                ? t('nutrition.remaining', { count: remaining.calories })
+                : t('nutrition.overGoal', { count: Math.abs(remaining.calories) })}
             </Text>
           </View>
 
           <MacroBar
-            label="Calories"
+            label={t('nutrition.form.calories')}
             current={totals.calories}
             goal={goals.dailyCalories}
             unit="kcal"
@@ -80,25 +82,25 @@ export default function NutritionScreen() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Macros</Text>
+          <Text style={styles.cardTitle}>{t('nutrition.macros')}</Text>
 
           <View style={styles.macroBars}>
             <MacroBar
-              label="Protéines"
+              label={t('nutrition.facts.protein')}
               current={roundedMacro(totals.protein)}
               goal={roundedMacro(goals.protein)}
               unit="g"
               percent={progress.protein}
             />
             <MacroBar
-              label="Glucides"
+              label={t('nutrition.facts.carbs')}
               current={roundedMacro(totals.carbs)}
               goal={roundedMacro(goals.carbs)}
               unit="g"
               percent={progress.carbs}
             />
             <MacroBar
-              label="Lipides"
+              label={t('nutrition.facts.fat')}
               current={roundedMacro(totals.fat)}
               goal={roundedMacro(goals.fat)}
               unit="g"
@@ -109,20 +111,20 @@ export default function NutritionScreen() {
 
         <View style={styles.actions}>
           <Button
-            title="Ajouter un repas"
+            title={t('nutrition.addMeal')}
             onPress={() => router.push('/(tabs)/nutrition/add' as never)}
           />
           <Button
-            title="Journal du jour"
+            title={t('nutrition.diaryTitle')}
             onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
           />
           <Button
-            title="Tendance calories"
+            title={t('nutrition.historyTitle')}
             variant="secondary"
             onPress={() => router.push('/(tabs)/nutrition/history' as never)}
           />
           <Button
-            title="Objectifs"
+            title={t('nutrition.goals.title')}
             variant="secondary"
             onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
           />

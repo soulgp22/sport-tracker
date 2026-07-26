@@ -9,19 +9,21 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { getCalorieTrend } from '../../../lib/nutritionCalc';
+import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 
 const periods = [
-  { label: '7 j', days: 7, bucket: 'day' },
-  { label: '30 j', days: 30, bucket: 'day' },
-  { label: '3 mois', days: 90, bucket: 'week' },
-  { label: '1 an', days: 365, bucket: 'month' },
+  { labelKey: 'nutrition.history.period7d', days: 7, bucket: 'day' },
+  { labelKey: 'nutrition.history.period30d', days: 30, bucket: 'day' },
+  { labelKey: 'nutrition.history.period3m', days: 90, bucket: 'week' },
+  { labelKey: 'nutrition.history.period1y', days: 365, bucket: 'month' },
 ] as const;
 
 type Period = (typeof periods)[number];
 
 export default function NutritionHistoryScreen() {
+  const { t } = useTranslation();
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
@@ -47,23 +49,23 @@ export default function NutritionHistoryScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Tendance calories</Text>
+        <Text style={styles.heading}>{t('nutrition.historyTitle')}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.periodRow}>
           {periods.map((item) => {
-            const selected = item.label === selectedPeriod.label;
+            const selected = item.labelKey === selectedPeriod.labelKey;
 
             return (
               <TouchableOpacity
-                key={item.label}
+                key={item.labelKey}
                 style={[styles.chip, selected && styles.chipSelected]}
                 onPress={() => setSelectedPeriod(item)}
                 activeOpacity={0.75}>
                 <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                  {item.label}
+                  {t(item.labelKey)}
                 </Text>
               </TouchableOpacity>
             );
@@ -72,12 +74,16 @@ export default function NutritionHistoryScreen() {
 
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Moyenne</Text>
-            <Text style={styles.statValue}>{trend.averagePerDay} kcal/j</Text>
+            <Text style={styles.statLabel}>{t('nutrition.history.average')}</Text>
+            <Text style={styles.statValue}>
+              {trend.averagePerDay} {t('nutrition.history.kcalPerDay')}
+            </Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Objectif</Text>
-            <Text style={styles.statValue}>{goals.dailyCalories} kcal/j</Text>
+            <Text style={styles.statLabel}>{t('nutrition.goals.objective')}</Text>
+            <Text style={styles.statValue}>
+              {goals.dailyCalories} {t('nutrition.history.kcalPerDay')}
+            </Text>
           </View>
         </View>
 
