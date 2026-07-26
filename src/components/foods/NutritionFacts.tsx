@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import type { FoodNutrition } from '../../types';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -89,11 +90,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderColor: c.border,
   },
   header: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 },
-  title: { fontSize: 18, fontWeight: '800', color: c.textPrimary },
+  title: { fontSize: 18, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   subtitle: { fontSize: 13, color: c.textSecondary },
   caloriesRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
-  caloriesValue: { fontSize: 34, fontWeight: '800', color: c.primary },
-  caloriesLabel: { fontSize: 16, fontWeight: '700', color: c.primary },
+  caloriesValue: { fontSize: 34, fontFamily: fonts.sansHeavy, color: c.primary },
+  caloriesLabel: { fontSize: 16, fontFamily: fonts.sansBold, color: c.primary },
   macroGrid: { flexDirection: 'row', gap: 8 },
   cell: {
     flex: 1,
@@ -102,7 +103,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     padding: 10,
     gap: 3,
   },
-  cellValue: { fontSize: 16, fontWeight: '800', color: c.textPrimary },
+  cellValue: { fontSize: 16, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   cellLabel: { fontSize: 11, color: c.textSecondary },
   details: {
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -112,5 +113,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   detailRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },
   detailLabel: { fontSize: 14, color: c.textSecondary },
-  detailValue: { fontSize: 14, fontWeight: '700', color: c.textPrimary },
+  detailValue: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
 });

@@ -4,6 +4,7 @@ import { Link, Stack, useRouter } from 'expo-router';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
 
@@ -43,7 +44,7 @@ export default function ProgramsLayout() {
         headerShown: false,
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
-        headerTitleStyle: { fontWeight: '700' },
+        headerTitleStyle: { fontFamily: fonts.sansBold },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>
@@ -76,7 +77,7 @@ export default function ProgramsLayout() {
                   activeOpacity={0.7}
                   accessibilityRole="button"
                   accessibilityLabel="Créer un programme">
-                  <Ionicons name="add" size={22} color={c.primaryText} />
+                  <Ionicons name="add" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>
             </View>
@@ -94,16 +95,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     gap: 8,
   },
   iconButton: {
-    width: 44,
-    height: 44,
+    width: 36,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
   },
   addButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: c.primary,
+    width: 36,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
   },

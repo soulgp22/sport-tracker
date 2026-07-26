@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CalorieTrendChart } from '../../../components/nutrition/CalorieTrendChart';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { getCalorieTrend } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
@@ -97,7 +98,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
   content: { padding: 16, gap: 18, paddingBottom: 32 },
   periodRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -111,25 +112,29 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderColor: c.border,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
-  chipText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  chipText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
   statsRow: { flexDirection: 'row', gap: 10 },
   statCard: {
     flex: 1,
     backgroundColor: c.surface,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: c.border,
-    padding: 16,
+    padding: 14,
     gap: 6,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
-  statLabel: { fontSize: 13, fontWeight: '700', color: c.textSecondary },
-  statValue: { fontSize: 20, fontWeight: '800', color: c.textPrimary },
+  statLabel: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
+  statValue: { fontSize: 20, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   chartCard: {
     backgroundColor: c.surface,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: c.border,
-    padding: 16,
+    padding: 14,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
 });

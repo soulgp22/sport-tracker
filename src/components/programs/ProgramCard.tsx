@@ -7,6 +7,7 @@ import { getEquipmentProfile } from '../../constants/equipmentProfiles';
 import { useTranslation } from '../../i18n/useTranslation';
 import type { Program } from '../../types';
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 
 interface ProgramCardProps {
@@ -44,15 +45,14 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
 
       <View style={styles.actions}>
         <TouchableOpacity
-          style={styles.deleteBtn}
           onPress={(event) => {
             event.stopPropagation();
             onDelete();
           }}
           hitSlop={6}>
-          <Ionicons name="trash-outline" size={19} color={c.danger} />
+          <Ionicons name="trash-outline" size={20} color={c.danger} />
         </TouchableOpacity>
-        <Ionicons name="chevron-forward" size={19} color={c.textMuted} />
+        <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
       </View>
     </TouchableOpacity>
   );
@@ -69,15 +69,12 @@ const makeStyles = (c: ThemeColors) =>
       marginVertical: 7,
       paddingHorizontal: 14,
       paddingVertical: 14,
-      borderRadius: 16,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: c.border,
+      borderRadius: 12,
       backgroundColor: c.surface,
       shadowColor: c.overlay,
-      shadowOpacity: 0.08,
-      shadowRadius: 8,
-      shadowOffset: { width: 0, height: 3 },
-      elevation: 2,
+      shadowOpacity: 0.05,
+      shadowRadius: 4,
+      elevation: 1,
     },
     logoColumn: {
       width: 68,
@@ -89,23 +86,15 @@ const makeStyles = (c: ThemeColors) =>
     name: {
       fontSize: 16,
       lineHeight: 20,
-      fontWeight: '700',
+      fontFamily: fonts.sansBold,
       color: c.textPrimary,
     },
     meta: { fontSize: 13, color: c.textSecondary },
-    profileName: { fontSize: 11, fontWeight: '700', color: c.primary },
+    profileName: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primary },
     actions: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 5,
       paddingLeft: 2,
-    },
-    deleteBtn: {
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: c.surfaceAlt,
     },
   });

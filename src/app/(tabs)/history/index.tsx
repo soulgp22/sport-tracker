@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import type { Session } from '../../../types';
 
@@ -74,7 +75,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     alignItems: 'center',
     backgroundColor: c.surface,
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
     shadowColor: c.overlay,
@@ -84,7 +85,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   cardLeft: { flex: 1, gap: 2 },
   cardDate: { fontSize: 12, color: c.textMuted, textTransform: 'capitalize' },
-  cardTitle: { fontSize: 17, fontWeight: '700', color: c.textPrimary },
-  cardSub: { fontSize: 14, color: c.primary, fontWeight: '500' },
+  cardTitle: { fontSize: 17, fontFamily: fonts.sansBold, color: c.textPrimary },
+  cardSub: { fontSize: 14, color: c.primary, fontFamily: fonts.sansSemi },
   cardMeta: { fontSize: 13, color: c.textSecondary, marginTop: 2 },
 });

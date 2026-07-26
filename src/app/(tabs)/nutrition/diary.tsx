@@ -12,6 +12,7 @@ import { appAlert } from '../../../components/ui/AppDialog';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { MEAL_LABELS, MEAL_ORDER } from '../../../constants/meals';
 import { calculateDailyTotals, calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -210,7 +211,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
   body: { flex: 1 },
   list: { flex: 1 },
@@ -223,8 +224,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 10,
   },
-  mealTitle: { flex: 1, fontSize: 16, fontWeight: '800', color: c.textPrimary },
-  mealSubtotal: { fontSize: 14, fontWeight: '800', color: c.primary },
+  mealTitle: { flex: 1, fontSize: 16, fontFamily: fonts.sansHeavy, color: c.textPrimary },
+  mealSubtotal: { fontSize: 14, fontFamily: fonts.sansHeavy, color: c.primary },
   footer: {
     padding: 16,
     borderTopWidth: StyleSheet.hairlineWidth,

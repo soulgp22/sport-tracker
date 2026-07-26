@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
+import { fonts } from '../../theme/fonts';
 import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
 import type { FoodEntry, MealType } from '../../types';
 import { TextInput } from '../ui/TextInput';
@@ -113,7 +114,7 @@ export function FoodEntryRow({
               onPress={cancelEdit}
               activeOpacity={0.75}
               accessibilityRole="button">
-              <Ionicons name="close" size={18} color={c.textSecondary} />
+              <Ionicons name="close" size={24} color={c.textSecondary} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconButton}
@@ -169,7 +170,7 @@ export function FoodEntryRow({
           onPress={() => onDeleteEntry(entry)}
           activeOpacity={0.75}
           accessibilityRole="button">
-          <Ionicons name="trash-outline" size={18} color={c.danger} />
+          <Ionicons name="trash-outline" size={20} color={c.danger} />
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -181,12 +182,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 14,
     marginHorizontal: 16,
     gap: 10,
-    borderWidth: 1,
-    borderColor: c.border,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   activeRow: {
     borderColor: c.primary,
@@ -198,9 +201,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     shadowRadius: 10,
   },
   body: { flex: 1, gap: 3 },
-  foodName: { fontSize: 16, fontWeight: '700', color: c.textPrimary },
+  foodName: { fontSize: 16, fontFamily: fonts.sansBold, color: c.textPrimary },
   meta: { fontSize: 13, color: c.textSecondary },
-  macros: { fontSize: 13, color: c.primary, fontWeight: '700' },
+  macros: { fontSize: 13, color: c.primary, fontFamily: fonts.sansBold },
   actions: { alignItems: 'flex-end', gap: 8 },
   textAction: {
     minHeight: 32,
@@ -210,14 +213,13 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: c.primary,
   },
-  textActionLabel: { fontSize: 12, fontWeight: '800', color: c.primary },
+  textActionLabel: { fontSize: 12, fontFamily: fonts.sansHeavy, color: c.primary },
   deleteButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: c.surfaceAlt,
   },
   moveButton: {
     width: 32,
@@ -231,7 +233,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   editControls: { flexDirection: 'row', alignItems: 'flex-start', gap: 8 },
   quantityField: { width: 96 },
   quantityInput: { minHeight: 40, paddingVertical: 8 },
-  unitLabel: { paddingTop: 11, fontSize: 14, fontWeight: '700', color: c.textSecondary },
+  unitLabel: { paddingTop: 11, fontSize: 14, fontFamily: fonts.sansBold, color: c.textSecondary },
   iconButton: {
     width: 40,
     height: 40,

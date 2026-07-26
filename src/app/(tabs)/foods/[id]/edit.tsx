@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FoodForm, type FoodFormValues } from '../../../../components/foods/FoodForm';
 import { EmptyState } from '../../../../components/ui/EmptyState';
 import { useColors } from '../../../../theme/useColors';
+import { fonts } from '../../../../theme/fonts';
 import type { ThemeColors } from '../../../../theme/palettes';
 import { useFoodStore } from '../../../../store/foodStore';
 import { useTranslation } from '../../../../i18n/useTranslation';
@@ -74,5 +75,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
 });

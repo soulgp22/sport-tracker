@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
 import type { ThemeColors } from '../../theme/palettes';
+import { fonts } from '../../theme/fonts';
 import type { Food } from '../../types';
 
 interface FoodRowProps {
@@ -57,7 +58,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
@@ -69,14 +70,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   body: { flex: 1, gap: 3 },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  name: { flex: 1, fontSize: 16, fontWeight: '700', color: c.textPrimary },
+  name: { flex: 1, fontSize: 16, fontFamily: fonts.sansBold, color: c.textPrimary },
   meta: { fontSize: 13, color: c.textSecondary },
-  preview: { fontSize: 13, color: c.primary, fontWeight: '600' },
+  preview: { fontSize: 13, color: c.primary, fontFamily: fonts.sansSemi },
   badge: {
     backgroundColor: c.secondary,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  badgeText: { fontSize: 11, fontWeight: '700', color: c.textPrimary },
+  badgeText: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primaryText },
 });

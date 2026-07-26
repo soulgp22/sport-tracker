@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 
 interface CalorieTrendDay {
@@ -78,7 +79,7 @@ export function CalorieTrendChart({ points, goal }: CalorieTrendChartProps) {
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8, paddingRight: 8 },
-  title: { fontSize: 14, fontWeight: '600', color: c.textPrimary },
+  title: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
   emptyText: { color: c.textMuted, fontSize: 13 },
   axisLabel: { fontSize: 10, color: c.textSecondary },

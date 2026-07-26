@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 
 interface CategoryChipsProps {
@@ -64,6 +65,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.primary,
     borderColor: c.primary,
   },
-  chipText: { fontSize: 13, fontWeight: '600', color: c.textPrimary },
+  chipText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
 });

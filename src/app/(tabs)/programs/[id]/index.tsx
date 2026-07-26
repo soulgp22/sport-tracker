@@ -28,6 +28,7 @@ import { analyzeProgramCompatibility } from '../../../../lib/exerciseRelations';
 import { useExerciseCatalogStore } from '../../../../store/exerciseCatalogStore';
 import { useProgramStore } from '../../../../store/programStore';
 import { useColors } from '../../../../theme/useColors';
+import { fonts } from '../../../../theme/fonts';
 import type { ThemeColors } from '../../../../theme/palettes';
 import type { ProgramDay } from '../../../../types';
 import type { EquipmentProfileId } from '../../../../types/equipment';
@@ -60,9 +61,9 @@ function DayRow({
         </View>
       ) : null}
       <TouchableOpacity onPress={onDelete} hitSlop={8} style={styles.deleteBtn}>
-        <Ionicons name="trash-outline" size={18} color={c.danger} />
+        <Ionicons name="trash-outline" size={20} color={c.danger} />
       </TouchableOpacity>
-      <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+      <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
     </TouchableOpacity>
   );
 }
@@ -341,13 +342,13 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   nameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   nameInput: { flex: 1 },
-  heading: { fontSize: 20, fontWeight: '700', color: c.textPrimary, flex: 1 },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary, flex: 1 },
   list: { paddingBottom: 16 },
   headerContent: { gap: 8 },
   compatibilityCard: {
@@ -356,14 +357,16 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginBottom: 8,
     padding: 14,
     gap: 12,
-    borderRadius: 16,
+    borderRadius: 12,
     backgroundColor: c.surface,
-    borderWidth: 1,
-    borderColor: c.border,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   compatibilityTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   compatibilityTitleCopy: { flex: 1, gap: 3 },
-  compatibilityTitle: { fontSize: 17, fontWeight: '800', color: c.textPrimary },
+  compatibilityTitle: { fontSize: 17, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   compatibilityHelp: { fontSize: 12, lineHeight: 17, color: c.textSecondary },
   equipmentRow: { gap: 8, paddingRight: 4 },
   equipmentChoice: {
@@ -379,7 +382,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 6,
   },
   equipmentChoiceSelected: { borderWidth: 2, borderColor: c.primary, backgroundColor: c.accentSoft },
-  equipmentChoiceText: { fontSize: 10, fontWeight: '700', color: c.textSecondary, textAlign: 'center' },
+  equipmentChoiceText: { fontSize: 10, fontFamily: fonts.sansBold, color: c.textSecondary, textAlign: 'center' },
   equipmentChoiceTextSelected: { color: c.primary },
   scoreRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   scoreCircle: {
@@ -392,12 +395,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderWidth: 3,
     borderColor: c.primary,
   },
-  scoreValue: { fontSize: 17, fontWeight: '900', color: c.primary },
+  scoreValue: { fontSize: 17, fontFamily: fonts.sansHeavy, color: c.primary },
   scoreCopy: { flex: 1, gap: 2 },
-  scoreTitle: { fontSize: 15, fontWeight: '800', color: c.textPrimary },
+  scoreTitle: { fontSize: 15, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   scoreMeta: { fontSize: 12, color: c.textSecondary },
-  scoreWarning: { fontSize: 12, fontWeight: '700', color: c.danger },
-  scoreSuccess: { fontSize: 12, fontWeight: '700', color: c.success },
+  scoreWarning: { fontSize: 12, fontFamily: fonts.sansBold, color: c.danger },
+  scoreSuccess: { fontSize: 12, fontFamily: fonts.sansBold, color: c.success },
   replacementPreview: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -408,11 +411,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surfaceAlt,
   },
   replacementFrom: { flex: 1, fontSize: 12, color: c.textSecondary },
-  replacementTo: { flex: 1, fontSize: 12, fontWeight: '700', color: c.primary },
+  replacementTo: { flex: 1, fontSize: 12, fontFamily: fonts.sansBold, color: c.primary },
   convertButton: { marginTop: 2 },
   sectionLabel: {
     fontSize: 13,
-    fontWeight: '600',
+    fontFamily: fonts.sansBold,
     color: c.textSecondary,
     paddingHorizontal: 16,
     paddingTop: 8,
@@ -424,7 +427,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 14,
     marginHorizontal: 16,
     marginVertical: 5,
@@ -434,7 +437,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   dayBody: { flex: 1, gap: 2 },
-  dayName: { fontSize: 16, fontWeight: '600', color: c.textPrimary },
+  dayName: { fontSize: 16, fontFamily: fonts.sansSemi, color: c.textPrimary },
   dayMeta: { fontSize: 13, color: c.textSecondary },
   issuePill: {
     flexDirection: 'row',
@@ -445,7 +448,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderRadius: 999,
     backgroundColor: c.accentSoft,
   },
-  issuePillText: { fontSize: 11, fontWeight: '800', color: c.danger },
+  issuePillText: { fontSize: 11, fontFamily: fonts.sansHeavy, color: c.danger },
   deleteBtn: { paddingHorizontal: 8 },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
   addDayForm: { gap: 10 },

@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
@@ -37,7 +38,7 @@ export default function FoodsLayout() {
         headerShown: false,
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
-        headerTitleStyle: { fontWeight: '700' },
+        headerTitleStyle: { fontFamily: fonts.sansBold },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>

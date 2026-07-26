@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../constants/keyboard';
 import { Button } from '../ui/Button';
@@ -351,7 +352,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: fonts.sansBold,
     color: c.textPrimary,
     borderBottomWidth: 1,
     borderBottomColor: c.border,
@@ -359,7 +360,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   categoryBlock: { gap: 6 },
   fieldBlock: { gap: 6 },
-  label: { fontSize: 14, fontWeight: '500', color: c.textPrimary },
+  label: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.textPrimary },
   unitRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   unitChip: {
     minHeight: 36,
@@ -371,7 +372,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderColor: c.border,
   },
   unitChipSelected: { backgroundColor: c.primary, borderColor: c.primary },
-  unitText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  unitText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   unitTextSelected: { color: c.primaryText },
   twoColumns: { flexDirection: 'row', gap: 10 },
   columnField: { flex: 1, minWidth: 0 },

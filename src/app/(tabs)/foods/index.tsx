@@ -10,6 +10,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -125,7 +126,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   empty: { flexGrow: 1 },
   sectionHeader: {
     fontSize: 13,
-    fontWeight: '700',
+    fontFamily: fonts.sansBold,
     color: c.textSecondary,
     paddingHorizontal: 16,
     paddingTop: 14,

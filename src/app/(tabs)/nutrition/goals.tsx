@@ -16,6 +16,7 @@ import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import type { GoalType, NutritionGoals } from '../../../types';
@@ -240,14 +241,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
   keyboardAvoiding: { flex: 1 },
   content: { padding: 16, gap: 22, paddingBottom: 32 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: fonts.sansBold,
     color: c.textPrimary,
     borderBottomWidth: 1,
     borderBottomColor: c.border,
@@ -264,7 +265,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderColor: c.border,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
-  chipText: { fontSize: 13, fontWeight: '700', color: c.textPrimary },
+  chipText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
   twoColumns: { flexDirection: 'row', gap: 10 },
   columnField: { flex: 1, minWidth: 0 },

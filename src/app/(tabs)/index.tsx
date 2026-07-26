@@ -32,7 +32,7 @@ interface HomeTile {
   labelKey: string;
   descriptionKey: string;
   icon: IoniconsName;
-  accent: string;
+  accent: 'primary' | 'secondary' | 'success' | 'danger';
   href:
     | '/(tabs)/programs'
     | '/(tabs)/exercises'
@@ -43,12 +43,12 @@ interface HomeTile {
 }
 
 const HOME_TILES: HomeTile[] = [
-  { key: 'programs', labelKey: 'home.programs', descriptionKey: 'home.programsDescription', icon: 'barbell', accent: '#2563EB', href: '/(tabs)/programs' },
-  { key: 'exercises', labelKey: 'home.exercises', descriptionKey: 'home.exercisesDescription', icon: 'accessibility', accent: '#8B5CF6', href: '/(tabs)/exercises' },
-  { key: 'nutrition', labelKey: 'home.nutrition', descriptionKey: 'home.nutritionDescription', icon: 'nutrition', accent: '#10B981', href: '/(tabs)/nutrition' },
-  { key: 'foods', labelKey: 'home.foods', descriptionKey: 'home.foodsDescription', icon: 'fast-food', accent: '#F59E0B', href: '/(tabs)/foods' },
-  { key: 'progress', labelKey: 'home.progress', descriptionKey: 'home.progressDescription', icon: 'analytics', accent: '#F43F5E', href: '/(tabs)/progress' },
-  { key: 'history', labelKey: 'home.history', descriptionKey: 'home.historyDescription', icon: 'pulse', accent: '#06B6D4', href: '/(tabs)/history' },
+  { key: 'programs', labelKey: 'home.programs', descriptionKey: 'home.programsDescription', icon: 'barbell', accent: 'primary', href: '/(tabs)/programs' },
+  { key: 'exercises', labelKey: 'home.exercises', descriptionKey: 'home.exercisesDescription', icon: 'accessibility', accent: 'secondary', href: '/(tabs)/exercises' },
+  { key: 'nutrition', labelKey: 'home.nutrition', descriptionKey: 'home.nutritionDescription', icon: 'nutrition', accent: 'success', href: '/(tabs)/nutrition' },
+  { key: 'foods', labelKey: 'home.foods', descriptionKey: 'home.foodsDescription', icon: 'fast-food', accent: 'danger', href: '/(tabs)/foods' },
+  { key: 'progress', labelKey: 'home.progress', descriptionKey: 'home.progressDescription', icon: 'analytics', accent: 'danger', href: '/(tabs)/progress' },
+  { key: 'history', labelKey: 'home.history', descriptionKey: 'home.historyDescription', icon: 'pulse', accent: 'secondary', href: '/(tabs)/history' },
 ];
 
 export default function HomeScreen() {
@@ -62,7 +62,7 @@ export default function HomeScreen() {
   const monthlyGoal = usePerformanceStore((state) => state.monthlySessionGoal);
   const { height, width } = useWindowDimensions();
   const compact = height < 700;
-  const tileWidth = Math.floor((width - 38) / 2);
+  const tileWidth = Math.floor((width - 42) / 2);
   const [animations] = useState(() => HOME_TILES.map(() => new Animated.Value(0)));
   const [sessionAnimation] = useState(() => new Animated.Value(0));
   const consistency = useMemo(
@@ -184,9 +184,9 @@ export default function HomeScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={t(tile.labelKey)}
                 accessibilityHint={t(tile.descriptionKey)}>
-                <View style={[styles.tileAccent, { backgroundColor: tile.accent }]} />
-                <View style={[styles.iconBox, { backgroundColor: `${tile.accent}1A` }]}>
-                  <Ionicons name={tile.icon} size={compact ? 19 : 22} color={tile.accent} />
+                <View style={[styles.tileAccent, { backgroundColor: c[tile.accent] }]} />
+                <View style={[styles.iconBox, { backgroundColor: `${c[tile.accent]}1A` }]}>
+                  <Ionicons name={tile.icon} size={compact ? 19 : 22} color={c[tile.accent]} />
                 </View>
                 <View style={styles.tileCopy}>
                   <Text style={styles.tileLabel} numberOfLines={1}>{t(tile.labelKey)}</Text>
@@ -194,7 +194,7 @@ export default function HomeScreen() {
                     {t(tile.descriptionKey)}
                   </Text>
                 </View>
-                <Ionicons name="chevron-forward" size={15} color={c.textMuted} />
+                <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
               </TouchableOpacity>
             </Animated.View>
           ))}
@@ -206,22 +206,16 @@ export default function HomeScreen() {
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
-  content: { flex: 1, paddingHorizontal: 14, paddingTop: 10, paddingBottom: 10 },
+  content: { flex: 1, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 10 },
   contentCompact: { paddingTop: 5, paddingBottom: 6 },
   brandRow: { minHeight: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
   settingsButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 15,
+    width: 36,
+    height: 36,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: c.surface,
-    borderWidth: 1,
-    borderColor: c.border,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.07,
-    shadowRadius: 6,
-    elevation: 2,
   },
   sessionCard: {
     minHeight: 94,
@@ -277,5 +271,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   iconBox: { width: 38, height: 38, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   tileCopy: { flex: 1, minWidth: 0, gap: 2 },
   tileLabel: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
-  tileDescription: { fontSize: 9.5, lineHeight: 12, fontFamily: fonts.sans, color: c.textMuted },
+  tileDescription: { fontSize: 10, lineHeight: 12, fontFamily: fonts.sans, color: c.textMuted },
 });

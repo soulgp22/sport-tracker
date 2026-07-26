@@ -3,6 +3,7 @@ import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
@@ -34,7 +35,7 @@ export default function ExercisesLayout() {
         headerShown: false,
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
-        headerTitleStyle: { fontWeight: '700' },
+        headerTitleStyle: { fontFamily: fonts.sansBold },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>

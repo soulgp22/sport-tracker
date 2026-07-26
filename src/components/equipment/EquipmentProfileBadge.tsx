@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getEquipmentProfile } from '../../constants/equipmentProfiles';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { EquipmentProfileId } from '../../types/equipment';
 
 interface EquipmentProfileBadgeProps {
@@ -58,6 +59,6 @@ const makeStyles = (size: number) =>
     },
     label: {
       fontSize: Math.round(size * 0.32),
-      fontWeight: '700',
+      fontFamily: fonts.sansBold,
     },
   });

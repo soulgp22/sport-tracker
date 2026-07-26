@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { macroStatusColor } from '../../lib/nutritionCalc';
 
@@ -46,10 +47,10 @@ export function MacroBar({ label, current, goal, unit, percent }: MacroBarProps)
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   container: { gap: 8 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  label: { flex: 1, fontSize: 14, fontWeight: '700', color: c.textPrimary },
+  label: { flex: 1, fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
   values: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  amount: { fontSize: 13, fontWeight: '700', color: c.textSecondary },
-  percent: { fontSize: 13, fontWeight: '800' },
+  amount: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
+  percent: { fontSize: 13, fontFamily: fonts.sansHeavy },
   track: {
     height: 8,
     borderRadius: 999,

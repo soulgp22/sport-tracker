@@ -61,22 +61,22 @@ export function PerformanceDashboard({
     <View style={styles.root}>
       <View style={styles.goalGrid}>
         <View style={styles.goalCard}>
-          <View style={[styles.goalIcon, { backgroundColor: '#F973161A' }]}>
-            <Ionicons name="flame" size={19} color="#F97316" />
+          <View style={[styles.goalIcon, { backgroundColor: `${c.secondary}1A` }]}>
+            <Ionicons name="flame" size={19} color={c.secondary} />
           </View>
           <Text style={styles.goalValue}>{consistency.weeklyStreak}</Text>
           <Text style={styles.goalLabel}>{t('performance.weekStreak')}</Text>
         </View>
         <View style={styles.goalCard}>
-          <View style={[styles.goalIcon, { backgroundColor: '#2563EB1A' }]}>
-            <Ionicons name="calendar" size={19} color="#2563EB" />
+          <View style={[styles.goalIcon, { backgroundColor: `${c.primary}1A` }]}>
+            <Ionicons name="calendar" size={19} color={c.primary} />
           </View>
           <Text style={styles.goalValue}>{consistency.thisWeek}/{weeklyGoal}</Text>
           <Text style={styles.goalLabel}>{t('performance.thisWeek')}</Text>
         </View>
         <View style={styles.goalCard}>
-          <View style={[styles.goalIcon, { backgroundColor: '#10B9811A' }]}>
-            <Ionicons name="flag" size={19} color="#10B981" />
+          <View style={[styles.goalIcon, { backgroundColor: `${c.success}1A` }]}>
+            <Ionicons name="flag" size={19} color={c.success} />
           </View>
           <Text style={styles.goalValue}>{consistency.thisMonth}/{monthlyGoal}</Text>
           <Text style={styles.goalLabel}>{t('performance.thisMonth')}</Text>
@@ -247,11 +247,11 @@ export function PerformanceDashboard({
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   root: { gap: 14 },
   goalGrid: { flexDirection: 'row', gap: 8 },
-  goalCard: { flex: 1, minWidth: 0, padding: 11, borderRadius: 15, backgroundColor: c.surface, borderWidth: 1, borderColor: c.border },
+  goalCard: { flex: 1, minWidth: 0, padding: 11, borderRadius: 12, backgroundColor: c.surface, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   goalIcon: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center', marginBottom: 7 },
   goalValue: { fontSize: 18, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   goalLabel: { fontSize: 9.5, fontFamily: fonts.sans, color: c.textMuted },
-  exerciseSelector: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 17, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
+  exerciseSelector: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 12, backgroundColor: c.surface, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   selectorIcon: { width: 42, height: 42, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
   selectorCopy: { flex: 1, minWidth: 0, gap: 2 },
   selectorLabel: { fontSize: 9, letterSpacing: 1, fontFamily: fonts.sansBold, color: c.textMuted, textTransform: 'uppercase' },
@@ -263,12 +263,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   confidencePill: { paddingHorizontal: 9, paddingVertical: 6, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.16)' },
   confidenceText: { fontSize: 10, fontFamily: fonts.sansBold, color: c.primaryText },
   heroFormula: { marginTop: 8, fontSize: 12, fontFamily: fonts.sans, color: c.primaryText, opacity: 0.78 },
-  setupCard: { flexDirection: 'row', alignItems: 'center', gap: 11, padding: 14, borderRadius: 17, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
+  setupCard: { flexDirection: 'row', alignItems: 'center', gap: 11, padding: 14, borderRadius: 12, backgroundColor: c.surface, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   setupCopy: { flex: 1, gap: 2 },
   setupTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
   setupText: { fontSize: 11, lineHeight: 16, fontFamily: fonts.sans, color: c.textSecondary },
   setupButton: { width: 34, height: 34, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.primary },
-  rankCard: { padding: 15, borderRadius: 18, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
+  rankCard: { padding: 14, borderRadius: 12, backgroundColor: c.surface, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   rankHeader: { flexDirection: 'row', alignItems: 'center', gap: 11 },
   rankMedal: { width: 46, height: 46, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   rankCopy: { flex: 1, minWidth: 0 },
@@ -296,7 +296,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   badgeIconUnlocked: { backgroundColor: c.accentSoft },
   badgeName: { minHeight: 28, textAlign: 'center', fontSize: 10, lineHeight: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   badgeNameLocked: { color: c.textMuted },
-  recordsCard: { borderRadius: 17, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface, overflow: 'hidden' },
+  recordsCard: { borderRadius: 12, backgroundColor: c.surface, overflow: 'hidden', shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   recordRow: { minHeight: 62, flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 9 },
   recordBorder: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
   recordIcon: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },

@@ -248,5 +248,5 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
   actionDanger: { backgroundColor: c.danger },
   actionText: { fontFamily: fonts.sansBold, fontSize: 14, color: c.primaryText },
   actionTextCancel: { color: c.textPrimary },
-  actionTextDanger: { color: '#FFFFFF' },
+  actionTextDanger: { color: c.primaryText },
 });

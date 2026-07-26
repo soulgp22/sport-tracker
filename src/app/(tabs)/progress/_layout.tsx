@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack, useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { fonts } from '../../../theme/fonts';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -37,7 +38,7 @@ export default function ProgressLayout() {
         headerShown: false,
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
-        headerTitleStyle: { fontWeight: '700' },
+        headerTitleStyle: { fontFamily: fonts.sansBold },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>
@@ -61,5 +62,5 @@ export default function ProgressLayout() {
 }
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  historyLink: { fontSize: 14, fontWeight: '600', color: c.primary },
+  historyLink: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.primary },
 });

@@ -11,6 +11,7 @@ import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { useFoodStore } from '../../../store/foodStore';
 
 export default function FoodDetailScreen() {
@@ -102,12 +103,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   content: { padding: 16, gap: 14, paddingBottom: 32 },
   infoCard: {
     backgroundColor: c.surface,
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
     gap: 6,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
@@ -115,14 +116,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  title: { flex: 1, fontSize: 22, fontWeight: '800', color: c.textPrimary },
-  meta: { fontSize: 14, color: c.primary, fontWeight: '600' },
+  title: { flex: 1, fontSize: 22, fontFamily: fonts.sansHeavy, color: c.textPrimary },
+  meta: { fontSize: 14, color: c.primary, fontFamily: fonts.sansSemi },
   badge: {
     backgroundColor: c.secondary,
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  badgeText: { fontSize: 11, fontWeight: '700', color: c.textPrimary },
+  badgeText: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primaryText },
   actions: { gap: 10, paddingTop: 4 },
 });

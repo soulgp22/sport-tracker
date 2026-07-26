@@ -29,6 +29,7 @@ import {
   translateMuscle,
 } from '../../../../../constants/exerciseI18n';
 import { useColors } from '../../../../../theme/useColors';
+import { fonts } from '../../../../../theme/fonts';
 import type { ThemeColors } from '../../../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../../../constants/keyboard';
 import { useTranslation } from '../../../../../i18n/useTranslation';
@@ -465,13 +466,13 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   dayNameBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
   dayNameInput: { flex: 1 },
-  heading: { fontSize: 20, fontWeight: '700', color: c.textPrimary, flex: 1 },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary, flex: 1 },
   list: { paddingBottom: 16 },
   emptyContainer: { flex: 1 },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
@@ -500,10 +501,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surfaceAlt,
   },
   exercisePickerBody: { flex: 1, gap: 2 },
-  exercisePickerName: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  exercisePickerName: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   exercisePickerMeta: { fontSize: 12, color: c.textSecondary },
   changeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', paddingVertical: 2 },
-  changeLabel: { color: c.primary, fontSize: 13, fontWeight: '600' },
+  changeLabel: { color: c.primary, fontSize: 13, fontFamily: fonts.sansSemi },
   equipmentWarning: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -514,9 +515,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: c.danger,
   },
-  equipmentWarningText: { flex: 1, fontSize: 12, fontWeight: '700', color: c.danger },
+  equipmentWarningText: { flex: 1, fontSize: 12, fontFamily: fonts.sansBold, color: c.danger },
   alternativesBlock: { gap: 6, paddingVertical: 2 },
-  alternativesTitle: { fontSize: 11, fontWeight: '700', color: c.textSecondary, textTransform: 'uppercase' },
+  alternativesTitle: { fontSize: 11, fontFamily: fonts.sansBold, color: c.textSecondary, textTransform: 'uppercase' },
   alternativesRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 },
   alternativeChip: {
     maxWidth: '100%',
@@ -528,7 +529,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderRadius: 16,
     backgroundColor: c.accentSoft,
   },
-  alternativeChipText: { color: c.primary, fontSize: 12, fontWeight: '600' },
+  alternativeChipText: { color: c.primary, fontSize: 12, fontFamily: fonts.sansSemi },
   addAlternativeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -536,7 +537,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 2,
   },
-  addAlternativeLabel: { color: c.primary, fontSize: 12, fontWeight: '600' },
+  addAlternativeLabel: { color: c.primary, fontSize: 12, fontFamily: fonts.sansSemi },
   suggestionsBlock: {
     gap: 5,
     padding: 8,
@@ -544,7 +545,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surfaceAlt,
   },
   suggestionRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  suggestionName: { flex: 1, fontSize: 12, fontWeight: '600', color: c.textPrimary },
+  suggestionName: { flex: 1, fontSize: 12, fontFamily: fonts.sansSemi, color: c.textPrimary },
   linkButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -554,9 +555,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderRadius: 14,
     backgroundColor: c.accentSoft,
   },
-  linkButtonText: { fontSize: 11, fontWeight: '700', color: c.primary },
+  linkButtonText: { fontSize: 12, fontFamily: fonts.sansBold, color: c.primary },
   setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  setIndex: { fontSize: 13, fontWeight: '600', color: c.textSecondary, width: 22 },
+  setIndex: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textSecondary, width: 22 },
   setField: { flex: 1, gap: 2 },
   setFieldLabel: { fontSize: 10, color: c.textMuted, textTransform: 'uppercase' },
   setInput: { paddingVertical: 6, paddingHorizontal: 8, minHeight: 36, fontSize: 14 },
@@ -567,7 +568,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingVertical: 4,
     alignSelf: 'flex-start',
   },
-  addSetLabel: { color: c.primary, fontSize: 14, fontWeight: '500' },
+  addSetLabel: { color: c.primary, fontSize: 14, fontFamily: fonts.sansSemi },
   selectorSafe: { flex: 1, backgroundColor: c.bg },
   selectorHeader: {
     flexDirection: 'row',
@@ -576,5 +577,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  selectorTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary, textAlign: 'center' },
+  selectorTitle: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary, textAlign: 'center' },
 });

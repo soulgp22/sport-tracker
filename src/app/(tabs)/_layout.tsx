@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 
+import { fonts } from '../../theme/fonts';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
 
@@ -33,7 +34,7 @@ export default function TabLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
-        headerTitleStyle: { fontWeight: '700' },
+        headerTitleStyle: { fontFamily: fonts.sansBold },
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>

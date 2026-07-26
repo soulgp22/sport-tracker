@@ -304,7 +304,7 @@ export default function ProgressScreen() {
               hitSlop={8}
               accessibilityRole="button"
               accessibilityLabel={t('common.cancel')}>
-              <Ionicons name="close" size={25} color={c.textPrimary} />
+              <Ionicons name="close" size={24} color={c.textPrimary} />
             </TouchableOpacity>
           </View>
           <View style={styles.searchWrap}>
@@ -371,10 +371,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: 14,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: c.border,
+    borderRadius: 12,
     backgroundColor: c.surface,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   selectorIcon: {
     width: 44,
@@ -405,15 +407,15 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   statValue: { marginTop: 2, fontSize: 20, fontFamily: fonts.sansHeavy, color: c.primary },
   formRow: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
   weightInput: { flex: 1, minWidth: 0 },
-  saveButton: { minHeight: 46, paddingHorizontal: 14 },
+  saveButton: { minHeight: 48, paddingHorizontal: 14 },
   chartCard: {
     backgroundColor: c.surface,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 12,
+    padding: 14,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowRadius: 4,
+    elevation: 1,
     overflow: 'hidden',
   },
   hint: { fontSize: 13, fontFamily: fonts.sans, color: c.textMuted, textAlign: 'center' },
@@ -427,7 +429,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: c.border,
   },
-  modalHeaderSpacer: { width: 25 },
+  modalHeaderSpacer: { width: 24 },
   modalTitle: { flex: 1, textAlign: 'center', fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   searchWrap: { padding: 16, paddingBottom: 8 },
   exerciseList: { paddingHorizontal: 16, paddingBottom: 24, gap: 8 },

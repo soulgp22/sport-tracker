@@ -10,6 +10,7 @@ import { useActiveSessionStore } from '../../../store/activeSessionStore';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import type { Program, ProgramDay } from '../../../types';
 
@@ -113,7 +114,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surface,
     marginHorizontal: 16,
     marginTop: 8,
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 14,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
@@ -121,7 +122,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   selected: { borderWidth: 2, borderColor: c.primary },
-  programName: { flex: 1, fontSize: 16, fontWeight: '600', color: c.textPrimary },
+  programName: { flex: 1, fontSize: 16, fontFamily: fonts.sansSemi, color: c.textPrimary },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -129,15 +130,15 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginHorizontal: 24,
     marginTop: 2,
     backgroundColor: c.surfaceAlt,
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 12,
   },
   daySelected: { backgroundColor: c.accentSoft },
-  dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontWeight: '500' },
+  dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontFamily: fonts.sansSemi },
   dayMeta: { fontSize: 13, color: c.textMuted },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
   resumeContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
-  resumeTitle: { fontSize: 22, fontWeight: '700', color: c.textPrimary },
+  resumeTitle: { fontSize: 22, fontFamily: fonts.sansBold, color: c.textPrimary },
   resumeSub: { fontSize: 15, color: c.textSecondary },
   resumeBtn: { width: '100%', marginTop: 8 },
 });

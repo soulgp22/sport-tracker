@@ -28,6 +28,7 @@ import {
 } from '../../../constants/exerciseI18n';
 import { isExerciseCompatibleWithProfile } from '../../../constants/equipmentProfiles';
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
@@ -285,7 +286,7 @@ export default function ActiveSessionScreen() {
         keyboardVerticalOffset={keyboardVerticalOffset}>
         {/* Top bar */}
         <View style={styles.topBar}>
-          <TouchableOpacity onPress={handleCancel} hitSlop={8}>
+          <TouchableOpacity onPress={handleCancel} hitSlop={8} style={styles.headerBtn}>
             <Ionicons name="close" size={24} color={c.textSecondary} />
           </TouchableOpacity>
           <View style={styles.topCenter}>
@@ -403,11 +404,11 @@ export default function ActiveSessionScreen() {
         onRequestClose={closeReplacementModal}>
         <SafeAreaView style={styles.replacementSafe} edges={['top', 'bottom']}>
           <View style={styles.replacementHeader}>
-            <TouchableOpacity onPress={closeReplacementModal} hitSlop={8}>
+            <TouchableOpacity onPress={closeReplacementModal} hitSlop={8} style={styles.headerBtn}>
               <Ionicons name="close" size={24} color={c.textPrimary} />
             </TouchableOpacity>
             <Text style={styles.replacementTitle}>Remplacer l&apos;exercice</Text>
-            <View style={{ width: 24 }} />
+            <View style={{ width: 36 }} />
           </View>
           <ScrollView contentContainerStyle={styles.replacementList}>
             {replacementAlternatives.map((alternativeId) => {
@@ -452,15 +453,25 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   keyboardAvoiding: { flex: 1 },
   topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+  headerBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   topCenter: { flex: 1, alignItems: 'center' },
-  topTitle: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  topTitle: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   topSub: { fontSize: 13, color: c.textSecondary },
-  finishLink: { fontSize: 15, fontWeight: '600', color: c.primary },
+  finishLink: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.primary },
   progressTrack: { height: 4, backgroundColor: c.border, marginHorizontal: 16, borderRadius: 2 },
   progressFill: { height: 4, backgroundColor: c.primary, borderRadius: 2 },
   progressLabel: { fontSize: 11, color: c.textMuted, paddingHorizontal: 16, marginTop: 4 },
   content: { padding: 16, gap: 8, paddingBottom: 16 },
-  exSection: { backgroundColor: c.surface, borderRadius: 10, padding: 12, opacity: 0.65 },
+  exSection: {
+    backgroundColor: c.surface,
+    borderRadius: 12,
+    padding: 14,
+    opacity: 0.65,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
   exSectionActive: { opacity: 1, borderWidth: 2, borderColor: c.primary },
   exRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
   infoBtn: { padding: 2 },
@@ -473,14 +484,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderRadius: 12,
     backgroundColor: c.accentSoft,
   },
-  replaceLabel: { fontSize: 12, fontWeight: '600', color: c.primary },
-  exName: { fontSize: 15, fontWeight: '600', color: c.textPrimary, flex: 1 },
+  replaceLabel: { fontSize: 12, fontFamily: fonts.sansSemi, color: c.primary },
+  exName: { fontSize: 15, fontFamily: fonts.sansSemi, color: c.textPrimary, flex: 1 },
   exNameActive: { color: c.textPrimary },
   setsRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
   setBubble: { width: 32, height: 32, borderRadius: 16, backgroundColor: c.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
   setBubbleDone: { backgroundColor: c.success },
   setBubbleActive: { backgroundColor: c.accentSoft, borderWidth: 2, borderColor: c.primary },
-  setBubbleText: { fontSize: 13, fontWeight: '600', color: c.textSecondary },
+  setBubbleText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textSecondary },
   setBubbleTextDone: { color: c.primaryText },
   setBubbleTextActive: { color: c.primary },
   logBar: {
@@ -492,11 +503,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderTopColor: c.border,
     gap: 8,
   },
-  logTitle: { fontSize: 14, fontWeight: '700', color: c.textPrimary },
+  logTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
   logRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
   logField: { flex: 1, gap: 3 },
-  logFieldLabel: { fontSize: 11, fontWeight: '600', color: c.textSecondary, textTransform: 'uppercase' },
-  logInput: { textAlign: 'center', fontSize: 18, fontWeight: '700' },
+  logFieldLabel: { fontSize: 11, fontFamily: fonts.sansSemi, color: c.textSecondary, textTransform: 'uppercase' },
+  logInput: { textAlign: 'center', fontSize: 18, fontFamily: fonts.sansBold },
   logBtn: { paddingHorizontal: 18 },
   replacementSafe: { flex: 1, backgroundColor: c.bg },
   replacementHeader: {
@@ -506,15 +517,15 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  replacementTitle: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary, textAlign: 'center' },
+  replacementTitle: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary, textAlign: 'center' },
   replacementList: { padding: 16, gap: 8 },
   replacementRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     backgroundColor: c.surface,
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 12,
+    padding: 14,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
@@ -522,6 +533,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   replacementRowSelected: { borderWidth: 2, borderColor: c.primary },
   replacementBody: { flex: 1, gap: 3 },
-  replacementName: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  replacementName: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   replacementMeta: { fontSize: 12, color: c.textSecondary },
 });

@@ -8,6 +8,7 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { FoodForm, type FoodFormValues } from '../../../components/foods/FoodForm';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { normalizeFoodName, useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -76,5 +77,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
 });

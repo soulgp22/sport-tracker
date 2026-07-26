@@ -22,6 +22,7 @@ import {
 } from '../../../lib/importLimits';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
+import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodStore, type ImportFoodsResult } from '../../../store/foodStore';
 import type { Food } from '../../../types';
@@ -77,9 +78,9 @@ function CustomFoodRow({
             style={styles.deleteButton}
             accessibilityRole="button"
             accessibilityLabel={`${t('common.delete')} ${food.name}`}>
-            <Ionicons name="trash-outline" size={18} color={c.danger} />
+            <Ionicons name="trash-outline" size={20} color={c.danger} />
           </TouchableOpacity>
-          <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+          <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
         </>
       ) : null}
     </TouchableOpacity>
@@ -471,12 +472,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   content: { padding: 16, gap: 28, paddingBottom: 40 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: fonts.sansBold,
     color: c.textPrimary,
     borderBottomWidth: 1,
     borderBottomColor: c.border,
@@ -490,7 +491,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   sectionTitleFlexible: { flex: 1, borderBottomWidth: 0 },
   selectionLink: { paddingHorizontal: 4, paddingVertical: 10 },
-  selectionLinkText: { fontSize: 13, fontWeight: '700', color: c.primary },
+  selectionLinkText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.primary },
   helpText: { fontSize: 13, color: c.textSecondary, lineHeight: 18 },
   codeBlock: {
     backgroundColor: c.surfaceAlt,
@@ -511,16 +512,20 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     gap: 12,
   },
   selectAllButton: { flexDirection: 'row', alignItems: 'center', gap: 7, paddingVertical: 4 },
-  selectAllText: { fontSize: 13, fontWeight: '700', color: c.primary },
+  selectAllText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.primary },
   selectionCount: { fontSize: 12, color: c.textSecondary },
   selectionHint: { fontSize: 12, color: c.textMuted },
   foodRow: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 10,
-    padding: 12,
+    borderRadius: 12,
+    padding: 14,
     gap: 8,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
   },
   foodRowSelected: {
     borderWidth: 1.5,
@@ -528,7 +533,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.accentSoft,
   },
   foodBody: { flex: 1, gap: 2 },
-  foodName: { fontSize: 15, fontWeight: '700', color: c.textPrimary },
+  foodName: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   foodMeta: { fontSize: 12, color: c.textSecondary },
   deleteButton: { paddingHorizontal: 8 },
 });

@@ -9,6 +9,7 @@ import { useProgramStore } from '../../../store/programStore';
 import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
+import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 
@@ -72,7 +73,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   content: { padding: 16, gap: 24 },
   btn: { marginTop: 8 },
 });

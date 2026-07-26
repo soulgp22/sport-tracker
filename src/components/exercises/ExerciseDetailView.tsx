@@ -13,8 +13,11 @@ import {
 import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
+import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
+import { ExerciseModel3D } from './ExerciseModel3D';
+import { exerciseModels } from '../../data/exerciseModels';
 import { EmptyState } from '../ui/EmptyState';
 
 export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () => void }) {
@@ -40,12 +43,16 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
         <EmptyState icon="alert-circle-outline" title={t('exercise.notFound')} />
       ) : (
         <ScrollView contentContainerStyle={styles.content}>
-          <AnimatedExerciseImage
-            id={exercise.id}
-            animate
-            style={styles.hero}
-            accessibilityLabel={displayName}
-          />
+          {exerciseModels[exercise.id] ? (
+            <ExerciseModel3D model={exerciseModels[exercise.id]} style={styles.hero} />
+          ) : (
+            <AnimatedExerciseImage
+              id={exercise.id}
+              animate
+              style={styles.hero}
+              accessibilityLabel={displayName}
+            />
+          )}
 
           <View style={styles.metaCard}>
             <Text style={styles.title}>{displayName}</Text>
@@ -93,25 +100,34 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  heading: { flex: 1, fontSize: 18, fontWeight: '700', color: c.textPrimary },
+  heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   content: { padding: 16, gap: 14, paddingBottom: 32 },
   hero: { width: '100%', aspectRatio: 1.25, borderRadius: 12, backgroundColor: c.surface },
   metaCard: {
     backgroundColor: c.surface,
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
     gap: 6,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  title: { fontSize: 22, fontWeight: '800', color: c.textPrimary },
-  meta: { fontSize: 14, color: c.primary, fontWeight: '600' },
+  title: { fontSize: 22, fontFamily: fonts.sansHeavy, color: c.textPrimary },
+  meta: { fontSize: 14, color: c.primary, fontFamily: fonts.sansSemi },
   secondary: { fontSize: 13, color: c.textSecondary },
-  aliases: { fontSize: 12, color: c.primary, fontWeight: '600' },
-  instructions: { backgroundColor: c.surface, borderRadius: 12, padding: 16, gap: 12 },
-  sectionTitle: { fontSize: 17, fontWeight: '700', color: c.textPrimary },
+  aliases: { fontSize: 12, color: c.primary, fontFamily: fonts.sansSemi },
+  instructions: {
+    backgroundColor: c.surface,
+    borderRadius: 12,
+    padding: 14,
+    gap: 12,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  sectionTitle: { fontSize: 17, fontFamily: fonts.sansBold, color: c.textPrimary },
   stepRow: { flexDirection: 'row', gap: 10 },
   stepIndex: {
     width: 24,
@@ -122,7 +138,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 12,
-    fontWeight: '700',
+    fontFamily: fonts.sansBold,
   },
   stepText: { flex: 1, fontSize: 14, lineHeight: 20, color: c.textPrimary },
 });
