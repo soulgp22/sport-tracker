@@ -46,3 +46,6 @@ example
 /ios
 /android
 .retranslate-names.progress.json
+
+# Clé de compte de service Google Play (eas submit) — JAMAIS committer
+pc-api-key.json
