@@ -1,0 +1,566 @@
+{
+  "version": 1,
+  "programs": [
+    {
+      "name": "Salle complète — Force — Intermédiaire",
+      "days": [
+        {
+          "name": "Haut du corps A",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Bench Press - Medium Grip",
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dumbbell Bench Press"
+              ]
+            },
+            {
+              "exerciseName": "One-Arm Dumbbell Row",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Bent Over Barbell Row"
+              ]
+            },
+            {
+              "exerciseName": "Standing Dumbbell Press",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Shoulder Press"
+              ]
+            },
+            {
+              "exerciseName": "Close-Grip Front Lat Pulldown",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Pullups"
+              ]
+            },
+            {
+              "exerciseName": "Hammer Curls",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Curl"
+              ]
+            },
+            {
+              "exerciseName": "Standing Dumbbell Triceps Extension",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Bas du corps A",
+          "exercises": [
+            {
+              "exerciseName": "Barbell Squat",
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Full Squat"
+              ]
+            },
+            {
+              "exerciseName": "Romanian Deadlift",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Deadlift"
+              ]
+            },
+            {
+              "exerciseName": "Split Squat with Dumbbells",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dumbbell Lunges"
+              ]
+            },
+            {
+              "exerciseName": "Calf Raises - With Bands",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Standing Calf Raises"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Haut du corps B",
+          "exercises": [
+            {
+              "exerciseName": "Smith Machine Incline Bench Press",
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Incline Bench Press - Medium Grip"
+              ]
+            },
+            {
+              "exerciseName": "Close-Grip Front Lat Pulldown",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Pullups"
+              ]
+            },
+            {
+              "exerciseName": "Leverage Iso Row",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Bent Over Barbell Row"
+              ]
+            },
+            {
+              "exerciseName": "Back Flyes - With Bands",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Side Lateral Raise"
+              ]
+            },
+            {
+              "exerciseName": "Seated Triceps Press",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Cable Preacher Curl",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Curl"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Bas du corps B",
+          "exercises": [
+            {
+              "exerciseName": "Stiff-Legged Dumbbell Deadlift",
+              "sets": [
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                },
+                {
+                  "reps": 5,
+                  "weight": 0,
+                  "restSeconds": 180
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Deadlift"
+              ]
+            },
+            {
+              "exerciseName": "Hack Squat",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Full Squat"
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell Rear Lunge",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dumbbell Lunges"
+              ]
+            },
+            {
+              "exerciseName": "Standing Dumbbell Calf Raise",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Standing Calf Raises"
+              ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

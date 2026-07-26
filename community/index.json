@@ -697,6 +697,1806 @@
         "es": "Mantener fuerza y masa con sesiones cortas",
         "de": "Kraft und Masse mit kurzen Einheiten erhalten"
       }
+    },
+    {
+      "id": "bodyweight-muscle-beginner",
+      "name": "Poids du corps — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 14,
+      "file": "bodyweight-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 30,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "poids du corps",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-strength-beginner",
+      "name": "Poids du corps — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 14,
+      "file": "bodyweight-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 37,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "poids du corps",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-weight_loss-beginner",
+      "name": "Poids du corps — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 17,
+      "file": "bodyweight-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 25,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "poids du corps",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-fitness-beginner",
+      "name": "Poids du corps — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 14,
+      "file": "bodyweight-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "poids du corps",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-muscle-intermediate",
+      "name": "Poids du corps — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 19,
+      "file": "bodyweight-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "poids du corps",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-strength-intermediate",
+      "name": "Poids du corps — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 19,
+      "file": "bodyweight-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 43,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "poids du corps",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-weight_loss-intermediate",
+      "name": "Poids du corps — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 23,
+      "file": "bodyweight-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 25,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "poids du corps",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-fitness-intermediate",
+      "name": "Poids du corps — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 19,
+      "file": "bodyweight-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "poids du corps",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-muscle-advanced",
+      "name": "Poids du corps — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 22,
+      "file": "bodyweight-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 29,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "poids du corps",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-strength-advanced",
+      "name": "Poids du corps — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 22,
+      "file": "bodyweight-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "poids du corps",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-weight_loss-advanced",
+      "name": "Poids du corps — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 27,
+      "file": "bodyweight-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 24,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "poids du corps",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "bodyweight-fitness-advanced",
+      "name": "Poids du corps — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 22,
+      "file": "bodyweight-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Aucun matériel, au poids du corps",
+      "equipmentProfileIds": [
+        "bodyweight"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "poids du corps",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "home-basic-muscle-beginner",
+      "name": "Petit matériel — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "home-basic-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 33,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "petit matériel",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "home-basic-strength-beginner",
+      "name": "Petit matériel — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "home-basic-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "petit matériel",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "home-basic-weight_loss-beginner",
+      "name": "Petit matériel — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 18,
+      "file": "home-basic-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "petit matériel",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "home-basic-fitness-beginner",
+      "name": "Petit matériel — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "home-basic-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 29,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "petit matériel",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "home-basic-muscle-intermediate",
+      "name": "Petit matériel — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "home-basic-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 35,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "petit matériel",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "home-basic-strength-intermediate",
+      "name": "Petit matériel — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "home-basic-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 48,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "petit matériel",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "home-basic-weight_loss-intermediate",
+      "name": "Petit matériel — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 26,
+      "file": "home-basic-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "petit matériel",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "home-basic-fitness-intermediate",
+      "name": "Petit matériel — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "home-basic-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "petit matériel",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "home-basic-muscle-advanced",
+      "name": "Petit matériel — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "home-basic-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 32,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "petit matériel",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "home-basic-strength-advanced",
+      "name": "Petit matériel — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "home-basic-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 44,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "petit matériel",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "home-basic-weight_loss-advanced",
+      "name": "Petit matériel — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 30,
+      "file": "home-basic-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "petit matériel",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "home-basic-fitness-advanced",
+      "name": "Petit matériel — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, élastiques, ballon ou kettlebell (petit matériel).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "home-basic-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
+      "equipmentProfileIds": [
+        "home-basic"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "petit matériel",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-muscle-beginner",
+      "name": "Haltères — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "dumbbells-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 33,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-strength-beginner",
+      "name": "Haltères — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "dumbbells-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-weight_loss-beginner",
+      "name": "Haltères — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 18,
+      "file": "dumbbells-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-fitness-beginner",
+      "name": "Haltères — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "dumbbells-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 29,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-muscle-intermediate",
+      "name": "Haltères — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "dumbbells-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 35,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-strength-intermediate",
+      "name": "Haltères — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "dumbbells-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 48,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-weight_loss-intermediate",
+      "name": "Haltères — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 26,
+      "file": "dumbbells-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-fitness-intermediate",
+      "name": "Haltères — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "dumbbells-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-muscle-advanced",
+      "name": "Haltères — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "dumbbells-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 32,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-strength-advanced",
+      "name": "Haltères — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "dumbbells-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 44,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-weight_loss-advanced",
+      "name": "Haltères — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 30,
+      "file": "dumbbells-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "dumbbells-fitness-advanced",
+      "name": "Haltères — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, une paire d’haltères.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "dumbbells-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Une paire d’haltères",
+      "equipmentProfileIds": [
+        "dumbbells"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "machines-muscle-beginner",
+      "name": "Machines — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "machines-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 33,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "machines",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "machines-strength-beginner",
+      "name": "Machines — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "machines-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "machines",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "machines-weight_loss-beginner",
+      "name": "Machines — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 18,
+      "file": "machines-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "machines",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "machines-fitness-beginner",
+      "name": "Machines — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "machines-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 29,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "machines",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "machines-muscle-intermediate",
+      "name": "Machines — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "machines-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 35,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "machines",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "machines-strength-intermediate",
+      "name": "Machines — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "machines-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 48,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "machines",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "machines-weight_loss-intermediate",
+      "name": "Machines — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 26,
+      "file": "machines-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "machines",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "machines-fitness-intermediate",
+      "name": "Machines — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "machines-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "machines",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "machines-muscle-advanced",
+      "name": "Machines — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "machines-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 32,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "machines",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "machines-strength-advanced",
+      "name": "Machines — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "machines-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 44,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "machines",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "machines-weight_loss-advanced",
+      "name": "Machines — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 30,
+      "file": "machines-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "machines",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "machines-fitness-advanced",
+      "name": "Machines — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, machines guidées et poulies.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "machines-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Machines guidées et poulies",
+      "equipmentProfileIds": [
+        "machines"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "machines",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "barbell-muscle-beginner",
+      "name": "Barre & haltères — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "barbell-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 33,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "barre & haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "barbell-strength-beginner",
+      "name": "Barre & haltères — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "barbell-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "barre & haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "barbell-weight_loss-beginner",
+      "name": "Barre & haltères — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 18,
+      "file": "barbell-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "barre & haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "barbell-fitness-beginner",
+      "name": "Barre & haltères — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "barbell-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 29,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "barre & haltères",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "barbell-muscle-intermediate",
+      "name": "Barre & haltères — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "barbell-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 35,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "barre & haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "barbell-strength-intermediate",
+      "name": "Barre & haltères — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "barbell-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 48,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "barre & haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "barbell-weight_loss-intermediate",
+      "name": "Barre & haltères — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 26,
+      "file": "barbell-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "barre & haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "barbell-fitness-intermediate",
+      "name": "Barre & haltères — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "barbell-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "barre & haltères",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "barbell-muscle-advanced",
+      "name": "Barre & haltères — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "barbell-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 32,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "barre & haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "barbell-strength-advanced",
+      "name": "Barre & haltères — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "barbell-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 44,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "barre & haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "barbell-weight_loss-advanced",
+      "name": "Barre & haltères — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 30,
+      "file": "barbell-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "barre & haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "barbell-fitness-advanced",
+      "name": "Barre & haltères — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, barre, haltères et poids du corps.",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "barbell-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Barre, haltères et poids du corps",
+      "equipmentProfileIds": [
+        "barbell"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "barre & haltères",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "full-gym-muscle-beginner",
+      "name": "Salle complète — Hypertrophie — Débutant",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "full-gym-muscle-beginner.json",
+      "goal": "Hypertrophie (Débutant)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 33,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "hypertrophie",
+        "salle complète",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "full-gym-strength-beginner",
+      "name": "Salle complète — Force — Débutant",
+      "description": "Programme force niveau débutant, 3 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "full-gym-strength-beginner.json",
+      "goal": "Force (Débutant)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 40,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "force",
+        "salle complète",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "full-gym-weight_loss-beginner",
+      "name": "Salle complète — Perte de poids — Débutant",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 18,
+      "file": "full-gym-weight_loss-beginner.json",
+      "goal": "Perte de poids (Débutant)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "perte de poids",
+        "salle complète",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "full-gym-fitness-beginner",
+      "name": "Salle complète — Forme & santé — Débutant",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "beginner",
+      "daysCount": 3,
+      "exercisesCount": 15,
+      "file": "full-gym-fitness-beginner.json",
+      "goal": "Forme & santé (Débutant)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 3,
+      "sessionMinutes": 29,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "débutant",
+        "forme & santé",
+        "salle complète",
+        "3 jours"
+      ]
+    },
+    {
+      "id": "full-gym-muscle-intermediate",
+      "name": "Salle complète — Hypertrophie — Intermédiaire",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "full-gym-muscle-intermediate.json",
+      "goal": "Hypertrophie (Intermédiaire)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 35,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "hypertrophie",
+        "salle complète",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "full-gym-strength-intermediate",
+      "name": "Salle complète — Force — Intermédiaire",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "full-gym-strength-intermediate.json",
+      "goal": "Force (Intermédiaire)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 48,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "force",
+        "salle complète",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "full-gym-weight_loss-intermediate",
+      "name": "Salle complète — Perte de poids — Intermédiaire",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 26,
+      "file": "full-gym-weight_loss-intermediate.json",
+      "goal": "Perte de poids (Intermédiaire)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 28,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "perte de poids",
+        "salle complète",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "full-gym-fitness-intermediate",
+      "name": "Salle complète — Forme & santé — Intermédiaire",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "intermediate",
+      "daysCount": 4,
+      "exercisesCount": 22,
+      "file": "full-gym-fitness-intermediate.json",
+      "goal": "Forme & santé (Intermédiaire)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 4,
+      "sessionMinutes": 31,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "intermédiaire",
+        "forme & santé",
+        "salle complète",
+        "4 jours"
+      ]
+    },
+    {
+      "id": "full-gym-muscle-advanced",
+      "name": "Salle complète — Hypertrophie — Avancé",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "full-gym-muscle-advanced.json",
+      "goal": "Hypertrophie (Avancé)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 32,
+      "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "hypertrophie",
+        "salle complète",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "full-gym-strength-advanced",
+      "name": "Salle complète — Force — Avancé",
+      "description": "Programme force niveau avancé, 5 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "full-gym-strength-advanced.json",
+      "goal": "Force (Avancé)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 44,
+      "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "force",
+        "salle complète",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "full-gym-weight_loss-advanced",
+      "name": "Salle complète — Perte de poids — Avancé",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 30,
+      "file": "full-gym-weight_loss-advanced.json",
+      "goal": "Perte de poids (Avancé)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 26,
+      "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "perte de poids",
+        "salle complète",
+        "5 jours"
+      ]
+    },
+    {
+      "id": "full-gym-fitness-advanced",
+      "name": "Salle complète — Forme & santé — Avancé",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, salle complète (barres, haltères, poulies, machines).",
+      "author": "Life Sport Tracker",
+      "level": "advanced",
+      "daysCount": 5,
+      "exercisesCount": 25,
+      "file": "full-gym-fitness-advanced.json",
+      "goal": "Forme & santé (Avancé)",
+      "equipment": "Salle complète (barres, haltères, poulies, machines)",
+      "equipmentProfileIds": [
+        "full-gym"
+      ],
+      "sessionsPerWeek": 5,
+      "sessionMinutes": 28,
+      "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
+      "tags": [
+        "gen-onboarding",
+        "avancé",
+        "forme & santé",
+        "salle complète",
+        "5 jours"
+      ]
     }
   ],
   "foodDatabases": [
