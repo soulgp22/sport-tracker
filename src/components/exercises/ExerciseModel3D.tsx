@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { Asset } from 'expo-asset';
+import * as FileSystemLegacy from 'expo-file-system/legacy';
 
 import ExerciseModelViewer from './dom/ExerciseModelViewer';
 
@@ -11,17 +12,41 @@ interface ExerciseModel3DProps {
 }
 
 /**
- * Viewer 3D via Expo DOM component : le <model-viewer> web est servi par
- * Metro en HTTP (fini les blocages file:// de la WebView Android).
+ * Viewer 3D via Expo DOM component (<model-viewer> dans une webview).
+ *
+ * Le GLB est embarqué en data-URI base64 : en build de production, la page
+ * DOM est servie en file:// et la WebView Android bloque les requêtes
+ * file:// secondaires — le modèle ne se chargeait jamais (écran noir).
+ * La data-URI fonctionne à l'identique en dev et en production.
  *
  * NB : un DOM component SANS dimensions explicites mesure 0×0 (le JS tourne
  * mais la webview native n'affiche rien). On mesure donc le conteneur via
  * onLayout et on passe une taille numérique au composant DOM.
  */
 export function ExerciseModel3D({ model, style }: ExerciseModel3DProps) {
-  // En dev, .uri est une URL Metro http://… joignable par la webview DOM.
-  const uri = Asset.fromModule(model).uri;
+  const [src, setSrc] = useState<string | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const asset = Asset.fromModule(model);
+        await asset.downloadAsync();
+        const uri = asset.localUri ?? asset.uri;
+        const base64 = await FileSystemLegacy.readAsStringAsync(uri, {
+          encoding: 'base64',
+        });
+        if (!cancelled) setSrc(`data:model/gltf-binary;base64,${base64}`);
+      } catch {
+        // Échec de lecture de l'asset : le conteneur noir reste affiché,
+        // l'écran de détail exercice reste utilisable.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [model]);
 
   const onLayout = (e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
@@ -40,9 +65,9 @@ export function ExerciseModel3D({ model, style }: ExerciseModel3DProps) {
 
   return (
     <View style={[styles.container, style]} onLayout={onLayout}>
-      {size ? (
+      {size && src ? (
         <ExerciseModelViewer
-          src={uri}
+          src={src}
           // La taille du webview natif passe par la prop `dom` (interceptée
           // par le wrapper Expo, non envoyée au composant web).
           dom={dom}

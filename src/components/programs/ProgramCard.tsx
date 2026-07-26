@@ -21,14 +21,18 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const totalExercises = program.days.reduce((sum, day) => sum + day.exercises.length, 0);
-  const equipmentProfileId = program.equipmentProfileId ?? 'bodyweight';
-  const profile = getEquipmentProfile(equipmentProfileId);
+  // Pas de profil par défaut : afficher « bodyweight » pour un programme
+  // dont l'équipement est inconnu serait un mensonge visible par l'utilisateur.
+  const equipmentProfileId = program.equipmentProfileId;
+  const profile = equipmentProfileId ? getEquipmentProfile(equipmentProfileId) : undefined;
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.75}>
-      <View style={styles.logoColumn}>
-        <EquipmentProfileBadge profileId={equipmentProfileId} size={54} />
-      </View>
+      {equipmentProfileId ? (
+        <View style={styles.logoColumn}>
+          <EquipmentProfileBadge profileId={equipmentProfileId} size={54} />
+        </View>
+      ) : null}
 
       <View style={styles.body}>
         <Text style={styles.name} numberOfLines={2}>
@@ -39,9 +43,11 @@ export function ProgramCard({ program, onPress, onDelete }: ProgramCardProps) {
           {' · '}
           {t(totalExercises !== 1 ? 'program.exerciseCount.other' : 'program.exerciseCount.one', { count: totalExercises })}
         </Text>
-        <Text style={styles.profileName} numberOfLines={1}>
-          {t(profile.i18nKey)}
-        </Text>
+        {profile ? (
+          <Text style={styles.profileName} numberOfLines={1}>
+            {t(profile.i18nKey)}
+          </Text>
+        ) : null}
       </View>
 
       <View style={styles.actions}>

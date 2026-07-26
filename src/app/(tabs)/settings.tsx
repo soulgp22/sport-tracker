@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import Constants from 'expo-constants';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystemLegacy from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
@@ -799,7 +800,7 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.about')}</Text>
-          <Text style={styles.aboutText}>Life Sport Tracker v1.0.0</Text>
+          <Text style={styles.aboutText}>Life Sport Tracker v{Constants.expoConfig?.version ?? '?'}</Text>
           <Text style={styles.aboutSubtext}>
             {t('settings.aboutSubtitle')}
           </Text>

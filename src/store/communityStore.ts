@@ -535,7 +535,10 @@ export const useCommunityStore = create<CommunityState>((set) => ({
   downloadProgram: async (entry) => {
     try {
       const text = await fetchText(`${COMMUNITY_BASE_URL}${entry.file}`);
-      return useProgramStore.getState().importPrograms(text);
+      // Le manifeste connaît le profil d'équipement du programme : on le propage.
+      return useProgramStore.getState().importPrograms(text, {
+        equipmentProfileId: entry.equipmentProfileIds?.[0],
+      });
     } catch {
       throw new Error(DOWNLOAD_ERROR_MESSAGE);
     }

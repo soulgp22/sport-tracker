@@ -1,4 +1,4 @@
-import { useMemo, useSyncExternalStore } from 'react';
+import { useContext, useMemo, useSyncExternalStore } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import {
   Modal,
@@ -12,7 +12,7 @@ import {
   type AlertButton,
   type AlertOptions,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
@@ -77,6 +77,12 @@ export function AppDialog() {
   const c = useColors();
   const { tr } = useTranslation();
   const { height: windowHeight } = useWindowDimensions();
+  // Dans une Modal Android (navigationBarTranslucent), l'inset bas peut être
+  // nul : on le lit explicitement pour que la carte ne passe jamais sous la
+  // barre de navigation/geste. Contexte lu directement (repli 0 si absent,
+  // ex. tests sans SafeAreaProvider).
+  const insets = useContext(SafeAreaInsetsContext);
+  const bottomInset = insets?.bottom ?? 0;
   const cardMaxHeight = windowHeight * 0.82;
   const styles = useMemo(() => makeStyles(c, cardMaxHeight), [c, cardMaxHeight]);
   const dialog = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
@@ -111,7 +117,7 @@ export function AppDialog() {
       onRequestClose={requestClose}>
       <View style={styles.root}>
         <Pressable style={StyleSheet.absoluteFill} onPress={requestClose} />
-        <SafeAreaView style={styles.safe} pointerEvents="box-none">
+        <View style={[styles.safe, { paddingBottom: bottomInset }]} pointerEvents="box-none">
           <View style={styles.card} accessibilityRole="alert" testID="app-dialog-card">
             <View style={styles.grabber} />
             <View style={styles.headerRow}>
@@ -171,7 +177,7 @@ export function AppDialog() {
               })}
             </View>
           </View>
-        </SafeAreaView>
+        </View>
       </View>
     </Modal>
   );
@@ -235,7 +241,9 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
   },
   actions: { flexDirection: 'column-reverse', gap: 9, marginTop: 16 },
   action: {
-    flex: 1,
+    // Pas de flex ici : dans une colonne à hauteur automatique, flex: 1
+    // étire les boutons de façon disproportionnée (et peut les pousser
+    // hors de l'écran quand la carte atteint sa hauteur max).
     minHeight: 46,
     alignItems: 'center',
     justifyContent: 'center',
@@ -243,7 +251,6 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
     borderRadius: 12,
     backgroundColor: c.primary,
   },
-  actionStacked: { flex: 0 },
   actionCancel: { backgroundColor: c.surfaceAlt, borderWidth: 1, borderColor: c.border },
   actionDanger: { backgroundColor: c.danger },
   actionText: { fontFamily: fonts.sansBold, fontSize: 14, color: c.primaryText },

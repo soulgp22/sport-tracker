@@ -110,7 +110,7 @@ interface ProgramState {
   addExercise: (name: string, muscleGroup?: string) => Exercise;
   updateExercise: (id: string, patch: Partial<Omit<Exercise, 'id'>>) => void;
 
-  importPrograms: (jsonString: string, options?: { commit?: boolean }) => ImportResult;
+  importPrograms: (jsonString: string, options?: { commit?: boolean; equipmentProfileId?: EquipmentProfileId }) => ImportResult;
 }
 
 export const useProgramStore = create<ProgramState>()(
@@ -395,6 +395,11 @@ export const useProgramStore = create<ProgramState>()(
             id: uid(),
             name: p.name.trim(),
             days,
+            // Tag d'équipement fourni par le téléchargement communautaire
+            // (le manifeste connaît le profil, pas le JSON du programme).
+            ...(options?.equipmentProfileId
+              ? { equipmentProfileId: options.equipmentProfileId }
+              : {}),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           });
