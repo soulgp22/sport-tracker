@@ -65,10 +65,6 @@ Les bases d'aliments communautaires sont organisées **par pays** dans `communit
 | Belgique | `foods-belgique.json` | Delhaize, Colruyt, Carrefour |
 | Royaume-Uni | `foods-royaume-uni.json` | Tesco, Sainsbury's, Asda |
 
-Des bases spécifiques par enseigne existent également (champ `retailer` historique) :
-- `foods-auchan-fr.json` — Auchan France
-- `foods-carrefour-fr.json` — Carrefour France
-
 ### Structure d'un pack pays (extrait de `community/foods-france.json`)
 
 ```json

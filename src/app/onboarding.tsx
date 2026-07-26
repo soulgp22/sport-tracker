@@ -134,11 +134,11 @@ export default function OnboardingScreen() {
   const [withExercises, setWithExercises] = useState(profile.level !== 'beginner');
   const totalSteps = 6;
   const retailerText = retailerCopy[language];
-  const selectedFoodDatabaseId = profile.retailer === 'auchan'
-    ? 'foods-auchan-fr-starter'
-    : profile.retailer === 'carrefour'
-      ? 'foods-carrefour-fr-starter'
-      : profile.retailer === 'none' ? null : profile.retailer;
+  // Anciens profils par enseigne : les bases starter Auchan/Carrefour ont été
+  // retirées, la base pays France (97 aliments) couvre ces deux enseignes.
+  const selectedFoodDatabaseId = profile.retailer === 'auchan' || profile.retailer === 'carrefour'
+    ? 'foods-france'
+    : profile.retailer === 'none' ? null : profile.retailer;
   const selectedFoodDatabase = communityData?.foodDatabases.find(
     (entry) => entry.id === selectedFoodDatabaseId
   );

@@ -2667,50 +2667,6 @@
         "es": "Una selección comunitaria de productos vendidos en el Reino Unido.",
         "de": "Eine Community-Auswahl von im UK verkauften Produkten."
       }
-    },
-    {
-      "id": "foods-auchan-fr-starter",
-      "name": "Produits Auchan France — Essentiels",
-      "description": "Une sélection de démarrage orientée sport : féculents, protéines, produits laitiers et collations.",
-      "author": "Communauté Life Sport Tracker",
-      "retailer": "Auchan FR",
-      "country": "France",
-      "foodsCount": 8,
-      "format": "json",
-      "file": "foods-auchan-fr.json",
-      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit.",
-      "nameI18n": {
-        "en": "Auchan France Products — Essentials",
-        "es": "Productos Auchan Francia — Esenciales",
-        "de": "Auchan Frankreich — Grundausstattung"
-      },
-      "descriptionI18n": {
-        "en": "A sports-oriented starter selection: starches, proteins, dairy and snacks.",
-        "es": "Una selección de inicio orientada al deporte: féculas, proteínas, lácteos y snacks.",
-        "de": "Sportorientierte Starter-Auswahl: Stärke, Proteine, Milchprodukte und Snacks."
-      }
-    },
-    {
-      "id": "foods-carrefour-fr-starter",
-      "name": "Produits Carrefour France — Essentiels",
-      "description": "Une sélection de produits courants pour compléter rapidement le suivi nutritionnel quotidien.",
-      "author": "Communauté Life Sport Tracker",
-      "retailer": "Carrefour FR",
-      "country": "France",
-      "foodsCount": 8,
-      "format": "json",
-      "file": "foods-carrefour-fr.json",
-      "disclaimer": "Base communautaire non officielle. Les recettes et valeurs nutritionnelles peuvent évoluer : vérifiez toujours l’emballage du produit.",
-      "nameI18n": {
-        "en": "Carrefour France Products — Essentials",
-        "es": "Productos Carrefour Francia — Esenciales",
-        "de": "Carrefour Frankreich — Grundausstattung"
-      },
-      "descriptionI18n": {
-        "en": "A selection of everyday products for daily nutritional tracking.",
-        "es": "Una selección de productos cotidianos para el seguimiento nutricional.",
-        "de": "Eine Auswahl alltäglicher Produkte für das Ernährungstracking."
-      }
     }
   ],
   "exercisePacks": [
