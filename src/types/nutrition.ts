@@ -19,6 +19,8 @@ export interface Food {
   category: string;
   unit: FoodUnit;
   nutritionPer100g: FoodNutrition;
+  /** Poids moyen d'une unité en grammes (ex. 1 œuf ≈ 55 g), pour les aliments en g/ml loggables à la pièce. */
+  unitWeightGrams?: number;
   barcode?: string;
   sourceUrl?: string;
   isCustom: boolean;

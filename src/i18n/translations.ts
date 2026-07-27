@@ -436,6 +436,20 @@ const fr: TranslationTable = {
   'dialog.invalidAlternative': 'Alternative invalide',
   'dialog.invalidAlternativeMessage': 'Choisis un exercice différent de l\'exercice principal.',
   'common.select': 'Sélectionner',
+  'community.filters.equipment': 'Équipement',
+  'community.filters.level': 'Niveau',
+  'community.filters.goal': 'Objectif',
+  'community.filters.all': 'Tous',
+  'community.filters.noResults': 'Aucun programme trouvé',
+  'community.filters.noResultsHint': 'Essaie de modifier ou réinitialiser les filtres',
+  'community.goal.muscle': 'Prise de muscle',
+  'community.goal.strength': 'Force',
+  'community.goal.weight_loss': 'Perte de poids',
+  'community.goal.fitness': 'Forme & santé',
+  'nutrition.add.modeWeight': 'Poids ({{unit}})',
+  'nutrition.add.modeUnits': 'Unités',
+  'nutrition.add.unitsApprox': '{{count}} unités ≈ {{grams}} g',
+  'nutrition.form.unitWeight': 'Poids d\'une unité (g)',
 };
 
 const en: TranslationTable = {
@@ -859,6 +873,20 @@ const en: TranslationTable = {
   'dialog.invalidAlternative': 'Invalid alternative',
   'dialog.invalidAlternativeMessage': 'Choose an exercise different from the main exercise.',
   'common.select': 'Select',
+  'community.filters.equipment': 'Equipment',
+  'community.filters.level': 'Level',
+  'community.filters.goal': 'Goal',
+  'community.filters.all': 'All',
+  'community.filters.noResults': 'No programs found',
+  'community.filters.noResultsHint': 'Try changing or resetting the filters',
+  'community.goal.muscle': 'Build muscle',
+  'community.goal.strength': 'Strength',
+  'community.goal.weight_loss': 'Lose weight',
+  'community.goal.fitness': 'Fitness & health',
+  'nutrition.add.modeWeight': 'Weight ({{unit}})',
+  'nutrition.add.modeUnits': 'Units',
+  'nutrition.add.unitsApprox': '{{count}} units ≈ {{grams}} g',
+  'nutrition.form.unitWeight': 'Weight of one unit (g)',
 };
 
 const es: TranslationTable = {
@@ -1282,6 +1310,20 @@ const es: TranslationTable = {
   'dialog.invalidAlternative': 'Alternativa no válida',
   'dialog.invalidAlternativeMessage': 'Elige un ejercicio diferente al ejercicio principal.',
   'common.select': 'Seleccionar',
+  'community.filters.equipment': 'Material',
+  'community.filters.level': 'Nivel',
+  'community.filters.goal': 'Objetivo',
+  'community.filters.all': 'Todos',
+  'community.filters.noResults': 'Ningún programa encontrado',
+  'community.filters.noResultsHint': 'Prueba a modificar o restablecer los filtros',
+  'community.goal.muscle': 'Ganar músculo',
+  'community.goal.strength': 'Fuerza',
+  'community.goal.weight_loss': 'Perder peso',
+  'community.goal.fitness': 'Forma y salud',
+  'nutrition.add.modeWeight': 'Peso ({{unit}})',
+  'nutrition.add.modeUnits': 'Unidades',
+  'nutrition.add.unitsApprox': '{{count}} unidades ≈ {{grams}} g',
+  'nutrition.form.unitWeight': 'Peso de una unidad (g)',
 };
 
 const de: TranslationTable = {
@@ -1705,6 +1747,20 @@ const de: TranslationTable = {
   'dialog.invalidAlternative': 'Ungültige Alternative',
   'dialog.invalidAlternativeMessage': 'Wähle eine andere Übung als die Hauptübung.',
   'common.select': 'Auswählen',
+  'community.filters.equipment': 'Ausrüstung',
+  'community.filters.level': 'Level',
+  'community.filters.goal': 'Ziel',
+  'community.filters.all': 'Alle',
+  'community.filters.noResults': 'Keine Programme gefunden',
+  'community.filters.noResultsHint': 'Filter ändern oder zurücksetzen',
+  'community.goal.muscle': 'Muskelaufbau',
+  'community.goal.strength': 'Kraft',
+  'community.goal.weight_loss': 'Gewicht verlieren',
+  'community.goal.fitness': 'Fitness & Gesundheit',
+  'nutrition.add.modeWeight': 'Gewicht ({{unit}})',
+  'nutrition.add.modeUnits': 'Einheiten',
+  'nutrition.add.unitsApprox': '{{count}} Einheiten ≈ {{grams}} g',
+  'nutrition.form.unitWeight': 'Gewicht einer Einheit (g)',
 };
 
 export const TRANSLATIONS: Record<LanguageId, TranslationTable> = { fr, en, es, de };

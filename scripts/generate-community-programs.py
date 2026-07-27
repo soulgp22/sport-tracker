@@ -43,7 +43,7 @@ EQUIP_LABEL = {
 }
 
 EQUIP_DESCRIPTION = {
-    'bodyweight': 'Aucun matériel, au poids du corps',
+    'bodyweight': 'Aucun matériel (100 % poids du corps)',
     'home-basic': 'Élastiques, ballon ou kettlebell (petit matériel)',
     'dumbbells': 'Une paire d’haltères',
     'machines': 'Machines guidées et poulies',
@@ -152,12 +152,32 @@ SLOTS = {
         'Rope Jumping', 'Fast Skipping', 'Bicycling, Stationary',
         'Rowing, Stationary', 'Elliptical Trainer', 'Plank',
     ]),
+    # Chaîne postérieure au sol — le SEUL travail « tirage/dos » possible
+    # en 100 % poids du corps (aucune traction/rowing sans barre n'existe).
+    'posterior': (['lower back', 'middle back', 'hamstrings', 'glutes'], [
+        'Superman', 'Hyperextensions With No Hyperextension Bench',
+        'Prone Manual Hamstring', 'Rear Leg Raises', 'One Half Locust',
+        'Inchworm', 'Glute Kickback', 'Floor Glute-Ham Raise',
+        'Natural Glute Ham Raise', 'Flutter Kicks',
+    ]),
 }
 
-# Le catalogue n'a pas d'exercice d'isolation biceps au poids du corps ni avec
-# du petit matériel : on le travaille via les tractions en supination.
+# Le catalogue n'a pas d'exercice d'isolation biceps avec du petit matériel :
+# on le travaille via les tractions en supination (barre + élastique).
+# Pour le poids du corps, les tractions sont EXCLUES (barre = matériel) :
+# les splits dédiés ci-dessous n'ont ni vertical_pull, ni horizontal_pull,
+# ni biceps — remplacés par le slot 'posterior' et des poussées variées.
 PROFILE_CANDIDATE_OVERRIDES = {
-    'bodyweight': {'biceps': ['Chin-Up', 'Pullups', 'V-Bar Pullup']},
+    'bodyweight': {
+        'horizontal_push': [
+            'Pushups', 'Push-Up Wide', 'Clock Push-Up',
+            'Pushups (Close and Wide Hand Positions)', 'Push Up to Side Plank',
+            'Plyo Push-up', 'Single-Arm Push-Up',
+        ],
+        'triceps': [
+            'Push-Ups - Close Triceps Position', 'Body Tricep Press', 'Body-Up',
+        ],
+    },
     'home-basic': {'biceps': ['Chin-Up', 'Pullups', 'V-Bar Pullup']},
 }
 
@@ -168,10 +188,30 @@ PROFILE_SLOT_DROP = {
     'bodyweight': {'calves', 'lateral'},
 }
 
-# Remplacement ponctuel : un débutant au poids du corps ne fait pas de
-# pompes en poirier (Handstand Push-Ups) → triceps à la place.
-PROFILE_SLOT_REPLACE = {
-    ('bodyweight', 'beginner', 'Full Body A'): ('vertical_push', 'triceps'),
+# Splits 100 % sans matériel (remplacent SPLITS pour le profil bodyweight) :
+# aucune barre fixe, aucun banc, aucune chaise — sol uniquement, à l'exception
+# du poirier contre un mur pour les avancés (standard calisthenics 2026).
+PROFILE_SPLIT_OVERRIDES = {
+    'bodyweight': {
+        'beginner': [
+            ('Full Body A', ['squat', 'horizontal_push', 'posterior', 'core']),
+            ('Full Body B', ['hinge', 'horizontal_push', 'triceps', 'core']),
+            ('Full Body C', ['lunge', 'horizontal_push', 'posterior', 'core']),
+        ],
+        'intermediate': [
+            ('Haut du corps A', ['horizontal_push', 'triceps', 'posterior', 'core']),
+            ('Bas du corps A', ['squat', 'hinge', 'lunge', 'core']),
+            ('Haut du corps B', ['horizontal_push', 'triceps', 'posterior', 'core']),
+            ('Bas du corps B', ['hinge', 'squat', 'lunge', 'core']),
+        ],
+        'advanced': [
+            ('Poussée', ['horizontal_push', 'vertical_push', 'horizontal_push', 'triceps', 'triceps']),
+            ('Chaîne postérieure', ['posterior', 'posterior', 'hinge', 'posterior', 'core']),
+            ('Jambes', ['squat', 'hinge', 'lunge', 'squat', 'core']),
+            ('Haut du corps', ['horizontal_push', 'triceps', 'posterior', 'core']),
+            ('Bas du corps', ['hinge', 'squat', 'lunge', 'core']),
+        ],
+    },
 }
 
 # Exercices isométriques / au temps : reps = secondes.
@@ -181,7 +221,7 @@ TIMED_EXERCISES = {
 }
 
 COMPOUND_SLOTS = {'squat', 'hinge', 'lunge', 'horizontal_push', 'incline_push',
-                  'vertical_push', 'horizontal_pull', 'vertical_pull'}
+                  'vertical_push', 'horizontal_pull', 'vertical_pull', 'posterior'}
 
 # --- Templates de splits ----------------------------------------------------
 
@@ -287,11 +327,9 @@ def build_program(goal, level, equipment):
     pool = Pool(catalog, equipment)
     days = []
     total_sets_seconds = 5 * 60  # échauffement forfaitaire
-    for day_index, (day_name, day_slots) in enumerate(SPLITS[level]):
+    split = PROFILE_SPLIT_OVERRIDES.get(equipment, {}).get(level) or SPLITS[level]
+    for day_index, (day_name, day_slots) in enumerate(split):
         slots = [s for s in day_slots if s not in PROFILE_SLOT_DROP.get(equipment, set())]
-        replace = PROFILE_SLOT_REPLACE.get((equipment, level, day_name))
-        if replace:
-            slots = [replace[1] if s == replace[0] else s for s in slots]
         used = set()
         exercises = []
         for position, slot in enumerate(slots):
@@ -358,6 +396,7 @@ def main():
                     'exercisesCount': exercises_count,
                     'file': file_name,
                     'goal': f'{GOAL_LABEL[goal]} ({LEVEL_LABEL[level]})',
+                    'goalId': goal,
                     'equipment': EQUIP_DESCRIPTION[equipment],
                     'equipmentProfileIds': [equipment],
                     'sessionsPerWeek': len(days),

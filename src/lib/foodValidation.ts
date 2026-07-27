@@ -71,6 +71,16 @@ function readUnit(record: Record<string, unknown>, label: string, errors: string
   return value as FoodUnit;
 }
 
+function readOptionalPositiveNumber(record: Record<string, unknown>, key: 'unitWeightGrams') {
+  if (!(key in record)) return undefined;
+  const value = record[key];
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    return undefined;
+  }
+
+  return value;
+}
+
 function readNumber(
   nutrition: Record<string, unknown>,
   key: keyof FoodNutrition,
@@ -227,6 +237,7 @@ export function validateFoodsJson(
     const country = readOptionalString(rawFood, 'country', label, itemErrors);
     const barcode = readOptionalString(rawFood, 'barcode', label, itemErrors);
     const sourceUrl = readOptionalString(rawFood, 'sourceUrl', label, itemErrors);
+    const unitWeightGrams = readOptionalPositiveNumber(rawFood, 'unitWeightGrams');
 
     if (id && duplicateIdSet.has(id)) {
       itemErrors.push(`Aliment ${label} : l'id "${id}" est déjà utilisé.`);
@@ -248,6 +259,7 @@ export function validateFoodsJson(
       nutritionPer100g: nutritionPer100g as FoodNutrition,
       ...(barcode ? { barcode } : {}),
       ...(sourceUrl ? { sourceUrl } : {}),
+      ...(unitWeightGrams !== undefined ? { unitWeightGrams } : {}),
       isCustom: true,
     });
   });

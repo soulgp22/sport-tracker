@@ -54,7 +54,7 @@
               ]
             },
             {
-              "exerciseName": "Inverted Row",
+              "exerciseName": "Prone Manual Hamstring",
               "sets": [
                 {
                   "reps": 6,
@@ -70,34 +70,14 @@
                   "reps": 6,
                   "weight": 0,
                   "restSeconds": 120
-                }
-              ]
-            },
-            {
-              "exerciseName": "Push-Ups - Close Triceps Position",
-              "sets": [
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
                 }
               ],
               "alternativeExerciseNames": [
-                "Dips - Triceps Version"
+                "Superman"
               ]
             },
             {
-              "exerciseName": "Dead Bug",
+              "exerciseName": "Russian Twist",
               "sets": [
                 {
                   "reps": 10,
@@ -148,27 +128,7 @@
               ]
             },
             {
-              "exerciseName": "Incline Push-Up",
-              "sets": [
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                },
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                },
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                }
-              ]
-            },
-            {
-              "exerciseName": "Chin-Up",
+              "exerciseName": "Clock Push-Up",
               "sets": [
                 {
                   "reps": 6,
@@ -187,11 +147,11 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Pullups"
+                "Pushups"
               ]
             },
             {
-              "exerciseName": "Pullups",
+              "exerciseName": "Push-Ups - Close Triceps Position",
               "sets": [
                 {
                   "reps": 8,
@@ -210,24 +170,24 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Chin-Up"
+                "Body Tricep Press"
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "Dead Bug",
               "sets": [
                 {
-                  "reps": 30,
+                  "reps": 10,
                   "weight": 0,
                   "restSeconds": 60
                 },
                 {
-                  "reps": 30,
+                  "reps": 10,
                   "weight": 0,
                   "restSeconds": 60
                 },
                 {
-                  "reps": 30,
+                  "reps": 10,
                   "weight": 0,
                   "restSeconds": 60
                 }
@@ -265,7 +225,7 @@
               ]
             },
             {
-              "exerciseName": "Pushups",
+              "exerciseName": "Pushups (Close and Wide Hand Positions)",
               "sets": [
                 {
                   "reps": 6,
@@ -284,11 +244,11 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Push-Up Wide"
+                "Pushups"
               ]
             },
             {
-              "exerciseName": "Inverted Row",
+              "exerciseName": "One Half Locust",
               "sets": [
                 {
                   "reps": 6,
@@ -304,30 +264,33 @@
                   "reps": 6,
                   "weight": 0,
                   "restSeconds": 120
-                }
-              ]
-            },
-            {
-              "exerciseName": "Push-Ups - Close Triceps Position",
-              "sets": [
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 90
                 }
               ],
               "alternativeExerciseNames": [
-                "Dips - Triceps Version"
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             }
           ]

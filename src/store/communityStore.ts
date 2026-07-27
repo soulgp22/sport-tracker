@@ -32,6 +32,7 @@ export interface CommunityProgramEntry {
   exercisesCount?: number;
   file: string;
   goal?: string;
+  goalId?: string;
   equipment?: string;
   equipmentProfileIds?: EquipmentProfileId[];
   sessionsPerWeek?: number;
@@ -355,6 +356,7 @@ function parseManifest(text: string): CommunityManifest {
 
       const exercisesCount = readOptionalCount(program, 'exercisesCount', 0);
       const goal = readOptionalString(program, 'goal');
+      const goalId = readOptionalString(program, 'goalId');
       const equipment = readOptionalString(program, 'equipment');
       const equipmentProfileIds = readOptionalEquipmentProfileIds(program);
       const sessionsPerWeek = readOptionalCount(program, 'sessionsPerWeek', 1);
@@ -372,6 +374,7 @@ function parseManifest(text: string): CommunityManifest {
         ...(exercisesCount !== undefined ? { exercisesCount } : {}),
         file,
         ...(goal !== undefined ? { goal } : {}),
+        ...(goalId !== undefined ? { goalId } : {}),
         ...(equipment !== undefined ? { equipment } : {}),
         ...(equipmentProfileIds !== undefined ? { equipmentProfileIds } : {}),
         ...(sessionsPerWeek !== undefined ? { sessionsPerWeek } : {}),

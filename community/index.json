@@ -701,19 +701,20 @@
     {
       "id": "bodyweight-muscle-beginner",
       "name": "Poids du corps — Hypertrophie — Débutant",
-      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 14,
+      "exercisesCount": 12,
       "file": "bodyweight-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "muscle",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 30,
+      "sessionMinutes": 26,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -726,19 +727,20 @@
     {
       "id": "bodyweight-strength-beginner",
       "name": "Poids du corps — Force — Débutant",
-      "description": "Programme force niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme force niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 14,
+      "exercisesCount": 12,
       "file": "bodyweight-strength-beginner.json",
       "goal": "Force (Débutant)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "strength",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 37,
+      "sessionMinutes": 32,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -751,19 +753,20 @@
     {
       "id": "bodyweight-weight_loss-beginner",
       "name": "Poids du corps — Perte de poids — Débutant",
-      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 17,
+      "exercisesCount": 15,
       "file": "bodyweight-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "weight_loss",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 25,
+      "sessionMinutes": 22,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -776,19 +779,20 @@
     {
       "id": "bodyweight-fitness-beginner",
       "name": "Poids du corps — Forme & santé — Débutant",
-      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 14,
+      "exercisesCount": 12,
       "file": "bodyweight-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "fitness",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 28,
+      "sessionMinutes": 24,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -801,19 +805,20 @@
     {
       "id": "bodyweight-muscle-intermediate",
       "name": "Poids du corps — Hypertrophie — Intermédiaire",
-      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 19,
+      "exercisesCount": 16,
       "file": "bodyweight-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "muscle",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 26,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -826,19 +831,20 @@
     {
       "id": "bodyweight-strength-intermediate",
       "name": "Poids du corps — Force — Intermédiaire",
-      "description": "Programme force niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 19,
+      "exercisesCount": 16,
       "file": "bodyweight-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "strength",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 43,
+      "sessionMinutes": 36,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -851,19 +857,20 @@
     {
       "id": "bodyweight-weight_loss-intermediate",
       "name": "Poids du corps — Perte de poids — Intermédiaire",
-      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 23,
+      "exercisesCount": 20,
       "file": "bodyweight-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "weight_loss",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 25,
+      "sessionMinutes": 22,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -876,19 +883,20 @@
     {
       "id": "bodyweight-fitness-intermediate",
       "name": "Poids du corps — Forme & santé — Intermédiaire",
-      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 19,
+      "exercisesCount": 16,
       "file": "bodyweight-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "fitness",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 23,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -901,19 +909,20 @@
     {
       "id": "bodyweight-muscle-advanced",
       "name": "Poids du corps — Hypertrophie — Avancé",
-      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 22,
+      "exercisesCount": 23,
       "file": "bodyweight-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "muscle",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 29,
+      "sessionMinutes": 30,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -926,19 +935,20 @@
     {
       "id": "bodyweight-strength-advanced",
       "name": "Poids du corps — Force — Avancé",
-      "description": "Programme force niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme force niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 22,
+      "exercisesCount": 23,
       "file": "bodyweight-strength-advanced.json",
       "goal": "Force (Avancé)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "strength",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 40,
+      "sessionMinutes": 41,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -951,14 +961,15 @@
     {
       "id": "bodyweight-weight_loss-advanced",
       "name": "Poids du corps — Perte de poids — Avancé",
-      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 27,
+      "exercisesCount": 28,
       "file": "bodyweight-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "weight_loss",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
@@ -976,19 +987,20 @@
     {
       "id": "bodyweight-fitness-advanced",
       "name": "Poids du corps — Forme & santé — Avancé",
-      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, aucun matériel, au poids du corps.",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 22,
+      "exercisesCount": 23,
       "file": "bodyweight-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
-      "equipment": "Aucun matériel, au poids du corps",
+      "goalId": "fitness",
+      "equipment": "Aucun matériel (100 % poids du corps)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 27,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1008,6 +1020,7 @@
       "exercisesCount": 15,
       "file": "home-basic-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
+      "goalId": "muscle",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1033,6 +1046,7 @@
       "exercisesCount": 15,
       "file": "home-basic-strength-beginner.json",
       "goal": "Force (Débutant)",
+      "goalId": "strength",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1058,6 +1072,7 @@
       "exercisesCount": 18,
       "file": "home-basic-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
+      "goalId": "weight_loss",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1083,6 +1098,7 @@
       "exercisesCount": 15,
       "file": "home-basic-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
+      "goalId": "fitness",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1108,6 +1124,7 @@
       "exercisesCount": 22,
       "file": "home-basic-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
+      "goalId": "muscle",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1133,6 +1150,7 @@
       "exercisesCount": 22,
       "file": "home-basic-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
+      "goalId": "strength",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1158,6 +1176,7 @@
       "exercisesCount": 26,
       "file": "home-basic-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
+      "goalId": "weight_loss",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1183,6 +1202,7 @@
       "exercisesCount": 22,
       "file": "home-basic-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
+      "goalId": "fitness",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1208,6 +1228,7 @@
       "exercisesCount": 25,
       "file": "home-basic-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
+      "goalId": "muscle",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1233,6 +1254,7 @@
       "exercisesCount": 25,
       "file": "home-basic-strength-advanced.json",
       "goal": "Force (Avancé)",
+      "goalId": "strength",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1258,6 +1280,7 @@
       "exercisesCount": 30,
       "file": "home-basic-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
+      "goalId": "weight_loss",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1283,6 +1306,7 @@
       "exercisesCount": 25,
       "file": "home-basic-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
+      "goalId": "fitness",
       "equipment": "Élastiques, ballon ou kettlebell (petit matériel)",
       "equipmentProfileIds": [
         "home-basic"
@@ -1308,6 +1332,7 @@
       "exercisesCount": 15,
       "file": "dumbbells-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
+      "goalId": "muscle",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1333,6 +1358,7 @@
       "exercisesCount": 15,
       "file": "dumbbells-strength-beginner.json",
       "goal": "Force (Débutant)",
+      "goalId": "strength",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1358,6 +1384,7 @@
       "exercisesCount": 18,
       "file": "dumbbells-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
+      "goalId": "weight_loss",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1383,6 +1410,7 @@
       "exercisesCount": 15,
       "file": "dumbbells-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
+      "goalId": "fitness",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1408,6 +1436,7 @@
       "exercisesCount": 22,
       "file": "dumbbells-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
+      "goalId": "muscle",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1433,6 +1462,7 @@
       "exercisesCount": 22,
       "file": "dumbbells-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
+      "goalId": "strength",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1458,6 +1488,7 @@
       "exercisesCount": 26,
       "file": "dumbbells-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
+      "goalId": "weight_loss",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1483,6 +1514,7 @@
       "exercisesCount": 22,
       "file": "dumbbells-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
+      "goalId": "fitness",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1508,6 +1540,7 @@
       "exercisesCount": 25,
       "file": "dumbbells-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
+      "goalId": "muscle",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1533,6 +1566,7 @@
       "exercisesCount": 25,
       "file": "dumbbells-strength-advanced.json",
       "goal": "Force (Avancé)",
+      "goalId": "strength",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1558,6 +1592,7 @@
       "exercisesCount": 30,
       "file": "dumbbells-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
+      "goalId": "weight_loss",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1583,6 +1618,7 @@
       "exercisesCount": 25,
       "file": "dumbbells-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
+      "goalId": "fitness",
       "equipment": "Une paire d’haltères",
       "equipmentProfileIds": [
         "dumbbells"
@@ -1608,6 +1644,7 @@
       "exercisesCount": 15,
       "file": "machines-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
+      "goalId": "muscle",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1633,6 +1670,7 @@
       "exercisesCount": 15,
       "file": "machines-strength-beginner.json",
       "goal": "Force (Débutant)",
+      "goalId": "strength",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1658,6 +1696,7 @@
       "exercisesCount": 18,
       "file": "machines-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
+      "goalId": "weight_loss",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1683,6 +1722,7 @@
       "exercisesCount": 15,
       "file": "machines-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
+      "goalId": "fitness",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1708,6 +1748,7 @@
       "exercisesCount": 22,
       "file": "machines-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
+      "goalId": "muscle",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1733,6 +1774,7 @@
       "exercisesCount": 22,
       "file": "machines-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
+      "goalId": "strength",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1758,6 +1800,7 @@
       "exercisesCount": 26,
       "file": "machines-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
+      "goalId": "weight_loss",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1783,6 +1826,7 @@
       "exercisesCount": 22,
       "file": "machines-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
+      "goalId": "fitness",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1808,6 +1852,7 @@
       "exercisesCount": 25,
       "file": "machines-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
+      "goalId": "muscle",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1833,6 +1878,7 @@
       "exercisesCount": 25,
       "file": "machines-strength-advanced.json",
       "goal": "Force (Avancé)",
+      "goalId": "strength",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1858,6 +1904,7 @@
       "exercisesCount": 30,
       "file": "machines-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
+      "goalId": "weight_loss",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1883,6 +1930,7 @@
       "exercisesCount": 25,
       "file": "machines-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
+      "goalId": "fitness",
       "equipment": "Machines guidées et poulies",
       "equipmentProfileIds": [
         "machines"
@@ -1908,6 +1956,7 @@
       "exercisesCount": 15,
       "file": "barbell-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
+      "goalId": "muscle",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -1933,6 +1982,7 @@
       "exercisesCount": 15,
       "file": "barbell-strength-beginner.json",
       "goal": "Force (Débutant)",
+      "goalId": "strength",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -1958,6 +2008,7 @@
       "exercisesCount": 18,
       "file": "barbell-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
+      "goalId": "weight_loss",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -1983,6 +2034,7 @@
       "exercisesCount": 15,
       "file": "barbell-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
+      "goalId": "fitness",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2008,6 +2060,7 @@
       "exercisesCount": 22,
       "file": "barbell-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
+      "goalId": "muscle",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2033,6 +2086,7 @@
       "exercisesCount": 22,
       "file": "barbell-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
+      "goalId": "strength",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2058,6 +2112,7 @@
       "exercisesCount": 26,
       "file": "barbell-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
+      "goalId": "weight_loss",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2083,6 +2138,7 @@
       "exercisesCount": 22,
       "file": "barbell-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
+      "goalId": "fitness",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2108,6 +2164,7 @@
       "exercisesCount": 25,
       "file": "barbell-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
+      "goalId": "muscle",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2133,6 +2190,7 @@
       "exercisesCount": 25,
       "file": "barbell-strength-advanced.json",
       "goal": "Force (Avancé)",
+      "goalId": "strength",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2158,6 +2216,7 @@
       "exercisesCount": 30,
       "file": "barbell-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
+      "goalId": "weight_loss",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2183,6 +2242,7 @@
       "exercisesCount": 25,
       "file": "barbell-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
+      "goalId": "fitness",
       "equipment": "Barre, haltères et poids du corps",
       "equipmentProfileIds": [
         "barbell"
@@ -2208,6 +2268,7 @@
       "exercisesCount": 15,
       "file": "full-gym-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
+      "goalId": "muscle",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2233,6 +2294,7 @@
       "exercisesCount": 15,
       "file": "full-gym-strength-beginner.json",
       "goal": "Force (Débutant)",
+      "goalId": "strength",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2258,6 +2320,7 @@
       "exercisesCount": 18,
       "file": "full-gym-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
+      "goalId": "weight_loss",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2283,6 +2346,7 @@
       "exercisesCount": 15,
       "file": "full-gym-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
+      "goalId": "fitness",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2308,6 +2372,7 @@
       "exercisesCount": 22,
       "file": "full-gym-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
+      "goalId": "muscle",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2333,6 +2398,7 @@
       "exercisesCount": 22,
       "file": "full-gym-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
+      "goalId": "strength",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2358,6 +2424,7 @@
       "exercisesCount": 26,
       "file": "full-gym-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
+      "goalId": "weight_loss",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2383,6 +2450,7 @@
       "exercisesCount": 22,
       "file": "full-gym-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
+      "goalId": "fitness",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2408,6 +2476,7 @@
       "exercisesCount": 25,
       "file": "full-gym-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
+      "goalId": "muscle",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2433,6 +2502,7 @@
       "exercisesCount": 25,
       "file": "full-gym-strength-advanced.json",
       "goal": "Force (Avancé)",
+      "goalId": "strength",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2458,6 +2528,7 @@
       "exercisesCount": 30,
       "file": "full-gym-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
+      "goalId": "weight_loss",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"
@@ -2483,6 +2554,7 @@
       "exercisesCount": 25,
       "file": "full-gym-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
+      "goalId": "fitness",
       "equipment": "Salle complète (barres, haltères, poulies, machines)",
       "equipmentProfileIds": [
         "full-gym"

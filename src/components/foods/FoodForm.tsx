@@ -16,6 +16,7 @@ export interface FoodFormValues {
   category: string;
   unit: FoodUnit;
   nutritionPer100g: FoodNutrition;
+  unitWeightGrams?: number;
 }
 
 interface FoodFormProps {
@@ -34,7 +35,8 @@ type FieldKey =
   | 'fat'
   | 'fiber'
   | 'sugar'
-  | 'salt';
+  | 'salt'
+  | 'unitWeightGrams';
 
 const units: FoodUnit[] = ['g', 'ml', 'portion', 'unité'];
 const requiredNumberFields = ['calories', 'protein', 'carbs', 'fat'] as const;
@@ -99,6 +101,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
     fiber: numberToInput(initialFood?.nutritionPer100g.fiber),
     sugar: numberToInput(initialFood?.nutritionPer100g.sugar),
     salt: numberToInput(initialFood?.nutritionPer100g.salt),
+    unitWeightGrams: numberToInput(initialFood?.unitWeightGrams),
   });
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
 
@@ -170,16 +173,38 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
       nutrition[field] = parsed;
     });
 
+    const showUnitWeight = unit === 'g' || unit === 'ml';
+    let unitWeightGrams: number | undefined;
+    if (showUnitWeight) {
+      const value = numberValues.unitWeightGrams.trim();
+      if (value) {
+        const label = t('nutrition.form.unitWeight');
+        const parsed = parseNumberInput(value);
+        if (parsed === null) {
+          nextErrors.unitWeightGrams = `${label} doit être un nombre.`;
+        } else if (parsed <= 0) {
+          nextErrors.unitWeightGrams = `${label} doit être supérieur à 0.`;
+        } else {
+          unitWeightGrams = parsed;
+        }
+      }
+    }
+
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) return null;
 
-    return {
+    const values: FoodFormValues = {
       name: name.trim(),
       category: category.trim(),
       unit,
       nutritionPer100g: nutrition as FoodNutrition,
     };
+    if (unitWeightGrams !== undefined) {
+      values.unitWeightGrams = unitWeightGrams;
+    }
+
+    return values;
   };
 
   const handleSubmit = () => {
@@ -338,6 +363,17 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
             keyboardType="decimal-pad"
             placeholder="0"
           />
+
+          {unit === 'g' || unit === 'ml' ? (
+            <TextInput
+              label={t('nutrition.form.unitWeight')}
+              value={numberValues.unitWeightGrams}
+              onChangeText={(value) => setNumberValue('unitWeightGrams', value)}
+              error={errors.unitWeightGrams}
+              keyboardType="decimal-pad"
+              placeholder="0"
+            />
+          ) : null}
         </View>
 
         <Button title={submitLabel} onPress={handleSubmit} style={styles.submitButton} />

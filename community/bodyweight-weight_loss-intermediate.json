@@ -31,47 +31,7 @@
               ]
             },
             {
-              "exerciseName": "Inverted Row",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
-              ]
-            },
-            {
-              "exerciseName": "Handstand Push-Ups",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
-              ]
-            },
-            {
-              "exerciseName": "Chin-Up",
+              "exerciseName": "Body Tricep Press",
               "sets": [
                 {
                   "reps": 15,
@@ -90,11 +50,11 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Pullups"
+                "Push-Ups - Close Triceps Position"
               ]
             },
             {
-              "exerciseName": "Pullups",
+              "exerciseName": "Prone Manual Hamstring",
               "sets": [
                 {
                   "reps": 15,
@@ -113,30 +73,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Chin-Up"
+                "Superman"
               ]
             },
             {
-              "exerciseName": "Push-Ups - Close Triceps Position",
+              "exerciseName": "Russian Twist",
               "sets": [
                 {
                   "reps": 15,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 30
                 },
                 {
                   "reps": 15,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 30
                 },
                 {
                   "reps": 15,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 30
                 }
               ],
               "alternativeExerciseNames": [
-                "Dips - Triceps Version"
+                "Plank"
               ]
             },
             {
@@ -282,7 +242,7 @@
           "name": "Haut du corps B",
           "exercises": [
             {
-              "exerciseName": "Incline Push-Up",
+              "exerciseName": "Clock Push-Up",
               "sets": [
                 {
                   "reps": 12,
@@ -298,50 +258,10 @@
                   "reps": 12,
                   "weight": 0,
                   "restSeconds": 60
-                }
-              ]
-            },
-            {
-              "exerciseName": "Chin-Up",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
                 }
               ],
               "alternativeExerciseNames": [
-                "Pullups"
-              ]
-            },
-            {
-              "exerciseName": "Inverted Row",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
+                "Pushups"
               ]
             },
             {
@@ -364,11 +284,11 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Dips - Triceps Version"
+                "Body Tricep Press"
               ]
             },
             {
-              "exerciseName": "Pullups",
+              "exerciseName": "One Half Locust",
               "sets": [
                 {
                   "reps": 15,
@@ -387,7 +307,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Chin-Up"
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             },
             {

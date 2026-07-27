@@ -5,8 +5,10 @@ import {
   calculateGoalProgress,
   calculateNutritionForQuantity,
   calculateRemainingGoals,
+  canLogByUnit,
   getCalorieTrend,
   macroStatusColor,
+  resolveQuantityInGrams,
 } from '../nutritionCalc';
 
 const rizCuit: Food = {
@@ -25,6 +27,16 @@ const oeuf: Food = {
   unit: 'unité',
   nutritionPer100g: { calories: 78, protein: 6.3, carbs: 0.6, fat: 5.3 },
   isCustom: true,
+};
+
+const pomme: Food = {
+  id: 'pomme',
+  name: 'Pomme',
+  category: 'Fruits',
+  unit: 'g',
+  unitWeightGrams: 180,
+  nutritionPer100g: { calories: 50, protein: 0.5, carbs: 12, fat: 0.2 },
+  isCustom: false,
 };
 
 const goals: NutritionGoals = {
@@ -70,6 +82,25 @@ describe('nutritionCalc', () => {
       carbs: 1.2,
       fat: 10.6,
     });
+  });
+
+  it('convertit un mode unités en grammes via unitWeightGrams', () => {
+    expect(canLogByUnit(pomme)).toBe(true);
+    expect(resolveQuantityInGrams(pomme, 2, true)).toBe(360);
+
+    expect(calculateNutritionForQuantity(pomme, resolveQuantityInGrams(pomme, 2, true))).toEqual({
+      calories: 180,
+      protein: 1.8,
+      carbs: 43.2,
+      fat: 0.7,
+    });
+  });
+
+  it('ne convertit pas sans unitWeightGrams ou en mode poids', () => {
+    expect(canLogByUnit(rizCuit)).toBe(false);
+    expect(canLogByUnit(oeuf)).toBe(false);
+    expect(resolveQuantityInGrams(rizCuit, 2, true)).toBe(2);
+    expect(resolveQuantityInGrams(pomme, 2, false)).toBe(2);
   });
 
   it('somme les totaux de la journée', () => {

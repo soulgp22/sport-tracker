@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -27,7 +28,10 @@ import {
   type CommunityFoodDatabaseEntry,
   type CommunityExercisePackEntry,
   type CommunityProgramEntry,
+  type CommunityProgramLevel,
 } from '../../../store/communityStore';
+import { EQUIPMENT_PROFILES } from '../../../constants/equipmentProfiles';
+import type { EquipmentProfileId } from '../../../types/equipment';
 import type { ImportResult } from '../../../types';
 import type { ImportFoodsResult } from '../../../store/foodStore';
 import { useExerciseCatalogStore } from '../../../store/exerciseCatalogStore';
@@ -213,9 +217,75 @@ function CommunityExerciseCard({ entry, disabled, loading, installed, onDownload
   </View>;
 }
 
-export default function CommunityScreen() {
+const PROGRAM_LEVELS: CommunityProgramLevel[] = ['beginner', 'intermediate', 'advanced'];
+const PROGRAM_GOALS = ['muscle', 'strength', 'weight_loss', 'fitness'] as const;
+
+function FilterChip({
+  label,
+  selected,
+  onPress,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  const c = useColors();
+  const styles = useMemo(() => makeStyles(c), [c]);
+  return (
+    <TouchableOpacity
+      style={[styles.filterChip, selected && styles.filterChipSelected]}
+      onPress={onPress}
+      activeOpacity={0.75}>
+      <Text style={[styles.filterChipText, selected && styles.filterChipTextSelected]}>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
+function FilterChipRow({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: { id: string; label: string }[];
+  value: string | null;
+  onChange: (id: string | null) => void;
+}) {
   const c = useColors();
   const { t } = useTranslation();
+  const styles = useMemo(() => makeStyles(c), [c]);
+  return (
+    <View style={styles.filterRow}>
+      <Text style={styles.filterLabel}>{label}</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.filterChips}>
+        <FilterChip
+          label={t('community.filters.all')}
+          selected={value === null}
+          onPress={() => onChange(null)}
+        />
+        {options.map((option) => (
+          <FilterChip
+            key={option.id}
+            label={option.label}
+            selected={value === option.id}
+            onPress={() => onChange(option.id)}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
+}
+
+export default function CommunityScreen() {
+  const c = useColors();
+  const { t, language } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const params = useLocalSearchParams<{ tab?: string }>();
@@ -232,11 +302,46 @@ export default function CommunityScreen() {
     params.tab === 'foods' ? 'foods' : params.tab === 'exercises' ? 'exercises' : 'programs'
   );
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [filterEquipment, setFilterEquipment] = useState<EquipmentProfileId | null>(null);
+  const [filterLevel, setFilterLevel] = useState<CommunityProgramLevel | null>(null);
+  const [filterGoal, setFilterGoal] = useState<string | null>(null);
 
   const programs = data?.programs ?? [];
   const foodDatabases = data?.foodDatabases ?? [];
   const exercisePacks = data?.exercisePacks ?? [];
   const currentItems = selectedTab === 'programs' ? programs : selectedTab === 'exercises' ? exercisePacks : foodDatabases;
+
+  const filteredPrograms = useMemo(
+    () =>
+      programs.filter((entry) => {
+        if (filterEquipment && !(entry.equipmentProfileIds ?? []).includes(filterEquipment)) return false;
+        if (filterLevel && entry.level !== filterLevel) return false;
+        if (filterGoal && entry.goalId !== filterGoal) return false;
+        return true;
+      }),
+    [programs, filterEquipment, filterLevel, filterGoal]
+  );
+
+  const equipmentOptions = useMemo(
+    () =>
+      EQUIPMENT_PROFILES.map((profile) => ({
+        id: profile.id as string,
+        label: resolveEquipmentLabels([profile.id], language)[0] ?? profile.id,
+      })),
+    [language]
+  );
+  const levelOptions = useMemo(
+    () =>
+      PROGRAM_LEVELS.map((level) => ({
+        id: level as string,
+        label: resolveEntryLevel(level, language),
+      })),
+    [language]
+  );
+  const goalOptions = useMemo(
+    () => PROGRAM_GOALS.map((goal) => ({ id: goal as string, label: t(`community.goal.${goal}`) })),
+    [t]
+  );
 
   useEffect(() => {
     void fetchManifest();
@@ -381,29 +486,59 @@ export default function CommunityScreen() {
           <Text style={styles.centerText}>{loadingLabel}</Text>
         </View>
       ) : selectedTab === 'programs' ? (
-        <FlatList
-          data={programs}
-          key="programs"
-          keyExtractor={(entry) => entry.id}
-          renderItem={({ item }) => (
-            <CommunityProgramCard
-              entry={item}
-              loading={downloadingId === item.id}
-              disabled={!!downloadingId && downloadingId !== item.id}
-              onDownload={() => void handleProgramDownload(item)}
+        <View style={styles.programsBody}>
+          <View style={styles.filters}>
+            <FilterChipRow
+              label={t('community.filters.equipment')}
+              options={equipmentOptions}
+              value={filterEquipment}
+              onChange={(id) => setFilterEquipment(id as EquipmentProfileId | null)}
             />
-          )}
-          refreshing={loading}
-          onRefresh={() => void fetchManifest()}
-          ListEmptyComponent={
-            <EmptyState
-              icon={error ? 'cloud-offline-outline' : 'cloud-download-outline'}
-              title={error ? t('community.unavailable') : emptyTitle}
-              subtitle={error ? t(error) : t('community.emptyList')}
+            <FilterChipRow
+              label={t('community.filters.level')}
+              options={levelOptions}
+              value={filterLevel}
+              onChange={(id) => setFilterLevel(id as CommunityProgramLevel | null)}
             />
-          }
-          contentContainerStyle={programs.length > 0 ? styles.list : styles.emptyList}
-        />
+            <FilterChipRow
+              label={t('community.filters.goal')}
+              options={goalOptions}
+              value={filterGoal}
+              onChange={setFilterGoal}
+            />
+          </View>
+          <FlatList
+            data={filteredPrograms}
+            key="programs"
+            keyExtractor={(entry) => entry.id}
+            renderItem={({ item }) => (
+              <CommunityProgramCard
+                entry={item}
+                loading={downloadingId === item.id}
+                disabled={!!downloadingId && downloadingId !== item.id}
+                onDownload={() => void handleProgramDownload(item)}
+              />
+            )}
+            refreshing={loading}
+            onRefresh={() => void fetchManifest()}
+            ListEmptyComponent={
+              programs.length > 0 ? (
+                <EmptyState
+                  icon="funnel-outline"
+                  title={t('community.filters.noResults')}
+                  subtitle={t('community.filters.noResultsHint')}
+                />
+              ) : (
+                <EmptyState
+                  icon={error ? 'cloud-offline-outline' : 'cloud-download-outline'}
+                  title={error ? t('community.unavailable') : emptyTitle}
+                  subtitle={error ? t(error) : t('community.emptyList')}
+                />
+              )
+            }
+            contentContainerStyle={filteredPrograms.length > 0 ? styles.list : styles.emptyList}
+          />
+        </View>
       ) : selectedTab === 'exercises' ? (
         <FlatList
           data={exercisePacks}
@@ -471,6 +606,32 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   tabTextActive: { color: c.primaryText },
   list: { paddingVertical: 4, paddingBottom: 28 },
   emptyList: { flexGrow: 1 },
+  programsBody: { flex: 1 },
+  filters: { gap: 4, paddingBottom: 4 },
+  filterRow: { flexDirection: 'row', alignItems: 'center', paddingLeft: 16 },
+  filterLabel: {
+    width: 86,
+    fontSize: 11,
+    fontFamily: fonts.sansBold,
+    color: c.textSecondary,
+    textTransform: 'uppercase',
+  },
+  filterChips: { gap: 8, paddingRight: 16, paddingVertical: 4, alignItems: 'center' },
+  filterChip: {
+    height: 34,
+    justifyContent: 'center',
+    paddingHorizontal: 14,
+    borderRadius: 17,
+    backgroundColor: c.surfaceAlt,
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  filterChipSelected: {
+    backgroundColor: c.primary,
+    borderColor: c.primary,
+  },
+  filterChipText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary },
+  filterChipTextSelected: { color: c.primaryText },
   centerState: {
     flex: 1,
     alignItems: 'center',

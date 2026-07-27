@@ -110,6 +110,21 @@ export function calculateNutritionForQuantity(food: Food, quantity: number): Cal
   });
 }
 
+/** Un aliment en g/ml peut être loggé à la pièce si le poids d'une unité est connu. */
+export function canLogByUnit(food: Food): boolean {
+  return (
+    (food.unit === 'g' || food.unit === 'ml') &&
+    typeof food.unitWeightGrams === 'number' &&
+    food.unitWeightGrams > 0
+  );
+}
+
+/** Convertit une quantité saisie en unités en grammes ; renvoie la quantité telle quelle sinon. */
+export function resolveQuantityInGrams(food: Food, quantity: number, byUnit: boolean): number {
+  if (!byUnit || !canLogByUnit(food)) return quantity;
+  return quantity * (food.unitWeightGrams as number);
+}
+
 export function calculateDailyTotals(entries: FoodEntry[]): CalculatedNutrition {
   return sumNutrition(entries.map((entry) => entry.calculatedNutrition));
 }

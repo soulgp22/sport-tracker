@@ -19,7 +19,11 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
-import { calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
+import {
+  calculateNutritionForQuantity,
+  canLogByUnit,
+  resolveQuantityInGrams,
+} from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food, MealType } from '../../../types';
@@ -88,29 +92,35 @@ export default function AddMealScreen() {
   const [query, setQuery] = useState('');
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [quantity, setQuantity] = useState('100');
+  const [quantityMode, setQuantityMode] = useState<'weight' | 'units'>('weight');
   const [mealType, setMealType] = useState<MealType>(() => getDefaultMealType());
 
   const results = useMemo(() => searchFoods(query), [customFoods, query, searchFoods]);
   const quantityNumber = parseQuantity(quantity);
+  const loggableByUnit = selectedFood !== null && canLogByUnit(selectedFood);
+  const byUnit = loggableByUnit && quantityMode === 'units';
+  const quantityInGrams = selectedFood
+    ? resolveQuantityInGrams(selectedFood, quantityNumber, byUnit)
+    : 0;
   const calculatedNutrition = useMemo(() => {
-    if (!selectedFood || quantityNumber <= 0) {
+    if (!selectedFood || quantityInGrams <= 0) {
       return { calories: 0, protein: 0, carbs: 0, fat: 0 };
     }
 
-    return calculateNutritionForQuantity(selectedFood, quantityNumber);
-  }, [quantityNumber, selectedFood]);
+    return calculateNutritionForQuantity(selectedFood, quantityInGrams);
+  }, [quantityInGrams, selectedFood]);
 
-  const canSubmit = selectedFood !== null && quantityNumber > 0;
+  const canSubmit = selectedFood !== null && quantityInGrams > 0;
 
   const handleSubmit = () => {
-    if (!selectedFood || quantityNumber <= 0) return;
+    if (!selectedFood || quantityInGrams <= 0) return;
 
     addFoodEntry({
       date: todayKey(),
       mealType,
       foodId: selectedFood.id,
       foodName: selectedFood.name,
-      quantity: quantityNumber,
+      quantity: quantityInGrams,
       unit: selectedFood.unit,
       calculatedNutrition,
     });
@@ -121,6 +131,7 @@ export default function AddMealScreen() {
   const handleSelectFood = (food: Food) => {
     setSelectedFood(food);
     setQuantity(defaultQuantityForFood(food));
+    setQuantityMode('weight');
   };
 
   return (
@@ -175,8 +186,32 @@ export default function AddMealScreen() {
               </Text>
             </View>
 
+            {loggableByUnit ? (
+              <View style={styles.unitModeRow}>
+                {(['weight', 'units'] as const).map((mode) => {
+                  const selected = mode === quantityMode;
+
+                  return (
+                    <TouchableOpacity
+                      key={mode}
+                      style={[styles.chip, selected && styles.chipSelected]}
+                      onPress={() => setQuantityMode(mode)}
+                      activeOpacity={0.75}>
+                      <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
+                        {mode === 'weight'
+                          ? t('nutrition.add.modeWeight', { unit: selectedFood.unit })
+                          : t('nutrition.add.modeUnits')}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            ) : null}
+
             <TextInput
-              label={`Quantité (${selectedFood.unit})`}
+              label={`${t('nutrition.add.quantity')} (${
+                byUnit ? t('nutrition.add.modeUnits') : selectedFood.unit
+              })`}
               value={quantity}
               onChangeText={setQuantity}
               keyboardType="numeric"
@@ -206,6 +241,14 @@ export default function AddMealScreen() {
 
             <View style={styles.previewCard}>
               <Text style={styles.previewTitle}>{t('nutrition.add.preview')}</Text>
+              {byUnit && quantityNumber > 0 ? (
+                <Text style={styles.previewApprox}>
+                  {t('nutrition.add.unitsApprox', {
+                    count: formatNumber(quantityNumber),
+                    grams: formatNumber(quantityInGrams),
+                  })}
+                </Text>
+              ) : null}
               <Text style={styles.previewCalories}>{calculatedNutrition.calories} kcal</Text>
               <Text style={styles.previewMacros}>
                 P {formatNumber(calculatedNutrition.protein)} g · G{' '}
@@ -279,6 +322,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   section: { gap: 10 },
   sectionTitle: { fontSize: 16, fontFamily: fonts.sansBold, color: c.textPrimary },
   mealTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  unitModeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     minHeight: 36,
     justifyContent: 'center',
@@ -302,6 +346,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   previewTitle: { fontSize: 16, fontFamily: fonts.sansHeavy, color: c.textPrimary },
+  previewApprox: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
   previewCalories: { fontSize: 28, fontFamily: fonts.sansHeavy, color: c.primary },
   previewMacros: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textSecondary },
   actions: { gap: 12 },
