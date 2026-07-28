@@ -1,9 +1,9 @@
 /**
  * Gating de la feature « estimation de repas par photo » (VLM on-device).
  *
- * react-native-executorch exige Android API 33+ (arm64), ~1 Go de modèle à
- * télécharger et beaucoup de RAM en inférence. La feature n'est donc exposée
- * que sur les appareils capables. Le module executorch n'est JAMAIS importé
+ * react-native-executorch exige Android API 33+ (arm64), ~4,4 Go de modèle à
+ * télécharger (Gemma 4 E2B multimodal, backend Vulkan) et beaucoup de RAM en
+ * inférence. La feature n'est donc exposée que sur les appareils capables. Le module executorch n'est JAMAIS importé
  * ici : il est chargé dynamiquement (require dans try/catch, pattern
  * healthConnect) uniquement quand le gating est OK, ce qui le rend inerte
  * sous Jest, Expo Go et les appareils exclus.
@@ -18,8 +18,8 @@
  *   arrière-plan, kill) laisse un fichier partiel dans le cache, rien dans le
  *   répertoire final → la tentative suivante repart de zéro (pas de reprise
  *   inter-session : createDownloadResumable écrase le partiel).
- * Conséquence : tant que le téléchargement d'1 Go est coupé avant la fin, le
- * modèle « se retélécharge à chaque utilisation ». D'où : keep-awake pendant
+ * Conséquence : tant que le téléchargement (~4,4 Go) est coupé avant la fin,
+ * le modèle « se retélécharge à chaque utilisation ». D'où : keep-awake pendant
  * le téléchargement, vérif existence+taille avant de relancer, et suppression
  * des partiels en échec pour repartir propre.
  */
@@ -28,10 +28,14 @@ import { Platform } from 'react-native';
 
 /** Android API level minimal requis par react-native-executorch. */
 const MIN_ANDROID_API = 33;
-/** RAM minimale : 5,5 Go (le modèle LFM2.5-VL 1.6B quantifié tient difficilement en dessous). */
-const MIN_TOTAL_MEMORY_BYTES = 5.5 * 1024 * 1024 * 1024;
-/** Espace libre minimal : 3,5 Go (modèle ~1 Go + tokenizer + marge). */
-const MIN_FREE_STORAGE_BYTES = 3.5 * 1024 * 1024 * 1024;
+/**
+ * RAM minimale : 7 Go, ciblant les appareils « 8 Go » (expo-device rapporte
+ * ~7,4-7,8 Go sur ceux-ci, la mémoire réservée système étant déduite). Le
+ * modèle Gemma 4 E2B MM occupe ~4,4 Go chargé, + overhead runtime et vision.
+ */
+const MIN_TOTAL_MEMORY_BYTES = 7 * 1024 * 1024 * 1024;
+/** Espace libre minimal : 6 Go (modèle ~4,4 Go + tokenizer + marge). */
+const MIN_FREE_STORAGE_BYTES = 6 * 1024 * 1024 * 1024;
 
 export type MealPhotoBlockReason = 'android-version' | 'memory' | 'storage';
 
@@ -108,11 +112,11 @@ function getModelFileUris(): MealPhotoModelFile[] | null {
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { LFM2_5_VL_1_6B_QUANTIZED } = require('react-native-executorch') as typeof import('react-native-executorch');
+    const { GEMMA4_E2B_MM } = require('react-native-executorch') as typeof import('react-native-executorch');
     const sources: unknown[] = [
-      LFM2_5_VL_1_6B_QUANTIZED.modelSource,
-      LFM2_5_VL_1_6B_QUANTIZED.tokenizerSource,
-      LFM2_5_VL_1_6B_QUANTIZED.tokenizerConfigSource,
+      GEMMA4_E2B_MM.modelSource,
+      GEMMA4_E2B_MM.tokenizerSource,
+      GEMMA4_E2B_MM.tokenizerConfigSource,
     ];
     const finalDir = `${fs.documentDirectory}${RNE_DIR_NAME}`;
     return sources
@@ -201,14 +205,14 @@ export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
 let executorchInitialized = false;
 
 /**
- * Télécharge les ressources du modèle LFM2.5-VL (modèle + tokenizer + config)
- * via ExpoResourceFetcher, SANS charger le modèle en mémoire. Utilisable hors
+ * Télécharge les ressources du modèle Gemma 4 E2B MM (modèle + tokenizer +
+ * config) via ExpoResourceFetcher, SANS charger le modèle en mémoire. Utilisable hors
  * de la modale photo (ex. à la fin de l'onboarding). Idempotent : si les
  * fichiers sont déjà complets (existence + taille > 0), retourne true sans
  * rien relancer, et la modale MealPhotoReview réutilise ces mêmes fichiers.
  *
  * Pendant tout le téléchargement, expo-keep-awake empêche la mise en veille
- * (cause principale des coupures d'1 Go). En cas d'échec, les fichiers
+ * (cause principale des coupures de ~4,4 Go). En cas d'échec, les fichiers
  * partiels du cache sont supprimés pour que la tentative suivante reparte
  * proprement (pas de reprise inter-session côté fetcher).
  *
@@ -225,7 +229,7 @@ export async function downloadMealPhotoModel(
   const files = getModelFileUris();
   if (!fs || !files) return false;
 
-  // Déjà complet : ne pas relancer ~1 Go de téléchargement.
+  // Déjà complet : ne pas relancer ~4,4 Go de téléchargement.
   if (await isMealPhotoModelDownloaded()) return true;
 
   const keepAwake = loadKeepAwake();
@@ -235,14 +239,14 @@ export async function downloadMealPhotoModel(
     await deletePartialFiles(fs, files);
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { LFM2_5_VL_1_6B_QUANTIZED } = require('react-native-executorch') as typeof import('react-native-executorch');
+    const { GEMMA4_E2B_MM } = require('react-native-executorch') as typeof import('react-native-executorch');
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { ExpoResourceFetcher } = require('react-native-executorch-expo-resource-fetcher') as typeof import('react-native-executorch-expo-resource-fetcher');
     await ExpoResourceFetcher.fetch(
       onProgress,
-      LFM2_5_VL_1_6B_QUANTIZED.modelSource,
-      LFM2_5_VL_1_6B_QUANTIZED.tokenizerSource,
-      LFM2_5_VL_1_6B_QUANTIZED.tokenizerConfigSource
+      GEMMA4_E2B_MM.modelSource,
+      GEMMA4_E2B_MM.tokenizerSource,
+      GEMMA4_E2B_MM.tokenizerConfigSource
     );
     // Vérif post-téléchargement : tous les fichiers attendus existent, non vides.
     return await isMealPhotoModelDownloaded();

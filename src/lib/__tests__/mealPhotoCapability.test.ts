@@ -29,7 +29,7 @@ function mockAndroidDevice(existingFiles: Map<string, number>) {
   jest.doMock('react-native', () => ({ Platform: { OS: 'android', Version: 34 } }));
   jest.doMock('expo-device', () => ({ totalMemory: 8 * 1024 * 1024 * 1024 }));
   jest.doMock('react-native-executorch', () => ({
-    LFM2_5_VL_1_6B_QUANTIZED: MODEL_SOURCES,
+    GEMMA4_E2B_MM: MODEL_SOURCES,
   }));
   const deleteAsync = jest.fn(async (uri: string) => {
     existingFiles.delete(uri);

@@ -486,11 +486,11 @@ const fr: TranslationTable = {
   'mealPhoto.permissionCamera': 'L\'accès à l\'appareil photo est nécessaire pour photographier ton repas.',
   'mealPhoto.permissionCta': 'Autoriser',
   'mealPhoto.downloading': 'Téléchargement du modèle IA… {{percent}} %',
-  'mealPhoto.downloadWarning': 'Ca. 1 GB: WLAN empfohlen. App während des Downloads geöffnet lassen.',
+  'mealPhoto.downloadWarning': 'Etwa 4,5 GB: WLAN empfohlen. App während des Downloads geöffnet lassen.',
   'mealPhoto.modelLoading': 'Chargement du modèle IA…',
   'mealPhoto.analyzing': 'Analyse de la photo… (10 à 30 s)',
   'mealPhoto.warningBanner': 'Estimation à vérifier — l\'IA se trompe sur les quantités.',
-  'mealPhoto.license': 'Modèle LFM2.5-VL (Liquid AI) — LFM Open License',
+  'mealPhoto.license': 'Gemma-4-E2B-Modell (Google) — Gemma Terms of Use',
   'mealPhoto.notFound': 'Non trouvé',
   'mealPhoto.searchManually': 'Rechercher manuellement',
   'mealPhoto.searchPlaceholder': 'Rechercher un aliment…',
@@ -520,6 +520,7 @@ const fr: TranslationTable = {
   'mealPhoto.downloadInterrupted': 'Le téléchargement du modèle a été interrompu. Rouvre cet écran et garde l\'app au premier plan jusqu\'à la fin.',
   'mealPhoto.totalTitle': 'Total estimé',
   'mealPhoto.totalHint': 'Consultation libre : rien n\'est enregistré tant que tu n\'appuies pas sur « Tout ajouter ».',
+  'mealPhoto.closing': 'Arrêt de l\'analyse en cours…',
 };
 
 const en: TranslationTable = {
@@ -1027,6 +1028,7 @@ const en: TranslationTable = {
   'mealPhoto.downloadInterrupted': 'The model download was interrupted. Reopen this screen and keep the app in the foreground until it finishes.',
   'mealPhoto.totalTitle': 'Estimated total',
   'mealPhoto.totalHint': 'Free preview: nothing is saved until you tap "Add all".',
+  'mealPhoto.closing': 'Stopping the analysis…',
 };
 
 const es: TranslationTable = {
@@ -1534,6 +1536,7 @@ const es: TranslationTable = {
   'mealPhoto.downloadInterrupted': 'La descarga del modelo se interrumpió. Vuelve a abrir esta pantalla y mantén la app en primer plano hasta el final.',
   'mealPhoto.totalTitle': 'Total estimado',
   'mealPhoto.totalHint': 'Consulta libre: no se guarda nada hasta que pulses «Añadir todo».',
+  'mealPhoto.closing': 'Deteniendo el análisis…',
 };
 
 const de: TranslationTable = {
@@ -2041,6 +2044,7 @@ const de: TranslationTable = {
   'mealPhoto.downloadInterrupted': 'Der Modell-Download wurde unterbrochen. Öffne diesen Bildschirm erneut und halte die App im Vordergrund, bis er abgeschlossen ist.',
   'mealPhoto.totalTitle': 'Geschätzte Summe',
   'mealPhoto.totalHint': 'Freie Ansicht: Es wird nichts gespeichert, bis du auf „Alle hinzufügen“ tippst.',
+  'mealPhoto.closing': 'Analyse wird beendet…',
 };
 
 export const TRANSLATIONS: Record<LanguageId, TranslationTable> = { fr, en, es, de };

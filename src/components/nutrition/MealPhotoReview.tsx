@@ -16,7 +16,7 @@ import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // Chargé uniquement via require() dynamique depuis add.tsx, après gating OK :
 // ce fichier n'est jamais évalué sous Jest ni sur un appareil non compatible.
-import { LFM2_5_VL_1_6B_QUANTIZED, useLLM } from 'react-native-executorch';
+import { GEMMA4_E2B_MM, useLLM } from 'react-native-executorch';
 
 import { appAlert } from '../ui/AppDialog';
 import { Button } from '../ui/Button';
@@ -27,6 +27,7 @@ import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
+import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import {
   MEAL_PHOTO_KEEP_AWAKE_TAG,
@@ -36,7 +37,7 @@ import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
 import type { Food, MealType } from '../../types';
 
-const LICENSE_URL = 'https://docs.liquid.ai/lfm/help/model-license';
+const LICENSE_URL = 'https://ai.google.dev/gemma/terms';
 const GRAM_STEP = 25;
 const MIN_STEP_GRAMS = 25;
 
@@ -79,22 +80,52 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
 
-  const llm = useLLM({ model: LFM2_5_VL_1_6B_QUANTIZED });
+  const llm = useLLM({ model: GEMMA4_E2B_MM });
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [items, setItems] = useState<ReviewItem[] | null>(null);
   const analysisStartedRef = useRef(false);
 
-  // interrupt() obligatoire au démontage (doc executorch) : coupe l'inférence
-  // en cours pour libérer la RAM native.
+  // Crash natif au retour (react-native-executorch 0.9.2) : au démontage, le
+  // cleanup de useLLM appelle LLMController.delete(), qui LÈVE ModelGenerating
+  // si une génération est en cours — une exception dans un cleanup React fait
+  // planter l'app. interrupt() seul ne suffit pas : isGenerating ne retombe
+  // que quand la promesse native de génération se termine. Règle d'or (doc
+  // officielle) : ne JAMAIS démonter tant que isGenerating est true. Le flux
+  // « demande de retour → interrupt → attente → fermeture » est factorisé et
+  // testé dans lib/mealPhotoExit.
   const interruptRef = useRef(llm.interrupt);
   interruptRef.current = llm.interrupt;
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  const [closePending, setClosePending] = useState(false);
+  const exitFlowRef = useRef<ReturnType<typeof createMealPhotoExitFlow> | null>(null);
+  if (exitFlowRef.current === null) {
+    exitFlowRef.current = createMealPhotoExitFlow({
+      interrupt: () => interruptRef.current(),
+      close: () => onCloseRef.current(),
+      onPendingChange: setClosePending,
+    });
+  }
+  const exitFlow = exitFlowRef.current;
+
+  // La fermeture demandée pendant une génération se déclenche ici, une fois
+  // isGenerating retombé (promesse native terminée après interrupt()).
   useEffect(() => {
-    const interrupt = () => interruptRef.current();
-    return interrupt;
+    exitFlow.handleGeneratingChange(llm.isGenerating);
+  }, [exitFlow, llm.isGenerating]);
+
+  // Filet de sécurité au démontage (démontage parent hors flux UI) : coupe
+  // une éventuelle inférence, sans jamais laisser remonter l'exception
+  // ModuleNotLoaded qu'interrupt() lève si le modèle n'est pas chargé.
+  useEffect(() => {
+    return () => safeInterrupt(interruptRef.current);
   }, []);
 
-  // Tant que le modèle n'est pas prêt (téléchargement ~1 Go ou chargement),
+  const requestClose = () => exitFlow.requestClose(llm.isGenerating);
+
+  // Tant que le modèle n'est pas prêt (téléchargement ~4,4 Go ou chargement),
   // empêche la mise en veille : une coupure laisse un fichier partiel en cache
   // et force un re-téléchargement complet à la prochaine ouverture.
   useEffect(() => {
@@ -149,6 +180,9 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         }))
       );
     } catch {
+      // Sortie demandée pendant l'analyse : interrupt() fait rejeter la
+      // promesse de génération — ce n'est pas une erreur, la fermeture suit.
+      if (exitFlow.isPending()) return;
       appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
         { text: 'OK', onPress: onClose },
       ]);
@@ -165,7 +199,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   }, [photoUri, llm.isReady]);
 
   function resetFlow() {
-    interruptRef.current();
+    safeInterrupt(interruptRef.current);
     analysisStartedRef.current = false;
     setPhotoUri(null);
     setItems(null);
@@ -239,10 +273,10 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   }, [items]);
 
   return (
-    <Modal visible animationType="slide" statusBarTranslucent onRequestClose={onClose}>
+    <Modal visible animationType="slide" statusBarTranslucent onRequestClose={requestClose}>
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={onClose} hitSlop={8} activeOpacity={0.7}>
+          <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7}>
             <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.heading}>{mt(t, 'mealPhoto.title')}</Text>
@@ -266,10 +300,12 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
           {photoUri ? <Image source={{ uri: photoUri }} style={styles.photo} /> : null}
 
-          {llm.isGenerating ? (
+          {llm.isGenerating || closePending ? (
             <View style={styles.analyzingRow}>
               <ActivityIndicator color={c.primary} />
-              <Text style={styles.muted}>{mt(t, 'mealPhoto.analyzing')}</Text>
+              <Text style={styles.muted}>
+                {mt(t, closePending ? 'mealPhoto.closing' : 'mealPhoto.analyzing')}
+              </Text>
             </View>
           ) : null}
 
