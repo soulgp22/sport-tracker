@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import performanceRules from '../config/performance-rules.json';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 import type {
+  ActivityLevel,
   ExperienceLevel,
   PerformanceProfile,
   PerformanceSex,
@@ -16,6 +17,8 @@ interface PerformanceState extends PerformanceProfile {
   unlockedBadges: UnlockedBadge[];
   setSex: (sex: PerformanceSex) => void;
   setAge: (age?: number) => void;
+  setHeightCm: (heightCm?: number) => void;
+  setActivityLevel: (activityLevel: ActivityLevel) => void;
   setExperience: (experience: ExperienceLevel) => void;
   setWeeklySessionGoal: (goal: number) => void;
   setMonthlySessionGoal: (goal: number) => void;
@@ -34,6 +37,8 @@ export const usePerformanceStore = create<PerformanceState>()(
     (set, get) => ({
       sex: 'unspecified',
       age: undefined,
+      heightCm: undefined,
+      activityLevel: 'sedentary',
       experience: 'beginner',
       weeklySessionGoal: performanceRules.goals.defaultWeeklySessions,
       monthlySessionGoal: performanceRules.goals.defaultMonthlySessions,
@@ -45,6 +50,10 @@ export const usePerformanceStore = create<PerformanceState>()(
       setAge: (age) => set({
         age: age === undefined ? undefined : clampInteger(age, 13, 100),
       }),
+      setHeightCm: (heightCm) => set({
+        heightCm: heightCm === undefined ? undefined : clampInteger(heightCm, 100, 250),
+      }),
+      setActivityLevel: (activityLevel) => set({ activityLevel }),
       setExperience: (experience) => set({ experience }),
       setWeeklySessionGoal: (goal) => set({
         weeklySessionGoal: clampInteger(

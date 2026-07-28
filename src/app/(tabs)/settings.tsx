@@ -50,12 +50,19 @@ import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
 import { useTranslation } from '../../i18n/useTranslation';
 import { requestNotificationPermission } from '../../lib/restTimerNotifications';
 import { combineAiProgramPrompt } from '../../lib/aiProgramPrompt';
-import type { ExperienceLevel, PerformanceSex } from '../../types/performance';
+import type { ActivityLevel, ExperienceLevel, PerformanceSex } from '../../types/performance';
 
 const SEX_OPTIONS: { id: PerformanceSex; labelKey: string }[] = [
   { id: 'unspecified', labelKey: 'performance.sexUnspecified' },
   { id: 'female', labelKey: 'performance.sexFemale' },
   { id: 'male', labelKey: 'performance.sexMale' },
+];
+
+const ACTIVITY_OPTIONS: { id: ActivityLevel; labelKey: string }[] = [
+  { id: 'sedentary', labelKey: 'performance.activity.sedentary' },
+  { id: 'light', labelKey: 'performance.activity.light' },
+  { id: 'moderate', labelKey: 'performance.activity.moderate' },
+  { id: 'active', labelKey: 'performance.activity.active' },
 ];
 
 const EXPERIENCE_OPTIONS: { id: ExperienceLevel; labelKey: string }[] = [
@@ -170,6 +177,10 @@ export default function SettingsScreen() {
   const setPerformanceSex = usePerformanceStore((s) => s.setSex);
   const performanceAge = usePerformanceStore((s) => s.age);
   const setPerformanceAge = usePerformanceStore((s) => s.setAge);
+  const performanceHeightCm = usePerformanceStore((s) => s.heightCm);
+  const setPerformanceHeightCm = usePerformanceStore((s) => s.setHeightCm);
+  const activityLevel = usePerformanceStore((s) => s.activityLevel);
+  const setActivityLevel = usePerformanceStore((s) => s.setActivityLevel);
   const experience = usePerformanceStore((s) => s.experience);
   const setExperience = usePerformanceStore((s) => s.setExperience);
   const weeklySessionGoal = usePerformanceStore((s) => s.weeklySessionGoal);
@@ -185,6 +196,8 @@ export default function SettingsScreen() {
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
   const [ageDraft, setAgeDraft] = useState<string | null>(null);
   const ageInput = ageDraft ?? (performanceAge ? String(performanceAge) : '');
+  const [heightDraft, setHeightDraft] = useState<string | null>(null);
+  const heightInput = heightDraft ?? (performanceHeightCm ? String(performanceHeightCm) : '');
   const aiPromptCopied = aiPromptCopyFeedback > 0;
 
   useEffect(() => {
@@ -620,6 +633,38 @@ export default function SettingsScreen() {
             maxLength={3}
             placeholder={t('performance.agePlaceholder')}
           />
+
+          <TextInput
+            label={t('performance.height')}
+            value={heightInput}
+            onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))}
+            onEndEditing={() => {
+              setPerformanceHeightCm(heightInput ? Number(heightInput) : undefined);
+              setHeightDraft(null);
+            }}
+            keyboardType="number-pad"
+            maxLength={3}
+            placeholder={t('performance.heightPlaceholder')}
+          />
+
+          <Text style={styles.fieldLabel}>{t('performance.activityLevel')}</Text>
+          <View style={styles.choiceRow}>
+            {ACTIVITY_OPTIONS.map((option) => {
+              const active = activityLevel === option.id;
+              return (
+                <TouchableOpacity
+                  key={option.id}
+                  style={[styles.choiceChip, active ? styles.choiceChipActive : null]}
+                  onPress={() => setActivityLevel(option.id)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: active }}>
+                  <Text style={[styles.choiceText, active ? styles.choiceTextActive : null]}>
+                    {t(option.labelKey)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
 
           <Text style={styles.fieldLabel}>{t('performance.experience')}</Text>
           <View style={styles.choiceRow}>

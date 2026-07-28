@@ -2,12 +2,15 @@ import type { Session } from './index';
 
 export type PerformanceSex = 'male' | 'female' | 'unspecified';
 export type ExperienceLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
+export type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active';
 export type StrengthFamily = 'bench_press' | 'back_squat' | 'deadlift';
 export type EstimateConfidence = 'high' | 'moderate' | 'low';
 
 export interface PerformanceProfile {
   sex: PerformanceSex;
   age?: number;
+  heightCm?: number;
+  activityLevel: ActivityLevel;
   experience: ExperienceLevel;
   weeklySessionGoal: number;
   monthlySessionGoal: number;

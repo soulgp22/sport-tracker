@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   ScrollView,
@@ -12,9 +13,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { appAlert } from '../../../components/ui/AppDialog';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
+import { BarcodeScannerModal } from '../../../components/nutrition/BarcodeScannerModal';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
@@ -24,6 +27,7 @@ import {
   canLogByUnit,
   resolveQuantityInGrams,
 } from '../../../lib/nutritionCalc';
+import { fetchOffFood } from '../../../lib/openFoodFacts';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food, MealType } from '../../../types';
@@ -87,6 +91,8 @@ export default function AddMealScreen() {
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const customFoods = useFoodStore((s) => s.customFoods);
+  const getAllFoods = useFoodStore((s) => s.getAllFoods);
+  const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
 
   const [query, setQuery] = useState('');
@@ -94,6 +100,8 @@ export default function AddMealScreen() {
   const [quantity, setQuantity] = useState('100');
   const [quantityMode, setQuantityMode] = useState<'weight' | 'units'>('weight');
   const [mealType, setMealType] = useState<MealType>(() => getDefaultMealType());
+  const [scannerVisible, setScannerVisible] = useState(false);
+  const [scanLoading, setScanLoading] = useState(false);
 
   const results = useMemo(() => searchFoods(query), [customFoods, query, searchFoods]);
   const quantityNumber = parseQuantity(quantity);
@@ -134,6 +142,43 @@ export default function AddMealScreen() {
     setQuantityMode('weight');
   };
 
+  const handleBarcodeScanned = async (barcode: string) => {
+    setScannerVisible(false);
+
+    // Déjà connu localement : pas besoin du réseau (offline-first).
+    const existing = getAllFoods().find((food) => food.barcode === barcode);
+    if (existing) {
+      handleSelectFood(existing);
+      return;
+    }
+
+    setScanLoading(true);
+    try {
+      const result = await fetchOffFood(barcode);
+
+      if (result.kind === 'found') {
+        addCustomFood(result.food);
+        handleSelectFood(result.food);
+        return;
+      }
+
+      if (result.kind === 'not-found') {
+        appAlert(t('nutrition.scan.notFoundTitle'), t('nutrition.scan.notFoundMessage'), [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: t('nutrition.scan.manualEntry'),
+            onPress: () => router.push('/(tabs)/foods/new' as never),
+          },
+        ]);
+        return;
+      }
+
+      appAlert(t('nutrition.scan.errorTitle'), t('nutrition.scan.errorMessage'));
+    } finally {
+      setScanLoading(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
@@ -151,13 +196,31 @@ export default function AddMealScreen() {
         {!selectedFood ? (
           <View style={styles.searchWrapper}>
             <View style={styles.searchBox}>
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder={t('foods.searchPlaceholder')}
-                autoCapitalize="none"
-              />
+              <View style={styles.searchField}>
+                <TextInput
+                  value={query}
+                  onChangeText={setQuery}
+                  placeholder={t('foods.searchPlaceholder')}
+                  autoCapitalize="none"
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.scanButton}
+                onPress={() => setScannerVisible(true)}
+                hitSlop={8}
+                activeOpacity={0.75}
+                accessibilityRole="button"
+                accessibilityLabel={t('nutrition.scan.button')}>
+                <Ionicons name="barcode-outline" size={22} color={c.textPrimary} />
+              </TouchableOpacity>
             </View>
+
+            {scanLoading ? (
+              <View style={styles.scanLoading}>
+                <ActivityIndicator color={c.primary} />
+                <Text style={styles.scanLoadingText}>{t('nutrition.scan.loading')}</Text>
+              </View>
+            ) : null}
 
             <FlatList
               data={results}
@@ -268,6 +331,13 @@ export default function AddMealScreen() {
           </ScrollView>
         )}
       </KeyboardAvoidingView>
+
+      {scannerVisible ? (
+        <BarcodeScannerModal
+          onClose={() => setScannerVisible(false)}
+          onScanned={handleBarcodeScanned}
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -285,7 +355,33 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   headerSpacer: { width: 24 },
   keyboardAvoiding: { flex: 1 },
   searchWrapper: { flex: 1 },
-  searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 6,
+  },
+  searchField: { flex: 1 },
+  scanButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: c.surfaceAlt,
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  scanLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  scanLoadingText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
   resultsList: { paddingBottom: 16 },
   emptyList: { flexGrow: 1 },
   foodRow: {

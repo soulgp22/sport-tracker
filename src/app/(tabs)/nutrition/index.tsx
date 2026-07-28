@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,9 +13,19 @@ import {
   calculateGoalProgress,
   calculateRemainingGoals,
 } from '../../../lib/nutritionCalc';
+import { calculateTdee } from '../../../lib/energyBalance';
+import {
+  hasHealthPermissions,
+  isHealthConnectAvailable,
+  readCaloriesBurnedToday,
+  requestHealthPermissions,
+} from '../../../lib/healthConnect';
+import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { useTranslation } from '../../../i18n/useTranslation';
+import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
+import { usePerformanceStore } from '../../../store/performanceStore';
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -39,12 +49,54 @@ export default function NutritionScreen() {
   const goals = useNutritionGoalsStore((s) => s.goals);
   const entriesState = useFoodDiaryStore((s) => s.entries);
   const getEntriesByDate = useFoodDiaryStore((s) => s.getEntriesByDate);
+  const sex = usePerformanceStore((s) => s.sex);
+  const age = usePerformanceStore((s) => s.age);
+  const heightCm = usePerformanceStore((s) => s.heightCm);
+  const activityLevel = usePerformanceStore((s) => s.activityLevel);
+  const weightEntries = useBodyWeightStore((s) => s.entries);
+  const [healthBurn, setHealthBurn] = useState<
+    { status: 'granted'; burned: number } | { status: 'needsPermission' } | { status: 'unavailable' }
+  >({ status: 'unavailable' });
+  const [connecting, setConnecting] = useState(false);
+
+  const loadHealthBurn = useCallback(async () => {
+    const available = await isHealthConnectAvailable();
+    if (!available) {
+      setHealthBurn({ status: 'unavailable' });
+      return;
+    }
+    const granted = await hasHealthPermissions();
+    if (!granted) {
+      setHealthBurn({ status: 'needsPermission' });
+      return;
+    }
+    const calories = await readCaloriesBurnedToday();
+    if (!calories) {
+      setHealthBurn({ status: 'unavailable' });
+      return;
+    }
+    setHealthBurn({
+      status: 'granted',
+      burned: calories.total > 0 ? calories.total : calories.active,
+    });
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       forceTick();
-    }, [])
+      loadHealthBurn();
+    }, [loadHealthBurn])
   );
+
+  const handleConnectHealth = async () => {
+    setConnecting(true);
+    try {
+      const granted = await requestHealthPermissions();
+      if (granted) await loadHealthBurn();
+    } finally {
+      setConnecting(false);
+    }
+  };
 
   const today = todayKey();
   const entries = useMemo(
@@ -55,9 +107,62 @@ export default function NutritionScreen() {
   const remaining = useMemo(() => calculateRemainingGoals(totals, goals), [goals, totals]);
   const progress = useMemo(() => calculateGoalProgress(totals, goals), [goals, totals]);
 
+  const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
+  const tdee = calculateTdee({ sex, weightKg, heightCm, ageYears: age, activityLevel });
+  const burned = healthBurn.status === 'granted' ? healthBurn.burned : tdee;
+  const balance = burned === null ? null : burned - totals.calories;
+  const showProfileInvite = healthBurn.status !== 'granted' && tdee === null;
+
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>{t('nutrition.balance.title')}</Text>
+
+          <View style={styles.balanceRow}>
+            <View style={styles.balanceCol}>
+              <Text style={styles.balanceValue}>{totals.calories}</Text>
+              <Text style={styles.balanceLabel}>{t('nutrition.balance.consumed')}</Text>
+            </View>
+            <View style={styles.balanceCol}>
+              <Text style={styles.balanceValue}>{burned === null ? '—' : burned}</Text>
+              <Text style={styles.balanceLabel}>{t('nutrition.balance.burned')}</Text>
+            </View>
+          </View>
+
+          {balance !== null ? (
+            <Text style={[styles.balanceHint, balance < 0 ? styles.overGoal : null]}>
+              {balance >= 0
+                ? t('nutrition.balance.remaining', { count: balance })
+                : t('nutrition.balance.over', { count: Math.abs(balance) })}
+            </Text>
+          ) : null}
+
+          {healthBurn.status === 'granted' ? (
+            <Text style={styles.balanceSource}>{t('nutrition.balance.sourceHealthConnect')}</Text>
+          ) : burned !== null ? (
+            <Text style={styles.balanceSource}>{t('nutrition.balance.sourceEstimate')}</Text>
+          ) : null}
+
+          {healthBurn.status === 'needsPermission' ? (
+            <Button
+              title={t('nutrition.balance.connect')}
+              onPress={handleConnectHealth}
+              loading={connecting}
+            />
+          ) : null}
+
+          {showProfileInvite ? (
+            <>
+              <Text style={styles.balanceHint}>{t('nutrition.balance.completeProfile')}</Text>
+              <Button
+                title={t('nutrition.balance.completeProfileCta')}
+                variant="secondary"
+                onPress={() => router.push('/(tabs)/settings' as never)}
+              />
+            </>
+          ) : null}
+        </View>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>{t('nutrition.today')}</Text>
 
@@ -148,6 +253,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   cardTitle: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
+  balanceRow: { flexDirection: 'row', gap: 12 },
+  balanceCol: { flex: 1, alignItems: 'center', gap: 4 },
+  balanceValue: { fontSize: 24, fontFamily: fonts.serifBold, color: c.primary },
+  balanceLabel: { fontSize: 12, fontFamily: fonts.sansSemi, color: c.textSecondary },
+  balanceHint: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary, lineHeight: 18 },
+  balanceSource: { fontSize: 11, fontFamily: fonts.sans, color: c.textMuted },
   caloriesBlock: { gap: 4 },
   caloriesValue: { fontSize: 28, fontFamily: fonts.serifBold, color: c.primary },
   remaining: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textSecondary },

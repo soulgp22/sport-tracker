@@ -4,6 +4,7 @@ import { buildPerformanceNotificationInsight } from '../performanceNotifications
 
 const profile: PerformanceProfile = {
   sex: 'unspecified',
+  activityLevel: 'sedentary',
   experience: 'intermediate',
   weeklySessionGoal: 3,
   monthlySessionGoal: 12,

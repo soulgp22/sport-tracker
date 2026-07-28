@@ -120,6 +120,8 @@ export function buildProfileBackup(): string {
       performanceProfile: {
         sex: usePerformanceStore.getState().sex,
         age: usePerformanceStore.getState().age,
+        heightCm: usePerformanceStore.getState().heightCm,
+        activityLevel: usePerformanceStore.getState().activityLevel,
         experience: usePerformanceStore.getState().experience,
         weeklySessionGoal: usePerformanceStore.getState().weeklySessionGoal,
         monthlySessionGoal: usePerformanceStore.getState().monthlySessionGoal,
@@ -191,6 +193,15 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
           ? data.performanceProfile.sex
           : 'unspecified' as const,
         age: isNumber(data.performanceProfile.age) ? data.performanceProfile.age : undefined,
+        heightCm: isNumber(data.performanceProfile.heightCm)
+          ? data.performanceProfile.heightCm
+          : undefined,
+        activityLevel:
+          data.performanceProfile.activityLevel === 'light' ||
+          data.performanceProfile.activityLevel === 'moderate' ||
+          data.performanceProfile.activityLevel === 'active'
+            ? data.performanceProfile.activityLevel
+            : 'sedentary' as const,
         experience:
           data.performanceProfile.experience === 'intermediate' ||
           data.performanceProfile.experience === 'advanced' ||
@@ -217,6 +228,8 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
     : {
         sex: 'unspecified' as const,
         age: undefined,
+        heightCm: undefined,
+        activityLevel: 'sedentary' as const,
         experience: 'beginner' as const,
         weeklySessionGoal: currentPerformance.weeklySessionGoal,
         monthlySessionGoal: currentPerformance.monthlySessionGoal,
