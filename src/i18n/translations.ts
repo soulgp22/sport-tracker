@@ -521,6 +521,15 @@ const fr: TranslationTable = {
   'mealPhoto.totalTitle': 'Total estimé',
   'mealPhoto.totalHint': 'Consultation libre : rien n\'est enregistré tant que tu n\'appuies pas sur « Tout ajouter ».',
   'mealPhoto.closing': 'Arrêt de l\'analyse en cours…',
+  'settings.dataPrivacy': 'Données & confidentialité',
+  'settings.aiTrainingToggle': 'Contribuer à l\'amélioration de l\'IA',
+  'settings.aiTrainingHelp': 'Anonyme, sans photos : seules tes corrections textuelles (aliments, grammes) sont conservées sur l\'appareil pour entraîner de futurs modèles. Désactivé par défaut.',
+  'settings.aiTrainingCount': '{{count}} enregistrements conservés',
+  'settings.aiTrainingExport': 'Exporter les données d\'entraînement',
+  'settings.aiTrainingClear': 'Effacer les données d\'entraînement',
+  'dialog.aiTrainingClearTitle': 'Effacer les données d\'entraînement ?',
+  'dialog.aiTrainingClearMessage': 'Tous les enregistrements de corrections conservés sur l\'appareil seront définitivement supprimés.',
+  'dialog.aiTrainingClearConfirm': 'Effacer',
 };
 
 const en: TranslationTable = {
@@ -1029,6 +1038,15 @@ const en: TranslationTable = {
   'mealPhoto.totalTitle': 'Estimated total',
   'mealPhoto.totalHint': 'Free preview: nothing is saved until you tap "Add all".',
   'mealPhoto.closing': 'Stopping the analysis…',
+  'settings.dataPrivacy': 'Data & privacy',
+  'settings.aiTrainingToggle': 'Help improve the AI',
+  'settings.aiTrainingHelp': 'Anonymous, no photos: only your text corrections (foods, grams) are stored on the device to train future models. Off by default.',
+  'settings.aiTrainingCount': '{{count}} records stored',
+  'settings.aiTrainingExport': 'Export training data',
+  'settings.aiTrainingClear': 'Clear training data',
+  'dialog.aiTrainingClearTitle': 'Clear training data?',
+  'dialog.aiTrainingClearMessage': 'All correction records stored on the device will be permanently deleted.',
+  'dialog.aiTrainingClearConfirm': 'Clear',
 };
 
 const es: TranslationTable = {
@@ -1537,6 +1555,15 @@ const es: TranslationTable = {
   'mealPhoto.totalTitle': 'Total estimado',
   'mealPhoto.totalHint': 'Consulta libre: no se guarda nada hasta que pulses «Añadir todo».',
   'mealPhoto.closing': 'Deteniendo el análisis…',
+  'settings.dataPrivacy': 'Datos y privacidad',
+  'settings.aiTrainingToggle': 'Contribuir a mejorar la IA',
+  'settings.aiTrainingHelp': 'Anónimo, sin fotos: solo tus correcciones de texto (alimentos, gramos) se guardan en el dispositivo para entrenar futuros modelos. Desactivado por defecto.',
+  'settings.aiTrainingCount': '{{count}} registros guardados',
+  'settings.aiTrainingExport': 'Exportar datos de entrenamiento',
+  'settings.aiTrainingClear': 'Borrar datos de entrenamiento',
+  'dialog.aiTrainingClearTitle': '¿Borrar los datos de entrenamiento?',
+  'dialog.aiTrainingClearMessage': 'Todos los registros de correcciones guardados en el dispositivo se eliminarán definitivamente.',
+  'dialog.aiTrainingClearConfirm': 'Borrar',
 };
 
 const de: TranslationTable = {
@@ -2045,6 +2072,15 @@ const de: TranslationTable = {
   'mealPhoto.totalTitle': 'Geschätzte Summe',
   'mealPhoto.totalHint': 'Freie Ansicht: Es wird nichts gespeichert, bis du auf „Alle hinzufügen“ tippst.',
   'mealPhoto.closing': 'Analyse wird beendet…',
+  'settings.dataPrivacy': 'Daten & Datenschutz',
+  'settings.aiTrainingToggle': 'Zur Verbesserung der KI beitragen',
+  'settings.aiTrainingHelp': 'Anonym, ohne Fotos: Nur deine Textkorrekturen (Lebensmittel, Gramm) werden auf dem Gerät gespeichert, um zukünftige Modelle zu trainieren. Standardmäßig deaktiviert.',
+  'settings.aiTrainingCount': '{{count}} gespeicherte Einträge',
+  'settings.aiTrainingExport': 'Trainingsdaten exportieren',
+  'settings.aiTrainingClear': 'Trainingsdaten löschen',
+  'dialog.aiTrainingClearTitle': 'Trainingsdaten löschen?',
+  'dialog.aiTrainingClearMessage': 'Alle auf dem Gerät gespeicherten Korrektur-Einträge werden endgültig gelöscht.',
+  'dialog.aiTrainingClearConfirm': 'Löschen',
 };
 
 export const TRANSLATIONS: Record<LanguageId, TranslationTable> = { fr, en, es, de };

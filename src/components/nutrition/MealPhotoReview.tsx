@@ -28,6 +28,7 @@ import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
 import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit';
+import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainingLog';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import {
   MEAL_PHOTO_KEEP_AWAKE_TAG,
@@ -46,6 +47,8 @@ interface ReviewItem {
   name: string;
   grams: number;
   food: Food | null;
+  /** Match automatique au moment de l'analyse (référence du diff d'entraînement). */
+  initialFoodName: string | null;
   searching: boolean;
   searchQuery: string;
 }
@@ -86,6 +89,11 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const [items, setItems] = useState<ReviewItem[] | null>(null);
   const analysisStartedRef = useRef(false);
 
+  // Roue à données (opt-in) : sortie brute du modèle conservée pour le diff,
+  // un seul record par analyse (addAll OU fermeture, le premier qui arrive).
+  const modelItemsRef = useRef<ModelItem[] | null>(null);
+  const trainingLoggedRef = useRef(false);
+
   // Crash natif au retour (react-native-executorch 0.9.2) : au démontage, le
   // cleanup de useLLM appelle LLMController.delete(), qui LÈVE ModelGenerating
   // si une génération est en cours — une exception dans un cleanup React fait
@@ -98,13 +106,39 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   interruptRef.current = llm.interrupt;
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
 
   const [closePending, setClosePending] = useState(false);
+
+  // Consigne le diff modèle ↔ corrections si l'opt-in est actif. Fire-and-
+  // forget : ne bloque jamais l'UI, ne lève jamais. Idempotent par analyse.
+  const logTraining = (finalItems: ReviewItem[]) => {
+    const modelItems = modelItemsRef.current;
+    if (!modelItems || trainingLoggedRef.current) return;
+    trainingLoggedRef.current = true;
+    void logMealPhotoTraining(
+      modelItems,
+      finalItems.map((item) => ({
+        recognizedName: item.name,
+        foodName: item.food?.name ?? null,
+        grams: item.grams,
+      }))
+    );
+  };
+  const logTrainingRef = useRef(logTraining);
+  logTrainingRef.current = logTraining;
+
   const exitFlowRef = useRef<ReturnType<typeof createMealPhotoExitFlow> | null>(null);
   if (exitFlowRef.current === null) {
     exitFlowRef.current = createMealPhotoExitFlow({
       interrupt: () => interruptRef.current(),
-      close: () => onCloseRef.current(),
+      close: () => {
+        // Fermeture après une analyse réussie (quel que soit le bout) :
+        // les corrections faites jusque-là sont aussi une donnée utile.
+        if (itemsRef.current) logTrainingRef.current(itemsRef.current);
+        onCloseRef.current();
+      },
       onPendingChange: setClosePending,
     });
   }
@@ -169,16 +203,27 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       }
 
       const foods = getAllFoods();
-      setItems(
-        recognized.map((item) => ({
+      const reviewItems = recognized.map((item) => {
+        const food = mapItemToFood(item, foods);
+        return {
           id: `item-${nextItemId++}`,
           name: item.name,
           grams: item.grams,
-          food: mapItemToFood(item, foods),
+          food,
+          initialFoodName: food?.name ?? null,
           searching: false,
           searchQuery: '',
-        }))
-      );
+        };
+      });
+      // Sortie brute du pipeline conservée pour la roue à données (texte
+      // uniquement — la photo n'est jamais retenue).
+      modelItemsRef.current = recognized.map((item, index) => ({
+        name: item.name,
+        grams: item.grams,
+        matchedFoodName: reviewItems[index].initialFoodName,
+      }));
+      trainingLoggedRef.current = false;
+      setItems(reviewItems);
     } catch {
       // Sortie demandée pendant l'analyse : interrupt() fait rejeter la
       // promesse de génération — ce n'est pas une erreur, la fermeture suit.
@@ -201,6 +246,8 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   function resetFlow() {
     safeInterrupt(interruptRef.current);
     analysisStartedRef.current = false;
+    modelItemsRef.current = null;
+    trainingLoggedRef.current = false;
     setPhotoUri(null);
     setItems(null);
   }
@@ -235,6 +282,10 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
   const handleAddAll = () => {
     if (!items) return;
+
+    // Roue à données : l'état validé est consigné avant enregistrement
+    // (no-op si opt-in inactif, jamais bloquant).
+    logTraining(items);
 
     for (const item of items) {
       if (!item.food || item.grams <= 0) continue;

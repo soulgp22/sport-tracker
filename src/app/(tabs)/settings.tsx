@@ -46,6 +46,13 @@ import { useThemeStore } from '../../store/themeStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePerformanceStore } from '../../store/performanceStore';
 import { useOnboardingStore } from '../../store/onboardingStore';
+import { useAiTrainingOptInStore } from '../../store/aiTrainingOptInStore';
+import {
+  clearRecords,
+  exportRecordsJson,
+  getRecords,
+} from '../../lib/mealPhotoTrainingLog';
+import { aiTrainingT as at } from '../../i18n/aiTrainingFallback';
 import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
 import { useTranslation } from '../../i18n/useTranslation';
 import { requestNotificationPermission } from '../../lib/restTimerNotifications';
@@ -189,6 +196,10 @@ export default function SettingsScreen() {
   const setMonthlySessionGoal = usePerformanceStore((s) => s.setMonthlySessionGoal);
   const notificationsEnabled = usePerformanceStore((s) => s.notificationsEnabled);
   const setNotificationsEnabled = usePerformanceStore((s) => s.setNotificationsEnabled);
+  const aiTrainingOptIn = useAiTrainingOptInStore((s) => s.aiTrainingOptIn);
+  const setAiTrainingOptIn = useAiTrainingOptInStore((s) => s.setAiTrainingOptIn);
+  const [trainingExporting, setTrainingExporting] = useState(false);
+  const [trainingCount, setTrainingCount] = useState(0);
   const [openAppearanceMenu, setOpenAppearanceMenu] =
     useState<'language' | 'palette' | 'font' | null>(null);
   const [profileImporting, setProfileImporting] = useState(false);
@@ -209,6 +220,19 @@ export default function SettingsScreen() {
 
     return () => clearTimeout(timeout);
   }, [aiPromptCopyFeedback]);
+
+  // Compteur d'enregistrements d'entraînement : affiché uniquement quand
+  // l'opt-in est actif (rien n'est écrit ni lu tant qu'il est inactif).
+  useEffect(() => {
+    if (!aiTrainingOptIn) return;
+    let cancelled = false;
+    void getRecords().then((records) => {
+      if (!cancelled) setTrainingCount(records.length);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [aiTrainingOptIn]);
 
 
 
@@ -369,6 +393,70 @@ export default function SettingsScreen() {
       return;
     }
     setNotificationsEnabled(true);
+  };
+
+  const handleTrainingExport = async () => {
+    try {
+      setTrainingExporting(true);
+      const content = await exportRecordsJson();
+      const filename = `sport-tracker-ai-training-${new Date().toISOString().slice(0, 10)}.json`;
+
+      if (Platform.OS === 'web') {
+        const blob = new Blob([content], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(url);
+        appAlert(
+          t('dialog.backupReady'),
+          t('dialog.backupReadyMessage')
+        );
+        return;
+      }
+
+      const available = await Sharing.isAvailableAsync();
+      if (!available) {
+        appAlert(t('common.error'), t('dialog.shareUnavailable'));
+        return;
+      }
+
+      const file = new ExpoFile(Paths.cache, filename);
+      if (file.exists) file.delete();
+      file.create();
+      file.write(content);
+      try {
+        await Sharing.shareAsync(file.uri, {
+          mimeType: 'application/json',
+          dialogTitle: at(t, 'settings.aiTrainingExport'),
+          UTI: 'public.json',
+        });
+      } finally {
+        if (file.exists) file.delete();
+      }
+    } catch {
+      appAlert(t('common.error'), t('dialog.backupError'));
+    } finally {
+      setTrainingExporting(false);
+    }
+  };
+
+  const handleTrainingClear = () => {
+    appAlert(
+      at(t, 'dialog.aiTrainingClearTitle'),
+      at(t, 'dialog.aiTrainingClearMessage'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: at(t, 'dialog.aiTrainingClearConfirm'),
+          style: 'destructive',
+          onPress: () => {
+            void clearRecords().then(() => setTrainingCount(0));
+          },
+        },
+      ]
+    );
   };
 
   const handleDeleteAll = () => {
@@ -770,6 +858,48 @@ export default function SettingsScreen() {
             style={styles.actionBtn}
           />
 
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{at(t, 'settings.dataPrivacy')}</Text>
+
+          <TouchableOpacity
+            style={styles.notificationRow}
+            onPress={() => setAiTrainingOptIn(!aiTrainingOptIn)}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: aiTrainingOptIn }}>
+            <View style={styles.notificationCopy}>
+              <Text style={styles.fieldLabel}>{at(t, 'settings.aiTrainingToggle')}</Text>
+              <Text style={styles.goalHint}>{at(t, 'settings.aiTrainingHelp')}</Text>
+            </View>
+            <View style={[styles.switchTrack, aiTrainingOptIn ? styles.switchTrackActive : null]}>
+              <View style={[styles.switchThumb, aiTrainingOptIn ? styles.switchThumbActive : null]} />
+            </View>
+          </TouchableOpacity>
+
+          {aiTrainingOptIn ? (
+            <>
+              <Text style={styles.helpText}>
+                {at(t, 'settings.aiTrainingCount', { count: trainingCount })}
+              </Text>
+
+              <Button
+                title={at(t, 'settings.aiTrainingExport')}
+                variant="secondary"
+                onPress={handleTrainingExport}
+                loading={trainingExporting}
+                style={styles.actionBtn}
+              />
+
+              <Button
+                title={at(t, 'settings.aiTrainingClear')}
+                variant="danger"
+                onPress={handleTrainingClear}
+                disabled={trainingCount === 0}
+                style={styles.actionBtn}
+              />
+            </>
+          ) : null}
         </View>
 
         <View style={styles.section}>
