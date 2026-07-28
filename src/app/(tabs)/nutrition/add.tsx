@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +18,8 @@ import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
 import { BarcodeScannerModal } from '../../../components/nutrition/BarcodeScannerModal';
+import { canUseMealPhoto } from '../../../lib/mealPhotoCapability';
+import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
@@ -66,6 +68,23 @@ function defaultQuantityForFood(food: Food) {
   return food.unit === 'g' || food.unit === 'ml' ? '100' : '1';
 }
 
+type MealPhotoReviewComponent = typeof import('../../../components/nutrition/MealPhotoReview').MealPhotoReview;
+
+/**
+ * Charge la modale photo (et donc react-native-executorch) uniquement quand
+ * le gating est OK. Le require est synchrone côté Metro et reste inerte sous
+ * Jest / Expo Go (module natif absent → catch → null).
+ */
+function loadMealPhotoReview(): MealPhotoReviewComponent | null {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const mod = require('../../../components/nutrition/MealPhotoReview') as typeof import('../../../components/nutrition/MealPhotoReview');
+    return mod.MealPhotoReview;
+  } catch {
+    return null;
+  }
+}
+
 function FoodResultRow({ food, onPress }: { food: Food; onPress: () => void }) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -102,6 +121,23 @@ export default function AddMealScreen() {
   const [mealType, setMealType] = useState<MealType>(() => getDefaultMealType());
   const [scannerVisible, setScannerVisible] = useState(false);
   const [scanLoading, setScanLoading] = useState(false);
+  const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
+  const [photoVisible, setPhotoVisible] = useState(false);
+
+  // Gating photo : feature visible uniquement sur appareils compatibles
+  // (Android 13+, RAM, stockage). Le module executorch n'est chargé qu'ici,
+  // après gating OK.
+  useEffect(() => {
+    let mounted = true;
+    void canUseMealPhoto().then((capability) => {
+      if (!mounted || !capability.ok) return;
+      const component = loadMealPhotoReview();
+      if (component) setMealPhotoReview(() => component);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const results = useMemo(() => searchFoods(query), [customFoods, query, searchFoods]);
   const quantityNumber = parseQuantity(quantity);
@@ -213,6 +249,17 @@ export default function AddMealScreen() {
                 accessibilityLabel={t('nutrition.scan.button')}>
                 <Ionicons name="barcode-outline" size={22} color={c.textPrimary} />
               </TouchableOpacity>
+              {mealPhotoReview ? (
+                <TouchableOpacity
+                  style={styles.scanButton}
+                  onPress={() => setPhotoVisible(true)}
+                  hitSlop={8}
+                  activeOpacity={0.75}
+                  accessibilityRole="button"
+                  accessibilityLabel={mt(t, 'mealPhoto.button')}>
+                  <Ionicons name="camera-outline" size={22} color={c.textPrimary} />
+                </TouchableOpacity>
+              ) : null}
             </View>
 
             {scanLoading ? (
@@ -338,6 +385,23 @@ export default function AddMealScreen() {
           onScanned={handleBarcodeScanned}
         />
       ) : null}
+
+      {photoVisible && mealPhotoReview
+        ? (() => {
+            const PhotoReview = mealPhotoReview;
+            return (
+              <PhotoReview
+                mealType={mealType}
+                date={todayKey()}
+                onClose={() => setPhotoVisible(false)}
+                onAdded={() => {
+                  setPhotoVisible(false);
+                  router.back();
+                }}
+              />
+            );
+          })()
+        : null}
     </SafeAreaView>
   );
 }

@@ -34,6 +34,7 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 
 import { configureNotifications } from '../lib/restTimerNotifications';
+import { initMealPhotoRuntime } from '../lib/mealPhotoCapability';
 import { RestTimerBanner } from '../components/session/RestTimerBanner';
 import { useColors, useThemeMode } from '../theme/useColors';
 import { AppDialog } from '../components/ui/AppDialog';
@@ -81,6 +82,9 @@ export default function RootLayout() {
 
   useEffect(() => {
     void configureNotifications();
+    // Runtime executorch initialisé au démarrage uniquement si le gating
+    // photo-repas est OK (jamais sous Jest : canUseMealPhoto() → false).
+    void initMealPhotoRuntime();
   }, []);
 
   useEffect(() => {

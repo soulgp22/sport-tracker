@@ -22,7 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "versionCode": 7,
+      "versionCode": 8,
       "permissions": [
         "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
         "android.permission.health.READ_TOTAL_CALORIES_BURNED",
@@ -77,7 +77,14 @@
           "recordAudioAndroid": false
         }
       ],
-      "./plugins/withHealthConnect.js"
+      "./plugins/withHealthConnect.js",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Autorise l'accès à ta galerie pour analyser la photo de ton repas.",
+          "cameraPermission": "Autorise l'accès à l'appareil photo pour photographier ton repas."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
