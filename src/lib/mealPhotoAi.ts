@@ -24,7 +24,8 @@ const MAX_NAME_LENGTH = 80;
 
 /**
  * Prompt envoyé au VLM : sortie JSON stricte, en français, noms génériques.
- * Le modèle ne doit rien calculer, seulement décrire.
+ * Le modèle ne doit rien calculer, seulement décrire — et ne JAMAIS inventer :
+ * une image sans nourriture (ou trop incertaine) doit donner {"items":[]}.
  */
 export function buildPrompt(): string {
   return [
@@ -37,7 +38,9 @@ export function buildPrompt(): string {
     '- "grams" : poids estimé en grammes, nombre entier entre 10 et 800 ;',
     '- maximum 8 aliments ;',
     '- ne calcule ni calories ni macronutriments ;',
-    '- si aucun aliment n\'est visible, réponds {"items":[]}.',
+    '- décris uniquement ce qui est réellement visible et n\'invente JAMAIS un aliment ;',
+    '- si l\'image ne contient ni nourriture ni boisson, ou si tu n\'es pas raisonnablement sûr qu\'un élément soit comestible, réponds {"items":[]} ;',
+    '- en cas de doute, réponds {"items":[]} plutôt que de deviner.',
   ].join('\n');
 }
 

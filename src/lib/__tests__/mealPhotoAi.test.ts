@@ -42,6 +42,19 @@ describe('buildPrompt', () => {
     expect(prompt).toContain('français');
     expect(prompt).toMatch(/ne calcule ni calories ni macronutriments/i);
   });
+
+  it('ordonne {"items":[]} pour une image sans nourriture ou incertaine', () => {
+    const prompt = buildPrompt();
+    expect(prompt).toContain('{"items":[]}');
+    expect(prompt).toMatch(/ni nourriture ni boisson/i);
+    expect(prompt).toMatch(/raisonnablement sûr/i);
+  });
+
+  it('interdit explicitement d\'inventer un aliment', () => {
+    const prompt = buildPrompt();
+    expect(prompt).toMatch(/n'invente JAMAIS/i);
+    expect(prompt).toMatch(/plutôt que de deviner/i);
+  });
 });
 
 describe('parseModelOutput', () => {
@@ -128,6 +141,14 @@ describe('parseModelOutput', () => {
 
   it('accepte un tableau d\'items vide', () => {
     expect(parseModelOutput('{"items":[]}')).toEqual([]);
+  });
+
+  it('{"items":[]} est une sortie valide (image sans nourriture) et donne zéro item', () => {
+    // Réponse attendue du prompt pour une photo non alimentaire (ex. un
+    // ventilateur) : elle doit être acceptée telle quelle, sans erreur.
+    const items = parseModelOutput('{"items":[]}');
+    expect(items).toEqual([]);
+    expect(items).toHaveLength(0);
   });
 });
 

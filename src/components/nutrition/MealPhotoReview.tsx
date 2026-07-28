@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // Chargé uniquement via require() dynamique depuis add.tsx, après gating OK :
 // ce fichier n'est jamais évalué sous Jest ni sur un appareil non compatible.
@@ -27,6 +28,10 @@ import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
+import {
+  MEAL_PHOTO_KEEP_AWAKE_TAG,
+  isMealPhotoModelDownloaded,
+} from '../../lib/mealPhotoCapability';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
 import type { Food, MealType } from '../../types';
@@ -53,6 +58,12 @@ interface MealPhotoReviewProps {
 }
 
 let nextItemId = 1;
+
+/** Formatage macro façon MacroBar : entier tel quel, sinon 1 décimale à virgule. */
+function formatMacro(value: number): string {
+  if (Number.isInteger(value)) return String(value);
+  return value.toFixed(1).replace('.', ',');
+}
 
 /**
  * Modale d'estimation d'un repas à partir d'une photo (VLM 100 % on-device).
@@ -83,12 +94,34 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     return interrupt;
   }, []);
 
-  // Échec de chargement/téléchargement du modèle : alerte + retour.
+  // Tant que le modèle n'est pas prêt (téléchargement ~1 Go ou chargement),
+  // empêche la mise en veille : une coupure laisse un fichier partiel en cache
+  // et force un re-téléchargement complet à la prochaine ouverture.
+  useEffect(() => {
+    if (llm.isReady) return;
+    activateKeepAwake(MEAL_PHOTO_KEEP_AWAKE_TAG);
+    return () => {
+      void deactivateKeepAwake(MEAL_PHOTO_KEEP_AWAKE_TAG);
+    };
+  }, [llm.isReady]);
+
+  // Échec de chargement/téléchargement du modèle : alerte + retour. Si les
+  // fichiers ne sont pas complets, c'est le téléchargement qui a été coupé :
+  // message dédié (useLLM ne distingue pas les deux cas dans llm.error).
   useEffect(() => {
     if (!llm.error) return;
-    appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
-      { text: 'OK', onPress: onClose },
-    ]);
+    let cancelled = false;
+    void isMealPhotoModelDownloaded().then((downloaded) => {
+      if (cancelled) return;
+      appAlert(
+        mt(t, 'mealPhoto.errorTitle'),
+        mt(t, downloaded ? 'mealPhoto.errorMessage' : 'mealPhoto.downloadInterrupted'),
+        [{ text: 'OK', onPress: onClose }]
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [llm.error, onClose, t]);
 
   const analyze = async (uri: string) => {
@@ -188,6 +221,23 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const addableCount = items ? items.filter((item) => item.food !== null && item.grams > 0).length : 0;
   const downloadPercent = Math.round(llm.downloadProgress * 100);
 
+  // Total réactif des items retenus : recalculé à chaque ajustement des
+  // steppers, suppression ou re-mappage. Permet de consulter les valeurs
+  // estimées sans rien enregistrer (« Tout ajouter » reste optionnel).
+  const totals = useMemo(() => {
+    if (!items) return null;
+    const sum = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+    for (const item of items) {
+      if (!item.food || item.grams <= 0) continue;
+      const nutrition = calculateNutritionForQuantity(item.food, item.grams);
+      sum.calories += nutrition.calories;
+      sum.protein += nutrition.protein;
+      sum.carbs += nutrition.carbs;
+      sum.fat += nutrition.fat;
+    }
+    return sum;
+  }, [items]);
+
   return (
     <Modal visible animationType="slide" statusBarTranslucent onRequestClose={onClose}>
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -239,6 +289,21 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
             </View>
           ) : (
             <>
+              {totals ? (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>{mt(t, 'mealPhoto.totalTitle')}</Text>
+                  <Text style={styles.totalCalories}>{totals.calories} kcal</Text>
+                  <Text style={styles.totalMacros}>
+                    {t('nutrition.facts.protein')} {formatMacro(totals.protein)} g
+                    {' · '}
+                    {t('nutrition.facts.carbs')} {formatMacro(totals.carbs)} g
+                    {' · '}
+                    {t('nutrition.facts.fat')} {formatMacro(totals.fat)} g
+                  </Text>
+                  <Text style={styles.muted}>{mt(t, 'mealPhoto.totalHint')}</Text>
+                </View>
+              ) : null}
+
               <View style={styles.warningBanner}>
                 <Ionicons name="warning-outline" size={18} color={c.primary} />
                 <Text style={styles.warningText}>{mt(t, 'mealPhoto.warningBanner')}</Text>
@@ -378,6 +443,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     elevation: 1,
   },
   cardTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
+  totalCalories: { fontSize: 26, fontFamily: fonts.sansHeavy, color: c.primary },
+  totalMacros: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
   progressTrack: {
     height: 8,
     borderRadius: 4,

@@ -19,7 +19,8 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.permissionCamera': "L'accès à l'appareil photo est nécessaire pour photographier ton repas.",
   'mealPhoto.permissionCta': 'Autoriser',
   'mealPhoto.downloading': 'Téléchargement du modèle IA… {{percent}} %',
-  'mealPhoto.downloadWarning': 'Environ 1 Go : connexion wifi recommandée.',
+  'mealPhoto.downloadWarning':
+    "Environ 1 Go : connexion wifi recommandée. Garde l'app ouverte pendant le téléchargement.",
   'mealPhoto.modelLoading': 'Chargement du modèle IA…',
   'mealPhoto.analyzing': 'Analyse de la photo… (10 à 30 s)',
   'mealPhoto.warningBanner': "Estimation à vérifier — l'IA se trompe sur les quantités.",
@@ -32,6 +33,11 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.retry': 'Réessayer',
   'mealPhoto.errorTitle': 'Analyse impossible',
   'mealPhoto.errorMessage': "Le modèle n'a pas pu analyser la photo. Réessaie plus tard.",
+  'mealPhoto.downloadInterrupted':
+    "Le téléchargement du modèle a été interrompu. Rouvre cet écran et garde l'app au premier plan jusqu'à la fin.",
+  'mealPhoto.totalTitle': 'Total estimé',
+  'mealPhoto.totalHint':
+    "Consultation libre : rien n'est enregistré tant que tu n'appuies pas sur « Tout ajouter ».",
   'mealPhoto.emptyTitle': 'Aucun aliment reconnu',
   'mealPhoto.emptyMessage': "L'IA n'a rien reconnu sur cette photo. Tu peux réessayer ou saisir ton repas manuellement.",
   'mealPhoto.manualEntry': 'Saisie manuelle',

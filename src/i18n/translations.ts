@@ -486,7 +486,7 @@ const fr: TranslationTable = {
   'mealPhoto.permissionCamera': 'L\'accès à l\'appareil photo est nécessaire pour photographier ton repas.',
   'mealPhoto.permissionCta': 'Autoriser',
   'mealPhoto.downloading': 'Téléchargement du modèle IA… {{percent}} %',
-  'mealPhoto.downloadWarning': 'Environ 1 Go : connexion wifi recommandée.',
+  'mealPhoto.downloadWarning': 'Ca. 1 GB: WLAN empfohlen. App während des Downloads geöffnet lassen.',
   'mealPhoto.modelLoading': 'Chargement du modèle IA…',
   'mealPhoto.analyzing': 'Analyse de la photo… (10 à 30 s)',
   'mealPhoto.warningBanner': 'Estimation à vérifier — l\'IA se trompe sur les quantités.',
@@ -517,6 +517,9 @@ const fr: TranslationTable = {
   'nutrition.healthConnect.deniedMessage': 'Health Connect n\'a pas autorisé la lecture des calories et des pas. Tu peux les activer dans Health Connect → Autorisations d\'accès → Life Sport Tracker.',
   'nutrition.healthConnect.openSettings': 'Ouvrir les réglages',
   'nutrition.healthConnect.errorTitle': 'Connexion à Health Connect impossible',
+  'mealPhoto.downloadInterrupted': 'Le téléchargement du modèle a été interrompu. Rouvre cet écran et garde l\'app au premier plan jusqu\'à la fin.',
+  'mealPhoto.totalTitle': 'Total estimé',
+  'mealPhoto.totalHint': 'Consultation libre : rien n\'est enregistré tant que tu n\'appuies pas sur « Tout ajouter ».',
 };
 
 const en: TranslationTable = {
@@ -1021,6 +1024,9 @@ const en: TranslationTable = {
   'nutrition.healthConnect.deniedMessage': 'Health Connect did not allow reading calories and steps. You can enable them in Health Connect → App permissions → Life Sport Tracker.',
   'nutrition.healthConnect.openSettings': 'Open settings',
   'nutrition.healthConnect.errorTitle': 'Could not connect to Health Connect',
+  'mealPhoto.downloadInterrupted': 'The model download was interrupted. Reopen this screen and keep the app in the foreground until it finishes.',
+  'mealPhoto.totalTitle': 'Estimated total',
+  'mealPhoto.totalHint': 'Free preview: nothing is saved until you tap "Add all".',
 };
 
 const es: TranslationTable = {
@@ -1525,6 +1531,9 @@ const es: TranslationTable = {
   'nutrition.healthConnect.deniedMessage': 'Health Connect no autorizó la lectura de calorías y pasos. Puedes activarla en Health Connect → Permisos de acceso → Life Sport Tracker.',
   'nutrition.healthConnect.openSettings': 'Abrir ajustes',
   'nutrition.healthConnect.errorTitle': 'No se pudo conectar con Health Connect',
+  'mealPhoto.downloadInterrupted': 'La descarga del modelo se interrumpió. Vuelve a abrir esta pantalla y mantén la app en primer plano hasta el final.',
+  'mealPhoto.totalTitle': 'Total estimado',
+  'mealPhoto.totalHint': 'Consulta libre: no se guarda nada hasta que pulses «Añadir todo».',
 };
 
 const de: TranslationTable = {
@@ -2029,6 +2038,9 @@ const de: TranslationTable = {
   'nutrition.healthConnect.deniedMessage': 'Health Connect hat das Lesen von Kalorien und Schritten nicht erlaubt. Du kannst sie in Health Connect → App-Berechtigungen → Life Sport Tracker aktivieren.',
   'nutrition.healthConnect.openSettings': 'Einstellungen öffnen',
   'nutrition.healthConnect.errorTitle': 'Verbindung zu Health Connect fehlgeschlagen',
+  'mealPhoto.downloadInterrupted': 'Der Modell-Download wurde unterbrochen. Öffne diesen Bildschirm erneut und halte die App im Vordergrund, bis er abgeschlossen ist.',
+  'mealPhoto.totalTitle': 'Geschätzte Summe',
+  'mealPhoto.totalHint': 'Freie Ansicht: Es wird nichts gespeichert, bis du auf „Alle hinzufügen“ tippst.',
 };
 
 export const TRANSLATIONS: Record<LanguageId, TranslationTable> = { fr, en, es, de };
