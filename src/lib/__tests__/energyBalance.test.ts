@@ -3,6 +3,7 @@ import {
   calculateBmr,
   calculateTdee,
   isEnergyProfileComplete,
+  missingEnergyProfileFields,
   type EnergyProfile,
 } from '../energyBalance';
 
@@ -79,6 +80,40 @@ describe('energyBalance', () => {
 
     it('false sinon', () => {
       expect(isEnergyProfileComplete({ ...homme80kg, sex: 'unspecified' })).toBe(false);
+    });
+  });
+
+  describe('missingEnergyProfileFields', () => {
+    it('retourne une liste vide quand le profil est complet', () => {
+      expect(
+        missingEnergyProfileFields({ sex: 'male', heightCm: 180, ageYears: 30 }, 80)
+      ).toEqual([]);
+    });
+
+    it('signale le sexe non précisé et le poids manquant', () => {
+      expect(
+        missingEnergyProfileFields({ sex: 'unspecified', heightCm: 180, ageYears: 30 }, undefined)
+      ).toEqual(['sex', 'weight']);
+    });
+
+    it('signale la taille et l’âge manquants', () => {
+      expect(
+        missingEnergyProfileFields({ sex: 'female', heightCm: undefined, ageYears: undefined }, 65)
+      ).toEqual(['height', 'age']);
+    });
+
+    it('signale tous les champs dans l’ordre sexe, poids, taille, âge', () => {
+      expect(
+        missingEnergyProfileFields({ sex: 'unspecified', heightCm: undefined, ageYears: undefined })
+      ).toEqual(['sex', 'weight', 'height', 'age']);
+    });
+
+    it('traite les valeurs à 0 ou négatives comme manquantes', () => {
+      expect(missingEnergyProfileFields({ sex: 'male', heightCm: 0, ageYears: -5 }, 0)).toEqual([
+        'weight',
+        'height',
+        'age',
+      ]);
     });
   });
 });

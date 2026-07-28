@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MacroBar } from '../../../components/nutrition/MacroBar';
+import { appAlert } from '../../../components/ui/AppDialog';
 import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
@@ -13,19 +14,36 @@ import {
   calculateGoalProgress,
   calculateRemainingGoals,
 } from '../../../lib/nutritionCalc';
-import { calculateTdee } from '../../../lib/energyBalance';
+import { calculateTdee, missingEnergyProfileFields } from '../../../lib/energyBalance';
 import {
   hasHealthPermissions,
   isHealthConnectAvailable,
+  openHealthConnectSettingsSafe,
   readCaloriesBurnedToday,
-  requestHealthPermissions,
+  requestHealthPermissionsWithStatus,
 } from '../../../lib/healthConnect';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
+import { healthConnectT as hct } from '../../../i18n/healthConnectFallback';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
+
+const HC_PACKAGE = 'com.google.android.apps.healthdata';
+
+/** Ouvre la fiche Play Store de Health Connect (intent market://, repli navigateur). */
+async function openHealthConnectPlayStore() {
+  try {
+    await Linking.openURL(`market://details?id=${HC_PACKAGE}`);
+  } catch {
+    try {
+      await Linking.openURL(`https://play.google.com/store/apps/details?id=${HC_PACKAGE}`);
+    } catch {
+      // Aucun store ni navigateur disponible : rien de plus à faire.
+    }
+  }
+}
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -91,8 +109,43 @@ export default function NutritionScreen() {
   const handleConnectHealth = async () => {
     setConnecting(true);
     try {
-      const granted = await requestHealthPermissions();
-      if (granted) await loadHealthBurn();
+      const result = await requestHealthPermissionsWithStatus();
+      if (result.granted) {
+        await loadHealthBurn();
+        return;
+      }
+      // Plus jamais d'échec silencieux : chaque cas a son message.
+      if (result.status === 'not-installed' || result.status === 'needs-update') {
+        const isUpdate = result.status === 'needs-update';
+        appAlert(
+          hct(t, isUpdate ? 'nutrition.healthConnect.updateTitle' : 'nutrition.healthConnect.installTitle'),
+          hct(t, isUpdate ? 'nutrition.healthConnect.updateMessage' : 'nutrition.healthConnect.installMessage'),
+          [
+            { text: hct(t, 'nutrition.healthConnect.later'), style: 'cancel' },
+            {
+              text: hct(t, 'nutrition.healthConnect.openPlayStore'),
+              onPress: () => void openHealthConnectPlayStore(),
+            },
+          ]
+        );
+        return;
+      }
+      if (result.error) {
+        appAlert(hct(t, 'nutrition.healthConnect.errorTitle'), result.error);
+        return;
+      }
+      // SDK disponible mais permissions refusées : guider vers les réglages HC.
+      appAlert(
+        hct(t, 'nutrition.healthConnect.deniedTitle'),
+        hct(t, 'nutrition.healthConnect.deniedMessage'),
+        [
+          { text: hct(t, 'nutrition.healthConnect.later'), style: 'cancel' },
+          {
+            text: hct(t, 'nutrition.healthConnect.openSettings'),
+            onPress: () => openHealthConnectSettingsSafe(),
+          },
+        ]
+      );
     } finally {
       setConnecting(false);
     }
@@ -112,6 +165,10 @@ export default function NutritionScreen() {
   const burned = healthBurn.status === 'granted' ? healthBurn.burned : tdee;
   const balance = burned === null ? null : burned - totals.calories;
   const showProfileInvite = healthBurn.status !== 'granted' && tdee === null;
+  const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
+  const missingFieldsLabel = missingFields
+    .map((field) => hct(t, `nutrition.balance.field.${field}`))
+    .join(', ');
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
@@ -144,7 +201,7 @@ export default function NutritionScreen() {
             <Text style={styles.balanceSource}>{t('nutrition.balance.sourceEstimate')}</Text>
           ) : null}
 
-          {healthBurn.status === 'needsPermission' ? (
+          {healthBurn.status !== 'granted' ? (
             <Button
               title={t('nutrition.balance.connect')}
               onPress={handleConnectHealth}
@@ -155,6 +212,11 @@ export default function NutritionScreen() {
           {showProfileInvite ? (
             <>
               <Text style={styles.balanceHint}>{t('nutrition.balance.completeProfile')}</Text>
+              {missingFields.length > 0 ? (
+                <Text style={styles.balanceHint}>
+                  {hct(t, 'nutrition.balance.missingFields', { fields: missingFieldsLabel })}
+                </Text>
+              ) : null}
               <Button
                 title={t('nutrition.balance.completeProfileCta')}
                 variant="secondary"

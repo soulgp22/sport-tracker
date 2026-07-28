@@ -7,10 +7,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../components/ui/Button';
 import { appAlert } from '../components/ui/AppDialog';
 import { RetailerPicker } from '../components/community/RetailerPicker';
+import { TextInput } from '../components/ui/TextInput';
 import { LANGUAGE_OPTIONS, type LanguageId } from '../i18n/translations';
 import { useTranslation } from '../i18n/useTranslation';
 import { useCommunityStore, resolveEntryName } from '../store/communityStore';
+import { useBodyWeightStore } from '../store/bodyWeightStore';
+import { usePerformanceStore } from '../store/performanceStore';
 import { findRecommendedProgram } from '../lib/programRecommendation';
+import { getBodyweightForDate } from '../lib/performanceEngine';
+import { canUseMealPhoto, downloadMealPhotoModel } from '../lib/mealPhotoCapability';
+import type { ActivityLevel, PerformanceSex } from '../types/performance';
 import {
   useOnboardingStore,
   type OnboardingGoal,
@@ -23,10 +29,10 @@ import type { ThemeColors } from '../theme/palettes';
 import { useColors } from '../theme/useColors';
 
 const copy: Record<LanguageId, Record<string, string>> = {
-  fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', goal: 'Quel est ton objectif principal ?', level: 'Quel est ton niveau actuel ?', rhythm: 'Comment vas-tu t’entraîner ?', nutrition: 'Personnalisons aussi la nutrition', result: 'Ton espace est prêt', resultHelp: 'Voici les contenus conseillés. Tu peux les télécharger maintenant ou plus tard.', next: 'Continuer', back: 'Retour', finish: 'Installer ma sélection', skip: 'Commencer sans téléchargement', downloading: 'Installation de tes contenus…', days: 'séances par semaine', equipment: 'Matériel disponible', retailer: 'Base d’aliments par pays', coreFoods: '142 aliments essentiels sont déjà disponibles hors ligne.', recommended: 'Programme conseillé · GitHub', catalog: 'Catalogue complet', extraExercises: '851 exercices supplémentaires', programFallback: 'Ton programme personnalisé' },
-  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', goal: 'What is your main goal?', level: 'What is your current level?', rhythm: 'How will you train?', nutrition: 'Let’s tailor nutrition too', result: 'Your space is ready', resultHelp: 'These are your recommended downloads. Get them now or anytime later.', next: 'Continue', back: 'Back', finish: 'Install my selection', skip: 'Start without downloads', downloading: 'Installing your content…', days: 'sessions per week', equipment: 'Available equipment', retailer: 'Food database by country', coreFoods: '142 essential foods are already available offline.', recommended: 'Recommended program · GitHub', catalog: 'Full exercise catalog', extraExercises: '851 extra exercises', programFallback: 'Your personalized program' },
-  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', goal: '¿Cuál es tu objetivo principal?', level: '¿Cuál es tu nivel actual?', rhythm: '¿Cómo vas a entrenar?', nutrition: 'Personalicemos también la nutrición', result: 'Tu espacio está listo', resultHelp: 'Estas son tus descargas recomendadas. Puedes instalarlas ahora o más tarde.', next: 'Continuar', back: 'Atrás', finish: 'Instalar mi selección', skip: 'Empezar sin descargar', downloading: 'Instalando tu contenido…', days: 'sesiones por semana', equipment: 'Equipo disponible', retailer: 'Base de alimentos por país', coreFoods: '142 alimentos esenciales ya están disponibles sin conexión.', recommended: 'Programa recomendado · GitHub', catalog: 'Catálogo completo', extraExercises: '851 ejercicios adicionales', programFallback: 'Tu programa personalizado' },
-  de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', goal: 'Was ist dein Hauptziel?', level: 'Wie ist dein aktuelles Niveau?', rhythm: 'Wie wirst du trainieren?', nutrition: 'Auch Ernährung personalisieren', result: 'Dein Bereich ist bereit', resultHelp: 'Das sind deine empfohlenen Downloads. Jetzt oder später installieren.', next: 'Weiter', back: 'Zurück', finish: 'Auswahl installieren', skip: 'Ohne Download starten', downloading: 'Inhalte werden installiert…', days: 'Einheiten pro Woche', equipment: 'Verfügbare Geräte', retailer: 'Lebensmitteldatenbank nach Land', coreFoods: '142 wichtige Lebensmittel sind bereits offline verfügbar.', recommended: 'Empfohlenes Programm · GitHub', catalog: 'Vollständiger Katalog', extraExercises: '851 zusätzliche Übungen', programFallback: 'Dein persönliches Programm' },
+  fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', goal: 'Quel est ton objectif principal ?', level: 'Quel est ton niveau actuel ?', rhythm: 'Comment vas-tu t’entraîner ?', profile: 'Ton profil', profileHelp: 'Optionnel — ces infos servent à estimer ta dépense quotidienne (bilan nutrition).', profileSex: 'Sexe', profileAge: 'Âge', profileHeight: 'Taille (cm)', profileWeight: 'Poids actuel (kg)', profileActivity: 'Niveau d’activité', nutrition: 'Personnalisons aussi la nutrition', result: 'Ton espace est prêt', resultHelp: 'Voici les contenus conseillés. Tu peux les télécharger maintenant ou plus tard.', next: 'Continuer', back: 'Retour', finish: 'Installer ma sélection', skip: 'Commencer sans téléchargement', downloading: 'Installation de tes contenus…', days: 'séances par semaine', equipment: 'Matériel disponible', retailer: 'Base d’aliments par pays', coreFoods: '142 aliments essentiels sont déjà disponibles hors ligne.', recommended: 'Programme conseillé · GitHub', catalog: 'Catalogue complet', extraExercises: '851 exercices supplémentaires', programFallback: 'Ton programme personnalisé', aiModel: 'Estimation de repas par photo', aiModelMeta: 'Modèle IA · ~1 Go · wifi recommandé', aiDownloadFailedTitle: 'Modèle IA non téléchargé', aiDownloadFailedMessage: 'Le téléchargement du modèle a échoué. Il sera retenté à la première utilisation de la photo de repas.' },
+  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', goal: 'What is your main goal?', level: 'What is your current level?', rhythm: 'How will you train?', profile: 'Your profile', profileHelp: 'Optional — used to estimate your daily energy burn (nutrition balance).', profileSex: 'Sex', profileAge: 'Age', profileHeight: 'Height (cm)', profileWeight: 'Current weight (kg)', profileActivity: 'Activity level', nutrition: 'Let’s tailor nutrition too', result: 'Your space is ready', resultHelp: 'These are your recommended downloads. Get them now or anytime later.', next: 'Continue', back: 'Back', finish: 'Install my selection', skip: 'Start without downloads', downloading: 'Installing your content…', days: 'sessions per week', equipment: 'Available equipment', retailer: 'Food database by country', coreFoods: '142 essential foods are already available offline.', recommended: 'Recommended program · GitHub', catalog: 'Full exercise catalog', extraExercises: '851 extra exercises', programFallback: 'Your personalized program', aiModel: 'Meal photo estimation', aiModelMeta: 'AI model · ~1 GB · Wi-Fi recommended', aiDownloadFailedTitle: 'AI model not downloaded', aiDownloadFailedMessage: 'The model download failed. It will be retried the first time you use meal photo.' },
+  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', goal: '¿Cuál es tu objetivo principal?', level: '¿Cuál es tu nivel actual?', rhythm: '¿Cómo vas a entrenar?', profile: 'Tu perfil', profileHelp: 'Opcional — sirve para estimar tu gasto diario (balance de nutrición).', profileSex: 'Sexo', profileAge: 'Edad', profileHeight: 'Altura (cm)', profileWeight: 'Peso actual (kg)', profileActivity: 'Nivel de actividad', nutrition: 'Personalicemos también la nutrición', result: 'Tu espacio está listo', resultHelp: 'Estas son tus descargas recomendadas. Puedes instalarlas ahora o más tarde.', next: 'Continuar', back: 'Atrás', finish: 'Instalar mi selección', skip: 'Empezar sin descargar', downloading: 'Instalando tu contenido…', days: 'sesiones por semana', equipment: 'Equipo disponible', retailer: 'Base de alimentos por país', coreFoods: '142 alimentos esenciales ya están disponibles sin conexión.', recommended: 'Programa recomendado · GitHub', catalog: 'Catálogo completo', extraExercises: '851 ejercicios adicionales', programFallback: 'Tu programa personalizado', aiModel: 'Estimación de comidas por foto', aiModelMeta: 'Modelo IA · ~1 GB · wifi recomendado', aiDownloadFailedTitle: 'Modelo IA no descargado', aiDownloadFailedMessage: 'La descarga del modelo falló. Se reintentará la primera vez que uses la foto de comida.' },
+  de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', goal: 'Was ist dein Hauptziel?', level: 'Wie ist dein aktuelles Niveau?', rhythm: 'Wie wirst du trainieren?', profile: 'Dein Profil', profileHelp: 'Optional — dient zur Schätzung deines täglichen Verbrauchs (Ernährungsbilanz).', profileSex: 'Geschlecht', profileAge: 'Alter', profileHeight: 'Größe (cm)', profileWeight: 'Aktuelles Gewicht (kg)', profileActivity: 'Aktivitätslevel', nutrition: 'Auch Ernährung personalisieren', result: 'Dein Bereich ist bereit', resultHelp: 'Das sind deine empfohlenen Downloads. Jetzt oder später installieren.', next: 'Weiter', back: 'Zurück', finish: 'Auswahl installieren', skip: 'Ohne Download starten', downloading: 'Inhalte werden installiert…', days: 'Einheiten pro Woche', equipment: 'Verfügbare Geräte', retailer: 'Lebensmitteldatenbank nach Land', coreFoods: '142 wichtige Lebensmittel sind bereits offline verfügbar.', recommended: 'Empfohlenes Programm · GitHub', catalog: 'Vollständiger Katalog', extraExercises: '851 zusätzliche Übungen', programFallback: 'Dein persönliches Programm', aiModel: 'Mahlzeiten-Schätzung per Foto', aiModelMeta: 'KI-Modell · ~1 GB · WLAN empfohlen', aiDownloadFailedTitle: 'KI-Modell nicht heruntergeladen', aiDownloadFailedMessage: 'Der Modell-Download ist fehlgeschlagen. Er wird bei der ersten Nutzung des Essensfotos erneut versucht.' },
 };
 
 const retailerCopy: Record<LanguageId, Record<string, string>> = {
@@ -100,6 +106,16 @@ const translatedLabels: Record<LanguageId, ChoiceLabelGroups> = {
   },
 };
 
+/** Poids saisi à l'onboarding : chiffres + un seul séparateur décimal (, ou .). */
+function sanitizeWeightInput(value: string): string {
+  const cleaned = value.replace(/[^\d.,]/g, '');
+  const firstSeparator = cleaned.search(/[.,]/);
+  if (firstSeparator === -1) return cleaned.slice(0, 6);
+  const head = cleaned.slice(0, firstSeparator + 1);
+  const tail = cleaned.slice(firstSeparator + 1).replace(/[.,]/g, '');
+  return (head + tail).slice(0, 6);
+}
+
 function ChoiceGrid({ items, value, onChange }: { items: Record<string, readonly [string, string]>; value: string; onChange: (value: string) => void }) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -129,10 +145,31 @@ export default function OnboardingScreen() {
   const downloadExercisePack = useCommunityStore((state) => state.downloadExercisePack);
   const communityData = useCommunityStore((state) => state.data);
   const communityLoading = useCommunityStore((state) => state.loading);
+  const performanceSex = usePerformanceStore((state) => state.sex);
+  const performanceAge = usePerformanceStore((state) => state.age);
+  const performanceHeightCm = usePerformanceStore((state) => state.heightCm);
+  const performanceActivityLevel = usePerformanceStore((state) => state.activityLevel);
+  const setPerformanceSex = usePerformanceStore((state) => state.setSex);
+  const setPerformanceAge = usePerformanceStore((state) => state.setAge);
+  const setPerformanceHeightCm = usePerformanceStore((state) => state.setHeightCm);
+  const setPerformanceActivityLevel = usePerformanceStore((state) => state.setActivityLevel);
+  const bodyWeightEntries = useBodyWeightStore((state) => state.entries);
+  const addBodyWeightEntry = useBodyWeightStore((state) => state.addEntry);
   const [step, setStep] = useState(0);
   const [installing, setInstalling] = useState(false);
   const [withExercises, setWithExercises] = useState(profile.level !== 'beginner');
-  const totalSteps = 6;
+  // Étape « Ton profil » : brouillons locaux, pré-remplis depuis les stores
+  // (ré-injectés à l'entrée de l'étape car l'hydratation persist est asynchrone).
+  const [profileSexDraft, setProfileSexDraft] = useState<PerformanceSex>(performanceSex);
+  const [ageDraft, setAgeDraft] = useState(performanceAge ? String(performanceAge) : '');
+  const [heightDraft, setHeightDraft] = useState(performanceHeightCm ? String(performanceHeightCm) : '');
+  const [weightDraft, setWeightDraft] = useState('');
+  const [activityDraft, setActivityDraft] = useState<ActivityLevel>(performanceActivityLevel);
+  const [profileDraftsReady, setProfileDraftsReady] = useState(false);
+  // Carte « modèle IA » de l'écran final (gating appareil).
+  const [mealPhotoOk, setMealPhotoOk] = useState(false);
+  const [withMealPhotoModel, setWithMealPhotoModel] = useState(true);
+  const totalSteps = 7;
   const retailerText = retailerCopy[language];
   // Anciens profils par enseigne : les bases starter Auchan/Carrefour ont été
   // retirées, la base pays France (97 aliments) couvre ces deux enseignes.
@@ -144,18 +181,92 @@ export default function OnboardingScreen() {
   );
 
   useEffect(() => {
-    if (step >= 4 && !communityData && !communityLoading) {
+    if (step >= 5 && !communityData && !communityLoading) {
       void fetchManifest();
     }
   }, [communityData, communityLoading, fetchManifest, step]);
+
+  // Pré-remplissage du profil énergétique à l'entrée de l'étape (une seule
+  // fois, pour ne pas écraser les saisies si l'utilisateur revient en arrière).
+  useEffect(() => {
+    if (step !== 4 || profileDraftsReady) return;
+    setProfileSexDraft(performanceSex);
+    setAgeDraft(performanceAge ? String(performanceAge) : '');
+    setHeightDraft(performanceHeightCm ? String(performanceHeightCm) : '');
+    const latestWeight = getBodyweightForDate(bodyWeightEntries, new Date().toISOString());
+    setWeightDraft(latestWeight ? String(latestWeight).replace('.', ',') : '');
+    setActivityDraft(performanceActivityLevel);
+    setProfileDraftsReady(true);
+  }, [
+    step,
+    profileDraftsReady,
+    performanceSex,
+    performanceAge,
+    performanceHeightCm,
+    performanceActivityLevel,
+    bodyWeightEntries,
+  ]);
+
+  // Gating de la carte « modèle IA » sur l'écran final.
+  useEffect(() => {
+    if (step !== totalSteps - 1) return;
+    let cancelled = false;
+    void canUseMealPhoto().then((capability) => {
+      if (!cancelled) setMealPhotoOk(capability.ok);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [step]);
 
   const recommendedProgram = communityData ? findRecommendedProgram(communityData, profile) : undefined;
   const programName = recommendedProgram
     ? resolveEntryName(recommendedProgram, language)
     : text.programFallback;
 
+  // Libellés du profil réutilisant les clés i18n existantes (déjà traduites).
+  const sexChoices: { id: PerformanceSex; label: string }[] = [
+    { id: 'female', label: t('performance.sexFemale') },
+    { id: 'male', label: t('performance.sexMale') },
+    { id: 'unspecified', label: t('performance.sexUnspecified') },
+  ];
+  const activityChoices: Record<string, readonly [string, string]> = {
+    sedentary: ['walk-outline', t('performance.activity.sedentary')],
+    light: ['bicycle-outline', t('performance.activity.light')],
+    moderate: ['fitness-outline', t('performance.activity.moderate')],
+    active: ['flame-outline', t('performance.activity.active')],
+  };
+
+  // Sauvegarde le profil énergétique au passage à l'étape suivante.
+  // Champs optionnels : seules les valeurs saisies ET dans les bornes sont
+  // enregistrées (les setters du store re-clampent de toute façon).
+  const saveEnergyProfile = () => {
+    setPerformanceSex(profileSexDraft);
+    setPerformanceActivityLevel(activityDraft);
+    const parsedAge = parseInt(ageDraft, 10);
+    if (ageDraft.trim() && Number.isFinite(parsedAge) && parsedAge >= 10 && parsedAge <= 100) {
+      setPerformanceAge(parsedAge);
+    }
+    const parsedHeight = parseInt(heightDraft, 10);
+    if (heightDraft.trim() && Number.isFinite(parsedHeight) && parsedHeight >= 100 && parsedHeight <= 250) {
+      setPerformanceHeightCm(parsedHeight);
+    }
+    const parsedWeight = parseFloat(weightDraft.replace(',', '.'));
+    if (weightDraft.trim() && Number.isFinite(parsedWeight) && parsedWeight >= 30 && parsedWeight <= 300) {
+      addBodyWeightEntry(parsedWeight);
+    }
+  };
+
+  const goNext = () => {
+    if (step === 4) saveEnergyProfile();
+    setStep(step + 1);
+  };
+
   const finish = async (download: boolean) => {
     setInstalling(true);
+    // Le téléchargement du modèle IA est lancé en tâche de fond APRÈS la fin
+    // de l'onboarding : il ne bloque ni complete() ni la navigation.
+    const wantsAiModel = download && withMealPhotoModel && mealPhotoOk;
     try {
       if (download) {
         const manifest = await fetchManifest();
@@ -173,10 +284,17 @@ export default function OnboardingScreen() {
       complete();
       setInstalling(false);
       router.replace('/(tabs)' as never);
+      if (wantsAiModel) {
+        void downloadMealPhotoModel().then((downloaded) => {
+          if (!downloaded) {
+            appAlert(text.aiDownloadFailedTitle, text.aiDownloadFailedMessage);
+          }
+        });
+      }
     }
   };
 
-  const title = [text.welcome, text.goal, text.level, text.rhythm, text.nutrition, text.result][step];
+  const title = [text.welcome, text.goal, text.level, text.rhythm, text.profile, text.nutrition, text.result][step];
   return <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
     <View style={styles.top}><View style={styles.progressTrack}><View style={[styles.progress, { width: `${((step + 1) / totalSteps) * 100}%` }]} /></View><Text style={styles.step}>{step + 1}/{totalSteps}</Text></View>
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -187,14 +305,29 @@ export default function OnboardingScreen() {
       {step === 1 ? <ChoiceGrid items={options.goals} value={profile.goal} onChange={(goal) => updateProfile({ goal: goal as OnboardingGoal })} /> : null}
       {step === 2 ? <ChoiceGrid items={options.levels} value={profile.level} onChange={(level) => { updateProfile({ level: level as OnboardingLevel }); setWithExercises(level !== 'beginner'); }} /> : null}
       {step === 3 ? <><Text style={styles.sectionLabel}>{text.days}</Text><View style={styles.daysRow}>{[2,3,4,5,6].map((days) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: profile.daysPerWeek === days }} key={days} style={[styles.day, profile.daysPerWeek === days && styles.daySelected]} onPress={() => updateProfile({ daysPerWeek: days })}><Text style={[styles.dayText, profile.daysPerWeek === days && styles.dayTextSelected]}>{days}</Text></TouchableOpacity>)}</View><Text style={styles.sectionLabel}>{text.equipment}</Text><ChoiceGrid items={options.equipmentProfiles} value={profile.equipmentProfileId} onChange={(equipmentProfileId) => updateProfile({ equipmentProfileId: equipmentProfileId as OnboardingEquipmentProfileId })} /></> : null}
-      {step === 4 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><RetailerPicker entries={communityData?.foodDatabases ?? []} value={selectedFoodDatabaseId} loading={communityLoading} label={text.retailer} placeholder={retailerText.placeholder} searchPlaceholder={retailerText.search} noneLabel={retailerText.none} githubLabel={retailerText.github} closeLabel={retailerText.close} emptyLabel={retailerText.empty} onChange={(id) => updateProfile({ retailer: id ?? 'none' })} onRefresh={() => void fetchManifest()} /></> : null}
-      {step === 5 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.country ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.retailers?.join(', ') ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name} · {selectedFoodDatabase.foodsCount} aliments · {selectedFoodDatabase.license ?? 'GitHub'}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
+      {step === 4 ? <>
+        <Text style={styles.subtitle}>{text.profileHelp}</Text>
+        <Text style={styles.sectionLabel}>{text.profileSex}</Text>
+        <View style={styles.languageRow}>{sexChoices.map((option) => {
+          const selected = profileSexDraft === option.id;
+          return <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected }} key={option.id} style={[styles.language, selected && styles.languageSelected]} onPress={() => setProfileSexDraft(option.id)}><Text style={[styles.profileSexText, selected && styles.languageTextSelected]} numberOfLines={1}>{option.label}</Text></TouchableOpacity>;
+        })}</View>
+        <View style={styles.profileFields}>
+          <TextInput label={text.profileAge} value={ageDraft} onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))} keyboardType="number-pad" maxLength={3} placeholder="30" />
+          <TextInput label={text.profileHeight} value={heightDraft} onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))} keyboardType="number-pad" maxLength={3} placeholder="175" />
+          <TextInput label={text.profileWeight} value={weightDraft} onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))} keyboardType="decimal-pad" placeholder="70" />
+        </View>
+        <Text style={styles.sectionLabel}>{text.profileActivity}</Text>
+        <ChoiceGrid items={activityChoices} value={activityDraft} onChange={(id) => setActivityDraft(id as ActivityLevel)} />
+      </> : null}
+      {step === 5 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><RetailerPicker entries={communityData?.foodDatabases ?? []} value={selectedFoodDatabaseId} loading={communityLoading} label={text.retailer} placeholder={retailerText.placeholder} searchPlaceholder={retailerText.search} noneLabel={retailerText.none} githubLabel={retailerText.github} closeLabel={retailerText.close} emptyLabel={retailerText.empty} onChange={(id) => updateProfile({ retailer: id ?? 'none' })} onRefresh={() => void fetchManifest()} /></> : null}
+      {step === 6 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{mealPhotoOk ? <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withMealPhotoModel }} style={[styles.recommendation, withMealPhotoModel && styles.recommendationActive]} onPress={() => setWithMealPhotoModel(!withMealPhotoModel)}><View style={styles.recIcon}><Ionicons name="camera-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.aiModel}</Text><Text style={styles.recMeta}>{text.aiModelMeta}</Text></View><Ionicons name={withMealPhotoModel ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withMealPhotoModel ? c.success : c.textMuted} /></TouchableOpacity> : null}{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.country ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.retailers?.join(', ') ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name} · {selectedFoodDatabase.foodsCount} aliments · {selectedFoodDatabase.license ?? 'GitHub'}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
       {installing ? <View style={styles.installing}><ActivityIndicator color={c.primary} /><Text style={styles.installingText}>{text.downloading}</Text></View> : null}
     </ScrollView>
-    {step < totalSteps - 1 ? <View style={styles.footer}>{step > 0 && !installing ? <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={20} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity> : <View />}<Button title={text.next} onPress={() => setStep(step + 1)} style={styles.nextButton} /></View> : <View style={styles.finalFooter}><Button title={text.finish} loading={installing} onPress={() => void finish(true)} style={styles.installButton} /><View style={styles.finalSecondary}><TouchableOpacity accessibilityRole="button" disabled={installing} style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={18} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity><TouchableOpacity accessibilityRole="button" disabled={installing} onPress={() => void finish(false)}><Text style={styles.skipText}>{text.skip}</Text></TouchableOpacity></View></View>}
+    {step < totalSteps - 1 ? <View style={styles.footer}>{step > 0 && !installing ? <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={20} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity> : <View />}<Button title={text.next} onPress={goNext} style={styles.nextButton} /></View> : <View style={styles.finalFooter}><Button title={text.finish} loading={installing} onPress={() => void finish(true)} style={styles.installButton} /><View style={styles.finalSecondary}><TouchableOpacity accessibilityRole="button" disabled={installing} style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={18} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity><TouchableOpacity accessibilityRole="button" disabled={installing} onPress={() => void finish(false)}><Text style={styles.skipText}>{text.skip}</Text></TouchableOpacity></View></View>}
   </SafeAreaView>;
 }
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  safe: { flex: 1, backgroundColor: c.bg }, top: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, paddingTop: 8 }, progressTrack: { flex: 1, height: 5, borderRadius: 3, overflow: 'hidden', backgroundColor: c.surfaceAlt }, progress: { height: '100%', borderRadius: 3, backgroundColor: c.primary }, step: { fontFamily: fonts.sansBold, color: c.textMuted, fontSize: 12 }, content: { padding: 24, paddingTop: 30, paddingBottom: 20 }, heroIcon: { width: 72, height: 72, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: c.primary, marginBottom: 26 }, eyebrow: { fontFamily: fonts.sansBold, fontSize: 11, letterSpacing: 1.8, color: c.primary, marginBottom: 10 }, title: { fontFamily: fonts.sansHeavy, fontSize: 32, lineHeight: 37, color: c.textPrimary, marginBottom: 12 }, subtitle: { fontFamily: fonts.sans, fontSize: 16, lineHeight: 23, color: c.textSecondary, marginBottom: 28 }, sectionLabel: { fontFamily: fonts.sansBold, fontSize: 13, color: c.textPrimary, marginTop: 18, marginBottom: 11 }, languageRow: { flexDirection: 'row', gap: 9 }, language: { flex: 1, minHeight: 46, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface, borderWidth: 1, borderColor: c.border }, languageSelected: { backgroundColor: c.primary, borderColor: c.primary }, languageText: { fontFamily: fonts.sansBold, color: c.textPrimary }, languageTextSelected: { color: c.primaryText }, choiceGrid: { gap: 10, marginTop: 12 }, choice: { minHeight: 68, borderRadius: 17, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 13, padding: 12 }, choiceSelected: { borderColor: c.primary, backgroundColor: c.accentSoft }, choiceIcon: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft }, choiceIconSelected: { backgroundColor: c.primary }, choiceText: { flex: 1, fontFamily: fonts.sansSemi, fontSize: 16, color: c.textPrimary }, choiceTextSelected: { fontFamily: fonts.sansBold }, daysRow: { flexDirection: 'row', gap: 9, marginBottom: 18 }, day: { flex: 1, aspectRatio: 1, maxHeight: 58, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface, borderWidth: 1, borderColor: c.border }, daySelected: { backgroundColor: c.primary, borderColor: c.primary }, dayText: { fontFamily: fonts.sansBold, fontSize: 18, color: c.textPrimary }, dayTextSelected: { color: c.primaryText }, recommendation: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 17, backgroundColor: c.surface, borderWidth: 1, borderColor: c.border, marginBottom: 10 }, recommendationActive: { borderColor: c.primary }, recIcon: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 13, backgroundColor: c.accentSoft }, recCopy: { flex: 1 }, recTitle: { fontFamily: fonts.sansBold, fontSize: 15, color: c.textPrimary }, recMeta: { fontFamily: fonts.sans, fontSize: 12, color: c.textSecondary, marginTop: 3 }, installing: { flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 18 }, installingText: { fontFamily: fonts.sansSemi, color: c.textSecondary }, footer: { minHeight: 80, borderTopWidth: 1, borderTopColor: c.border, paddingHorizontal: 20, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: c.surface }, finalFooter: { minHeight: 122, borderTopWidth: 1, borderTopColor: c.border, paddingHorizontal: 20, paddingVertical: 12, gap: 4, backgroundColor: c.surface }, installButton: { width: '100%' }, finalSecondary: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, backButton: { flexDirection: 'row', gap: 7, minHeight: 42, alignItems: 'center', paddingHorizontal: 8 }, backText: { fontFamily: fonts.sansSemi, color: c.textPrimary }, nextButton: { minWidth: 150 }, skipText: { maxWidth: 180, textAlign: 'right', fontFamily: fonts.sansSemi, fontSize: 12, color: c.textSecondary },
+  safe: { flex: 1, backgroundColor: c.bg }, top: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 20, paddingTop: 8 }, progressTrack: { flex: 1, height: 5, borderRadius: 3, overflow: 'hidden', backgroundColor: c.surfaceAlt }, progress: { height: '100%', borderRadius: 3, backgroundColor: c.primary }, step: { fontFamily: fonts.sansBold, color: c.textMuted, fontSize: 12 }, content: { padding: 24, paddingTop: 30, paddingBottom: 20 }, heroIcon: { width: 72, height: 72, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: c.primary, marginBottom: 26 }, eyebrow: { fontFamily: fonts.sansBold, fontSize: 11, letterSpacing: 1.8, color: c.primary, marginBottom: 10 }, title: { fontFamily: fonts.sansHeavy, fontSize: 32, lineHeight: 37, color: c.textPrimary, marginBottom: 12 }, subtitle: { fontFamily: fonts.sans, fontSize: 16, lineHeight: 23, color: c.textSecondary, marginBottom: 28 }, sectionLabel: { fontFamily: fonts.sansBold, fontSize: 13, color: c.textPrimary, marginTop: 18, marginBottom: 11 }, languageRow: { flexDirection: 'row', gap: 9 }, language: { flex: 1, minHeight: 46, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface, borderWidth: 1, borderColor: c.border }, languageSelected: { backgroundColor: c.primary, borderColor: c.primary }, languageText: { fontFamily: fonts.sansBold, color: c.textPrimary }, languageTextSelected: { color: c.primaryText }, choiceGrid: { gap: 10, marginTop: 12 }, choice: { minHeight: 68, borderRadius: 17, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 13, padding: 12 }, choiceSelected: { borderColor: c.primary, backgroundColor: c.accentSoft }, choiceIcon: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft }, choiceIconSelected: { backgroundColor: c.primary }, choiceText: { flex: 1, fontFamily: fonts.sansSemi, fontSize: 16, color: c.textPrimary }, choiceTextSelected: { fontFamily: fonts.sansBold }, daysRow: { flexDirection: 'row', gap: 9, marginBottom: 18 }, day: { flex: 1, aspectRatio: 1, maxHeight: 58, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surface, borderWidth: 1, borderColor: c.border }, daySelected: { backgroundColor: c.primary, borderColor: c.primary }, dayText: { fontFamily: fonts.sansBold, fontSize: 18, color: c.textPrimary }, dayTextSelected: { color: c.primaryText }, recommendation: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: 17, backgroundColor: c.surface, borderWidth: 1, borderColor: c.border, marginBottom: 10 }, recommendationActive: { borderColor: c.primary }, recIcon: { width: 42, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 13, backgroundColor: c.accentSoft }, recCopy: { flex: 1 }, recTitle: { fontFamily: fonts.sansBold, fontSize: 15, color: c.textPrimary }, recMeta: { fontFamily: fonts.sans, fontSize: 12, color: c.textSecondary, marginTop: 3 }, installing: { flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 18 }, installingText: { fontFamily: fonts.sansSemi, color: c.textSecondary }, footer: { minHeight: 80, borderTopWidth: 1, borderTopColor: c.border, paddingHorizontal: 20, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: c.surface }, finalFooter: { minHeight: 122, borderTopWidth: 1, borderTopColor: c.border, paddingHorizontal: 20, paddingVertical: 12, gap: 4, backgroundColor: c.surface }, installButton: { width: '100%' }, finalSecondary: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }, backButton: { flexDirection: 'row', gap: 7, minHeight: 42, alignItems: 'center', paddingHorizontal: 8 }, backText: { fontFamily: fonts.sansSemi, color: c.textPrimary }, nextButton: { minWidth: 150 }, skipText: { maxWidth: 180, textAlign: 'right', fontFamily: fonts.sansSemi, fontSize: 12, color: c.textSecondary }, profileFields: { gap: 12, marginTop: 16 }, profileSexText: { fontFamily: fonts.sansBold, fontSize: 12, color: c.textPrimary },
 });

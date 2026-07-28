@@ -45,3 +45,24 @@ export function calculateTdee(profile: EnergyProfile): number | null {
 export function isEnergyProfileComplete(profile: EnergyProfile): boolean {
   return calculateBmr(profile) !== null;
 }
+
+/** Champs du profil énergétique qui peuvent manquer au calcul du BMR/TDEE. */
+export type EnergyProfileField = 'sex' | 'weight' | 'height' | 'age';
+
+/**
+ * Liste les champs manquants empêchant l'estimation de la dépense (TDEE).
+ * Le poids est passé à part car il vient du journal de poids
+ * (bodyWeightStore), pas du profil de performance.
+ * Ordre stable : sexe, poids, taille, âge.
+ */
+export function missingEnergyProfileFields(
+  profile: Pick<EnergyProfile, 'sex' | 'heightCm' | 'ageYears'>,
+  weightKg?: number
+): EnergyProfileField[] {
+  const missing: EnergyProfileField[] = [];
+  if (profile.sex === 'unspecified') missing.push('sex');
+  if (!weightKg || weightKg <= 0) missing.push('weight');
+  if (!profile.heightCm || profile.heightCm <= 0) missing.push('height');
+  if (!profile.ageYears || profile.ageYears <= 0) missing.push('age');
+  return missing;
+}

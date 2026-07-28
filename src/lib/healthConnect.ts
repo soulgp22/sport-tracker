@@ -42,12 +42,32 @@ async function safeCall<T>(fn: (hc: HealthConnectModule) => Promise<T>): Promise
   }
 }
 
+/**
+ * Statut détaillé de Health Connect sur l'appareil :
+ * - 'available' : installé et utilisable ;
+ * - 'not-installed' : SDK absent — l'app Health Connect n'est pas installée
+ *   (ou l'appareil ne la supporte pas) ;
+ * - 'needs-update' : installée mais obsolète, mise à jour requise ;
+ * - 'unavailable' : module natif absent (Jest, Expo Go, iOS) ou erreur.
+ */
+export type HealthConnectStatus = 'available' | 'not-installed' | 'needs-update' | 'unavailable';
+
+/** Statut détaillé de Health Connect (appel frais, utile juste après une installation). */
+export async function getHealthConnectStatus(): Promise<HealthConnectStatus> {
+  const hc = loadModule();
+  if (!hc) return 'unavailable';
+  const status = await safeCall((module) => module.getSdkStatus());
+  if (status === null) return 'unavailable';
+  if (status === hc.SdkAvailabilityStatus.SDK_AVAILABLE) return 'available';
+  if (status === hc.SdkAvailabilityStatus.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED) {
+    return 'needs-update';
+  }
+  return 'not-installed';
+}
+
 /** true si Health Connect est installé et utilisable sur l'appareil. */
 export async function isHealthConnectAvailable(): Promise<boolean> {
-  const hc = loadModule();
-  if (!hc) return false;
-  const status = await safeCall((module) => module.getSdkStatus());
-  return status !== null && status === hc.SdkAvailabilityStatus.SDK_AVAILABLE;
+  return (await getHealthConnectStatus()) === 'available';
 }
 
 /** Initialise le client Health Connect. false si indisponible. */
@@ -75,15 +95,57 @@ export async function hasHealthPermissions(): Promise<boolean> {
   return hasAllReadPermissions(granted);
 }
 
+/** Résultat détaillé du flow de permission Health Connect. */
+export interface HealthPermissionResult {
+  /** Statut Health Connect mesuré juste avant la demande (post-installation). */
+  status: HealthConnectStatus;
+  /** true si toutes les permissions requises ont été accordées. */
+  granted: boolean;
+  /** Message d'erreur natif si requestPermission a levé une exception. */
+  error?: string;
+}
+
+/**
+ * Lance le flow de permission Health Connect avec un résultat détaillé.
+ * Vérifie d'abord le statut SDK (un utilisateur peut venir d'installer
+ * l'app Health Connect) : si le SDK n'est pas disponible, la demande n'est
+ * pas tentée et le statut explique pourquoi.
+ */
+export async function requestHealthPermissionsWithStatus(): Promise<HealthPermissionResult> {
+  const hc = loadModule();
+  if (!hc) return { status: 'unavailable', granted: false };
+  const status = await getHealthConnectStatus();
+  if (status !== 'available') return { status, granted: false };
+  try {
+    const granted = (await hc.requestPermission([...REQUIRED_PERMISSIONS])) as HealthPermission[];
+    return { status, granted: hasAllReadPermissions(granted) };
+  } catch (error) {
+    return {
+      status,
+      granted: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
 /**
  * Lance le flow de permission Health Connect.
  * true si toutes les permissions requises ont été accordées.
  */
 export async function requestHealthPermissions(): Promise<boolean> {
-  const granted = await safeCall(
-    (hc) => hc.requestPermission([...REQUIRED_PERMISSIONS]) as Promise<HealthPermission[]>
-  );
-  return hasAllReadPermissions(granted);
+  return (await requestHealthPermissionsWithStatus()).granted;
+}
+
+/** Ouvre les réglages Health Connect (réactivation des permissions). No-op si indisponible. */
+export function openHealthConnectSettingsSafe(): boolean {
+  const hc = loadModule();
+  if (!hc) return false;
+  try {
+    hc.openHealthConnectSettings();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function todayTimeRange() {

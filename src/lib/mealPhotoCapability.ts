@@ -84,6 +84,40 @@ export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
 let executorchInitialized = false;
 
 /**
+ * Télécharge les ressources du modèle LFM2.5-VL (modèle + tokenizer + config)
+ * via ExpoResourceFetcher, SANS charger le modèle en mémoire. Utilisable hors
+ * de la modale photo (ex. à la fin de l'onboarding). Idempotent : les fichiers
+ * déjà présents dans le répertoire executorch sont ignorés, et la modale
+ * MealPhotoReview réutilise ces mêmes fichiers ensuite.
+ *
+ * Retourne false sans lever si le gating est KO, si le module natif est
+ * absent (Jest, Expo Go) ou si le téléchargement échoue — l'échec est logué.
+ */
+export async function downloadMealPhotoModel(
+  onProgress?: (progress: number) => void
+): Promise<boolean> {
+  const capability = await canUseMealPhoto();
+  if (!capability.ok) return false;
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { LFM2_5_VL_1_6B_QUANTIZED } = require('react-native-executorch') as typeof import('react-native-executorch');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { ExpoResourceFetcher } = require('react-native-executorch-expo-resource-fetcher') as typeof import('react-native-executorch-expo-resource-fetcher');
+    await ExpoResourceFetcher.fetch(
+      onProgress,
+      LFM2_5_VL_1_6B_QUANTIZED.modelSource,
+      LFM2_5_VL_1_6B_QUANTIZED.tokenizerSource,
+      LFM2_5_VL_1_6B_QUANTIZED.tokenizerConfigSource
+    );
+    return true;
+  } catch (error) {
+    console.warn('[mealPhoto] échec du téléchargement du modèle', error);
+    return false;
+  }
+}
+
+/**
  * Initialise le runtime executorch (resource fetcher Expo), uniquement si le
  * gating est OK. Idempotent. Toute erreur (module natif absent, Expo Go) est
  * avalée : la feature reste simplement cachée.
