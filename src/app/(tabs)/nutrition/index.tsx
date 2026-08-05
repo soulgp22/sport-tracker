@@ -9,6 +9,7 @@ import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { makeShadows, makeTypeScale, radius, spacing } from '../../../theme/tokens';
 import {
   calculateDailyTotals,
   calculateGoalProgress,
@@ -284,50 +285,64 @@ export default function NutritionScreen() {
             title={t('nutrition.addMeal')}
             onPress={() => router.push('/(tabs)/nutrition/add' as never)}
           />
-          <Button
-            title={t('nutrition.diaryTitle')}
-            onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
-          />
-          <Button
-            title={t('nutrition.historyTitle')}
-            variant="secondary"
-            onPress={() => router.push('/(tabs)/nutrition/history' as never)}
-          />
-          <Button
-            title={t('nutrition.goals.title')}
-            variant="secondary"
-            onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
-          />
+          <View style={styles.actionsRow}>
+            <Button
+              title={t('nutrition.diaryTitle')}
+              variant="soft"
+              compact
+              style={styles.actionsRowBtn}
+              onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
+            />
+            <Button
+              title={t('nutrition.historyTitle')}
+              variant="soft"
+              compact
+              style={styles.actionsRowBtn}
+              onPress={() => router.push('/(tabs)/nutrition/history' as never)}
+            />
+            <Button
+              title={t('nutrition.goals.title')}
+              variant="soft"
+              compact
+              style={styles.actionsRowBtn}
+              onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
+            />
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
+const makeStyles = (c: ThemeColors) => {
+  const shadows = makeShadows(c);
+  const type = makeTypeScale();
+  return StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
-  content: { padding: 16, gap: 18, paddingBottom: 32 },
+  content: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl },
   card: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 16,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
+    gap: spacing.md,
+    ...shadows.card,
   },
-  cardTitle: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
-  balanceRow: { flexDirection: 'row', gap: 12 },
-  balanceCol: { flex: 1, alignItems: 'center', gap: 4 },
-  balanceValue: { fontSize: 24, fontFamily: fonts.serifBold, color: c.primary },
-  balanceLabel: { fontSize: 12, fontFamily: fonts.sansSemi, color: c.textSecondary },
-  balanceHint: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary, lineHeight: 18 },
-  balanceSource: { fontSize: 11, fontFamily: fonts.sans, color: c.textMuted },
-  caloriesBlock: { gap: 4 },
-  caloriesValue: { fontSize: 28, fontFamily: fonts.serifBold, color: c.primary },
-  remaining: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textSecondary },
+  cardTitle: { ...type.micro, fontFamily: fonts.sansBold, color: c.textPrimary },
+  balanceRow: { flexDirection: 'row', gap: spacing.sm },
+  balanceCol: { flex: 1, alignItems: 'center', gap: spacing.xxs },
+  balanceValue: { fontSize: 26, fontFamily: fonts.serifBold, color: c.primary },
+  balanceLabel: { ...type.micro, fontFamily: fonts.sansSemi, color: c.textSecondary },
+  balanceHint: { ...type.caption, color: c.textSecondary },
+  balanceSource: { ...type.micro, fontFamily: fonts.sans, color: c.textMuted },
+  caloriesBlock: { gap: spacing.xxs },
+  caloriesValue: { ...type.display, fontFamily: fonts.serifBold, color: c.primary },
+  remaining: { ...type.subtitle, fontFamily: fonts.sansBold, color: c.textSecondary },
   overGoal: { color: c.danger },
-  macroBars: { gap: 14 },
-  actions: { gap: 12 },
-});
+  macroBars: { gap: spacing.sm },
+  actions: { gap: spacing.sm },
+  actionsRow: { flexDirection: 'row', gap: spacing.xs },
+  actionsRowBtn: { flex: 1 },
+  });
+};

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,6 +29,7 @@ import {
 import { isExerciseCompatibleWithProfile } from '../../../constants/equipmentProfiles';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
+import { makeShadows, radius, spacing } from '../../../theme/tokens';
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
@@ -123,6 +124,15 @@ export default function ActiveSessionScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const { t } = useTranslation();
   const router = useRouter();
+  const navigation = useNavigation();
+
+  // Plein écran pendant l'effort : la tab bar disparaît le temps de la séance
+  // et revient dès qu'on quitte cet écran.
+  useEffect(() => {
+    const parent = navigation.getParent();
+    parent?.setOptions({ tabBarStyle: { display: 'none' } });
+    return () => parent?.setOptions({ tabBarStyle: undefined });
+  }, [navigation]);
   const active = useActiveSessionStore((s) => s.active);
   const logSet = useActiveSessionStore((s) => s.logSet);
   const setRestTimer = useActiveSessionStore((s) => s.setRestTimer);
@@ -450,63 +460,65 @@ export default function ActiveSessionScreen() {
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
+const makeStyles = (c: ThemeColors) => {
+  const shadows = makeShadows(c);
+  return StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   keyboardAvoiding: { flex: 1 },
-  topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-  headerBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
+  headerBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   topCenter: { flex: 1, alignItems: 'center' },
   topTitle: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   topSub: { fontSize: 13, color: c.textSecondary },
-  finishLink: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.primary },
-  progressTrack: { height: 4, backgroundColor: c.border, marginHorizontal: 16, borderRadius: 2 },
-  progressFill: { height: 4, backgroundColor: c.primary, borderRadius: 2 },
-  progressLabel: { fontSize: 11, color: c.textMuted, paddingHorizontal: 16, marginTop: 4 },
-  content: { padding: 16, gap: 8, paddingBottom: 16 },
+  finishLink: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.primary, paddingVertical: spacing.xs, paddingHorizontal: spacing.xxs },
+  progressTrack: { height: 6, backgroundColor: c.border, marginHorizontal: spacing.md, borderRadius: 3 },
+  progressFill: { height: 6, backgroundColor: c.primary, borderRadius: 3 },
+  progressLabel: { fontSize: 12, color: c.textMuted, paddingHorizontal: spacing.md, marginTop: spacing.xxs },
+  content: { padding: spacing.md, gap: spacing.sm, paddingBottom: spacing.md },
   exSection: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
     opacity: 0.65,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    ...shadows.card,
   },
   exSectionActive: { opacity: 1, borderWidth: 2, borderColor: c.primary },
-  exRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
-  infoBtn: { padding: 2 },
+  exRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: spacing.sm },
+  infoBtn: { padding: spacing.xxs, minWidth: 36, minHeight: 36, alignItems: 'center', justifyContent: 'center' },
   replaceBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 12,
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 6,
+    borderRadius: radius.pill,
     backgroundColor: c.accentSoft,
   },
   replaceLabel: { fontSize: 12, fontFamily: fonts.sansSemi, color: c.primary },
   exName: { fontSize: 15, fontFamily: fonts.sansSemi, color: c.textPrimary, flex: 1 },
   exNameActive: { color: c.textPrimary },
-  setsRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  setBubble: { width: 32, height: 32, borderRadius: 16, backgroundColor: c.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
+  setsRow: { flexDirection: 'row', gap: spacing.xs, flexWrap: 'wrap' },
+  setBubble: { width: 40, height: 40, borderRadius: 20, backgroundColor: c.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
   setBubbleDone: { backgroundColor: c.success },
   setBubbleActive: { backgroundColor: c.accentSoft, borderWidth: 2, borderColor: c.primary },
-  setBubbleText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textSecondary },
+  setBubbleText: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.textSecondary },
   setBubbleTextDone: { color: c.primaryText },
   setBubbleTextActive: { color: c.primary },
   logBar: {
     backgroundColor: c.surface,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 12,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: c.border,
-    gap: 8,
+    gap: spacing.xs,
+    ...shadows.raised,
   },
   logTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
-  logRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
-  logField: { flex: 1, gap: 3 },
+  logRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
+  logField: { flex: 1, gap: spacing.xxs },
   logFieldLabel: { fontSize: 11, fontFamily: fonts.sansSemi, color: c.textSecondary, textTransform: 'uppercase' },
   logInput: { textAlign: 'center', fontSize: 18, fontFamily: fonts.sansBold },
   logBtn: { paddingHorizontal: 18 },
@@ -514,26 +526,26 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   replacementHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   replacementTitle: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary, textAlign: 'center' },
-  replacementList: { padding: 16, gap: 8 },
+  replacementList: { padding: spacing.md, gap: spacing.sm },
   replacementRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: spacing.sm,
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
+    ...shadows.card,
   },
   replacementRowSelected: { borderWidth: 2, borderColor: c.primary },
-  replacementBody: { flex: 1, gap: 3 },
+  replacementBody: { flex: 1, gap: spacing.xxs },
   replacementName: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   replacementMeta: { fontSize: 12, color: c.textSecondary },
-});
+  });
+};

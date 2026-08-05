@@ -12,6 +12,7 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { spacing } from '../../../theme/tokens';
 import { MEAL_ORDER } from '../../../constants/meals';
 import { calculateDailyTotals, calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -135,10 +136,9 @@ export default function NutritionDiaryScreen() {
             icon="restaurant-outline"
             title={t('nutrition.diary.emptyTitle')}
             subtitle={t('nutrition.diary.emptySubtitle')}
+            actionLabel={t('nutrition.addMeal')}
+            onAction={openAddMeal}
           />
-          <View style={styles.emptyButton}>
-            <Button title={t('nutrition.addMeal')} onPress={openAddMeal} />
-          </View>
         </View>
       ) : (
         <View style={styles.body}>
@@ -185,29 +185,28 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
   body: { flex: 1 },
   list: { flex: 1 },
-  content: { gap: 8, paddingTop: 8, paddingBottom: 16 },
+  content: { gap: spacing.xs, paddingTop: spacing.xs, paddingBottom: spacing.md },
   mealHeader: {
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 10,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
   },
   mealTitle: { flex: 1, fontSize: 16, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   mealSubtotal: { fontSize: 14, fontFamily: fonts.sansHeavy, color: c.primary },
   footer: {
-    padding: 16,
+    padding: spacing.md,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: c.border,
   },
-  emptyContent: { flex: 1, paddingHorizontal: 16, paddingBottom: 16 },
-  emptyButton: { paddingBottom: 16 },
+  emptyContent: { flex: 1, paddingHorizontal: spacing.md, paddingBottom: spacing.md },
 });
