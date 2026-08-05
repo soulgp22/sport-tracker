@@ -54,7 +54,6 @@ export default function ProgramsLayout() {
         options={{
           headerShown: true,
           title: t('nav.programs'),
-          headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <View style={styles.headerActions}>
               <Link

@@ -47,7 +47,6 @@ export default function ProgressLayout() {
         options={{
           headerShown: true,
           title: t('nav.progress'),
-          headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <Link href="/(tabs)/history" asChild>
               <TouchableOpacity hitSlop={8} activeOpacity={0.75}>

@@ -47,7 +47,6 @@ export default function NutritionLayout() {
         options={{
           headerShown: true,
           title: t('nav.nutrition'),
-          headerLeft: () => <BackToHomeButton />,
           headerRight: () => (
             <Link href={'/(tabs)/nutrition/goals' as never} asChild>
               <TouchableOpacity style={styles.settingsButton} hitSlop={8} activeOpacity={0.7}>
