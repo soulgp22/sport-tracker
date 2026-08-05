@@ -33,15 +33,9 @@ import {
 import { fetchOffFood } from '../../../lib/openFoodFacts';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
+import { collectMealGroups, mealTypeLabel, MEAL_ORDER } from '../../../constants/meals';
 import type { Food, MealType } from '../../../types';
 import { useTranslation } from '../../../i18n/useTranslation';
-
-const MEAL_TYPE_KEYS: Record<MealType, string> = {
-  breakfast: 'nutrition.add.meal.breakfast',
-  lunch: 'nutrition.add.meal.lunch',
-  dinner: 'nutrition.add.meal.dinner',
-  snack: 'nutrition.add.meal.snack',
-};
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -120,6 +114,8 @@ export default function AddMealScreen() {
   const [quantity, setQuantity] = useState('100');
   const [quantityMode, setQuantityMode] = useState<'weight' | 'units'>('weight');
   const [mealType, setMealType] = useState<MealType>(() => getDefaultMealType());
+  const [newGroupMode, setNewGroupMode] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
   const [scannerVisible, setScannerVisible] = useState(false);
   const [scanLoading, setScanLoading] = useState(false);
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
@@ -155,7 +151,24 @@ export default function AddMealScreen() {
     return calculateNutritionForQuantity(selectedFood, quantityInGrams);
   }, [quantityInGrams, selectedFood]);
 
-  const canSubmit = selectedFood !== null && quantityInGrams > 0;
+  const diaryEntries = useFoodDiaryStore((s) => s.entries);
+  // Groupes proposés : ceux déjà utilisés (toutes dates) ; à défaut, les 4
+  // classiques comme simples suggestions de départ. Aucun groupe imposé.
+  const knownGroups = useMemo(() => collectMealGroups(diaryEntries), [diaryEntries]);
+  const selectableGroups = knownGroups.length > 0 ? knownGroups : MEAL_ORDER;
+
+  const canSubmit = selectedFood !== null && quantityInGrams > 0 && mealType.trim().length > 0;
+
+  const handleSelectGroup = (value: MealType) => {
+    setNewGroupMode(false);
+    setNewGroupName('');
+    setMealType(value);
+  };
+
+  const handleNewGroupChange = (value: string) => {
+    setNewGroupName(value);
+    setMealType(value.trim());
+  };
 
   const handleSubmit = () => {
     if (!selectedFood || quantityInGrams <= 0) return;
@@ -332,22 +345,43 @@ export default function AddMealScreen() {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Repas</Text>
               <View style={styles.mealTypeRow}>
-                {Object.entries(MEAL_TYPE_KEYS).map(([value, key]) => {
-                  const selected = value === mealType;
+                {selectableGroups.map((value) => {
+                  const selected = !newGroupMode && value === mealType;
 
                   return (
                     <TouchableOpacity
                       key={value}
                       style={[styles.chip, selected && styles.chipSelected]}
-                      onPress={() => setMealType(value as MealType)}
+                      onPress={() => handleSelectGroup(value)}
                       activeOpacity={0.75}>
                       <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                        {t(key)}
+                        {mealTypeLabel(value, t)}
                       </Text>
                     </TouchableOpacity>
                   );
                 })}
+                <TouchableOpacity
+                  style={[styles.chip, newGroupMode && styles.chipSelected]}
+                  onPress={() => {
+                    setNewGroupMode(true);
+                    setNewGroupName('');
+                    setMealType('');
+                  }}
+                  activeOpacity={0.75}>
+                  <Text style={[styles.chipText, newGroupMode && styles.chipTextSelected]}>
+                    + {t('nutrition.add.newGroup')}
+                  </Text>
+                </TouchableOpacity>
               </View>
+              {newGroupMode ? (
+                <TextInput
+                  value={newGroupName}
+                  onChangeText={handleNewGroupChange}
+                  placeholder={t('nutrition.add.groupNamePlaceholder')}
+                  autoFocus
+                  maxLength={40}
+                />
+              ) : null}
             </View>
 
             <View style={styles.previewCard}>

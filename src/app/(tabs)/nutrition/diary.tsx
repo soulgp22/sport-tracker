@@ -13,7 +13,7 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { spacing } from '../../../theme/tokens';
-import { MEAL_ORDER } from '../../../constants/meals';
+import { collectMealGroups, mealTypeLabel } from '../../../constants/meals';
 import { calculateDailyTotals, calculateNutritionForQuantity } from '../../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useFoodStore } from '../../../store/foodStore';
@@ -51,39 +51,44 @@ export default function NutritionDiaryScreen() {
     [entriesState, getEntriesByDate, today]
   );
   const entriesByMeal = useMemo(() => {
-    const grouped: Record<MealType, FoodEntry[]> = {
-      breakfast: [],
-      lunch: [],
-      dinner: [],
-      snack: [],
-    };
+    const grouped = new Map<MealType, FoodEntry[]>();
 
     for (const entry of entries) {
-      grouped[entry.mealType].push(entry);
+      const list = grouped.get(entry.mealType);
+      if (list) {
+        list.push(entry);
+      } else {
+        grouped.set(entry.mealType, [entry]);
+      }
     }
 
     return grouped;
   }, [entries]);
+  // Groupes affichés : uniquement ceux réellement utilisés aujourd'hui
+  // (aucun groupe pré-défini à vide).
+  const dayGroups = useMemo(() => collectMealGroups(entries), [entries]);
+  // Tous les groupes connus (toutes dates) pour le menu "Déplacer vers".
+  const allGroups = useMemo(() => collectMealGroups(entriesState), [entriesState]);
   const mealTotals = useMemo(() => {
-    const totals = {} as Record<MealType, ReturnType<typeof calculateDailyTotals>>;
+    const totals = new Map<MealType, ReturnType<typeof calculateDailyTotals>>();
 
-    for (const mealType of MEAL_ORDER) {
-      totals[mealType] = calculateDailyTotals(entriesByMeal[mealType]);
+    for (const mealType of dayGroups) {
+      totals.set(mealType, calculateDailyTotals(entriesByMeal.get(mealType) ?? []));
     }
 
     return totals;
-  }, [entriesByMeal]);
+  }, [dayGroups, entriesByMeal]);
   const rows = useMemo<Row[]>(
     () =>
-      MEAL_ORDER.flatMap((mealType) => [
+      dayGroups.flatMap((mealType) => [
         { key: `h-${mealType}`, kind: 'header' as const, mealType },
-        ...entriesByMeal[mealType].map((entry) => ({
+        ...(entriesByMeal.get(mealType) ?? []).map((entry) => ({
           key: entry.id,
           kind: 'entry' as const,
           entry,
         })),
       ]),
-    [entriesByMeal]
+    [dayGroups, entriesByMeal]
   );
 
   const handleDelete = (entry: FoodEntry) => {
@@ -151,8 +156,10 @@ export default function NutritionDiaryScreen() {
               if (item.kind === 'header') {
                 return (
                   <View style={styles.mealHeader}>
-                    <Text style={styles.mealTitle}>{t(`nutrition.add.meal.${item.mealType}`)}</Text>
-                    <Text style={styles.mealSubtotal}>{mealTotals[item.mealType].calories} kcal</Text>
+                    <Text style={styles.mealTitle}>{mealTypeLabel(item.mealType, t)}</Text>
+                    <Text style={styles.mealSubtotal}>
+                      {mealTotals.get(item.mealType)?.calories ?? 0} kcal
+                    </Text>
                   </View>
                 );
               }
@@ -162,6 +169,7 @@ export default function NutritionDiaryScreen() {
                   entry={item.entry}
                   drag={() => {}}
                   isActive={false}
+                  availableMealTypes={allGroups}
                   onDeleteEntry={handleDelete}
                   onMoveEntry={handleMove}
                   onUpdateQuantity={handleUpdateQuantity}

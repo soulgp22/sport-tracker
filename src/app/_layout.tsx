@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { Platform } from 'react-native';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -40,6 +41,22 @@ import { useColors, useThemeMode } from '../theme/useColors';
 import { AppDialog } from '../components/ui/AppDialog';
 
 void SplashScreen.preventAutoHideAsync();
+
+/**
+ * Mode immersif Android : masque la barre de navigation système. Elle
+ * réapparaît temporairement sur un balayage depuis le bas (inset-swipe).
+ * Require synchrone inerte sous Jest / Expo Go (module natif absent → catch).
+ */
+function enableImmersiveNavigationBar() {
+  if (Platform.OS !== 'android') return;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const NavigationBar = require('expo-navigation-bar') as typeof import('expo-navigation-bar');
+    void NavigationBar.setVisibilityAsync('hidden');
+  } catch {
+    // Module natif indisponible : on ignore silencieusement.
+  }
+}
 
 export default function RootLayout() {
   const c = useColors();
@@ -85,6 +102,7 @@ export default function RootLayout() {
     // Runtime executorch initialisé au démarrage uniquement si le gating
     // photo-repas est OK (jamais sous Jest : canUseMealPhoto() → false).
     void initMealPhotoRuntime();
+    enableImmersiveNavigationBar();
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
 import { cardShadow, radius, spacing } from '../../theme/tokens';
 
-import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
+import { MEAL_ORDER, mealTypeLabel } from '../../constants/meals';
 import type { FoodEntry, MealType } from '../../types';
 import { TextInput } from '../ui/TextInput';
 import { appAlert } from '../ui/AppDialog';
@@ -21,6 +21,8 @@ interface FoodEntryRowProps {
   onUpdateQuantity: (entry: FoodEntry, quantity: number) => void;
   drag: () => void;
   isActive: boolean;
+  /** Groupes proposés dans le menu "Déplacer vers" (défaut : les 4 classiques). */
+  availableMealTypes?: MealType[];
 }
 
 function formatNumber(value: number) {
@@ -40,6 +42,7 @@ export function FoodEntryRow({
   onUpdateQuantity,
   drag,
   isActive,
+  availableMealTypes = MEAL_ORDER,
 }: FoodEntryRowProps) {
   const { t } = useTranslation();
   const c = useColors();
@@ -76,8 +79,8 @@ export function FoodEntryRow({
       t('dialog.moveTo'),
       undefined,
       [
-        ...MEAL_ORDER.filter((mealType) => mealType !== entry.mealType).map((mealType) => ({
-          text: MEAL_LABELS[mealType],
+        ...availableMealTypes.filter((mealType) => mealType !== entry.mealType).map((mealType) => ({
+          text: mealTypeLabel(mealType, t),
           onPress: () => onMoveEntry(entry, mealType),
         })),
         { text: t('common.cancel'), style: 'cancel' as const },

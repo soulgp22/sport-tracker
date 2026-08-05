@@ -44,7 +44,12 @@ export interface WeightEntry {
   weight: number; // kg
 }
 
-export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+/**
+ * Groupe de repas. Les 4 valeurs classiques ('breakfast' | 'lunch' | 'dinner' |
+ * 'snack') restent supportées, mais l'utilisateur peut créer des groupes
+ * personnalisés : n'importe quelle chaîne non vide est valide (ex. "Post-workout").
+ */
+export type MealType = string;
 
 export interface CalculatedNutrition {
   calories: number;
