@@ -6,19 +6,22 @@
  * la sortie brute du modèle et l'état final validé.
  *
  * Règles privacy strictes :
- * - JAMAIS de photo, d'image ni de chemin de fichier : texte uniquement
- *   (noms d'aliments reconnus / retenus, grammes) ;
- * - écriture UNIQUEMENT si l'opt-in explicite est actif
+ * - rien n'est conservé ni envoyé sans l'opt-in explicite
  *   (useAiTrainingOptInStore, désactivé par défaut) ;
- * - persistance locale bornée (500 records max, FIFO), export à la main.
+ * - avec opt-in : le diff textuel est conservé localement (500 records max,
+ *   FIFO) ET, si la photo est fournie, le couple photo + corrections est
+ *   envoyé au serveur d'entraînement (cf. repas du projet) ;
+ * - best-effort silencieux : le logging ne doit JAMAIS impacter l'UI.
  *
  * Dépendances : AsyncStorage (mockée sous Jest) + normalisation de
- * mealPhotoAi. Aucune dépendance native.
+ * mealPhotoAi. fetch n'est appelé que si une photo est fournie (jamais
+ * sous Jest : les tests n'en passent pas).
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { normalizeFoodName } from './mealPhotoAi';
+import { buildTrainingUploadRequest } from './mealPhotoApi';
 import { useAiTrainingOptInStore } from '../store/aiTrainingOptInStore';
 
 const STORAGE_KEY = 'meal-photo-training-log-v1';
@@ -202,16 +205,39 @@ export async function exportRecordsJson(): Promise<string> {
 /**
  * Point d'entrée unique pour l'UI : ne fait RIEN si l'opt-in est inactif.
  * Fire-and-forget — ne jamais awaiter dans un handler UI.
+ * Si photoJpegBase64 est fournie, le couple photo + corrections est aussi
+ * envoyé au serveur d'entraînement (best-effort, silencieux).
  */
 export async function logMealPhotoTraining(
   modelItems: ModelItem[],
-  finalItems: FinalItem[]
+  finalItems: FinalItem[],
+  photoJpegBase64?: string
 ): Promise<void> {
   try {
     if (!useAiTrainingOptInStore.getState().aiTrainingOptIn) return;
     if (modelItems.length === 0) return;
-    await appendTrainingRecord(buildTrainingRecord(modelItems, finalItems));
+    const record = buildTrainingRecord(modelItems, finalItems);
+    await appendTrainingRecord(record);
+    if (photoJpegBase64) void uploadTrainingCorrection(record, photoJpegBase64);
   } catch {
     // Double filet : le logging ne doit jamais faire échouer l'UI.
+  }
+}
+
+/** Envoie la correction annotée au serveur. Silencieux : un échec réseau
+ * n'est pas grave — la donnée reste conservée localement. */
+async function uploadTrainingCorrection(
+  record: MealPhotoTrainingRecord,
+  photoJpegBase64: string
+): Promise<void> {
+  try {
+    const request = buildTrainingUploadRequest(record, photoJpegBase64);
+    await fetch(request.url, {
+      method: 'POST',
+      headers: request.headers,
+      body: request.body,
+    });
+  } catch {
+    // Réseau coupé ou serveur indisponible : tant pis, rien à signaler.
   }
 }

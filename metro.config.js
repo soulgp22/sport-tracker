@@ -8,4 +8,7 @@ config.resolver.extraNodeModules = {
   'react-native-linear-gradient': require.resolve('expo-linear-gradient'),
 };
 
+// Modèles 3D (viewer <model-viewer> en DOM component)
+config.resolver.assetExts = [...config.resolver.assetExts, 'glb'];
+
 module.exports = config;

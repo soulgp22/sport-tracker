@@ -25,12 +25,14 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.analyzing': 'Analyse de la photo… (10 à 30 s)',
   'mealPhoto.closing': "Arrêt de l'analyse en cours…",
   'mealPhoto.warningBanner': "Estimation à vérifier — l'IA se trompe sur les quantités.",
-  'mealPhoto.license': 'Modèle Gemma 4 E2B (Google) — Gemma Terms of Use',
+  'mealPhoto.license': 'Modèle LFM2.5-VL (Liquid AI) — LFM Open License',
   'mealPhoto.notFound': 'Non trouvé',
+  'mealPhoto.enriching': 'Recherche des infos nutritionnelles…',
   'mealPhoto.searchManually': 'Rechercher manuellement',
   'mealPhoto.searchPlaceholder': 'Rechercher un aliment…',
   'mealPhoto.remove': 'Retirer',
   'mealPhoto.addAll': 'Tout ajouter',
+  'mealPhoto.addItem': 'Ajouter un aliment',
   'mealPhoto.retry': 'Réessayer',
   'mealPhoto.errorTitle': 'Analyse impossible',
   'mealPhoto.errorMessage': "Le modèle n'a pas pu analyser la photo. Réessaie plus tard.",
@@ -42,6 +44,9 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.emptyTitle': 'Aucun aliment reconnu',
   'mealPhoto.emptyMessage': "L'IA n'a rien reconnu sur cette photo. Tu peux réessayer ou saisir ton repas manuellement.",
   'mealPhoto.manualEntry': 'Saisie manuelle',
+  'mealPhoto.skippedTitle': 'Aliments non ajoutés',
+  'mealPhoto.skippedMessage':
+    "Ces aliments n'ont pas été identifiés dans la base et n'ont pas été ajoutés : {{names}}. Utilise « Rechercher manuellement » pour les associer avant de valider.",
 };
 
 /**

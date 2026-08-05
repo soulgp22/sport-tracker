@@ -26,8 +26,8 @@ export const HEALTH_CONNECT_TEXTS_FR: Record<string, string> = {
   'nutrition.healthConnect.later': 'Plus tard',
   'nutrition.healthConnect.deniedTitle': 'Permissions non accordées',
   'nutrition.healthConnect.deniedMessage':
-    'Health Connect n’a pas autorisé la lecture des calories et des pas. Tu peux les activer dans Health Connect → Autorisations d’accès → Life Sport Tracker.',
-  'nutrition.healthConnect.openSettings': 'Ouvrir les réglages',
+    'Health Connect n’a pas autorisé la lecture des calories et des pas. Le bouton ci-dessous ouvre DIRECTEMENT la page de permissions de Life Sport Tracker dans Health Connect : active les interrupteurs (calories, pas) puis reviens ici.',
+  'nutrition.healthConnect.openSettings': 'Ouvrir mes permissions Health Connect',
   'nutrition.healthConnect.errorTitle': 'Connexion à Health Connect impossible',
 };
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>html,body{height:100%;margin:0;background:#000}#root{display:flex;flex:1;height:100%}</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+window.$$EXPO_DOM_HOST_OS = "android";
+window.$$EXPO_INITIAL_PROPS = { names: [], props: { src: "http://localhost:8081/assets/?unstable_path=.%2Fassets%2Fmodels%2Foffline-546.glb&platform=web" } };
+window.ReactNativeWebView = { postMessage: function(){}, injectedObjectJson: function(){ return "{}"; } };
+window.__errors = [];
+addEventListener("error", function(e){ __errors.push(String((e.error && e.error.stack) || e.message).slice(0,300)); });
+addEventListener("unhandledrejection", function(e){ __errors.push("REJ " + String((e.reason && e.reason.stack) || e.reason).slice(0,300)); });
+</script>
+<script crossorigin src="http://localhost:8081/node_modules/expo/dom/entry.bundle?platform=web&dev=true&hot=false&lazy=true&transform.engine=hermes&transform.baseUrl=%2F&transform.routerRoot=src%2Fapp&transform.reactCompiler=true&transform.dom=.%2F..%2F..%2F..%2Fsrc%2Fcomponents%2Fexercises%2Fdom%2FExerciseModelViewer.tsx&unstable_transformProfile=hermes-stable"></script>
+</body>
+</html>

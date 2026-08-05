@@ -1,0 +1,40 @@
+# Exclusions d'upload EAS Build (complète .gitignore — EAS applique les deux).
+# Objectif : ne pas uploader les artefacts de dev/CI inutiles au build natif.
+# Rien n'est supprimé du disque : exclusions d'upload uniquement.
+
+# Artefacts de build locaux et CI (~320 Mo)
+artifacts/
+dist/
+*.apk
+*.aab
+
+# Hébergement CDN GitHub raw des médias d'exercices (51 Mo, non requis au build)
+media/
+
+# Sources de génération des WebP animés — consommées par scripts/ uniquement,
+# jamais require() par le runtime (~99 Mo, 1746 JPG)
+assets/exercises/gifs/
+
+# Fichiers de sauvegarde (ex. assets/models/offline-128.glb.bak, 13,4 Mo)
+*.bak
+
+# Page de test interne du composant DOM (URLs localhost:8081 en dur)
+public/__kimi_dom_test.html
+
+# Dossier natif local (régénéré par prebuild lors du build EAS)
+android/
+ios/
+
+# Documentation et notes de développement
+docs/
+*.md
+
+# Scripts de génération/validation (jamais importés par le runtime)
+scripts/
+
+# Outillage de test/lint inutile au build
+__mocks__/
+jest.config.js
+jest.setup.js
+eslint.config.js
+test_output.txt

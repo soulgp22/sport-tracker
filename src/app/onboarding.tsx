@@ -15,7 +15,6 @@ import { useBodyWeightStore } from '../store/bodyWeightStore';
 import { usePerformanceStore } from '../store/performanceStore';
 import { findRecommendedProgram } from '../lib/programRecommendation';
 import { getBodyweightForDate } from '../lib/performanceEngine';
-import { canUseMealPhoto, downloadMealPhotoModel } from '../lib/mealPhotoCapability';
 import type { ActivityLevel, PerformanceSex } from '../types/performance';
 import {
   useOnboardingStore,
@@ -166,9 +165,6 @@ export default function OnboardingScreen() {
   const [weightDraft, setWeightDraft] = useState('');
   const [activityDraft, setActivityDraft] = useState<ActivityLevel>(performanceActivityLevel);
   const [profileDraftsReady, setProfileDraftsReady] = useState(false);
-  // Carte « modèle IA » de l'écran final (gating appareil).
-  const [mealPhotoOk, setMealPhotoOk] = useState(false);
-  const [withMealPhotoModel, setWithMealPhotoModel] = useState(true);
   const totalSteps = 7;
   const retailerText = retailerCopy[language];
   // Anciens profils par enseigne : les bases starter Auchan/Carrefour ont été
@@ -207,17 +203,8 @@ export default function OnboardingScreen() {
     bodyWeightEntries,
   ]);
 
-  // Gating de la carte « modèle IA » sur l'écran final.
-  useEffect(() => {
-    if (step !== totalSteps - 1) return;
-    let cancelled = false;
-    void canUseMealPhoto().then((capability) => {
-      if (!cancelled) setMealPhotoOk(capability.ok);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [step]);
+  // La feature « photo de repas » n'a plus rien à télécharger (mode serveur) :
+  // plus de carte dédiée sur l'écran final, elle est simplement disponible.
 
   const recommendedProgram = communityData ? findRecommendedProgram(communityData, profile) : undefined;
   const programName = recommendedProgram
@@ -264,9 +251,6 @@ export default function OnboardingScreen() {
 
   const finish = async (download: boolean) => {
     setInstalling(true);
-    // Le téléchargement du modèle IA est lancé en tâche de fond APRÈS la fin
-    // de l'onboarding : il ne bloque ni complete() ni la navigation.
-    const wantsAiModel = download && withMealPhotoModel && mealPhotoOk;
     try {
       if (download) {
         const manifest = await fetchManifest();
@@ -284,13 +268,6 @@ export default function OnboardingScreen() {
       complete();
       setInstalling(false);
       router.replace('/(tabs)' as never);
-      if (wantsAiModel) {
-        void downloadMealPhotoModel().then((downloaded) => {
-          if (!downloaded) {
-            appAlert(text.aiDownloadFailedTitle, text.aiDownloadFailedMessage);
-          }
-        });
-      }
     }
   };
 
@@ -321,7 +298,7 @@ export default function OnboardingScreen() {
         <ChoiceGrid items={activityChoices} value={activityDraft} onChange={(id) => setActivityDraft(id as ActivityLevel)} />
       </> : null}
       {step === 5 ? <><Text style={styles.subtitle}>{text.coreFoods}</Text><RetailerPicker entries={communityData?.foodDatabases ?? []} value={selectedFoodDatabaseId} loading={communityLoading} label={text.retailer} placeholder={retailerText.placeholder} searchPlaceholder={retailerText.search} noneLabel={retailerText.none} githubLabel={retailerText.github} closeLabel={retailerText.close} emptyLabel={retailerText.empty} onChange={(id) => updateProfile({ retailer: id ?? 'none' })} onRefresh={() => void fetchManifest()} /></> : null}
-      {step === 6 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{mealPhotoOk ? <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withMealPhotoModel }} style={[styles.recommendation, withMealPhotoModel && styles.recommendationActive]} onPress={() => setWithMealPhotoModel(!withMealPhotoModel)}><View style={styles.recIcon}><Ionicons name="camera-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.aiModel}</Text><Text style={styles.recMeta}>{text.aiModelMeta}</Text></View><Ionicons name={withMealPhotoModel ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withMealPhotoModel ? c.success : c.textMuted} /></TouchableOpacity> : null}{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.country ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.retailers?.join(', ') ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name} · {selectedFoodDatabase.foodsCount} aliments · {selectedFoodDatabase.license ?? 'GitHub'}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
+      {step === 6 ? <><Text style={styles.subtitle}>{text.resultHelp}</Text><View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="barbell-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{programName}</Text><Text style={styles.recMeta}>{text.recommended}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View><TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: withExercises }} style={[styles.recommendation, withExercises && styles.recommendationActive]} onPress={() => setWithExercises(!withExercises)}><View style={styles.recIcon}><Ionicons name="cloud-download-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{text.catalog}</Text><Text style={styles.recMeta}>{text.extraExercises}</Text></View><Ionicons name={withExercises ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={withExercises ? c.success : c.textMuted} /></TouchableOpacity>{selectedFoodDatabase ? <View style={styles.recommendation}><View style={styles.recIcon}><Ionicons name="basket-outline" size={22} color={c.primary} /></View><View style={styles.recCopy}><Text style={styles.recTitle}>{selectedFoodDatabase.country ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name}</Text><Text style={styles.recMeta}>{selectedFoodDatabase.retailers?.join(', ') ?? selectedFoodDatabase.retailer ?? selectedFoodDatabase.name} · {selectedFoodDatabase.foodsCount} aliments · {selectedFoodDatabase.license ?? 'GitHub'}</Text></View><Ionicons name="checkmark-circle" size={22} color={c.success} /></View> : null}</> : null}
       {installing ? <View style={styles.installing}><ActivityIndicator color={c.primary} /><Text style={styles.installingText}>{text.downloading}</Text></View> : null}
     </ScrollView>
     {step < totalSteps - 1 ? <View style={styles.footer}>{step > 0 && !installing ? <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={20} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity> : <View />}<Button title={text.next} onPress={goNext} style={styles.nextButton} /></View> : <View style={styles.finalFooter}><Button title={text.finish} loading={installing} onPress={() => void finish(true)} style={styles.installButton} /><View style={styles.finalSecondary}><TouchableOpacity accessibilityRole="button" disabled={installing} style={styles.backButton} onPress={() => setStep(step - 1)}><Ionicons name="arrow-back" size={18} color={c.textPrimary} /><Text style={styles.backText}>{text.back}</Text></TouchableOpacity><TouchableOpacity accessibilityRole="button" disabled={installing} onPress={() => void finish(false)}><Text style={styles.skipText}>{text.skip}</Text></TouchableOpacity></View></View>}

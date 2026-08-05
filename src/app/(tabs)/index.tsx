@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LifeSportLogo } from '../../components/brand/LifeSportLogo';
+import { canUseMealPhoto } from '../../lib/mealPhotoCapability';
 import { calculateConsistencyMetrics } from '../../lib/performanceEngine';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 import { usePerformanceStore } from '../../store/performanceStore';
@@ -65,6 +66,19 @@ export default function HomeScreen() {
   const tileWidth = Math.floor((width - 42) / 2);
   const [animations] = useState(() => HOME_TILES.map(() => new Animated.Value(0)));
   const [sessionAnimation] = useState(() => new Animated.Value(0));
+  const [photoScanAvailable, setPhotoScanAvailable] = useState(false);
+
+  // Bouton « scan de repas » : visible uniquement sur appareils compatibles
+  // (Android 13+, RAM/stockage suffisants). Gating sans charger executorch.
+  useEffect(() => {
+    let mounted = true;
+    void canUseMealPhoto().then((capability) => {
+      if (mounted && capability.ok) setPhotoScanAvailable(true);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
   const consistency = useMemo(
     () => calculateConsistencyMetrics(sessions, weeklyGoal, monthlyGoal),
     [monthlyGoal, sessions, weeklyGoal]
@@ -156,6 +170,28 @@ export default function HomeScreen() {
             </LinearGradient>
           </TouchableOpacity>
         </Animated.View>
+
+        {photoScanAvailable ? (
+          <TouchableOpacity
+            onPress={() => router.push('/(tabs)/nutrition/photo' as never)}
+            activeOpacity={0.86}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.scanMeal')}
+            accessibilityHint={t('home.scanMealDescription')}
+            style={[styles.mealScanCard, compact ? styles.sessionCardCompact : null]}>
+            <View style={styles.mealScanIconBox}>
+              <Ionicons name="camera" size={24} color={c.primary} />
+            </View>
+            <View style={styles.sessionCopy}>
+              <Text style={styles.mealScanKicker}>{t('home.scanMealKicker')}</Text>
+              <Text style={styles.mealScanTitle}>{t('home.scanMeal')}</Text>
+              <Text style={styles.mealScanSubtitle} numberOfLines={1}>
+                {t('home.scanMealDescription')}
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={c.textMuted} />
+          </TouchableOpacity>
+        ) : null}
 
         <View style={styles.sectionHeader}>
           <View>
@@ -272,4 +308,26 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   tileCopy: { flex: 1, minWidth: 0, gap: 2 },
   tileLabel: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   tileDescription: { fontSize: 10, lineHeight: 12, fontFamily: fonts.sans, color: c.textMuted },
+  mealScanCard: {
+    marginTop: 10,
+    minHeight: 94,
+    borderRadius: 22,
+    paddingHorizontal: 15,
+    paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: c.surface,
+    borderWidth: 1,
+    borderColor: c.border,
+    shadowColor: c.overlay,
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  mealScanIconBox: { width: 46, height: 46, borderRadius: 16, backgroundColor: c.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
+  mealScanKicker: { fontSize: 9, letterSpacing: 1.4, fontFamily: fonts.sansBold, color: c.primary, textTransform: 'uppercase' },
+  mealScanTitle: { fontSize: 17, fontFamily: fonts.sansHeavy, color: c.textPrimary },
+  mealScanSubtitle: { fontSize: 11, fontFamily: fonts.sans, color: c.textSecondary },
 });

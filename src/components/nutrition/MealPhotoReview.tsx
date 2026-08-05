@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
-  Linking,
   Modal,
   ScrollView,
   StyleSheet,
@@ -12,11 +11,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// Chargé uniquement via require() dynamique depuis add.tsx, après gating OK :
-// ce fichier n'est jamais évalué sous Jest ni sur un appareil non compatible.
-import { GEMMA4_E2B_MM, useLLM } from 'react-native-executorch';
+// Chargé uniquement via require() dynamique depuis add.tsx/photo.tsx : ce
+// fichier n'est jamais évalué sous Jest. Le modèle ne tourne plus sur
+// l'appareil : l'app envoie la photo au serveur (llama-server, v9 GGUF).
 
 import { appAlert } from '../ui/AppDialog';
 import { Button } from '../ui/Button';
@@ -27,18 +26,21 @@ import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
+import {
+  MEAL_SERVER_TIMEOUTS,
+  buildAnalysisRequest,
+  buildFoodInfoRequest,
+  buildHealthRequest,
+  extractCompletionText,
+} from '../../lib/mealPhotoApi';
 import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit';
 import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainingLog';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
-import {
-  MEAL_PHOTO_KEEP_AWAKE_TAG,
-  isMealPhotoModelDownloaded,
-} from '../../lib/mealPhotoCapability';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
+import { useLanguageStore } from '../../store/languageStore';
 import type { Food, MealType } from '../../types';
 
-const LICENSE_URL = 'https://ai.google.dev/gemma/terms';
 const GRAM_STEP = 25;
 const MIN_STEP_GRAMS = 25;
 
@@ -51,6 +53,8 @@ interface ReviewItem {
   initialFoodName: string | null;
   searching: boolean;
   searchQuery: string;
+  /** Enrichissement IA d'un aliment absent de la base : en cours / échoué. */
+  enrichStatus?: 'pending' | 'failed';
 }
 
 interface MealPhotoReviewProps {
@@ -81,29 +85,64 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
   const getAllFoods = useFoodStore((s) => s.getAllFoods);
   const searchFoods = useFoodStore((s) => s.searchFoods);
+  const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
-
-  const llm = useLLM({ model: GEMMA4_E2B_MM });
+  const language = useLanguageStore((s) => s.language);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [items, setItems] = useState<ReviewItem[] | null>(null);
   const analysisStartedRef = useRef(false);
 
+  // --- Moteur VLM : serveur llama-server (v9 GGUF) --------------------------
+  // Le modèle ne quitte jamais le serveur : l'app envoie la photo (JPEG
+  // base64) et reçoit le JSON. isReady = sonde /health OK, isGenerating =
+  // requête en cours, abortRef = interrupt.
+  const abortRef = useRef<AbortController | null>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [engineError, setEngineError] = useState<unknown>(null);
+
+  // Sonde de disponibilité du serveur au montage (timeout court).
+  useEffect(() => {
+    let cancelled = false;
+    const probe = new AbortController();
+    const timer = setTimeout(() => probe.abort(), MEAL_SERVER_TIMEOUTS.HEALTH_TIMEOUT_MS);
+    void fetch(buildHealthRequest().url, { signal: probe.signal })
+      .then((res) => {
+        if (!cancelled && res.ok) setIsReady(true);
+        else if (!cancelled) setEngineError(new Error(`Serveur indisponible (HTTP ${res.status})`));
+      })
+      .catch((error) => {
+        if (!cancelled) setEngineError(error);
+      })
+      .finally(() => clearTimeout(timer));
+    return () => {
+      cancelled = true;
+      probe.abort();
+    };
+  }, []);
+
+  const interrupt = () => {
+    abortRef.current?.abort();
+    return Promise.resolve();
+  };
+  const interruptRef = useRef(interrupt);
+  interruptRef.current = interrupt;
+
   // Roue à données (opt-in) : sortie brute du modèle conservée pour le diff,
   // un seul record par analyse (addAll OU fermeture, le premier qui arrive).
   const modelItemsRef = useRef<ModelItem[] | null>(null);
   const trainingLoggedRef = useRef(false);
+  // Enrichissements IA en vol : « Tout ajouter » les attend pour ne pas
+  // sauter un aliment en cours d'ajout à la base.
+  const enrichPromisesRef = useRef<Promise<void>[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
+  // Photo JPEG (512 px) envoyée au serveur d'entraînement avec les corrections.
+  const analysisPhotoB64Ref = useRef<string | null>(null);
 
-  // Crash natif au retour (react-native-executorch 0.9.2) : au démontage, le
-  // cleanup de useLLM appelle LLMController.delete(), qui LÈVE ModelGenerating
-  // si une génération est en cours — une exception dans un cleanup React fait
-  // planter l'app. interrupt() seul ne suffit pas : isGenerating ne retombe
-  // que quand la promesse native de génération se termine. Règle d'or (doc
-  // officielle) : ne JAMAIS démonter tant que isGenerating est true. Le flux
-  // « demande de retour → interrupt → attente → fermeture » est factorisé et
+  // Ne JAMAIS démonter pendant une requête en cours : le flux « demande de
+  // retour → interrupt (abort) → attente → fermeture » est factorisé et
   // testé dans lib/mealPhotoExit.
-  const interruptRef = useRef(llm.interrupt);
-  interruptRef.current = llm.interrupt;
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
   const itemsRef = useRef(items);
@@ -123,7 +162,8 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         recognizedName: item.name,
         foodName: item.food?.name ?? null,
         grams: item.grams,
-      }))
+      })),
+      analysisPhotoB64Ref.current ?? undefined
     );
   };
   const logTrainingRef = useRef(logTraining);
@@ -147,52 +187,65 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   // La fermeture demandée pendant une génération se déclenche ici, une fois
   // isGenerating retombé (promesse native terminée après interrupt()).
   useEffect(() => {
-    exitFlow.handleGeneratingChange(llm.isGenerating);
-  }, [exitFlow, llm.isGenerating]);
+    exitFlow.handleGeneratingChange(isGenerating);
+  }, [exitFlow, isGenerating]);
 
   // Filet de sécurité au démontage (démontage parent hors flux UI) : coupe
-  // une éventuelle inférence, sans jamais laisser remonter l'exception
-  // ModuleNotLoaded qu'interrupt() lève si le modèle n'est pas chargé.
+  // une éventuelle inférence, sans jamais laisser remonter d'exception.
   useEffect(() => {
     return () => safeInterrupt(interruptRef.current);
   }, []);
 
-  const requestClose = () => exitFlow.requestClose(llm.isGenerating);
+  const requestClose = () => exitFlow.requestClose(isGenerating);
 
-  // Tant que le modèle n'est pas prêt (téléchargement ~4,4 Go ou chargement),
-  // empêche la mise en veille : une coupure laisse un fichier partiel en cache
-  // et force un re-téléchargement complet à la prochaine ouverture.
+  // Serveur injoignable : alerte + retour. Le détail est toujours affiché —
+  // le message générique masque la cause réelle (réseau, mauvaise IP…).
   useEffect(() => {
-    if (llm.isReady) return;
-    activateKeepAwake(MEAL_PHOTO_KEEP_AWAKE_TAG);
-    return () => {
-      void deactivateKeepAwake(MEAL_PHOTO_KEEP_AWAKE_TAG);
-    };
-  }, [llm.isReady]);
-
-  // Échec de chargement/téléchargement du modèle : alerte + retour. Si les
-  // fichiers ne sont pas complets, c'est le téléchargement qui a été coupé :
-  // message dédié (useLLM ne distingue pas les deux cas dans llm.error).
-  useEffect(() => {
-    if (!llm.error) return;
-    let cancelled = false;
-    void isMealPhotoModelDownloaded().then((downloaded) => {
-      if (cancelled) return;
-      appAlert(
-        mt(t, 'mealPhoto.errorTitle'),
-        mt(t, downloaded ? 'mealPhoto.errorMessage' : 'mealPhoto.downloadInterrupted'),
-        [{ text: 'OK', onPress: onClose }]
-      );
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [llm.error, onClose, t]);
+    if (!engineError) return;
+    const detail =
+      engineError instanceof Error ? engineError.message : String(engineError);
+    appAlert(
+      mt(t, 'mealPhoto.errorTitle'),
+      `${mt(t, 'mealPhoto.errorMessage')}\n\n${detail}`,
+      [{ text: 'OK', onPress: onClose }]
+    );
+  }, [engineError, onClose, t]);
 
   const analyze = async (uri: string) => {
+    setIsGenerating(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const timer = setTimeout(
+      () => controller.abort(),
+      MEAL_SERVER_TIMEOUTS.ANALYSIS_TIMEOUT_MS
+    );
     try {
-      const output = await llm.sendMessage(buildPrompt(), { imagePath: uri });
-      const recognized = parseModelOutput(output);
+      // Réduit la photo avant l'envoi à 512 px : la v9 a été entraînée sur
+      // des thumbnails ~512 px (comparator) et hallucine au-delà de ~1024 px
+      // (prouvé : pain → "bread" à 512 px, "rice" à 1024+). Bonus : upload
+      // ~50-80 Ko, analyse quasi instantanée même en 4G.
+      const rendered = await ImageManipulator.manipulate(uri)
+        .resize({ width: 512 })
+        .renderAsync();
+      const saved = await rendered.saveAsync({
+        compress: 0.7,
+        format: SaveFormat.JPEG,
+        base64: true,
+      });
+      const jpegBase64 = saved.base64;
+      if (!jpegBase64) throw new Error('Compression de la photo impossible');
+      analysisPhotoB64Ref.current = jpegBase64;
+      const request = buildAnalysisRequest(buildPrompt(), jpegBase64, language);
+      const response = await fetch(request.url, {
+        method: 'POST',
+        headers: request.headers,
+        body: request.body,
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const text = extractCompletionText(await response.json());
+      if (text === null) throw new Error('Réponse du serveur inattendue');
+      const recognized = parseModelOutput(text);
 
       if (recognized.length === 0) {
         appAlert(mt(t, 'mealPhoto.emptyTitle'), mt(t, 'mealPhoto.emptyMessage'), [
@@ -224,30 +277,45 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       }));
       trainingLoggedRef.current = false;
       setItems(reviewItems);
+
+      // Enrichissement IA : tout item sans match local est demandé au serveur
+      // (Gemini + cache partagé) → aliment personnalisé ajouté à la base et
+      // associé automatiquement. « Tout ajouter » attend ces promesses.
+      enrichPromisesRef.current = [];
+      for (let i = 0; i < reviewItems.length; i++) {
+        if (reviewItems[i].food) continue;
+        const queryName = recognized[i].nameFr ?? recognized[i].name;
+        updateItem(reviewItems[i].id, { enrichStatus: 'pending' });
+        enrichPromisesRef.current.push(enrichUnmatchedItem(reviewItems[i].id, queryName));
+      }
     } catch {
-      // Sortie demandée pendant l'analyse : interrupt() fait rejeter la
-      // promesse de génération — ce n'est pas une erreur, la fermeture suit.
+      // Sortie demandée pendant l'analyse : interrupt() aborte le fetch — ce
+      // n'est pas une erreur, la fermeture suit.
       if (exitFlow.isPending()) return;
       appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
         { text: 'OK', onPress: onClose },
       ]);
+    } finally {
+      clearTimeout(timer);
+      abortRef.current = null;
+      setIsGenerating(false);
     }
   };
 
-  // Analyse automatique dès que la photo est choisie ET le modèle prêt
-  // (le téléchargement initial peut encore être en cours).
+  // Analyse automatique dès que la photo est choisie ET le serveur joignable.
   useEffect(() => {
-    if (!photoUri || !llm.isReady || analysisStartedRef.current) return;
+    if (!photoUri || !isReady || analysisStartedRef.current) return;
     analysisStartedRef.current = true;
     void analyze(photoUri);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photoUri, llm.isReady]);
+  }, [photoUri, isReady]);
 
   function resetFlow() {
     safeInterrupt(interruptRef.current);
     analysisStartedRef.current = false;
     modelItemsRef.current = null;
     trainingLoggedRef.current = false;
+    analysisPhotoB64Ref.current = null;
     setPhotoUri(null);
     setItems(null);
   }
@@ -276,19 +344,100 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     );
   };
 
+  /**
+   * Aliment inconnu de la base locale : demande ses valeurs /100 g au serveur
+   * (Gemini, cache partagé) puis l'ajoute comme aliment personnalisé et
+   * l'associe à l'item. Silencieux en cas d'échec (recherche manuelle reste).
+   */
+  const enrichUnmatchedItem = async (itemId: string, queryName: string) => {
+    const markFailed = () =>
+      setItems((current) =>
+        current
+          ? current.map((item) =>
+              item.id === itemId && !item.food ? { ...item, enrichStatus: 'failed' as const } : item
+            )
+          : current
+      );
+    try {
+      const request = buildFoodInfoRequest(queryName);
+      const response = await fetch(request.url, {
+        method: 'POST',
+        headers: request.headers,
+        body: request.body,
+      });
+      if (!response.ok) return markFailed();
+      const json = (await response.json()) as {
+        food?: { name_fr?: string; calories?: number; protein?: number; carbs?: number; fat?: number } | null;
+      };
+      const info = json.food;
+      if (!info || typeof info.calories !== 'number' || info.calories <= 0) return markFailed();
+      const slug = (info.name_fr ?? queryName)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+      const food: Food = {
+        id: `ai_${slug}`,
+        name: info.name_fr ?? queryName,
+        category: 'IA',
+        unit: 'g',
+        nutritionPer100g: {
+          calories: Math.round(info.calories),
+          protein: Math.round((info.protein ?? 0) * 10) / 10,
+          carbs: Math.round((info.carbs ?? 0) * 10) / 10,
+          fat: Math.round((info.fat ?? 0) * 10) / 10,
+        },
+        isCustom: true,
+      };
+      addCustomFood(food);
+      // N'écrase pas une association manuelle faite entre-temps.
+      setItems((current) =>
+        current
+          ? current.map((item) =>
+              item.id === itemId && !item.food ? { ...item, food, enrichStatus: undefined } : item
+            )
+          : current
+      );
+    } catch {
+      // Réseau/serveur indisponible : l'utilisateur associe manuellement.
+      markFailed();
+    }
+  };
+
   const removeItem = (id: string) => {
     setItems((current) => (current ? current.filter((item) => item.id !== id) : current));
   };
 
-  const handleAddAll = () => {
+  const handleAddAll = async () => {
+    // Un aliment détecté mais absent de la base est enrichi de façon asynchrone
+    // : on attend la fin de ces enrichissements (plafonné à 5 s) pour qu'il
+    // soit ajouté au journal ET à la liste des aliments, au lieu d'être sauté.
+    if (enrichPromisesRef.current.length > 0) {
+      setIsAdding(true);
+      try {
+        await Promise.race([
+          Promise.allSettled(enrichPromisesRef.current),
+          new Promise((resolve) => setTimeout(resolve, 5000)),
+        ]);
+      } finally {
+        setIsAdding(false);
+      }
+    }
+
+    const items = itemsRef.current;
     if (!items) return;
 
     // Roue à données : l'état validé est consigné avant enregistrement
     // (no-op si opt-in inactif, jamais bloquant).
     logTraining(items);
 
+    const skipped: string[] = [];
     for (const item of items) {
-      if (!item.food || item.grams <= 0) continue;
+      if (!item.food || item.grams <= 0) {
+        if (item.grams > 0) skipped.push(item.name);
+        continue;
+      }
       addFoodEntry({
         date,
         mealType,
@@ -300,11 +449,40 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       });
     }
 
+    // Ne plus jamais masquer un item non identifié : l'utilisateur croit
+    // sinon que tout le plat a été enregistré (macros fausses, journal vide).
+    if (skipped.length > 0) {
+      appAlert(
+        mt(t, 'mealPhoto.skippedTitle'),
+        mt(t, 'mealPhoto.skippedMessage', { names: skipped.join(', ') })
+      );
+    }
+
     onAdded();
   };
 
   const addableCount = items ? items.filter((item) => item.food !== null && item.grams > 0).length : 0;
-  const downloadPercent = Math.round(llm.downloadProgress * 100);
+
+  // Ajout manuel d'un aliment oublié par le modèle : carte vide ouverte
+  // directement sur la recherche dans la base locale.
+  const addManualItem = () => {
+    setItems((current) =>
+      current
+        ? [
+            ...current,
+            {
+              id: `item-${nextItemId++}`,
+              name: '',
+              grams: 100,
+              food: null,
+              initialFoodName: null,
+              searching: true,
+              searchQuery: '',
+            },
+          ]
+        : current
+    );
+  };
 
   // Total réactif des items retenus : recalculé à chaque ajustement des
   // steppers, suppression ou re-mappage. Permet de consulter les valeurs
@@ -335,23 +513,16 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         </View>
 
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          {!llm.isReady ? (
+          {!isReady ? (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>
-                {llm.downloadProgress > 0 && llm.downloadProgress < 1
-                  ? mt(t, 'mealPhoto.downloading', { percent: downloadPercent })
-                  : mt(t, 'mealPhoto.modelLoading')}
-              </Text>
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: `${downloadPercent}%` }]} />
-              </View>
-              <Text style={styles.muted}>{mt(t, 'mealPhoto.downloadWarning')}</Text>
+              <Text style={styles.cardTitle}>{mt(t, 'mealPhoto.modelLoading')}</Text>
+              <ActivityIndicator color={c.primary} />
             </View>
           ) : null}
 
           {photoUri ? <Image source={{ uri: photoUri }} style={styles.photo} /> : null}
 
-          {llm.isGenerating || closePending ? (
+          {isGenerating || closePending ? (
             <View style={styles.analyzingRow}>
               <ActivityIndicator color={c.primary} />
               <Text style={styles.muted}>
@@ -365,13 +536,13 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
               <Button
                 title={mt(t, 'mealPhoto.takePhoto')}
                 onPress={() => void pickImage('camera')}
-                disabled={!llm.isReady || llm.isGenerating}
+                disabled={!isReady || isGenerating}
               />
               <Button
                 title={mt(t, 'mealPhoto.pickFromGallery')}
                 variant="secondary"
                 onPress={() => void pickImage('gallery')}
-                disabled={!llm.isReady || llm.isGenerating}
+                disabled={!isReady || isGenerating}
               />
             </View>
           ) : (
@@ -400,7 +571,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
                 <View key={item.id} style={styles.itemCard}>
                   <View style={styles.itemHeader}>
                     <Text style={styles.itemName} numberOfLines={1}>
-                      {item.name}
+                      {item.name || mt(t, 'mealPhoto.addItem')}
                     </Text>
                     <TouchableOpacity
                       onPress={() => removeItem(item.id)}
@@ -424,7 +595,9 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
                         }
                         activeOpacity={0.75}>
                         <Text style={styles.itemNotFound}>
-                          {mt(t, 'mealPhoto.notFound')} — {mt(t, 'mealPhoto.searchManually')}
+                          {item.enrichStatus === 'pending'
+                            ? mt(t, 'mealPhoto.enriching')
+                            : `${mt(t, 'mealPhoto.notFound')} — ${mt(t, 'mealPhoto.searchManually')}`}
                         </Text>
                       </TouchableOpacity>
                       {item.searching ? (
@@ -487,20 +660,19 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
               <View style={styles.actions}>
                 <Button
                   title={mt(t, 'mealPhoto.addAll')}
-                  onPress={handleAddAll}
-                  disabled={addableCount === 0}
+                  onPress={() => void handleAddAll()}
+                  loading={isAdding}
+                  disabled={addableCount === 0 && !isAdding}
+                />
+                <Button
+                  title={mt(t, 'mealPhoto.addItem')}
+                  variant="secondary"
+                  onPress={addManualItem}
                 />
                 <Button title={mt(t, 'mealPhoto.retry')} variant="secondary" onPress={resetFlow} />
               </View>
             </>
           )}
-
-          <TouchableOpacity
-            onPress={() => void Linking.openURL(LICENSE_URL)}
-            activeOpacity={0.7}
-            accessibilityRole="link">
-            <Text style={styles.license}>{mt(t, 'mealPhoto.license')}</Text>
-          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -532,13 +704,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   cardTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
   totalCalories: { fontSize: 26, fontFamily: fonts.sansHeavy, color: c.primary },
   totalMacros: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
-  progressTrack: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: c.surfaceAlt,
-    overflow: 'hidden',
-  },
-  progressFill: { height: 8, borderRadius: 4, backgroundColor: c.primary },
   muted: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary },
   photo: { width: '100%', height: 200, borderRadius: 12, backgroundColor: c.surfaceAlt },
   analyzingRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },

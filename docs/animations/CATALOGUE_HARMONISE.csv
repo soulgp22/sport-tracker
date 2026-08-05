@@ -1,0 +1,66 @@
+﻿produit_animation;tier;usages_cumules;props;statut;clip_source;alias_catalogue;ids_catalogue;notes
+Squat haltères / goblet;DONE;23;haltères;EN LIGNE;Mixamo Air Squat Bent Arms;Dumbbell Squat|Goblet Squat|Bodyweight Squat|Dumbbell Squat To A Bench|Chair Squat|Squats - With Bands|Freehand Jump Squat;offline-546|offline-560|offline-529|offline-547|offline-537|offline-642|offline-553;goblet = 1 haltère tenu devant
+Pompes;DONE;18;aucun;EN LIGNE;Mixamo Push Up;Pushups|Incline Push-Up|Decline Push-Up|Push-Up Wide|Push-Ups - Close Triceps Position|Incline Push-Up Close-Grip|Plyo Push-up|Incline Push-Up Depth Jump;offline-266|offline-242|offline-221|offline-263|offline-846|offline-831|offline-261|offline-243;variantes incliné/décliné/large alias
+Soulevé de terre jambes tendues haltères;DONE;10;haltères;EN LIGNE ⚠️;Mixamo Lifting Object;Stiff-Legged Dumbbell Deadlift;offline-397;genoux un peu fléchis, à réévaluer
+Dead Bug;DONE;10;aucun;EN LIGNE ⚠️;Mixamo Bicycle Crunch;Dead Bug;offline-026;ressemble plutôt à un crunch, à réévaluer
+Planche;DONE;8;aucun;EN LIGNE;Mixamo Plank;Plank;offline-060;
+Curl haltères alterné;DONE;4;haltères;EN LIGNE;Mixamo Bicep Curl;Dumbbell Alternate Bicep Curl|Dumbbell Bicep Curl;offline-128|offline-129;validé téléphone
+Tractions;P1;27;barre de traction (prop à créer);CLIP MANQUANT;;Pullups|Chin-Up|Weighted Pull Ups|Band Assisted Pull-Up|Wide-Grip Rear Pull-Up|Scapular Pull-Up;offline-429|offline-411|offline-440|offline-406|offline-443|offline-796;Mixamo Hang Hop Up REJETÉ (escalade). chin-up = variante prise supination
+Fentes;P1;27;haltères ou poids du corps;CLIP MANQUANT;;Dumbbell Lunges|Dumbbell Rear Lunge|Bodyweight Walking Lunge|Split Squats|Split Squat with Dumbbells|Barbell Walking Lunge|Smith Single-Leg Split Squat;offline-543|offline-544|offline-530|offline-392|offline-637|offline-523|offline-628;avant/arrière/marchée = même produit
+Développé couché barre;P1;25;barre + banc;CLIP MANQUANT;;Barbell Bench Press - Medium Grip|Bench Press - Powerlifting|Close-Grip Barbell Bench Press|Machine Bench Press|Smith Machine Bench Press|Leverage Chest Press;offline-198|offline-805|offline-815|offline-254|offline-270|offline-250;machines en alias (même mouvement)
+Soulevé de terre roumain (RDL);P1;21;barre;CLIP MANQUANT;;Romanian Deadlift|Smith Machine Stiff-Legged Deadlift|Band Good Morning;offline-379|offline-388|offline-330;EXERCICE TOP 5
+Développé couché haltères;P1;20;haltères + banc;CLIP MANQUANT;;Dumbbell Bench Press|Dumbbell Bench Press with Neutral Grip;offline-225|offline-226;EXERCICE #1 des usages
+Élévations latérales;P1;19;haltères;CLIP MANQUANT;;Side Lateral Raise|Seated Side Lateral Raise|Lateral Raise - With Bands|Cable Seated Lateral Raise;offline-761|offline-755|offline-723|offline-680;Mixamo Front Raises REJETÉ
+Rowing barre penché;P1;19;barre;CLIP MANQUANT;;Bent Over Barbell Row|Reverse Grip Bent-Over Rows|T-Bar Row with Handle|Lying T-Bar Row|Smith Machine Bent Over Row;offline-473|offline-493|offline-502|offline-485|offline-498;
+Développé épaules haltères;P1;18;haltères;CLIP MANQUANT;;Dumbbell Shoulder Press|Standing Dumbbell Press|Standing Alternating Dumbbell Press|Shoulder Press - With Bands;offline-699|offline-774|offline-771|offline-758;Mixamo Front Raises REJETÉ (mauvais plan)
+Soulevé de terre barre;P1;18;barre;CLIP MANQUANT;;Barbell Deadlift|Trap Bar Deadlift;offline-447|offline-653;trap bar en alias
+Relevé de mollets debout;P1;17;haltères ou poids du corps;CLIP MANQUANT;;Standing Calf Raises|Standing Dumbbell Calf Raise|Calf Raises - With Bands|Calf Press|Calf Press On The Leg Press Machine;offline-192|offline-193|offline-175|offline-172|offline-173;
+Pont fessier (glute bridge);P1;16;aucun;CLIP MANQUANT;;Butt Lift (Bridge)|Single Leg Glute Bridge|Hip Lift with Band|Smith Machine Hip Raise|Barbell Glute Bridge;offline-308|offline-325|offline-313|offline-075|offline-306;variantes 1 jambe/bande alias
+Extension triceps au-dessus de la tête;P1;15;haltère;CLIP MANQUANT;;Standing Dumbbell Triceps Extension|Seated Triceps Press|Dumbbell One-Arm Triceps Extension|Cable Rope Overhead Triceps Extension|Machine Triceps Extension;offline-859|offline-853|offline-825|offline-813|offline-839;
+Oiseau / reverse fly (deltoïde post.);P1;14;haltères;CLIP MANQUANT;;Reverse Flyes|Reverse Machine Flyes|Back Flyes - With Bands|Dumbbell Lying Rear Lateral Raise|Bent Over Dumbbell Rear Delt Raise With Head On Bench;offline-746|offline-748|offline-667|offline-694|offline-674;
+Squat barre arrière;P1;13;barre;CLIP MANQUANT;;Barbell Full Squat|Box Squat;offline-516|offline-531;
+Face pull;P1;13;poulie ou bande;CLIP MANQUANT;;Face Pull;offline-704;13 usages
+Développé incliné haltères;P1;12;haltères + banc incliné;CLIP MANQUANT;;Incline Dumbbell Press|Hammer Grip Incline DB Bench Press;offline-241|offline-234;
+Rowing un bras haltère;P1;12;haltère (+ banc optionnel);CLIP MANQUANT;;One-Arm Dumbbell Row|Dumbbell Incline Row;offline-490|offline-479;EXERCICE TOP 10
+Rowing penché deux haltères;P1;9;haltères;CLIP MANQUANT;;Bent Over Two-Dumbbell Row|Bent Over Two-Dumbbell Row With Palms In;offline-476|offline-477;
+Curl marteau;P1;9;haltères;CLIP MANQUANT;;Hammer Curls|Alternate Hammer Curl|Cable Hammer Curls - Rope Attachment;offline-133|offline-115|offline-120;
+Floor press haltères;P1;8;haltères (au sol);CLIP MANQUANT;;Dumbbell Floor Press;offline-824;pas de banc nécessaire
+Curl barre;P1;8;barre / EZ;CLIP MANQUANT;;Barbell Curl|EZ-Bar Curl;offline-117|offline-131;
+Dips;P1;6;barres parallèles (prop);CLIP MANQUANT;;Dips - Triceps Version|Dip Machine;offline-823|offline-822;
+Russian twist;P1;3;aucun;CLIP MANQUANT;;Russian Twist;offline-065;
+Crunch;P1;3;aucun;CLIP MANQUANT;;Crunches|Cross-Body Crunch;offline-025|offline-022;
+Leg curl allongé;P2;36;machine (prop complexe);CLIP MANQUANT;;Lying Leg Curls|Seated Leg Curl|Standing Leg Curl|Glute Ham Raise|Floor Glute-Ham Raise|Natural Glute Ham Raise|Reverse Hyperextension;offline-362|offline-386|offline-394|offline-342|offline-339|offline-365|offline-378;27 usages cumulés — fort candidat machine
+Tirage vertical poulie (lat pulldown);P2;23;poulie (prop);CLIP MANQUANT;;Wide-Grip Lat Pulldown|Close-Grip Front Lat Pulldown|Straight-Arm Pulldown|Rope Straight-Arm Pulldown;offline-441|offline-412|offline-436|offline-432;23 usages cumulés
+Tirage horizontal poulie (seated row);P2;23;poulie (prop);CLIP MANQUANT;;Seated Cable Rows|Leverage Iso Row|Leverage High Row;offline-495|offline-421|offline-483;27 usages cumulés
+Presse à cuisses (leg press);P2;21;machine (prop);CLIP MANQUANT;;Leg Press|Narrow Stance Leg Press|Smith Machine Leg Press;offline-574|offline-583|offline-625;EXERCICE #1 TOUTES MACHINES (19 usages)
+Développé militaire barre;P2;19;barre;CLIP MANQUANT;;Barbell Shoulder Press|Push Press|Leverage Shoulder Press|Machine Shoulder (Military) Press|Smith Machine Overhead Shoulder Press;offline-672|offline-742|offline-724|offline-729|offline-770;
+Band pull apart;P2;15;bande élastique;CLIP MANQUANT;;Band Pull Apart|External Rotation with Band;offline-669|offline-702;
+Leg extension;P2;14;machine (prop);CLIP MANQUANT;;Leg Extensions|Single-Leg Leg Extension;offline-573|offline-619;
+Relevé de mollets assis;P2;13;machine/banc + poids;CLIP MANQUANT;;Seated Calf Raise|Dumbbell Seated One-Leg Calf Raise;offline-187|offline-180;
+Développé incliné barre;P2;10;barre + banc incliné;CLIP MANQUANT;;Barbell Incline Bench Press - Medium Grip|Smith Machine Incline Bench Press|Leverage Incline Chest Press;offline-200|offline-272|offline-252;
+Extension triceps poulie (pushdown);P2;9;poulie / bande;CLIP MANQUANT;;Triceps Pushdown|Band Skull Crusher;offline-869|offline-803;
+Squat barre avant;P2;6;barre;CLIP MANQUANT;;Front Barbell Squat;offline-555;
+Step-up;P2;6;marche/box + haltères;CLIP MANQUANT;;Dumbbell Step Ups|Step-up with Knee Raise;offline-548|offline-326;
+Curl incliné haltères;P2;4;haltères + banc incliné;CLIP MANQUANT;;Incline Dumbbell Curl;offline-135;
+Planche latérale;P2;3;aucun;CLIP MANQUANT;;Side Bridge;offline-071;
+Mountain climbers;P2;3;aucun;CLIP MANQUANT;;Mountain Climbers;offline-581;
+Extension triceps allongé (skullcrusher);P2;2;haltères/barre;CLIP MANQUANT;;Lying Dumbbell Tricep Extension|Lying Triceps Press;offline-837|offline-838;
+Rowing inversé;P2;2;barre basse;CLIP MANQUANT;;Inverted Row;offline-481;
+Shrugs;P2;2;haltères;CLIP MANQUANT;;Dumbbell Shrug|Leverage Shrug;offline-793|offline-795;
+Hip thrust;P2;1;barre + banc;CLIP MANQUANT;;Barbell Hip Thrust;offline-307;
+Clean / snatch (haltérophilie);P3;13;barre/haltère;CLIP MANQUANT;;Power Clean|Hang Clean|Power Snatch|Hang Snatch|Dumbbell Clean|Vertical Swing|Push Press;offline-371|offline-562|offline-373|offline-347|offline-338|offline-403|offline-742;mouvements explosifs complexes
+Hack squat;P3;11;machine (prop);CLIP MANQUANT;;Hack Squat|Narrow Stance Hack Squats;offline-561|offline-582;
+Curl pupitre (preacher);P3;9;banc pupitre;CLIP MANQUANT;;Cable Preacher Curl|Machine Preacher Curls|Machine Bicep Curl;offline-121|offline-143|offline-142;
+Écartés poulie/machine (fly);P3;5;poulie/machine;CLIP MANQUANT;;Cable Crossover|Butterfly|Cable Chest Press;offline-207|offline-205|offline-206;
+Plyométrie sur place (sauts verticaux);P3;4;aucun;CLIP MANQUANT;;Knee Tuck Jump|Star Jump|Rocket Jump|Rope Jumping;offline-356|offline-647|offline-604|offline-605;sauts sur place seulement
+Abducteurs / adducteurs machine;P3;2;machine;CLIP MANQUANT;;Thigh Abductor|Thigh Adductor;offline-100|offline-114;
+Passes medicine ball;P3;2;ballon;CLIP MANQUANT;;Medicine Ball Chest Pass|Chest Push from 3 point stance;offline-255|offline-213;
+Arnold press;P3;1;haltères;CLIP MANQUANT;;Arnold Dumbbell Press;offline-666;
+Soulevé de terre sumo;P3;1;barre;CLIP MANQUANT;;Sumo Deadlift;offline-398;
+Relevés de hanche arrière au sol;P3;1;aucun;CLIP MANQUANT;;Rear Leg Raises;offline-599;
+Pistol squat;P3;1;aucun;CLIP MANQUANT;;Smith Machine Pistol Squat;offline-626;
+Développé nuque guidé;P3;1;machine;CLIP MANQUANT;;Smith Machine One-Arm Upright Row;offline-769;
+Flexion latérale du tronc;P3;1;haltère;CLIP MANQUANT;;Dumbbell Side Bend;offline-031;
+Sprints et drills au sol;DROP;11;-;HORS PRODUIT;;Fast Skipping|Wind Sprints|Running, Treadmill|Prowler Sprint|Sled Push|Bear Crawl Sled Drags|Single-Cone Sprint Drill;offline-551|offline-093|offline-607|offline-376|offline-624|offline-524|offline-615;déplacement horizontal, non démontrable en place
+Sauts horizontaux;DROP;5;-;HORS PRODUIT;;Standing Long Jump|Side Standing Long Jump|Lateral Bound|Front Box Jump;offline-646|offline-611|offline-108|offline-340;déplacement horizontal
+Marches chargées;DROP;2;-;HORS PRODUIT;;Farmer's Walk|Rickshaw Carry;offline-284|offline-292;locomotion, pas de boucle en place

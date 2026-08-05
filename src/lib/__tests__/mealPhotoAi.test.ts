@@ -30,30 +30,23 @@ const FOODS: Food[] = [
 ];
 
 describe('buildPrompt', () => {
-  it('demande une sortie JSON stricte avec le format items/name/grams', () => {
+  it('est strictement identique au PROMPT_FINAL.txt du fine-tune v9', () => {
+    // Le v9 a été entraîné sur ce prompt exact (EN) : toute dérive de
+    // wording dégrade la sortie. Référence :
+    // E:\AI\trainingpicssporttracker\finetune\PROMPT_FINAL.txt
     const prompt = buildPrompt();
-    expect(prompt).toContain('{"items":[{"name":"riz","grams":150}]}');
-    expect(prompt).toContain('UNIQUEMENT');
-    expect(prompt).toContain('JSON');
+    expect(prompt).toContain('Analyze this meal photo.');
+    expect(prompt).toContain('{"items":[{"name":"rice","grams":150}]}');
+    expect(prompt).toContain('Answer ONLY with valid JSON');
   });
 
-  it('interdit le calcul de macros et impose des noms génériques en français', () => {
+  it('impose les règles anti-invention et de bornes du fine-tune', () => {
     const prompt = buildPrompt();
-    expect(prompt).toContain('français');
-    expect(prompt).toMatch(/ne calcule ni calories ni macronutriments/i);
-  });
-
-  it('ordonne {"items":[]} pour une image sans nourriture ou incertaine', () => {
-    const prompt = buildPrompt();
+    expect(prompt).toContain('NEVER invent a food item');
     expect(prompt).toContain('{"items":[]}');
-    expect(prompt).toMatch(/ni nourriture ni boisson/i);
-    expect(prompt).toMatch(/raisonnablement sûr/i);
-  });
-
-  it('interdit explicitement d\'inventer un aliment', () => {
-    const prompt = buildPrompt();
-    expect(prompt).toMatch(/n'invente JAMAIS/i);
-    expect(prompt).toMatch(/plutôt que de deviner/i);
+    expect(prompt).toContain('integer between 10 and 800');
+    expect(prompt).toContain('maximum 8 foods');
+    expect(prompt).toContain('do not compute calories or macronutrients');
   });
 });
 
@@ -139,6 +132,22 @@ describe('parseModelOutput', () => {
     expect(items[0].name).toBe('aliment 0');
   });
 
+  it('déduplique les items répétés par le modèle (boucle de génération)', () => {
+    // Cas réel : « brown rice » ×8 sur une photo de pain.
+    const text = JSON.stringify({
+      items: Array.from({ length: 8 }, () => ({ name: 'brown rice', grams: 78 })),
+    });
+    expect(parseModelOutput(text)).toEqual([{ name: 'brown rice', grams: 78 }]);
+  });
+
+  it('déduplique malgré casse et accents, mais garde les aliments distincts', () => {
+    const text = '{"items":[{"name":"Riz","grams":100},{"name":"riz","grams":80},{"name":"Poulet","grams":120}]}';
+    expect(parseModelOutput(text)).toEqual([
+      { name: 'Riz', grams: 100 },
+      { name: 'Poulet', grams: 120 },
+    ]);
+  });
+
   it('accepte un tableau d\'items vide', () => {
     expect(parseModelOutput('{"items":[]}')).toEqual([]);
   });
@@ -188,8 +197,28 @@ describe('mapItemToFood', () => {
     expect(mapItemToFood({ name: 'pomme' }, [])).toBeNull();
   });
 
+  it('ne matche pas un nom très court contenu par accident (« agneau » ≠ « eau »)', () => {
+    const foods = [makeFood('eau', 'Eau')];
+    expect(mapItemToFood({ name: 'agneau' }, foods)).toBeNull();
+    // Les matches légitimes de noms courts restent possibles par token entier.
+    expect(mapItemToFood({ name: 'eau' }, foods)?.id).toBe('eau');
+    expect(mapItemToFood({ name: 'eau pétillante' }, foods)?.id).toBe('eau');
+  });
+
   it('matche malgré les accents du côté de la base locale', () => {
     const foods = [makeFood('puree', 'Purée de pommes de terre')];
     expect(mapItemToFood({ name: 'puree' }, foods)?.id).toBe('puree');
+  });
+
+  it('traduit les noms anglais du v9 avant le matching (EN_TO_FR)', () => {
+    // Le v9 répond en anglais : "chicken breast" → "blanc de poulet".
+    expect(mapItemToFood({ name: 'chicken breast' }, FOODS)?.id).toBe('poulet');
+    expect(mapItemToFood({ name: 'rice' }, FOODS)?.id).toBe('riz_cuit');
+    expect(mapItemToFood({ name: 'broccoli' }, FOODS)?.id).toBe('brocoli');
+    expect(mapItemToFood({ name: 'apple' }, FOODS)?.id).toBe('pomme');
+  });
+
+  it('retombe sur le nom brut si aucun alias EN→FR n\u2019existe', () => {
+    expect(mapItemToFood({ name: 'dragonfruit' }, FOODS)).toBeNull();
   });
 });

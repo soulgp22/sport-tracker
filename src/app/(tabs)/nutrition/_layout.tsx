@@ -58,6 +58,7 @@ export default function NutritionLayout() {
         }}
       />
       <Stack.Screen name="add" options={{ headerShown: false }} />
+      <Stack.Screen name="photo" options={{ headerShown: false }} />
       <Stack.Screen name="diary" options={{ headerShown: false }} />
       <Stack.Screen name="goals" options={{ headerShown: false }} />
       <Stack.Screen name="history" options={{ headerShown: false }} />

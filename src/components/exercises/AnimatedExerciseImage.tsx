@@ -155,16 +155,6 @@ export function AnimatedExerciseImage({
           accessibilityLabel={accessibilityLabel}
         />
       ) : null}
-
-      {animate && !imageError && !imageLoading && displaySource ? (
-        <View pointerEvents="none" style={styles.motionBadge}>
-          <Text style={styles.motionBadgeText}>
-            {shouldUseEnhancedMedia
-              ? t('exercise.mediaEnhanced')
-              : `${t('exercise.start')} ↔ ${t('exercise.finish')}`}
-          </Text>
-        </View>
-      ) : null}
     </View>
   );
 }
@@ -198,19 +188,5 @@ const makeStyles = (c: ThemeColors) =>
     errorText: {
       color: c.textMuted,
       fontSize: 12,
-    },
-    motionBadge: {
-      position: 'absolute',
-      right: 8,
-      bottom: 8,
-      borderRadius: 999,
-      paddingHorizontal: 9,
-      paddingVertical: 5,
-      backgroundColor: c.overlay,
-    },
-    motionBadgeText: {
-      color: '#FFFFFF',
-      fontSize: 11,
-      fontWeight: '700',
     },
   });

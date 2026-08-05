@@ -4,6 +4,7 @@ import type { ImageSource } from 'expo-image';
 export const exerciseGifs: Record<string, ImageSource> = {
   'offline-025': require('../../assets/exercises/core/offline-025.webp'),
   'offline-117': require('../../assets/exercises/core/offline-117.webp'),
+  'offline-128': require('../../assets/exercises/core/offline-128.webp'),
   'offline-187': require('../../assets/exercises/core/offline-187.webp'),
   'offline-198': require('../../assets/exercises/core/offline-198.webp'),
   'offline-225': require('../../assets/exercises/core/offline-225.webp'),

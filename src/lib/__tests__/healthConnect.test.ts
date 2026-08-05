@@ -136,6 +136,7 @@ describe('healthConnect', () => {
       jest.doMock('react-native-health-connect', () => ({
         SdkAvailabilityStatus: SDK,
         getSdkStatus: jest.fn().mockResolvedValue(3),
+        initialize: jest.fn().mockResolvedValue(true),
       }));
       const service = loadService();
       await expect(service.getHealthConnectStatus()).resolves.toBe('available');
@@ -208,12 +209,14 @@ describe('healthConnect', () => {
       jest.doMock('react-native-health-connect', () => ({
         SdkAvailabilityStatus: SDK,
         getSdkStatus: jest.fn().mockResolvedValue(3),
+        initialize: jest.fn().mockResolvedValue(true),
         requestPermission: jest.fn().mockResolvedValue(ALL_GRANTED),
       }));
       const service = loadService();
       await expect(service.requestHealthPermissionsWithStatus()).resolves.toEqual({
         status: 'available',
         granted: true,
+        instantDenial: false,
       });
     });
 
@@ -221,12 +224,14 @@ describe('healthConnect', () => {
       jest.doMock('react-native-health-connect', () => ({
         SdkAvailabilityStatus: SDK,
         getSdkStatus: jest.fn().mockResolvedValue(3),
+        initialize: jest.fn().mockResolvedValue(true),
         requestPermission: jest.fn().mockResolvedValue([]),
       }));
       const service = loadService();
       await expect(service.requestHealthPermissionsWithStatus()).resolves.toEqual({
         status: 'available',
         granted: false,
+        instantDenial: true,
       });
     });
 
@@ -234,6 +239,7 @@ describe('healthConnect', () => {
       jest.doMock('react-native-health-connect', () => ({
         SdkAvailabilityStatus: SDK,
         getSdkStatus: jest.fn().mockResolvedValue(3),
+        initialize: jest.fn().mockResolvedValue(true),
         requestPermission: jest.fn().mockRejectedValue(new Error('activity not found')),
       }));
       const service = loadService();

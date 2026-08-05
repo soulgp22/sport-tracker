@@ -18,7 +18,7 @@ import { calculateTdee, missingEnergyProfileFields } from '../../../lib/energyBa
 import {
   hasHealthPermissions,
   isHealthConnectAvailable,
-  openHealthConnectSettingsSafe,
+  openHealthConnectPermissionsForApp,
   readCaloriesBurnedToday,
   requestHealthPermissionsWithStatus,
 } from '../../../lib/healthConnect';
@@ -135,14 +135,17 @@ export default function NutritionScreen() {
         return;
       }
       // SDK disponible mais permissions refusées : guider vers les réglages HC.
+      // Refus instantané sans feuille = appli sideloadée bloquée par HC.
       appAlert(
         hct(t, 'nutrition.healthConnect.deniedTitle'),
-        hct(t, 'nutrition.healthConnect.deniedMessage'),
+        result.instantDenial
+          ? hct(t, 'nutrition.healthConnect.sideloadedMessage')
+          : `${hct(t, 'nutrition.healthConnect.deniedMessage')}\n\n(détail : statut=${result.status})`,
         [
           { text: hct(t, 'nutrition.healthConnect.later'), style: 'cancel' },
           {
             text: hct(t, 'nutrition.healthConnect.openSettings'),
-            onPress: () => openHealthConnectSettingsSafe(),
+            onPress: () => void openHealthConnectPermissionsForApp(),
           },
         ]
       );

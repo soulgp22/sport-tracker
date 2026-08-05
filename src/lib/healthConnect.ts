@@ -101,6 +101,8 @@ export interface HealthPermissionResult {
   status: HealthConnectStatus;
   /** true si toutes les permissions requises ont été accordées. */
   granted: boolean;
+  /** Refus instantané sans feuille affichée = appli hors Play Store bloquée par HC. */
+  instantDenial?: boolean;
   /** Message d'erreur natif si requestPermission a levé une exception. */
   error?: string;
 }
@@ -117,8 +119,15 @@ export async function requestHealthPermissionsWithStatus(): Promise<HealthPermis
   const status = await getHealthConnectStatus();
   if (status !== 'available') return { status, granted: false };
   try {
+    // Obligatoire avant requestPermission : sinon « client is not initialized ».
+    await hc.initialize();
+    const startedAt = Date.now();
     const granted = (await hc.requestPermission([...REQUIRED_PERMISSIONS])) as HealthPermission[];
-    return { status, granted: hasAllReadPermissions(granted) };
+    // Refus résolu quasi instantanément = la feuille de permission ne s'est
+    // JAMAIS affichée : signature du blocage des applis installées hors Play
+    // Store (Health Connect les ignore, elles n'apparaissent pas dans sa liste).
+    const instantDenial = granted.length === 0 && Date.now() - startedAt < 400;
+    return { status, granted: hasAllReadPermissions(granted), instantDenial };
   } catch (error) {
     return {
       status,
@@ -148,6 +157,34 @@ export function openHealthConnectSettingsSafe(): boolean {
   }
 }
 
+/**
+ * Ouvre DIRECTEMENT la page de permissions Health Connect de NOTRE app.
+ * Nécessaire car l'app n'apparaît pas toujours dans la liste HC (notamment
+ * installée hors Play Store) : l'intent MANAGE_HEALTH_PERMISSIONS avec le
+ * package en extra ouvre la bonne page même si l'app est absente de la liste.
+ * Retourne true si un écran a été ouvert (deep-link ou réglages HC).
+ */
+export async function openHealthConnectPermissionsForApp(): Promise<boolean> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const IntentLauncher = require('expo-intent-launcher') as typeof import('expo-intent-launcher');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { applicationId } = require('expo-application') as typeof import('expo-application');
+    await IntentLauncher.startActivityAsync(
+      'android.health.connect.action.MANAGE_HEALTH_PERMISSIONS',
+      {
+        extra: applicationId
+          ? { 'android.intent.extra.PACKAGE_NAME': applicationId }
+          : undefined,
+      }
+    );
+    return true;
+  } catch {
+    // Repli : la page d'accueil des réglages Health Connect.
+    return openHealthConnectSettingsSafe();
+  }
+}
+
 function todayTimeRange() {
   const start = new Date();
   start.setHours(0, 0, 0, 0);
@@ -163,6 +200,7 @@ function todayTimeRange() {
 /** Calories brûlées aujourd'hui (actives + totales), en kcal. null si indisponible. */
 export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | null> {
   return safeCall(async (hc) => {
+    await hc.initialize();
     const range = todayTimeRange();
     const [activeResult, totalResult] = await Promise.all([
       hc.readRecords('ActiveCaloriesBurned', range),
@@ -183,6 +221,7 @@ export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | n
 /** Nombre de pas effectués aujourd'hui. null si indisponible. */
 export async function readStepsToday(): Promise<number | null> {
   return safeCall(async (hc) => {
+    await hc.initialize();
     const result = await hc.readRecords('Steps', todayTimeRange());
     return result.records.reduce((sum, record) => sum + record.count, 0);
   });

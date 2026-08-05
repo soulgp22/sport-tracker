@@ -60,7 +60,9 @@ export async function configureNotifications(): Promise<void> {
         name: 'Fin du temps de repos',
         description: 'Alertes prioritaires à la fin des temps de repos',
         importance: Notifications.AndroidImportance.MAX,
-        sound: 'default',
+        // Pas de clé `sound` : le canal utilise le son système par défaut.
+        // Passer 'default' déclenchait "Custom sound 'default' not found"
+        // (expo-notifications cherche alors res/raw/default, inexistant).
         enableVibrate: true,
         vibrationPattern: STRONG_VIBRATION_PATTERN,
         enableLights: true,

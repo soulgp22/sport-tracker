@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useReducer } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FoodEntryRow } from '../../../components/nutrition/FoodEntryRow';
@@ -118,22 +117,6 @@ export default function NutritionDiaryScreen() {
     });
   };
 
-  const handleDragEnd = ({ data }: { data: Row[] }) => {
-    let currentMeal: MealType | undefined;
-
-    for (const item of data) {
-      if (item.kind === 'header') {
-        currentMeal = item.mealType;
-        continue;
-      }
-
-      const targetMeal = currentMeal ?? MEAL_ORDER[0];
-      if (item.entry.mealType !== targetMeal) {
-        updateFoodEntry(item.entry.id, { mealType: targetMeal });
-      }
-    }
-  };
-
   const openAddMeal = () => router.push('/(tabs)/nutrition/add' as never);
 
   return (
@@ -159,13 +142,12 @@ export default function NutritionDiaryScreen() {
         </View>
       ) : (
         <View style={styles.body}>
-          <DraggableFlatList<Row>
+          <FlatList<Row>
             data={rows}
             keyExtractor={(item) => item.key}
             contentContainerStyle={styles.content}
             style={styles.list}
-            onDragEnd={handleDragEnd}
-            renderItem={({ item, drag, isActive }) => {
+            renderItem={({ item }) => {
               if (item.kind === 'header') {
                 return (
                   <View style={styles.mealHeader}>
@@ -176,16 +158,14 @@ export default function NutritionDiaryScreen() {
               }
 
               return (
-                <ScaleDecorator>
-                  <FoodEntryRow
-                    entry={item.entry}
-                    drag={drag}
-                    isActive={isActive}
-                    onDeleteEntry={handleDelete}
-                    onMoveEntry={handleMove}
-                    onUpdateQuantity={handleUpdateQuantity}
-                  />
-                </ScaleDecorator>
+                <FoodEntryRow
+                  entry={item.entry}
+                  drag={() => {}}
+                  isActive={false}
+                  onDeleteEntry={handleDelete}
+                  onMoveEntry={handleMove}
+                  onUpdateQuantity={handleUpdateQuantity}
+                />
               );
             }}
           />
