@@ -13,6 +13,8 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 import type { CatalogExercise } from '../../types';
 import type { EquipmentProfileId } from '../../types/equipment';
@@ -174,40 +176,37 @@ export function ExerciseCatalogList({
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   wrapper: { flex: 1 },
-  downloadBanner: { marginHorizontal: 16, marginTop: 8, padding: 14, borderRadius: 12, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: 10, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
-  downloadIcon: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
+  downloadBanner: { marginHorizontal: spacing.md, marginTop: spacing.xs, padding: spacing.md, borderRadius: radius.lg, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
+  downloadIcon: { width: 38, height: 38, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
   downloadCopy: { flex: 1 },
   downloadTitle: { fontSize: 14, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   downloadMeta: { fontSize: 11, lineHeight: 15, color: c.textSecondary, marginTop: 2 },
-  searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
+  searchBox: { paddingHorizontal: spacing.md, paddingTop: spacing.xs, paddingBottom: 6 },
   chipList: { flexGrow: 0, flexShrink: 0 },
-  chipRow: { paddingHorizontal: 16, gap: 8, paddingVertical: 8, alignItems: 'center' },
+  chipRow: { paddingHorizontal: spacing.md, gap: spacing.xs, paddingVertical: spacing.xs, alignItems: 'center' },
   chip: {
     height: 34,
     justifyContent: 'center',
-    paddingHorizontal: 14,
-    borderRadius: 17,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: c.surfaceAlt,
   },
   chipSelected: { backgroundColor: c.primary },
   chipText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
-  list: { paddingHorizontal: 16, paddingBottom: 24, gap: 8 },
+  list: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg, gap: 8 },
   empty: { flexGrow: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 10,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.sm,
+    ...cardShadow(c),
   },
   cardSelected: { borderWidth: 2, borderColor: c.primary },
-  thumb: { width: 58, height: 58, borderRadius: 8, backgroundColor: c.surfaceAlt },
+  thumb: { width: 58, height: 58, borderRadius: radius.sm, backgroundColor: c.surfaceAlt },
   cardBody: { flex: 1, gap: 3 },
   name: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
   meta: { fontSize: 12, color: c.textSecondary },

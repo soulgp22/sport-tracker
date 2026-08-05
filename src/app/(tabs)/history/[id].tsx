@@ -12,6 +12,8 @@ import { getCatalogExerciseName } from '../../../store/exerciseCatalogStore';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../../theme/tokens';
+
 import type { ThemeColors } from '../../../theme/palettes';
 
 function fmt(secs: number) {
@@ -114,34 +116,31 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   headerBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
-  content: { padding: 16, gap: 12 },
+  content: { padding: spacing.md, gap: 12 },
   metaCard: {
     backgroundColor: c.accentSoft,
-    borderRadius: 12,
-    padding: 14,
-    gap: 4,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.xxs,
   },
   metaDate: { fontSize: 15, fontFamily: fonts.sansSemi, color: c.primary, textTransform: 'capitalize' },
   metaDay: { fontSize: 14, color: c.primary },
   metaDuration: { fontSize: 13, color: c.textSecondary, marginTop: 4 },
   exCard: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    ...cardShadow(c),
   },
-  exHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
+  exHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: 10 },
   exName: { flex: 1, fontSize: 16, fontFamily: fonts.sansBold, color: c.textPrimary },
-  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: c.border, paddingBottom: 6, marginBottom: 4 },
+  tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: c.border, paddingBottom: spacing.xs, marginBottom: 4 },
   tableRow: { flexDirection: 'row', paddingVertical: 5 },
   tableRowAlt: { backgroundColor: c.surfaceAlt },
   tableCell: { flex: 1, fontSize: 14, color: c.textPrimary, textAlign: 'center' },

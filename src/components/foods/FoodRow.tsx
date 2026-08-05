@@ -6,6 +6,8 @@ import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../theme/tokens';
+
 import type { Food } from '../../types';
 
 interface FoodRowProps {
@@ -58,15 +60,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    marginHorizontal: 16,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    marginHorizontal: spacing.md,
     marginVertical: 5,
-    gap: 10,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    gap: spacing.sm,
+    ...cardShadow(c),
   },
   body: { flex: 1, gap: 3 },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
@@ -76,7 +75,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   badge: {
     backgroundColor: c.secondary,
     borderRadius: 999,
-    paddingHorizontal: 8,
+    paddingHorizontal: spacing.xs,
     paddingVertical: 3,
   },
   badgeText: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primaryText },

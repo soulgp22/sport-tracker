@@ -8,6 +8,8 @@ import { useTranslation } from '../../i18n/useTranslation';
 import type { Program } from '../../types';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 
 interface ProgramCardProps {
@@ -70,18 +72,15 @@ const makeStyles = (c: ThemeColors) =>
     card: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 14,
+      gap: spacing.md,
       minHeight: 98,
-      marginHorizontal: 16,
+      marginHorizontal: spacing.md,
       marginVertical: 7,
-      paddingHorizontal: 14,
-      paddingVertical: 14,
-      borderRadius: 12,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      borderRadius: radius.lg,
       backgroundColor: c.surface,
-      shadowColor: c.overlay,
-      shadowOpacity: 0.05,
-      shadowRadius: 4,
-      elevation: 1,
+      ...cardShadow(c),
     },
     logoColumn: {
       width: 68,

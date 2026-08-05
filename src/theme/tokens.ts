@@ -122,3 +122,8 @@ export function cardSurface(c: ThemeColors, shadows: ShadowSet): ViewStyle {
     ...shadows.card,
   };
 }
+
+/** Ombre douce de carte seule (à spreader dans les styles existants). */
+export function cardShadow(c: ThemeColors): ViewStyle {
+  return makeShadows(c).card;
+}

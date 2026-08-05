@@ -8,6 +8,8 @@ import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../../theme/tokens';
+
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { Session } from '../../../types';
@@ -77,14 +79,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    marginHorizontal: 16,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    marginHorizontal: spacing.md,
     marginVertical: 5,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    ...cardShadow(c),
   },
   cardLeft: { flex: 1, gap: 2 },
   cardDate: { fontSize: 12, color: c.textMuted, textTransform: 'capitalize' },

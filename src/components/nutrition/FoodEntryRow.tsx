@@ -7,6 +7,8 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../theme/tokens';
+
 import { MEAL_LABELS, MEAL_ORDER } from '../../constants/meals';
 import type { FoodEntry, MealType } from '../../types';
 import { TextInput } from '../ui/TextInput';
@@ -182,14 +184,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    marginHorizontal: 16,
-    gap: 10,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    marginHorizontal: spacing.md,
+    gap: spacing.sm,
+    ...cardShadow(c),
   },
   activeRow: {
     borderColor: c.primary,
@@ -208,8 +207,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   textAction: {
     minHeight: 32,
     justifyContent: 'center',
-    paddingHorizontal: 10,
-    borderRadius: 16,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: c.primary,
   },
@@ -217,14 +216,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   deleteButton: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   moveButton: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: c.surfaceAlt,
@@ -237,7 +236,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   iconButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: c.surfaceAlt,

@@ -10,6 +10,8 @@ import { Button } from '../../../components/ui/Button';
 import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
+import { spacing } from '../../../theme/tokens';
+
 import type { ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -72,10 +74,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
-  content: { padding: 16, gap: 24 },
+  content: { padding: spacing.md, gap: 24 },
   btn: { marginTop: 8 },
 });

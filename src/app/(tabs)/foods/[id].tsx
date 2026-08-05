@@ -12,6 +12,8 @@ import { useColors } from '../../../theme/useColors';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../../theme/tokens';
+
 import { useFoodStore } from '../../../store/foodStore';
 
 export default function FoodDetailScreen() {
@@ -99,21 +101,18 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
-  content: { padding: 16, gap: 14, paddingBottom: 32 },
+  content: { padding: spacing.md, gap: spacing.md, paddingBottom: 32 },
   infoCard: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 6,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.xs,
+    ...cardShadow(c),
   },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   title: { flex: 1, fontSize: 22, fontFamily: fonts.sansHeavy, color: c.textPrimary },
@@ -121,9 +120,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   badge: {
     backgroundColor: c.secondary,
     borderRadius: 999,
-    paddingHorizontal: 8,
+    paddingHorizontal: spacing.xs,
     paddingVertical: 3,
   },
   badgeText: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primaryText },
-  actions: { gap: 10, paddingTop: 4 },
+  actions: { gap: spacing.sm, paddingTop: 4 },
 });

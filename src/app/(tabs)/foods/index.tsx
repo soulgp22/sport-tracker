@@ -11,6 +11,8 @@ import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { spacing } from '../../../theme/tokens';
+
 import { useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -121,22 +123,22 @@ export default function FoodsScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   wrapper: { flex: 1 },
-  searchBox: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 6 },
+  searchBox: { paddingHorizontal: spacing.md, paddingTop: spacing.xs, paddingBottom: 6 },
   list: { paddingBottom: 16 },
   empty: { flexGrow: 1 },
   sectionHeader: {
     fontSize: 13,
     fontFamily: fonts.sansBold,
     color: c.textSecondary,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 4,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxs,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     backgroundColor: c.bg,
   },
   footer: {
-    padding: 16,
+    padding: spacing.md,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: c.border,
   },

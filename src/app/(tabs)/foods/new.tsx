@@ -9,6 +9,8 @@ import { FoodForm, type FoodFormValues } from '../../../components/foods/FoodFor
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { spacing } from '../../../theme/tokens';
+
 import { normalizeFoodName, useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
 
@@ -74,8 +76,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
 });

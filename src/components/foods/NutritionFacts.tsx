@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 import type { FoodNutrition } from '../../types';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -83,9 +85,9 @@ export function NutritionFacts({ nutrition }: NutritionFactsProps) {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   card: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 16,
-    gap: 14,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.md,
     borderWidth: 1,
     borderColor: c.border,
   },
@@ -99,8 +101,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   cell: {
     flex: 1,
     backgroundColor: c.surfaceAlt,
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: radius.sm,
+    padding: spacing.sm,
     gap: 3,
   },
   cellValue: { fontSize: 16, fontFamily: fonts.sansHeavy, color: c.textPrimary },
@@ -108,7 +110,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   details: {
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: c.border,
-    paddingTop: 8,
+    paddingTop: spacing.xs,
     gap: 7,
   },
   detailRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 12 },

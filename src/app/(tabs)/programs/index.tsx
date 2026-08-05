@@ -14,6 +14,7 @@ import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
+import { spacing } from '../../../theme/tokens';
 import {
   assertImportFileSize,
   assertImportTextSize,
@@ -218,7 +219,7 @@ export default function ProgramsScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   wrapper: { flex: 1 },
-  importExportRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
+  importExportRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: 4 },
   halfBtn: { flex: 1 },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
