@@ -17,6 +17,7 @@ import { TextInput } from '../../../components/ui/TextInput';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { makeShadows, radius, spacing } from '../../../theme/tokens';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
@@ -234,42 +235,45 @@ export default function NutritionGoalsScreen() {
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
+const makeStyles = (c: ThemeColors) => {
+  const shadows = makeShadows(c);
+  return StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
   keyboardAvoiding: { flex: 1 },
-  content: { padding: 16, gap: 22, paddingBottom: 32 },
-  section: { gap: 12 },
+  content: { padding: spacing.md, gap: spacing.lg, paddingBottom: spacing.xl },
+  section: { gap: spacing.sm },
   sectionTitle: {
     fontSize: 16,
     fontFamily: fonts.sansBold,
     color: c.textPrimary,
     borderBottomWidth: 1,
     borderBottomColor: c.border,
-    paddingBottom: 8,
+    paddingBottom: spacing.xs,
   },
-  goalTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  goalTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   chip: {
-    minHeight: 36,
+    minHeight: 40,
     justifyContent: 'center',
-    paddingHorizontal: 14,
-    borderRadius: 18,
-    backgroundColor: c.surfaceAlt,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.pill,
+    backgroundColor: c.surface,
     borderWidth: 1,
     borderColor: c.border,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
   chipText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
-  twoColumns: { flexDirection: 'row', gap: 10 },
+  twoColumns: { flexDirection: 'row', gap: spacing.sm },
   columnField: { flex: 1, minWidth: 0 },
-  submitButton: { marginTop: 4 },
-});
+  submitButton: { marginTop: spacing.xxs },
+  });
+};

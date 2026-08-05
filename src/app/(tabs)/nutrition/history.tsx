@@ -8,6 +8,7 @@ import { CalorieTrendChart } from '../../../components/nutrition/CalorieTrendCha
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { makeShadows, radius, spacing } from '../../../theme/tokens';
 import { getCalorieTrend } from '../../../lib/nutritionCalc';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -95,52 +96,53 @@ export default function NutritionHistoryScreen() {
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
+const makeStyles = (c: ThemeColors) => {
+  const shadows = makeShadows(c);
+  return StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
   headerSpacer: { width: 24 },
-  content: { padding: 16, gap: 18, paddingBottom: 32 },
-  periodRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  content: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl },
+  periodRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   chip: {
-    minHeight: 36,
+    minHeight: 40,
     justifyContent: 'center',
-    paddingHorizontal: 14,
-    borderRadius: 18,
-    backgroundColor: c.surfaceAlt,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.pill,
+    backgroundColor: c.surface,
     borderWidth: 1,
     borderColor: c.border,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
   chipText: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
   chipTextSelected: { color: c.primaryText },
-  statsRow: { flexDirection: 'row', gap: 10 },
+  statsRow: { flexDirection: 'row', gap: spacing.sm },
   statCard: {
     flex: 1,
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
     gap: 6,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    ...shadows.card,
   },
   statLabel: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
   statValue: { fontSize: 20, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   chartCard: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
+    ...shadows.card,
   },
-});
+  });
+};

@@ -9,6 +9,7 @@ import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { spacing } from '../../../theme/tokens';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { MealType } from '../../../types';
 
@@ -115,7 +116,7 @@ export default function MealPhotoScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   host: { flex: 1, backgroundColor: c.bg },
-  blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 },
+  blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, padding: spacing.lg },
   blockedText: { fontSize: 14, fontFamily: fonts.sans, color: c.textSecondary, textAlign: 'center' },
   blockedLink: { fontSize: 14, fontFamily: fonts.sansBold, color: c.primary },
 });
