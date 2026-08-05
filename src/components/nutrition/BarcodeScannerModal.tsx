@@ -13,6 +13,8 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 
 const BARCODE_TYPES = ['ean13', 'ean8', 'upc_a', 'upc_e'] as const;
 
@@ -104,9 +106,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   topTitle: {
     flex: 1,
@@ -117,7 +119,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   closeButton: {
     width: 38,
     height: 38,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: c.overlay,
@@ -126,12 +128,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   aimFrame: {
     width: 240,
     height: 150,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     borderWidth: 2,
     borderColor: c.primary,
     backgroundColor: 'transparent',
   },
-  bottomBlock: { alignItems: 'center', gap: 6, paddingHorizontal: 24, paddingBottom: 24 },
+  bottomBlock: { alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.lg, paddingBottom: 24 },
   hint: {
     fontSize: 14,
     fontFamily: fonts.sansBold,
@@ -149,8 +151,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
-    paddingHorizontal: 32,
+    gap: spacing.md,
+    paddingHorizontal: spacing.xl,
   },
   permissionText: {
     fontSize: 14,

@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import type { CommunityFoodDatabaseEntry } from '../../store/communityStore';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 import { TextInput } from '../ui/TextInput';
@@ -221,14 +223,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     minHeight: 68,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 12,
-    borderRadius: 17,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: c.border,
     backgroundColor: c.surface,
   },
-  triggerIcon: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
+  triggerIcon: { width: 42, height: 42, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
   triggerCopy: { flex: 1 },
   triggerTitle: { fontFamily: fonts.sansBold, fontSize: 16, color: c.textPrimary },
   triggerMeta: { fontFamily: fonts.sans, fontSize: 12, color: c.textSecondary, marginTop: 2 },
@@ -244,22 +246,22 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     overflow: 'hidden',
   },
   grabber: { width: 42, height: 4, borderRadius: 2, alignSelf: 'center', backgroundColor: c.border, marginTop: 10 },
-  sheetHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 18, paddingTop: 16, paddingBottom: 12 },
+  sheetHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.md, paddingTop: spacing.md, paddingBottom: 12 },
   sheetTitleBlock: { flex: 1 },
   sheetEyebrow: { fontFamily: fonts.sansBold, fontSize: 9, letterSpacing: 1.2, color: c.primary, marginBottom: 3 },
   sheetTitle: { fontFamily: fonts.sansHeavy, fontSize: 21, color: c.textPrimary },
-  closeButton: { width: 40, height: 40, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surfaceAlt },
-  searchRow: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingHorizontal: 18, paddingBottom: 10 },
+  closeButton: { width: 40, height: 40, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surfaceAlt },
+  searchRow: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingHorizontal: spacing.md, paddingBottom: 10 },
   searchInput: { flex: 1 },
-  refreshButton: { width: 46, height: 46, alignItems: 'center', justifyContent: 'center', borderRadius: 13, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
-  list: { paddingHorizontal: 18, paddingBottom: 28, gap: 9 },
-  option: { minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 11, padding: 11, borderRadius: 15, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
+  refreshButton: { width: 46, height: 46, alignItems: 'center', justifyContent: 'center', borderRadius: radius.md, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
+  list: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg, gap: 9 },
+  option: { minHeight: 64, flexDirection: 'row', alignItems: 'center', gap: 11, padding: 11, borderRadius: radius.md, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface },
   optionSelected: { borderColor: c.primary, backgroundColor: c.accentSoft },
-  optionIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
+  optionIcon: { width: 40, height: 40, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
   optionIconSelected: { backgroundColor: c.primary },
   optionCopy: { flex: 1 },
   optionTitle: { flex: 1, fontFamily: fonts.sansBold, fontSize: 15, color: c.textPrimary },
   optionMeta: { fontFamily: fonts.sans, fontSize: 11, color: c.textSecondary, marginTop: 3 },
-  empty: { alignItems: 'center', gap: 8, paddingVertical: 36 },
+  empty: { alignItems: 'center', gap: spacing.xs, paddingVertical: 36 },
   emptyText: { fontFamily: fonts.sansSemi, color: c.textSecondary },
 });

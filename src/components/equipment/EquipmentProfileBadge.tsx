@@ -6,6 +6,8 @@ import { getEquipmentProfile } from '../../constants/equipmentProfiles';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { spacing } from '../../theme/tokens';
+
 import type { EquipmentProfileId } from '../../types/equipment';
 
 interface EquipmentProfileBadgeProps {
@@ -53,7 +55,7 @@ const makeStyles = (size: number) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 6,
+      gap: spacing.xs,
       paddingHorizontal: Math.round(size * 0.18),
       overflow: 'hidden',
     },

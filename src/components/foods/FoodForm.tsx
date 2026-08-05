@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, V
 
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../constants/keyboard';
 import { Button } from '../ui/Button';
@@ -384,7 +386,7 @@ export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: Foo
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   keyboardAvoiding: { flex: 1 },
-  content: { padding: 16, gap: 22, paddingBottom: 32 },
+  content: { padding: spacing.md, gap: spacing.lg, paddingBottom: 32 },
   section: { gap: 12 },
   sectionTitle: {
     fontSize: 16,
@@ -392,7 +394,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     color: c.textPrimary,
     borderBottomWidth: 1,
     borderBottomColor: c.border,
-    paddingBottom: 8,
+    paddingBottom: spacing.xs,
   },
   categoryBlock: { gap: 6 },
   fieldBlock: { gap: 6 },
@@ -401,8 +403,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   unitChip: {
     minHeight: 36,
     justifyContent: 'center',
-    paddingHorizontal: 14,
-    borderRadius: 18,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.pill,
     backgroundColor: c.surfaceAlt,
     borderWidth: 1,
     borderColor: c.border,

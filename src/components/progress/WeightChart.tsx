@@ -5,6 +5,8 @@ import type { DataPoint } from '../../hooks/useProgressData';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 
 interface WeightChartProps {
@@ -55,7 +57,7 @@ export function WeightChart({ data, title }: WeightChartProps) {
 }
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  container: { gap: 8, paddingRight: 8 },
+  container: { gap: spacing.xs, paddingRight: 8 },
   title: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.textPrimary },
   empty: { height: 100, alignItems: 'center', justifyContent: 'center' },
   emptyText: { color: c.textMuted, fontSize: 13 },

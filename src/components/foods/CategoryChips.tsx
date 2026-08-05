@@ -3,6 +3,8 @@ import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 
 interface CategoryChipsProps {
@@ -51,12 +53,12 @@ export function CategoryChips({
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   list: { flexGrow: 0, flexShrink: 0 },
-  row: { paddingHorizontal: 16, gap: 8, paddingVertical: 8, alignItems: 'center' },
+  row: { paddingHorizontal: spacing.md, gap: spacing.xs, paddingVertical: spacing.xs, alignItems: 'center' },
   chip: {
     height: 34,
     justifyContent: 'center',
-    paddingHorizontal: 14,
-    borderRadius: 17,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.lg,
     backgroundColor: c.surfaceAlt,
     borderWidth: 1,
     borderColor: c.border,

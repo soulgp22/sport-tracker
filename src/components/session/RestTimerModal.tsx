@@ -12,6 +12,8 @@ import Svg, { Circle } from 'react-native-svg';
 
 import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
 import { fonts } from '../../theme/fonts';
+import { radius, spacing } from '../../theme/tokens';
+
 import { BRAND_BRASS, type ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 
@@ -225,9 +227,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 24,
-    gap: 22,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.lg,
+    gap: spacing.lg,
   },
   restLabel: {
     color: c.primary,
@@ -258,10 +260,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surface,
     borderColor: c.border,
     borderWidth: 1,
-    borderRadius: 16,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    gap: 4,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    gap: spacing.xxs,
   },
   exerciseName: { color: c.textPrimary, fontFamily: fonts.serifBold, fontSize: 21, textAlign: 'center' },
   setPosition: { color: c.primary, fontFamily: fonts.sansBold, fontSize: 14 },
@@ -280,7 +282,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   setDotCurrent: {
     width: 15,
     height: 15,
-    borderRadius: 8,
+    borderRadius: radius.sm,
     backgroundColor: BRAND_BRASS,
     borderWidth: 2,
     borderColor: c.surface,
@@ -294,8 +296,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surfaceAlt,
     borderColor: c.border,
     borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 8,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.xs,
   },
   skipButton: { backgroundColor: c.primary, borderColor: c.primary },
   controlLabel: { color: c.textPrimary, fontFamily: fonts.sansBold, fontSize: 15 },

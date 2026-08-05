@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
 import { fonts } from '../../theme/fonts';
+import { spacing } from '../../theme/tokens';
+
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
 
@@ -55,11 +57,11 @@ const makeStyles = (c: ThemeColors) =>
       right: 0,
       zIndex: 9999,
       backgroundColor: c.primary,
-      paddingHorizontal: 16,
-      paddingBottom: 8,
+      paddingHorizontal: spacing.md,
+      paddingBottom: spacing.xs,
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
+      gap: spacing.xs,
     },
     label: {
       color: c.primaryText,

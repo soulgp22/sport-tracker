@@ -14,6 +14,8 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { cardShadow, radius, spacing } from '../../theme/tokens';
+
 import type { ThemeColors } from '../../theme/palettes';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { ExerciseModel3D } from './ExerciseModel3D';
@@ -96,22 +98,19 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heading: { flex: 1, fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
-  content: { padding: 16, gap: 14, paddingBottom: 32 },
-  hero: { width: '100%', aspectRatio: 1.25, borderRadius: 12, backgroundColor: c.surface },
+  content: { padding: spacing.md, gap: spacing.md, paddingBottom: 32 },
+  hero: { width: '100%', aspectRatio: 1.25, borderRadius: radius.lg, backgroundColor: c.surface },
   metaCard: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 6,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.xs,
+    ...cardShadow(c),
   },
   title: { fontSize: 22, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   meta: { fontSize: 14, color: c.primary, fontFamily: fonts.sansSemi },
@@ -119,20 +118,17 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   aliases: { fontSize: 12, color: c.primary, fontFamily: fonts.sansSemi },
   instructions: {
     backgroundColor: c.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 12,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.sm,
+    ...cardShadow(c),
   },
   sectionTitle: { fontSize: 17, fontFamily: fonts.sansBold, color: c.textPrimary },
   stepRow: { flexDirection: 'row', gap: 10 },
   stepIndex: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     backgroundColor: c.accentSoft,
     color: c.primary,
     textAlign: 'center',
