@@ -52,10 +52,10 @@ Rules:
 | Élément | Valeur |
 |---------|--------|
 | **VPS** | Hetzner CX23, Ubuntu 24.04 |
-| **IP** | `<VPS_IP-PURGED>` |
+| **IP** | `<VPS_IP — voir HANDOFF privé>` |
 | **Domaine** | `https://lifesporttracker.duckdns.org` |
 | **HTTPS** | Caddy + Let's Encrypt (auto-renew) |
-| **Clé API** | `<MEAL_SERVER_API_KEY-PURGED>` (embarquée dans l'app, révocable côté serveur) |
+| **Clé API** | `<MEAL_SERVER_API_KEY — voir .env>` (embarquée dans l'app, révocable côté serveur) |
 | **Endpoint analyse** | POST `/v1/chat/completions` (format OpenAI, image en base64 data URL) |
 | **Endpoint health** | GET `/health` |
 | **Endpoint collecte** | POST `/training/submit` (roue à données, opt-in utilisateur) |
@@ -81,8 +81,8 @@ Le serveur est déjà opérationnel. L'app est configurée pour pointer dessus.
 
 ### Config API (src/lib/mealPhotoApi.ts)
 ```typescript
-export const MEAL_SERVER_URL = 'https://lifesporttracker.duckdns.org';
-export const MEAL_SERVER_API_KEY = '<MEAL_SERVER_API_KEY-PURGED>';
+export const MEAL_SERVER_URL = process.env.EXPO_PUBLIC_MEAL_SERVER_URL ?? '';
+export const MEAL_SERVER_API_KEY = process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY ?? '';
 const HEALTH_TIMEOUT_MS = 5000;
 const ANALYSIS_TIMEOUT_MS = 60000;
 const MAX_PREDICT_TOKENS = 256;
@@ -96,8 +96,8 @@ La photo est compressée à 768 px / JPEG qualité 0.6 avant envoi (`expo-image-
 ### Keystore de production
 - **Fichier** : `android/app/lst-release.keystore`
 - **Alias** : `lst-upload`
-- **Store password** : `<KEYSTORE_PASSWORD-PURGED>`
-- **Key password** : `<KEYSTORE_PASSWORD-PURGED>`
+- **Store password** : `<KEYSTORE_PASSWORD — voir HANDOFF privé>`
+- **Key password** : `<KEYSTORE_PASSWORD — voir HANDOFF privé>`
 - **Backup** : `E:\Téléchargement\lst-release.keystore.BACKUP` (à conserver à vie)
 
 Déjà configuré dans `build.gradle` :
@@ -105,9 +105,9 @@ Déjà configuré dans `build.gradle` :
 signingConfigs {
     release {
         storeFile file('lst-release.keystore')
-        storePassword '<KEYSTORE_PASSWORD-PURGED>'
+        storePassword '<KEYSTORE_PASSWORD — voir HANDOFF privé>'
         keyAlias 'lst-upload'
-        keyPassword '<KEYSTORE_PASSWORD-PURGED>'
+        keyPassword '<KEYSTORE_PASSWORD — voir HANDOFF privé>'
     }
 }
 ```
@@ -199,7 +199,7 @@ Output : `android/app/build/outputs/bundle/release/app-release.aab`
 ## ⚠️ POINTS D'ATTENTION
 
 ### API Key embarquée
-La clé API `<MEAL_SERVER_API_KEY-PURGED>` est dans le code source (`mealPhotoApi.ts`). Elle est extractible de l'APK. C'est acceptable car :
+La clé API `<MEAL_SERVER_API_KEY — voir .env>` est injectée dans le bundle depuis `.env`. Elle est extractible de l'APK. C'est acceptable car :
 - Elle ne protège que l'USAGE du serveur (pas le modèle)
 - Elle est révocable et rotatable côté serveur
 - Le serveur est derrière HTTPS
@@ -248,7 +248,7 @@ L'app demande :
 - **Keystore backup** : `E:\Téléchargement\lst-release.keystore.BACKUP`
 - **Play Store Console** : https://play.google.com/console
 - **Privacy policy** : https://lifesporttracker.duckdns.org/privacy
-- **Serveur VPS** : `ssh -i ~/.ssh/meal-server-key root@<VPS_IP-PURGED>`
+- **Serveur VPS** : `ssh -i ~/.ssh/meal-server-key root@<VPS_IP — voir HANDOFF privé>`
 
 ---
 

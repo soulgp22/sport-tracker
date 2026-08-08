@@ -9,9 +9,9 @@
  * Aucune dépendance native ici : logique testable sous Jest.
  */
 
-/** Configuration du serveur — VPS Hetzner + Caddy HTTPS (DuckDNS). */
-export const MEAL_SERVER_URL = 'https://lifesporttracker.duckdns.org';
-export const MEAL_SERVER_API_KEY = '<MEAL_SERVER_API_KEY-PURGED>';
+/** Configuration du serveur — injectée par Expo depuis les variables EXPO_PUBLIC_. */
+export const MEAL_SERVER_URL = process.env.EXPO_PUBLIC_MEAL_SERVER_URL ?? '';
+export const MEAL_SERVER_API_KEY = process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY ?? '';
 
 const HEALTH_PATH = '/health';
 // Moteur d'analyse : 'gemini' (Gemini 3.5 Flash Lite via le routeur VPS) ou

@@ -6,14 +6,14 @@
  * envoie la photo en HTTPS — voir lib/mealPhotoApi.ts. Il n'y a donc plus
  * rien à télécharger ni de contrainte RAM/stockage côté téléphone.
  *
- * Seule exigence : Android (cohérent avec la cible de l'app) et une URL
- * serveur configurée. Les signatures historiques sont conservées pour ne pas
+ * Seule exigence : Android (cohérent avec la cible de l'app) et une configuration
+ * serveur complète. Les signatures historiques sont conservées pour ne pas
  * toucher index.tsx / add.tsx / photo.tsx / onboarding.tsx / _layout.tsx.
  */
 
 import { Platform } from 'react-native';
 
-import { MEAL_SERVER_URL } from './mealPhotoApi';
+import { MEAL_SERVER_API_KEY, MEAL_SERVER_URL } from './mealPhotoApi';
 
 /** Android API level minimal (inchangé — cible historique de l'app). */
 const MIN_ANDROID_API = 33;
@@ -26,7 +26,7 @@ export interface MealPhotoCapability {
 }
 
 /**
- * true si la feature est utilisable : Android récent + URL serveur renseignée.
+ * true si la feature est utilisable : Android récent + URL et clé serveur renseignées.
  * Aucune dépendance native — testable sous Jest.
  */
 export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
@@ -35,7 +35,7 @@ export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
   if (Platform.OS !== 'android' || !Number.isFinite(apiLevel) || apiLevel < MIN_ANDROID_API) {
     return { ok: false, reason: 'android-version' };
   }
-  if (!MEAL_SERVER_URL) {
+  if (!MEAL_SERVER_URL || !MEAL_SERVER_API_KEY) {
     return { ok: false, reason: 'server-config' };
   }
   return { ok: true };
