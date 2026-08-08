@@ -1,22 +1,10 @@
 /**
- * Flux de sortie de l'écran « photo de repas » (VLM on-device).
+ * Flux de sortie de l'écran « photo de repas » (mode serveur HTTPS).
  *
- * Pourquoi ce module existe (crash natif au retour) :
- * - le cleanup de `useLLM` (react-native-executorch 0.9.2) appelle
- *   `LLMController.delete()` au démontage si le modèle est prêt ;
- * - `delete()` LÈVE `ModelGenerating` si une génération est en cours
- *   (« You cannot delete the model now. You need to interrupt it first. ») ;
- * - `interrupt()` ne remet PAS `isGenerating` à false de façon synchrone :
- *   le flag ne retombe que dans le `finally` de `forward()`, quand la promesse
- *   native de génération se résout ;
- * - la doc officielle l'exige : « If you try to dismount the component using
- *   this hook while generation is still going on, it will result in crash.
- *   You'll need to interrupt the model first and wait until isGenerating is
- *   set to false. »
- *
- * Règle d'or : ne JAMAIS démonter l'écran tant que `isGenerating` est true.
- * Ce module orchestre : demande de retour → interrupt() (sans jamais laisser
- * remonter son exception) → attente de la fin de génération → fermeture.
+ * Une analyse peut encore être en cours quand l'utilisateur ferme l'écran.
+ * Ce module orchestre alors l'annulation de la requête, attend que son état
+ * `isGenerating` retombe à false, puis ferme l'écran une seule fois. Les erreurs
+ * d'annulation restent sans effet afin que la navigation demeure sûre.
  *
  * Aucune dépendance native ici : module 100 % testable sous Jest.
  */

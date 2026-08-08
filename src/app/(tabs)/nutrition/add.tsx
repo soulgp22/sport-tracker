@@ -66,9 +66,9 @@ function defaultQuantityForFood(food: Food) {
 type MealPhotoReviewComponent = typeof import('../../../components/nutrition/MealPhotoReview').MealPhotoReview;
 
 /**
- * Charge la modale photo (et donc react-native-executorch) uniquement quand
- * le gating est OK. Le require est synchrone côté Metro et reste inerte sous
- * Jest / Expo Go (module natif absent → catch → null).
+ * Charge la modale photo uniquement quand la plateforme et la configuration
+ * serveur sont compatibles. Le require synchrone côté Metro reste protégé pour
+ * les environnements où le composant n'est pas disponible.
  */
 function loadMealPhotoReview(): MealPhotoReviewComponent | null {
   try {
@@ -121,9 +121,8 @@ export default function AddMealScreen() {
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [photoVisible, setPhotoVisible] = useState(false);
 
-  // Gating photo : feature visible uniquement sur appareils compatibles
-  // (Android 13+, RAM, stockage). Le module executorch n'est chargé qu'ici,
-  // après gating OK.
+  // Gating photo : feature visible uniquement sur Android compatible quand la
+  // configuration du serveur d'analyse est complète.
   useEffect(() => {
     let mounted = true;
     void canUseMealPhoto().then((capability) => {

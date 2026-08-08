@@ -198,17 +198,6 @@ export function cancelRestEndNotification(notificationId?: string | null): Promi
   return runNotificationOperation(() => cancelRestEndNotificationInternal(notificationId));
 }
 
-export async function hasScheduledRestEndNotification(): Promise<boolean> {
-  try {
-    const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-    return scheduledNotifications.some(
-      (request) => request.content.data?.kind === REST_TIMER_NOTIFICATION_KIND
-    );
-  } catch {
-    return scheduledRestEndNotificationId !== null;
-  }
-}
-
 // ──────────────────────────────────────────────
 // Persistent (ongoing) countdown notification
 // ──────────────────────────────────────────────

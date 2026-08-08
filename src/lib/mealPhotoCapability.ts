@@ -42,20 +42,6 @@ export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
 }
 
 /**
- * Compat : en mode serveur il n'y a plus de modèle à télécharger. Conservé
- * pour onboarding.tsx — retourne immédiatement true si le serveur est
- * configuré (le « téléchargement » est devenu instantané).
- */
-export async function downloadMealPhotoModel(
-  onProgress?: (progress: number) => void
-): Promise<boolean> {
-  const capability = await canUseMealPhoto();
-  if (!capability.ok) return false;
-  onProgress?.(1);
-  return true;
-}
-
-/**
  * Compat : plus rien à initialiser globalement (llama.rn retiré).
  * No-op conservé pour ne pas toucher _layout.tsx.
  */

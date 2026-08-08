@@ -46,7 +46,6 @@ describe('mealPhotoCapability (mode serveur)', () => {
       ok: false,
       reason: 'android-version',
     });
-    await expect(service.downloadMealPhotoModel()).resolves.toBe(false);
     await expect(service.initMealPhotoRuntime()).resolves.toBeUndefined();
   });
 
@@ -75,15 +74,6 @@ describe('mealPhotoCapability (mode serveur)', () => {
       ok: false,
       reason: 'android-version',
     });
-  });
-
-  it('downloadMealPhotoModel est un no-op instantané (plus rien à télécharger)', async () => {
-    mockAndroid(34);
-    configureMealServer();
-    const service = loadService();
-    const onProgress = jest.fn();
-    await expect(service.downloadMealPhotoModel(onProgress)).resolves.toBe(true);
-    expect(onProgress).toHaveBeenCalledWith(1);
   });
 
   it('initMealPhotoRuntime reste un no-op', async () => {

@@ -1,13 +1,5 @@
 import type { FoodEntry, MealType } from '../types';
 
-/** Libellés des groupes classiques (clés i18n : nutrition.add.meal.<type>). */
-export const MEAL_LABELS: Record<string, string> = {
-  breakfast: 'Petit-déjeuner',
-  lunch: 'Déjeuner',
-  dinner: 'Dîner',
-  snack: 'Collation',
-};
-
 /** Ordre d'affichage des groupes classiques quand ils existent. */
 export const MEAL_ORDER: MealType[] = ['breakfast', 'lunch', 'dinner', 'snack'];
 

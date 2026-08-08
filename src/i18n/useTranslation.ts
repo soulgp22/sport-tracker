@@ -5,7 +5,6 @@ import {
   LANGUAGE_OPTIONS,
   translate,
   translateRaw,
-  type LanguageId,
 } from './translations';
 
 export function useTranslation() {
@@ -23,8 +22,4 @@ export function useTranslation() {
   );
 
   return { language, locale, setLanguage, t, tr };
-}
-
-export function getCurrentLanguage(): LanguageId {
-  return useLanguageStore.getState().language;
 }

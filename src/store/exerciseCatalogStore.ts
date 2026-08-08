@@ -134,4 +134,3 @@ export function getCatalogExerciseName(id: string, fallback = 'Exercice') {
   const exercise = byId.get(id);
   return exercise ? getExerciseDisplayName(exercise) : fallback;
 }
-export function normalizeExerciseName(name: string) { return normalize(name); }

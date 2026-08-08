@@ -77,8 +77,8 @@ export default function HomeScreen() {
   const [sessionAnimation] = useState(() => new Animated.Value(0));
   const [photoScanAvailable, setPhotoScanAvailable] = useState(false);
 
-  // Bouton « scan de repas » : visible uniquement sur appareils compatibles
-  // (Android 13+, RAM/stockage suffisants). Gating sans charger executorch.
+  // Bouton « scan de repas » : visible uniquement sur Android compatible quand
+  // la configuration du serveur d'analyse est complète.
   useEffect(() => {
     let mounted = true;
     void canUseMealPhoto().then((capability) => {

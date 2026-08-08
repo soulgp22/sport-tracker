@@ -1,11 +1,9 @@
 /**
  * Tests du flux de sortie de l'écran photo de repas.
  *
- * Couvre le correctif du crash natif au retour : react-native-executorch
- * 0.9.2 lève ModelGenerating dans le cleanup de useLLM si l'écran est démonté
- * pendant une génération. Le flux doit donc TOUJOURS : interrupt() d'abord,
- * attendre isGenerating === false, fermer ensuite — et ne jamais laisser
- * remonter l'exception d'interrupt().
+ * Pendant une analyse HTTPS, le flux doit toujours annuler la requête, attendre
+ * isGenerating === false, fermer ensuite — et ne jamais laisser remonter
+ * l'exception d'interrupt().
  */
 
 import { createMealPhotoExitFlow, safeInterrupt } from '../mealPhotoExit';

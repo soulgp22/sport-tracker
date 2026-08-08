@@ -99,8 +99,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     void configureNotifications();
-    // Runtime executorch initialisé au démarrage uniquement si le gating
-    // photo-repas est OK (jamais sous Jest : canUseMealPhoto() → false).
+    // Compatibilité historique : le runtime photo est désormais un no-op, car
+    // le serveur d'analyse est sondé à la demande par MealPhotoReview.
     void initMealPhotoRuntime();
     enableImmersiveNavigationBar();
   }, []);

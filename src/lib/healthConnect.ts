@@ -70,12 +70,6 @@ export async function isHealthConnectAvailable(): Promise<boolean> {
   return (await getHealthConnectStatus()) === 'available';
 }
 
-/** Initialise le client Health Connect. false si indisponible. */
-export async function initializeHealthConnect(): Promise<boolean> {
-  const result = await safeCall((hc) => hc.initialize());
-  return result === true;
-}
-
 function hasAllReadPermissions(granted: HealthPermission[] | null): boolean {
   if (!granted) return false;
   return REQUIRED_PERMISSIONS.every((required) =>
@@ -135,14 +129,6 @@ export async function requestHealthPermissionsWithStatus(): Promise<HealthPermis
       error: error instanceof Error ? error.message : String(error),
     };
   }
-}
-
-/**
- * Lance le flow de permission Health Connect.
- * true si toutes les permissions requises ont été accordées.
- */
-export async function requestHealthPermissions(): Promise<boolean> {
-  return (await requestHealthPermissionsWithStatus()).granted;
 }
 
 /** Ouvre les réglages Health Connect (réactivation des permissions). No-op si indisponible. */
@@ -215,14 +201,5 @@ export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | n
       0
     );
     return { active: Math.round(active), total: Math.round(total) };
-  });
-}
-
-/** Nombre de pas effectués aujourd'hui. null si indisponible. */
-export async function readStepsToday(): Promise<number | null> {
-  return safeCall(async (hc) => {
-    await hc.initialize();
-    const result = await hc.readRecords('Steps', todayTimeRange());
-    return result.records.reduce((sum, record) => sum + record.count, 0);
   });
 }
