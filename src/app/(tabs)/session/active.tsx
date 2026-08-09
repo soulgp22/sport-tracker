@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
@@ -66,6 +66,7 @@ function SessionLogBar({
   onSubmit: (actualReps: number, actualWeight: number) => void;
 }) {
   const c = useColors();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { t } = useTranslation();
   const [reps, setReps] = useState(() =>
@@ -84,7 +85,14 @@ function SessionLogBar({
   };
 
   return (
-    <View style={styles.logBar}>
+    <View
+      style={[
+        styles.logBar,
+        // Le fond de la barre se prolonge derrière la barre de navigation
+        // système : l'inset bas s'ajoute au padding de contenu existant, les
+        // champs de saisie restent au-dessus de la zone système.
+        { paddingBottom: insets.bottom + spacing.sm },
+      ]}>
       <Text style={styles.logTitle} numberOfLines={1}>
         {t('session.logTitle', { name: exerciseName, index: setIndex + 1, total: exercise.sets.length })}
       </Text>
@@ -290,7 +298,7 @@ export default function ActiveSessionScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top']}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoiding}
         behavior={keyboardAvoidingBehavior}
@@ -510,7 +518,6 @@ const makeStyles = (c: ThemeColors) => {
     backgroundColor: c.surface,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
-    paddingBottom: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: c.border,
     gap: spacing.xs,
