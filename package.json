@@ -69,6 +69,7 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
+    "clean:dom-bundle": "node -e \"const fs=require('fs'),p='android/app/build/generated/assets/react';for(const variant of fs.existsSync(p)?fs.readdirSync(p):[])fs.rmSync(p+'/'+variant+'/www.bundle',{recursive:true,force:true})\"",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
