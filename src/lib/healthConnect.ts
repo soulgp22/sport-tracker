@@ -229,3 +229,12 @@ export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | n
     return { active: Math.round(active), total: Math.round(total) };
   });
 }
+
+/** Nombre de pas effectues aujourd'hui. null si indisponible. */
+export async function readStepsToday(): Promise<number | null> {
+  return safeCall('readStepsToday', async (hc) => {
+    await ensureInitialized(hc);
+    const result = await hc.readRecords('Steps', todayTimeRange());
+    return result.records.reduce((sum, record) => sum + record.count, 0);
+  });
+}

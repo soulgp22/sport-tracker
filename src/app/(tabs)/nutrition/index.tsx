@@ -15,12 +15,18 @@ import {
   calculateGoalProgress,
   calculateRemainingGoals,
 } from '../../../lib/nutritionCalc';
-import { calculateTdee, missingEnergyProfileFields } from '../../../lib/energyBalance';
+import {
+  calculateTdee,
+  missingEnergyProfileFields,
+  resolveDailyEnergyBalance,
+  resolveDailyEnergyExpenditure,
+} from '../../../lib/energyBalance';
 import {
   hasHealthPermissions,
   isHealthConnectAvailable,
   openHealthConnectPermissionsForApp,
   readCaloriesBurnedToday,
+  readStepsToday,
   requestHealthPermissionsWithStatus,
 } from '../../../lib/healthConnect';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
@@ -73,30 +79,36 @@ export default function NutritionScreen() {
   const heightCm = usePerformanceStore((s) => s.heightCm);
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
   const weightEntries = useBodyWeightStore((s) => s.entries);
-  const [healthBurn, setHealthBurn] = useState<
-    { status: 'granted'; burned: number } | { status: 'needsPermission' } | { status: 'unavailable' }
+  const [healthData, setHealthData] = useState<
+    | {
+        status: 'granted';
+        calories: Awaited<ReturnType<typeof readCaloriesBurnedToday>>;
+        steps: Awaited<ReturnType<typeof readStepsToday>>;
+      }
+    | { status: 'needsPermission' }
+    | { status: 'unavailable' }
   >({ status: 'unavailable' });
   const [connecting, setConnecting] = useState(false);
 
   const loadHealthBurn = useCallback(async () => {
     const available = await isHealthConnectAvailable();
     if (!available) {
-      setHealthBurn({ status: 'unavailable' });
+      setHealthData({ status: 'unavailable' });
       return;
     }
     const granted = await hasHealthPermissions();
     if (!granted) {
-      setHealthBurn({ status: 'needsPermission' });
+      setHealthData({ status: 'needsPermission' });
       return;
     }
-    const calories = await readCaloriesBurnedToday();
-    if (!calories) {
-      setHealthBurn({ status: 'unavailable' });
-      return;
-    }
-    setHealthBurn({
+    const [calories, steps] = await Promise.all([
+      readCaloriesBurnedToday(),
+      readStepsToday(),
+    ]);
+    setHealthData({
       status: 'granted',
-      burned: calories.total > 0 ? calories.total : calories.active,
+      calories,
+      steps,
     });
   }, []);
 
@@ -166,10 +178,18 @@ export default function NutritionScreen() {
 
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
   const tdee = calculateTdee({ sex, weightKg, heightCm, ageYears: age, activityLevel });
-  const burned = healthBurn.status === 'granted' ? healthBurn.burned : tdee;
-  const balance = burned === null ? null : burned - totals.calories;
-  const showProfileInvite = healthBurn.status !== 'granted' && tdee === null;
   const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
+  const expenditure = resolveDailyEnergyExpenditure({
+    healthCalories: healthData.status === 'granted' ? healthData.calories : null,
+    healthSteps: healthData.status === 'granted' ? healthData.steps : null,
+    tdee,
+    profileComplete: missingFields.length === 0,
+    weightKg,
+  });
+  const burned = expenditure.burnedKcal;
+  const balance = resolveDailyEnergyBalance(burned, totals.calories);
+  const showProfileInvite =
+    missingFields.length > 0 && expenditure.source !== 'healthConnectCalories';
   const missingFieldsLabel = missingFields
     .map((field) => hct(t, `nutrition.balance.field.${field}`))
     .join(', ');
@@ -191,21 +211,25 @@ export default function NutritionScreen() {
             </View>
           </View>
 
-          {balance !== null ? (
-            <Text style={[styles.balanceHint, balance < 0 ? styles.overGoal : null]}>
-              {balance >= 0
-                ? t('nutrition.balance.remaining', { count: balance })
-                : t('nutrition.balance.over', { count: Math.abs(balance) })}
+          {balance.status !== 'unavailable' ? (
+            <Text style={[styles.balanceHint, balance.status === 'over' ? styles.overGoal : null]}>
+              {balance.status === 'remaining'
+                ? t('nutrition.balance.remaining', { count: balance.count })
+                : t('nutrition.balance.over', { count: balance.count })}
             </Text>
           ) : null}
 
-          {healthBurn.status === 'granted' ? (
-            <Text style={styles.balanceSource}>{t('nutrition.balance.sourceHealthConnect')}</Text>
-          ) : burned !== null ? (
-            <Text style={styles.balanceSource}>{t('nutrition.balance.sourceEstimate')}</Text>
+          <Text style={styles.balanceSource}>{t(expenditure.sourceLabelKey)}</Text>
+
+          {expenditure.source === 'healthConnectSteps' && expenditure.activeCaloriesOnly ? (
+            <Text style={styles.balanceHint}>{t('nutrition.balance.stepsActiveOnly')}</Text>
           ) : null}
 
-          {healthBurn.status !== 'granted' ? (
+          {expenditure.source === 'healthConnectSteps' && expenditure.usedDefaultWeight ? (
+            <Text style={styles.balanceHint}>{t('nutrition.balance.stepsDefaultWeight')}</Text>
+          ) : null}
+
+          {healthData.status !== 'granted' ? (
             <Button
               title={t('nutrition.balance.connect')}
               onPress={handleConnectHealth}

@@ -469,7 +469,11 @@ const fr: TranslationTable = {
   'nutrition.balance.remaining': '{{count}} kcal restantes sur la dépense du jour',
   'nutrition.balance.over': '{{count}} kcal au-delà de la dépense du jour',
   'nutrition.balance.sourceHealthConnect': 'Source : Health Connect',
-  'nutrition.balance.sourceEstimate': 'Estimation d\'après ton profil (TDEE)',
+  'nutrition.balance.sourceSteps': 'Estimation d\'après tes pas (Health Connect)',
+  'nutrition.balance.sourceEstimate': 'Estimation d\'après ton profil',
+  'nutrition.balance.sourceUnavailable': 'Dépense indisponible',
+  'nutrition.balance.stepsActiveOnly': 'Profil énergétique incomplet : seules les calories actives estimées sont affichées.',
+  'nutrition.balance.stepsDefaultWeight': 'Estimation basée sur un poids par défaut de 70 kg.',
   'nutrition.balance.connect': 'Connecter Health Connect',
   'nutrition.balance.completeProfile': 'Renseigne ton sexe, ton âge, ta taille, ton poids et ton niveau d\'activité pour estimer ta dépense.',
   'nutrition.balance.completeProfileCta': 'Compléter mon profil',
@@ -995,7 +999,11 @@ const en: TranslationTable = {
   'nutrition.balance.remaining': '{{count}} kcal left on today\'s expenditure',
   'nutrition.balance.over': '{{count}} kcal over today\'s expenditure',
   'nutrition.balance.sourceHealthConnect': 'Source: Health Connect',
-  'nutrition.balance.sourceEstimate': 'Estimated from your profile (TDEE)',
+  'nutrition.balance.sourceSteps': 'Estimated from your steps (Health Connect)',
+  'nutrition.balance.sourceEstimate': 'Estimated from your profile',
+  'nutrition.balance.sourceUnavailable': 'Expenditure unavailable',
+  'nutrition.balance.stepsActiveOnly': 'Your energy profile is incomplete: only estimated active calories are shown.',
+  'nutrition.balance.stepsDefaultWeight': 'Estimate based on a default weight of 70 kg.',
   'nutrition.balance.connect': 'Connect Health Connect',
   'nutrition.balance.completeProfile': 'Fill in your sex, age, height, weight and activity level to estimate your expenditure.',
   'nutrition.balance.completeProfileCta': 'Complete my profile',
@@ -1521,7 +1529,11 @@ const es: TranslationTable = {
   'nutrition.balance.remaining': '{{count}} kcal restantes del gasto de hoy',
   'nutrition.balance.over': '{{count}} kcal por encima del gasto de hoy',
   'nutrition.balance.sourceHealthConnect': 'Fuente: Health Connect',
-  'nutrition.balance.sourceEstimate': 'Estimación según tu perfil (TDEE)',
+  'nutrition.balance.sourceSteps': 'Estimación según tus pasos (Health Connect)',
+  'nutrition.balance.sourceEstimate': 'Estimación según tu perfil',
+  'nutrition.balance.sourceUnavailable': 'Gasto no disponible',
+  'nutrition.balance.stepsActiveOnly': 'Tu perfil energético está incompleto: solo se muestran las calorías activas estimadas.',
+  'nutrition.balance.stepsDefaultWeight': 'Estimación basada en un peso predeterminado de 70 kg.',
   'nutrition.balance.connect': 'Conectar Health Connect',
   'nutrition.balance.completeProfile': 'Indica tu sexo, edad, altura, peso y nivel de actividad para estimar tu gasto.',
   'nutrition.balance.completeProfileCta': 'Completar mi perfil',
@@ -2047,7 +2059,11 @@ const de: TranslationTable = {
   'nutrition.balance.remaining': '{{count}} kcal übrig vom heutigen Verbrauch',
   'nutrition.balance.over': '{{count}} kcal über dem heutigen Verbrauch',
   'nutrition.balance.sourceHealthConnect': 'Quelle: Health Connect',
-  'nutrition.balance.sourceEstimate': 'Schätzung aus deinem Profil (TDEE)',
+  'nutrition.balance.sourceSteps': 'Schätzung anhand deiner Schritte (Health Connect)',
+  'nutrition.balance.sourceEstimate': 'Schätzung anhand deines Profils',
+  'nutrition.balance.sourceUnavailable': 'Verbrauch nicht verfügbar',
+  'nutrition.balance.stepsActiveOnly': 'Dein Energieprofil ist unvollständig: Es werden nur die geschätzten aktiven Kalorien angezeigt.',
+  'nutrition.balance.stepsDefaultWeight': 'Schätzung auf Basis eines Standardgewichts von 70 kg.',
   'nutrition.balance.connect': 'Health Connect verbinden',
   'nutrition.balance.completeProfile': 'Gib Geschlecht, Alter, Größe, Gewicht und Aktivitätslevel an, um deinen Verbrauch zu schätzen.',
   'nutrition.balance.completeProfileCta': 'Profil vervollständigen',
@@ -2158,7 +2174,6 @@ export function translateRaw(language: LanguageId, value: string) {
   const key = RAW_TEXT_KEYS[value];
   return key ? translate(language, key) : value;
 }
-
 
 
 

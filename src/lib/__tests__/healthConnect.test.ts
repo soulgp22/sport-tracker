@@ -34,6 +34,7 @@ describe('healthConnect', () => {
     await expect(service.isHealthConnectAvailable()).resolves.toBe(false);
     await expect(service.hasHealthPermissions()).resolves.toBe(false);
     await expect(service.readCaloriesBurnedToday()).resolves.toBeNull();
+    await expect(service.readStepsToday()).resolves.toBeNull();
     expect(warnSpy).toHaveBeenCalledWith('[healthConnect] getSdkStatus', expect.any(Error));
     expect(warnSpy).toHaveBeenCalledWith(
       '[healthConnect] getGrantedPermissions',
@@ -43,6 +44,7 @@ describe('healthConnect', () => {
       '[healthConnect] readCaloriesBurnedToday',
       expect.any(Error)
     );
+    expect(warnSpy).toHaveBeenCalledWith('[healthConnect] readStepsToday', expect.any(Error));
   });
 
   it('dégrade proprement quand le require du module échoue', async () => {
@@ -53,6 +55,7 @@ describe('healthConnect', () => {
     await expect(service.isHealthConnectAvailable()).resolves.toBe(false);
     await expect(service.hasHealthPermissions()).resolves.toBe(false);
     await expect(service.readCaloriesBurnedToday()).resolves.toBeNull();
+    await expect(service.readStepsToday()).resolves.toBeNull();
   });
 
   it('retourne false/null quand les appels natifs rejettent', async () => {
@@ -67,6 +70,7 @@ describe('healthConnect', () => {
     await expect(service.isHealthConnectAvailable()).resolves.toBe(false);
     await expect(service.hasHealthPermissions()).resolves.toBe(false);
     await expect(service.readCaloriesBurnedToday()).resolves.toBeNull();
+    await expect(service.readStepsToday()).resolves.toBeNull();
   });
 
   it('lit les calories quand le module répond', async () => {
@@ -94,6 +98,33 @@ describe('healthConnect', () => {
       active: 300,
       total: 2201,
     });
+  });
+
+  it('lit et additionne les pas du jour sur la plage locale utilisee pour les calories', async () => {
+    const readRecords = jest.fn().mockResolvedValue({
+      records: [{ count: 4200 }, { count: 800 }],
+    });
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      readRecords,
+    }));
+    const service = loadService();
+
+    await expect(service.readStepsToday()).resolves.toBe(5000);
+    expect(readRecords).toHaveBeenCalledTimes(1);
+    expect(readRecords).toHaveBeenCalledWith('Steps', {
+      timeRangeFilter: {
+        operator: 'between',
+        startTime: expect.any(String),
+        endTime: expect.any(String),
+      },
+    });
+    const [, options] = readRecords.mock.calls[0];
+    const start = new Date(options.timeRangeFilter.startTime);
+    expect(start.getHours()).toBe(0);
+    expect(start.getMinutes()).toBe(0);
+    expect(start.getSeconds()).toBe(0);
+    expect(start.getMilliseconds()).toBe(0);
   });
 
   it('signale indisponible quand le SDK ne rapporte pas SDK_AVAILABLE', async () => {

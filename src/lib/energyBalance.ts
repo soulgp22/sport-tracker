@@ -15,6 +15,130 @@ export interface EnergyProfile {
   activityLevel: ActivityLevel;
 }
 
+export const DEFAULT_STEP_ESTIMATION_WEIGHT_KG = 70;
+
+export const ENERGY_SOURCE_LABEL_KEYS = {
+  healthConnectCalories: 'nutrition.balance.sourceHealthConnect',
+  healthConnectSteps: 'nutrition.balance.sourceSteps',
+  profile: 'nutrition.balance.sourceEstimate',
+  unknown: 'nutrition.balance.sourceUnavailable',
+} as const;
+
+export type EnergySource = keyof typeof ENERGY_SOURCE_LABEL_KEYS;
+
+export interface StepCaloriesEstimate {
+  activeCaloriesKcal: number;
+  weightKg: number;
+  usedDefaultWeight: boolean;
+}
+
+/** Estimation pure des calories actives a partir des pas et du poids. */
+export function estimateActiveCaloriesFromSteps(
+  steps: number,
+  weightKg?: number
+): StepCaloriesEstimate {
+  const validWeight = weightKg !== undefined && Number.isFinite(weightKg) && weightKg > 0;
+  const estimationWeightKg = validWeight ? weightKg : DEFAULT_STEP_ESTIMATION_WEIGHT_KG;
+  const normalizedSteps = Number.isFinite(steps) ? Math.max(0, steps) : 0;
+  return {
+    activeCaloriesKcal: Math.round(normalizedSteps * estimationWeightKg * 0.0005),
+    weightKg: estimationWeightKg,
+    usedDefaultWeight: !validWeight,
+  };
+}
+
+export interface DailyEnergyExpenditureInput {
+  healthCalories: { active: number; total: number } | null;
+  healthSteps: number | null;
+  tdee: number | null;
+  profileComplete: boolean;
+  weightKg?: number;
+}
+
+export interface DailyEnergyExpenditure {
+  burnedKcal: number | null;
+  source: EnergySource;
+  sourceLabelKey: (typeof ENERGY_SOURCE_LABEL_KEYS)[EnergySource];
+  activeCaloriesKcal?: number;
+  activeCaloriesOnly: boolean;
+  usedDefaultWeight: boolean;
+}
+
+/**
+ * Choisit la depense du jour selon la hierarchie produit, sans dependance UI :
+ * calories Health Connect, pas Health Connect, profil, puis inconnu.
+ */
+export function resolveDailyEnergyExpenditure({
+  healthCalories,
+  healthSteps,
+  tdee,
+  profileComplete,
+  weightKg,
+}: DailyEnergyExpenditureInput): DailyEnergyExpenditure {
+  const healthCaloriesKcal = healthCalories
+    ? healthCalories.total > 0
+      ? healthCalories.total
+      : healthCalories.active
+    : 0;
+  if (healthCaloriesKcal > 0) {
+    return {
+      burnedKcal: healthCaloriesKcal,
+      source: 'healthConnectCalories',
+      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.healthConnectCalories,
+      activeCaloriesOnly: false,
+      usedDefaultWeight: false,
+    };
+  }
+
+  if (healthSteps !== null && healthSteps > 0) {
+    const estimate = estimateActiveCaloriesFromSteps(healthSteps, weightKg);
+    const canUseTdee = profileComplete && tdee !== null && tdee > 0;
+    return {
+      burnedKcal: (canUseTdee ? tdee : 0) + estimate.activeCaloriesKcal,
+      source: 'healthConnectSteps',
+      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.healthConnectSteps,
+      activeCaloriesKcal: estimate.activeCaloriesKcal,
+      activeCaloriesOnly: !canUseTdee,
+      usedDefaultWeight: estimate.usedDefaultWeight,
+    };
+  }
+
+  if (profileComplete && tdee !== null && tdee > 0) {
+    return {
+      burnedKcal: tdee,
+      source: 'profile',
+      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.profile,
+      activeCaloriesOnly: false,
+      usedDefaultWeight: false,
+    };
+  }
+
+  return {
+    burnedKcal: null,
+    source: 'unknown',
+    sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.unknown,
+    activeCaloriesOnly: false,
+    usedDefaultWeight: false,
+  };
+}
+
+export type DailyEnergyBalance =
+  | { status: 'remaining'; count: number }
+  | { status: 'over'; count: number }
+  | { status: 'unavailable' };
+
+/** Ne calcule jamais d'excedent a partir d'une depense nulle ou inconnue. */
+export function resolveDailyEnergyBalance(
+  burnedKcal: number | null,
+  consumedKcal: number
+): DailyEnergyBalance {
+  if (burnedKcal === null || burnedKcal <= 0) return { status: 'unavailable' };
+  const difference = burnedKcal - consumedKcal;
+  return difference >= 0
+    ? { status: 'remaining', count: difference }
+    : { status: 'over', count: Math.abs(difference) };
+}
+
 /**
  * Métabolisme de base selon Mifflin-St Jeor :
  * BMR = 10 × poids (kg) + 6,25 × taille (cm) − 5 × âge (ans) + s
