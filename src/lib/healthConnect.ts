@@ -32,12 +32,34 @@ function loadModule(): HealthConnectModule | null {
   }
 }
 
-async function safeCall<T>(fn: (hc: HealthConnectModule) => Promise<T>): Promise<T | null> {
+let initializationPromise: Promise<boolean> | null = null;
+
+function ensureInitialized(hc: HealthConnectModule): Promise<boolean> {
+  if (!initializationPromise) {
+    initializationPromise = hc.initialize().catch((error: unknown) => {
+      initializationPromise = null;
+      throw error;
+    });
+  }
+  return initializationPromise;
+}
+
+function warnInDev(context: string, error: unknown): void {
+  if (__DEV__) {
+    console.warn(`[healthConnect] ${context}`, error);
+  }
+}
+
+async function safeCall<T>(
+  context: string,
+  fn: (hc: HealthConnectModule) => Promise<T>
+): Promise<T | null> {
   const hc = loadModule();
   if (!hc) return null;
   try {
     return await fn(hc);
-  } catch {
+  } catch (error) {
+    warnInDev(context, error);
     return null;
   }
 }
@@ -56,7 +78,7 @@ export type HealthConnectStatus = 'available' | 'not-installed' | 'needs-update'
 export async function getHealthConnectStatus(): Promise<HealthConnectStatus> {
   const hc = loadModule();
   if (!hc) return 'unavailable';
-  const status = await safeCall((module) => module.getSdkStatus());
+  const status = await safeCall('getSdkStatus', (module) => module.getSdkStatus());
   if (status === null) return 'unavailable';
   if (status === hc.SdkAvailabilityStatus.SDK_AVAILABLE) return 'available';
   if (status === hc.SdkAvailabilityStatus.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED) {
@@ -84,7 +106,11 @@ function hasAllReadPermissions(granted: HealthPermission[] | null): boolean {
 /** true si les permissions de lecture calories/pas sont déjà accordées. */
 export async function hasHealthPermissions(): Promise<boolean> {
   const granted = await safeCall(
-    (hc) => hc.getGrantedPermissions() as Promise<HealthPermission[]>
+    'getGrantedPermissions',
+    async (hc) => {
+      await ensureInitialized(hc);
+      return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
+    }
   );
   return hasAllReadPermissions(granted);
 }
@@ -114,7 +140,7 @@ export async function requestHealthPermissionsWithStatus(): Promise<HealthPermis
   if (status !== 'available') return { status, granted: false };
   try {
     // Obligatoire avant requestPermission : sinon « client is not initialized ».
-    await hc.initialize();
+    await ensureInitialized(hc);
     const startedAt = Date.now();
     const granted = (await hc.requestPermission([...REQUIRED_PERMISSIONS])) as HealthPermission[];
     // Refus résolu quasi instantanément = la feuille de permission ne s'est
@@ -185,8 +211,8 @@ function todayTimeRange() {
 
 /** Calories brûlées aujourd'hui (actives + totales), en kcal. null si indisponible. */
 export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | null> {
-  return safeCall(async (hc) => {
-    await hc.initialize();
+  return safeCall('readCaloriesBurnedToday', async (hc) => {
+    await ensureInitialized(hc);
     const range = todayTimeRange();
     const [activeResult, totalResult] = await Promise.all([
       hc.readRecords('ActiveCaloriesBurned', range),

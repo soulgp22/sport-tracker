@@ -17,7 +17,14 @@ function loadService(): HealthConnectService {
 }
 
 describe('healthConnect', () => {
+  let warnSpy: jest.SpiedFunction<typeof console.warn>;
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+  });
+
   afterEach(() => {
+    warnSpy.mockRestore();
     jest.resetModules();
     jest.dontMock('react-native-health-connect');
   });
@@ -27,6 +34,15 @@ describe('healthConnect', () => {
     await expect(service.isHealthConnectAvailable()).resolves.toBe(false);
     await expect(service.hasHealthPermissions()).resolves.toBe(false);
     await expect(service.readCaloriesBurnedToday()).resolves.toBeNull();
+    expect(warnSpy).toHaveBeenCalledWith('[healthConnect] getSdkStatus', expect.any(Error));
+    expect(warnSpy).toHaveBeenCalledWith(
+      '[healthConnect] getGrantedPermissions',
+      expect.any(Error)
+    );
+    expect(warnSpy).toHaveBeenCalledWith(
+      '[healthConnect] readCaloriesBurnedToday',
+      expect.any(Error)
+    );
   });
 
   it('dégrade proprement quand le require du module échoue', async () => {
@@ -91,12 +107,34 @@ describe('healthConnect', () => {
 
   it('hasHealthPermissions retourne false si les permissions sont partielles', async () => {
     jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
       getGrantedPermissions: jest
         .fn()
         .mockResolvedValue([{ accessType: 'read', recordType: 'Steps' }]),
     }));
     const service = loadService();
     await expect(service.hasHealthPermissions()).resolves.toBe(false);
+  });
+
+  it('initialise le client avant de lire les permissions déjà accordées', async () => {
+    let initialized = false;
+    const initialize = jest.fn(async () => {
+      initialized = true;
+      return true;
+    });
+    const getGrantedPermissions = jest.fn(async () => {
+      if (!initialized) throw new Error('client is not initialized');
+      return ALL_GRANTED;
+    });
+    jest.doMock('react-native-health-connect', () => ({
+      initialize,
+      getGrantedPermissions,
+    }));
+
+    const service = loadService();
+    await expect(service.hasHealthPermissions()).resolves.toBe(true);
+    expect(initialize).toHaveBeenCalledTimes(1);
+    expect(getGrantedPermissions).toHaveBeenCalledTimes(1);
   });
 
   describe('getHealthConnectStatus', () => {
