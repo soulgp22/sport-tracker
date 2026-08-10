@@ -1,6 +1,4 @@
 import {
-  buildOffProductUrl,
-  fetchOffFood,
   foodIdForBarcode,
   mapOffCategoriesToAppCategory,
   mapOffProductToFood,
@@ -8,7 +6,11 @@ import {
   type OffProductResponse,
 } from '../openFoodFacts';
 
+type OffService = typeof import('../openFoodFacts');
+
 const BARCODE = '3017620422003';
+const GATEWAY_BASE = 'https://lifesporttracker.duckdns.org';
+const API_KEY = 'test-api-key';
 
 const nutellaResponse: OffProductResponse = {
   status: 1,
@@ -27,15 +29,60 @@ const nutellaResponse: OffProductResponse = {
   },
 };
 
+// `MEAL_SERVER_URL` / `MEAL_SERVER_API_KEY` sont lues à l'import du module.
+// Les tests qui dépendent de la configuration serveur rechargent le module
+// avec `process.env` contrôlé.
+const originalServerUrl = process.env.EXPO_PUBLIC_MEAL_SERVER_URL;
+const originalApiKey = process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY;
+
+function restoreEnv() {
+  if (originalServerUrl === undefined) {
+    delete process.env.EXPO_PUBLIC_MEAL_SERVER_URL;
+  } else {
+    process.env.EXPO_PUBLIC_MEAL_SERVER_URL = originalServerUrl;
+  }
+  if (originalApiKey === undefined) {
+    delete process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY;
+  } else {
+    process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY = originalApiKey;
+  }
+}
+
+/** Charge un module frais avec la configuration serveur souhaitée. */
+function loadOffService(serverUrl?: string, apiKey?: string): OffService {
+  if (serverUrl === undefined) {
+    delete process.env.EXPO_PUBLIC_MEAL_SERVER_URL;
+  } else {
+    process.env.EXPO_PUBLIC_MEAL_SERVER_URL = serverUrl;
+  }
+  if (apiKey === undefined) {
+    delete process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY;
+  } else {
+    process.env.EXPO_PUBLIC_MEAL_SERVER_API_KEY = apiKey;
+  }
+
+  jest.resetModules();
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('../openFoodFacts') as OffService;
+}
+
 describe('buildOffProductUrl / offProductPageUrl / foodIdForBarcode', () => {
-  it('construit une URL API v2 avec les champs nutriments', () => {
-    const url = buildOffProductUrl(BARCODE);
-    expect(url).toContain(`https://world.openfoodfacts.org/api/v2/product/${BARCODE}.json`);
-    expect(url).toContain('product_name');
-    expect(url).toContain('nutriments');
+  afterEach(() => {
+    restoreEnv();
+    jest.resetModules();
   });
 
-  it('construit la page produit et un id déterministe', () => {
+  it('construit l’URL de la passerelle /v1/products/<barcode>', () => {
+    const { buildOffProductUrl } = loadOffService(GATEWAY_BASE, API_KEY);
+    expect(buildOffProductUrl(BARCODE)).toBe(`${GATEWAY_BASE}/v1/products/${BARCODE}`);
+  });
+
+  it('lit la base depuis la configuration serveur (EXPO_PUBLIC_)', () => {
+    const { buildOffProductUrl } = loadOffService('https://autre.example.org', 'cle-2');
+    expect(buildOffProductUrl(BARCODE)).toBe(`https://autre.example.org/v1/products/${BARCODE}`);
+  });
+
+  it('construit la page produit publique et un id déterministe', () => {
     expect(offProductPageUrl(BARCODE)).toBe(`https://world.openfoodfacts.org/product/${BARCODE}`);
     expect(foodIdForBarcode(BARCODE)).toBe(`off_${BARCODE}`);
   });
@@ -130,11 +177,17 @@ describe('mapOffProductToFood', () => {
 });
 
 describe('fetchOffFood', () => {
+  afterEach(() => {
+    restoreEnv();
+    jest.resetModules();
+  });
+
   function mockFetch(impl: (...args: any[]) => any) {
     return jest.fn(impl) as unknown as typeof fetch;
   }
 
-  it('retourne found quand l’API répond un produit', async () => {
+  it('retourne found quand la passerelle répond un produit', async () => {
+    const { fetchOffFood } = loadOffService(GATEWAY_BASE, API_KEY);
     const fetchImpl = mockFetch(async () => ({
       ok: true,
       status: 200,
@@ -147,14 +200,20 @@ describe('fetchOffFood', () => {
     if (result.kind === 'found') {
       expect(result.food.barcode).toBe(BARCODE);
       expect(result.food.isCustom).toBe(true);
+      expect(result.food.sourceUrl).toBe(`https://world.openfoodfacts.org/product/${BARCODE}`);
     }
     expect(fetchImpl).toHaveBeenCalledWith(
-      expect.stringContaining(`/api/v2/product/${BARCODE}.json`),
-      expect.objectContaining({ signal: expect.any(AbortSignal) })
+      `${GATEWAY_BASE}/v1/products/${BARCODE}`,
+      expect.objectContaining({
+        signal: expect.any(AbortSignal),
+        headers: { Authorization: `Bearer ${API_KEY}` },
+      })
     );
   });
 
   it('retourne not-found sur status 0 ou HTTP 404', async () => {
+    const { fetchOffFood } = loadOffService(GATEWAY_BASE, API_KEY);
+
     const statusZero = mockFetch(async () => ({
       ok: true,
       status: 200,
@@ -166,14 +225,38 @@ describe('fetchOffFood', () => {
     expect((await fetchOffFood(BARCODE, { fetchImpl: http404 })).kind).toBe('not-found');
   });
 
-  it('retourne error sur HTTP 500, réseau KO et timeout', async () => {
-    const http500 = mockFetch(async () => ({ ok: false, status: 500, json: async () => ({}) }));
-    expect((await fetchOffFood(BARCODE, { fetchImpl: http500 })).kind).toBe('error');
+  it('retourne server-not-configured quand l’URL serveur est vide (fetch jamais appelé)', async () => {
+    const { fetchOffFood } = loadOffService(undefined, API_KEY);
+    const fetchImpl = mockFetch(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => nutellaResponse,
+    }));
+
+    const result = await fetchOffFood(BARCODE, { fetchImpl });
+
+    expect(result).toEqual({ kind: 'server-not-configured' });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it('retourne unavailable sur HTTP 502 (OpenFoodFacts injoignable)', async () => {
+    const { fetchOffFood } = loadOffService(GATEWAY_BASE, API_KEY);
+    const upstreamDown = mockFetch(async () => ({
+      ok: false,
+      status: 502,
+      json: async () => ({ error: { code: 'upstream_unavailable', message: '…' } }),
+    }));
+
+    expect((await fetchOffFood(BARCODE, { fetchImpl: upstreamDown })).kind).toBe('unavailable');
+  });
+
+  it('retourne unavailable sur réseau KO, timeout et autres statuts HTTP', async () => {
+    const { fetchOffFood } = loadOffService(GATEWAY_BASE, API_KEY);
 
     const offline = mockFetch(async () => {
       throw new TypeError('Network request failed');
     });
-    expect((await fetchOffFood(BARCODE, { fetchImpl: offline })).kind).toBe('error');
+    expect((await fetchOffFood(BARCODE, { fetchImpl: offline })).kind).toBe('unavailable');
 
     const hanging = mockFetch(
       (_url: unknown, init?: { signal?: AbortSignal }) =>
@@ -183,6 +266,17 @@ describe('fetchOffFood', () => {
           );
         })
     );
-    expect((await fetchOffFood(BARCODE, { fetchImpl: hanging, timeoutMs: 20 })).kind).toBe('error');
+    expect((await fetchOffFood(BARCODE, { fetchImpl: hanging, timeoutMs: 20 })).kind).toBe(
+      'unavailable'
+    );
+
+    for (const status of [500, 401]) {
+      const httpError = mockFetch(async () => ({
+        ok: false,
+        status,
+        json: async () => ({}),
+      }));
+      expect((await fetchOffFood(BARCODE, { fetchImpl: httpError })).kind).toBe('unavailable');
+    }
   });
 });

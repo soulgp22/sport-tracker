@@ -19,7 +19,7 @@ capacité réutilisable par un autre client (web, autre app).
 | Capacité | Aujourd'hui | Cible |
 |---|---|---|
 | Estimation de repas par photo | ✅ API serveur | inchangé |
-| Scan de code-barres | ❌ appel direct OpenFoodFacts depuis l'app | API serveur |
+| Scan de code-barres | ✅ API serveur (passerelle `/v1/products`) | inchangé |
 | Catalogue exercices / aliments | ❌ téléchargement de packs GitHub | API serveur à la demande |
 
 ---
@@ -73,19 +73,29 @@ if (!useAiTrainingOptInStore.getState().aiTrainingOptIn) return;
 
 ---
 
-## 2. OpenFoodFacts — scan de code-barres
+## 2. Scan de code-barres — passerelle serveur (proxy OpenFoodFacts)
 
 **Client :** `src/lib/openFoodFacts.ts`
-**Base :** `https://world.openfoodfacts.org`
-**Authentification :** aucune (API publique)
+**Base :** variable d'environnement `EXPO_PUBLIC_MEAL_SERVER_URL` (passerelle,
+ex. `https://lifesporttracker.duckdns.org`)
+**Authentification :** en-tête `Authorization: Bearer <EXPO_PUBLIC_MEAL_SERVER_API_KEY>`
 
-`GET /api/v2/product/<barcode>` → fiche produit.
+`GET /v1/products/<barcode>` → proxy **avec cache** vers OpenFoodFacts. Réponse
+volontairement transparente : même format que l'API v2 avec les mêmes champs
+filtrés — `{ "status": 1, "product": { … } }`, ou `{ "status": 0 }` si le produit
+est introuvable. `mapOffProductToFood` / `CATEGORY_RULES` restent la source de
+vérité de la conversion.
 
-> **À migrer.** L'app appelle aujourd'hui OpenFoodFacts directement. La cible est
-> un point d'entrée sur le serveur, sur le modèle de l'estimation photo : l'app
-> envoie le code-barres, le serveur répond avec le produit normalisé. Bénéfices :
-> cache partagé, normalisation centralisée, source substituable sans republier
-> l'app, et gestion du hors-ligne côté serveur.
+Erreurs : `{ "error": { "code", "message" } }` — `400 invalid_barcode`,
+`401 unauthorized`, `502 upstream_unavailable` (OpenFoodFacts injoignable).
+
+L'app distingue 4 cas : trouvé (`found`), introuvable (`not-found`, status 0 ou
+404), serveur non configuré (`server-not-configured`, URL vide), indisponible
+(`unavailable`, réseau/timeout/502). Aucune valeur inventée en cas
+d'indisponibilité — message explicite.
+
+La page publique `offProductPageUrl` reste sur `https://world.openfoodfacts.org` :
+c'est un lien affiché à l'utilisateur, pas un appel d'API.
 
 ---
 

@@ -61,6 +61,7 @@ est une régression déguisée.
 | Health Connect | `src/lib/__tests__/healthConnect.test.ts` | `initialize()` avant lecture des permissions |
 | Bilan énergétique | `src/lib/__tests__/energyBalance.test.ts` | conversion pas → kcal, hiérarchie des 4 sources |
 | Capacité photo | `src/lib/__tests__/mealPhotoCapability.test.ts` | garde-fou quand la config serveur manque |
+| Scan code-barres | `src/lib/__tests__/openFoodFacts.test.ts` | passerelle `/v1/products`, les 4 cas : trouvé, introuvable, serveur non configuré, injoignable |
 | Notifications | `src/lib/__tests__/performanceNotifications.test.ts` | déterminisme (`now` injecté) |
 | i18n | test de parité | les 4 langues (fr, en, es, de) restent complètes |
 

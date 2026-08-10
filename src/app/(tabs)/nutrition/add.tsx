@@ -222,6 +222,16 @@ export default function AddMealScreen() {
         return;
       }
 
+      if (result.kind === 'server-not-configured') {
+        appAlert(
+          t('nutrition.scan.serverNotConfiguredTitle'),
+          t('nutrition.scan.serverNotConfiguredMessage')
+        );
+        return;
+      }
+
+      // unavailable : réseau KO, timeout ou passerelle injoignable.
+      // Aucun produit inventé : message explicite, rien d'autre.
       appAlert(t('nutrition.scan.errorTitle'), t('nutrition.scan.errorMessage'));
     } finally {
       setScanLoading(false);

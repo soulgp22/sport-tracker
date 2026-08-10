@@ -1,14 +1,20 @@
 import type { Food } from '../types';
+import { MEAL_SERVER_API_KEY, MEAL_SERVER_URL } from './mealPhotoApi';
 
 /**
- * Open Food Facts (https://world.openfoodfacts.org) — données sous licence ODbL.
+ * Scan de code-barres via la passerelle serveur
+ * (GET {MEAL_SERVER_URL}/v1/products/<barcode>), proxy avec cache vers
+ * Open Food Facts. Le format de réponse est identique à l'API v2
+ * (mêmes champs filtrés) : `{ "status": 1, "product": { … } }` ou
+ * `{ "status": 0 }` si introuvable — `mapOffProductToFood` reste inchangé.
+ *
  * Attribution obligatoire : « Source : Open Food Facts » affichée dans l'UI
- * (modale de scan) et sourceUrl renseignée sur chaque aliment créé.
+ * (modale de scan) et sourceUrl renseignée sur chaque aliment créé. La page
+ * publique (`offProductPageUrl`) pointe toujours vers world.openfoodfacts.org.
  */
 
-const API_BASE = 'https://world.openfoodfacts.org';
-const PRODUCT_FIELDS =
-  'product_name,brands,categories_tags,serving_size,nutriments.energy-kcal_100g,nutriments.energy-kj_100g,nutriments.proteins_100g,nutriments.carbohydrates_100g,nutriments.fat_100g';
+/** Site public Open Food Facts — lien affiché à l'utilisateur, pas un appel d'API. */
+const OFF_PUBLIC_BASE = 'https://world.openfoodfacts.org';
 
 const DEFAULT_TIMEOUT_MS = 8000;
 
@@ -37,14 +43,16 @@ export interface OffProductResponse {
 export type OffLookupResult =
   | { kind: 'found'; food: Food }
   | { kind: 'not-found' }
-  | { kind: 'error' };
+  | { kind: 'server-not-configured' }
+  | { kind: 'unavailable' };
 
+/** Construit l'URL passerelle du produit (proxy OpenFoodFacts avec cache). */
 export function buildOffProductUrl(barcode: string) {
-  return `${API_BASE}/api/v2/product/${encodeURIComponent(barcode)}.json?fields=${PRODUCT_FIELDS}`;
+  return `${MEAL_SERVER_URL}/v1/products/${encodeURIComponent(barcode)}`;
 }
 
 export function offProductPageUrl(barcode: string) {
-  return `${API_BASE}/product/${encodeURIComponent(barcode)}`;
+  return `${OFF_PUBLIC_BASE}/product/${encodeURIComponent(barcode)}`;
 }
 
 export function foodIdForBarcode(barcode: string) {
@@ -125,30 +133,49 @@ export function mapOffProductToFood(barcode: string, response: OffProductRespons
   };
 }
 
+function warnInDev(context: string, error: unknown): void {
+  if (__DEV__) {
+    console.warn(`[openFoodFacts] ${context}`, error);
+  }
+}
+
 /**
- * Récupère un produit OFF par code-barres. Ne throw jamais : les erreurs
- * réseau/offline/timeout ressortent en `{ kind: 'error' }`.
+ * Récupère un produit par code-barres via la passerelle serveur. Ne throw jamais.
+ * Résultats possibles :
+ * - `found` : produit trouvé et converti ;
+ * - `not-found` : `{ "status": 0 }` ou HTTP 404 ;
+ * - `server-not-configured` : `MEAL_SERVER_URL` vide — aucun appel réseau ;
+ * - `unavailable` : réseau KO, timeout, HTTP 502 (ou tout statut non-OK).
+ *
+ * En cas d'indisponibilité, aucun produit n'est inventé : l'appelant affiche un
+ * message explicite.
  */
 export async function fetchOffFood(
   barcode: string,
   options: { fetchImpl?: typeof fetch; timeoutMs?: number } = {}
 ): Promise<OffLookupResult> {
+  if (!MEAL_SERVER_URL) return { kind: 'server-not-configured' };
+
   const fetchImpl = options.fetchImpl ?? fetch;
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetchImpl(buildOffProductUrl(barcode), { signal: controller.signal });
+    const response = await fetchImpl(buildOffProductUrl(barcode), {
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${MEAL_SERVER_API_KEY}` },
+    });
 
     if (response.status === 404) return { kind: 'not-found' };
-    if (!response.ok) return { kind: 'error' };
+    if (!response.ok) return { kind: 'unavailable' };
 
     const json = (await response.json()) as OffProductResponse;
     const food = mapOffProductToFood(barcode, json);
     return food ? { kind: 'found', food } : { kind: 'not-found' };
-  } catch {
-    return { kind: 'error' };
+  } catch (error) {
+    warnInDev('produit injoignable (réseau, timeout ou réponse invalide)', error);
+    return { kind: 'unavailable' };
   } finally {
     clearTimeout(timer);
   }
