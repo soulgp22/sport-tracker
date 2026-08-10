@@ -104,11 +104,10 @@ c'est un lien affiché à l'utilisateur, pas un appel d'API.
 **Client :** `src/store/communityStore.ts`
 **Base :** `https://raw.githubusercontent.com/soulgp22/sport-tracker/main/`
 
-Manifeste + packs de programmes, aliments et exercices, téléchargés à la demande.
-
-> **À revoir.** Le téléchargement est aujourd'hui proposé pendant l'onboarding
-> (« Installer ma sélection » / « Commencer sans téléchargement »). La cible est
-> une récupération **à la demande** via API, sans étape d'installation initiale.
+Manifeste + packs de programmes, aliments et exercices, téléchargés à la demande
+depuis l'écran « Communauté ». L'étape de téléchargement de l'onboarding a été
+retirée ; la cible reste une récupération **à la demande** via API, sans étape
+d'installation initiale.
 
 ⚠️ **Piège LFS** : les fichiers suivis par Git LFS renvoient un **pointeur de
 130 octets** sur `raw.githubusercontent.com`, pas le fichier. Les médias
