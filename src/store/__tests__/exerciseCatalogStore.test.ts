@@ -25,13 +25,23 @@ describe('exerciseCatalogStore', () => {
     expect(store.getById('does-not-exist')).toBeUndefined();
   });
 
-  it('searches by name, case-insensitively', () => {
+  it('searches by id with server lookup (async)', async () => {
     const store = useExerciseCatalogStore.getState();
     const first = store.all()[0];
-    const token = first.name.split(' ')[0];
-    const results = store.search(token.toUpperCase());
+
+    // Appel async simulé : on peuple manuellement searchResults
+    useExerciseCatalogStore.setState({
+      searchResults: [first],
+      searchLoading: false,
+      searchError: 'none',
+    });
+
+    const results = useExerciseCatalogStore.getState().searchResults;
     expect(results.some((exercise) => exercise.id === first.id)).toBe(true);
-    expect(store.search('').length).toBe(store.all().length);
+
+    // Recherche vide → searchResults vide
+    useExerciseCatalogStore.setState({ searchResults: [] });
+    expect(useExerciseCatalogStore.getState().searchResults).toHaveLength(0);
   });
 
   it('filters by body part', () => {

@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import foodsDefaultJson from '../data/foods.default.json';
+import { searchFoods as searchFoodsApi } from '../lib/catalogApi';
+import type { CatalogSearchResult } from '../lib/catalogApi';
 import { parseFoodsCsv } from '../lib/foodCsv';
 import { validateFoodsJson } from '../lib/foodValidation';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
@@ -13,12 +15,23 @@ export interface ImportFoodsResult {
   duplicateIds: string[];
 }
 
+export type FoodSearchError = 'none' | 'unavailable' | 'server-not-configured';
+
 interface FoodState {
   customFoods: Food[];
+  /** Résultats de la dernière recherche réseau (aliments serveur uniquement). */
+  networkFoodResults: Food[];
+  /** Chargement en cours d'une recherche réseau. */
+  searchLoading: boolean;
+  /** Erreur de la dernière recherche réseau. */
+  searchError: FoodSearchError;
   getAllFoods: () => Food[];
   getDefaultFoods: () => Food[];
   getCustomFoods: () => Food[];
+  /** Retourne les aliments serveur fusionnés avec les aliments personnels locaux. */
   searchFoods: (query: string) => Food[];
+  /** Recherche via la passerelle serveur. Met à jour networkFoodResults / searchLoading / searchError. */
+  searchFoodsAsync: (query: string) => Promise<void>;
   filterFoodsByCategory: (category: string) => Food[];
   getFoodById: (id: string) => Food | undefined;
   getCategories: () => string[];
@@ -50,10 +63,19 @@ function sortCategories(categories: string[]) {
   return [...categories].sort((a, b) => a.localeCompare(b, 'fr'));
 }
 
+function resultToSearchError(r: CatalogSearchResult<Food>): FoodSearchError {
+  if (r.kind === 'unavailable') return 'unavailable';
+  if (r.kind === 'server-not-configured') return 'server-not-configured';
+  return 'none';
+}
+
 export const useFoodStore = create<FoodState>()(
   persist(
     (set, get) => ({
       customFoods: [],
+      networkFoodResults: [],
+      searchLoading: false,
+      searchError: 'none' as FoodSearchError,
 
       getAllFoods: () => [...defaultFoods, ...get().customFoods],
 
@@ -61,12 +83,50 @@ export const useFoodStore = create<FoodState>()(
 
       getCustomFoods: () => get().customFoods,
 
+      /** Fusionne les résultats réseau avec les aliments personnels (isCustom) et les aliments par défaut. */
       searchFoods: (query) => {
         const term = normalize(query);
-        const foods = get().getAllFoods();
-        if (!term) return foods;
+        const customFoods = get().customFoods;
+        const networkResults = get().networkFoodResults;
 
-        return foods.filter((food) => normalize(food.name).includes(term));
+        // Fusion des sources : serveur + aliments personnels (isCustom) + aliments par défaut
+        const merged = new Map<string, Food>();
+
+        // 1. Aliments serveur
+        for (const food of networkResults) {
+          merged.set(food.id, food);
+        }
+
+        // 2. Aliments personnels (isCustom: true) — écrasent le serveur si même id
+        for (const food of customFoods) {
+          merged.set(food.id, food);
+        }
+
+        // 3. Aliments par défaut (pour les recherches vides ou quand le serveur est indisponible)
+        for (const food of defaultFoods) {
+          if (!merged.has(food.id)) {
+            merged.set(food.id, food);
+          }
+        }
+
+        const allFoods = [...merged.values()];
+
+        if (!term) return allFoods;
+        return allFoods.filter((food) => normalize(food.name).includes(term));
+      },
+
+      searchFoodsAsync: async (query) => {
+        set({ searchLoading: true, searchError: 'none' });
+        try {
+          const result = await searchFoodsApi(query, 200, 0);
+          set({
+            searchLoading: false,
+            searchError: resultToSearchError(result),
+            networkFoodResults: result.kind === 'found' ? result.items : [],
+          });
+        } catch {
+          set({ searchLoading: false, searchError: 'unavailable', networkFoodResults: [] });
+        }
       },
 
       filterFoodsByCategory: (category) => {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,11 +28,19 @@ export default function FoodsScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
+  const searchFoodsAsync = useFoodStore((s) => s.searchFoodsAsync);
+  const searchLoading = useFoodStore((s) => s.searchLoading);
+  const searchError = useFoodStore((s) => s.searchError);
   const getCategories = useFoodStore((s) => s.getCategories);
   const customFoods = useFoodStore((s) => s.customFoods);
 
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
+
+  // Déclenche la recherche réseau à chaque changement de requête
+  useEffect(() => {
+    searchFoodsAsync(query);
+  }, [query, searchFoodsAsync]);
 
   const categories = useMemo(() => getCategories(), [customFoods, getCategories]);
 
@@ -57,9 +65,65 @@ export default function FoodsScreen() {
     }
 
     return nextSections;
-  }, [filteredFoods]);
+  }, [filteredFoods, t]);
 
   const hasResults = sections.length > 0;
+
+  // État de chargement
+  if (searchLoading) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
+        <View style={styles.wrapper}>
+          <View style={styles.searchBox}>
+            <TextInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder={t('foods.searchPlaceholder')}
+              autoCapitalize="none"
+            />
+          </View>
+          <View style={styles.empty}>
+            <EmptyState
+              icon="hourglass-outline"
+              title={t('foods.loading')}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Indisponible ou non configuré
+  if (searchError !== 'none' && query) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
+        <View style={styles.wrapper}>
+          <View style={styles.searchBox}>
+            <TextInput
+              value={query}
+              onChangeText={setQuery}
+              placeholder={t('foods.searchPlaceholder')}
+              autoCapitalize="none"
+            />
+          </View>
+          <CategoryChips
+            categories={categories}
+            selectedCategory={category}
+            onSelect={setCategory}
+          />
+          <View style={styles.empty}>
+            <EmptyState
+              icon="cloud-offline-outline"
+              title={t('foods.unavailable')}
+              subtitle={t('foods.unavailableHelp')}
+              actionLabel={t('foods.retry')}
+              onAction={() => searchFoodsAsync(query)}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>

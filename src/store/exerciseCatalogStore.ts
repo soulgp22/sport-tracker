@@ -3,10 +3,9 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import {
   getExerciseDisplayName,
-  getExerciseSearchAliases,
-  translateEquipment,
-  translateMuscle,
 } from '../constants/exerciseI18n';
+import { searchExercises } from '../lib/catalogApi';
+import type { CatalogSearchResult } from '../lib/catalogApi';
 import coreCatalogJson from '../data/exercises.core.json';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 import type { CatalogExercise } from '../types';
@@ -38,16 +37,26 @@ function mergeCatalog(downloaded: CatalogExercise[]) {
 
 rebuildIndexes(coreCatalog);
 
+export type SearchError = 'none' | 'unavailable' | 'server-not-configured';
+
 interface ExerciseCatalogState {
   exercises: CatalogExercise[];
   downloadedExercises: CatalogExercise[];
   installedPackIds: string[];
   bodyParts: string[];
   equipments: string[];
+  /** Résultats de la dernière recherche réseau. */
+  searchResults: CatalogExercise[];
+  /** Chargement en cours d'une recherche réseau. */
+  searchLoading: boolean;
+  /** Erreur de la dernière recherche réseau. */
+  searchError: SearchError;
   all: () => CatalogExercise[];
   getById: (id: string) => CatalogExercise | undefined;
   findByName: (name: string) => CatalogExercise | undefined;
-  search: (query: string) => CatalogExercise[];
+  /** Recherche via la passerelle serveur. Met à jour searchResults / searchLoading / searchError. */
+  searchAsync: (query: string) => Promise<void>;
+  /** Filtrage local par groupe musculaire sur le catalogue complet. */
   filterByMuscle: (bodyPart: string) => CatalogExercise[];
   installPack: (packId: string, exercises: CatalogExercise[]) => number;
 }
@@ -59,6 +68,12 @@ function dimensions(exercises: CatalogExercise[]) {
   };
 }
 
+function resultToSearchError(r: CatalogSearchResult<CatalogExercise>): SearchError {
+  if (r.kind === 'unavailable') return 'unavailable';
+  if (r.kind === 'server-not-configured') return 'server-not-configured';
+  return 'none';
+}
+
 export const useExerciseCatalogStore = create<ExerciseCatalogState>()(
   persist(
     (set, get) => ({
@@ -66,21 +81,24 @@ export const useExerciseCatalogStore = create<ExerciseCatalogState>()(
       downloadedExercises: [],
       installedPackIds: [],
       ...dimensions(coreCatalog),
+      searchResults: [],
+      searchLoading: false,
+      searchError: 'none' as SearchError,
       all: () => get().exercises,
       getById: (id) => byId.get(id),
       findByName: (name) => byName.get(normalize(name)),
-      search: (query) => {
-        const term = normalize(query);
-        if (!term) return get().exercises;
-        return get().exercises.filter((exercise) => normalize([
-          exercise.name, exercise.nameFr, exercise.bodyPart, exercise.target, exercise.equipment,
-          ...exercise.secondaryMuscles, ...getExerciseSearchAliases(exercise.id),
-          ...(['fr', 'en', 'es', 'de'] as const).flatMap((language) => [
-            translateMuscle(exercise.bodyPart, language), translateMuscle(exercise.target, language),
-            translateEquipment(exercise.equipment, language),
-            ...exercise.secondaryMuscles.map((muscle) => translateMuscle(muscle, language)),
-          ]),
-        ].filter(Boolean).join(' ')).includes(term));
+      searchAsync: async (query) => {
+        set({ searchLoading: true, searchError: 'none' });
+        try {
+          const result = await searchExercises(query, 200, 0);
+          set({
+            searchLoading: false,
+            searchError: resultToSearchError(result),
+            searchResults: result.kind === 'found' ? result.items : [],
+          });
+        } catch {
+          set({ searchLoading: false, searchError: 'unavailable', searchResults: [] });
+        }
       },
       filterByMuscle: (bodyPart) => bodyPart
         ? get().exercises.filter((exercise) => exercise.bodyPart === bodyPart)

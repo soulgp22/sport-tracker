@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -92,32 +92,86 @@ export function ExerciseCatalogList({
   const c = useColors();
   const { language, t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
-  const searchCatalog = useExerciseCatalogStore((state) => state.search);
+  const searchAsync = useExerciseCatalogStore((state) => state.searchAsync);
+  const searchResults = useExerciseCatalogStore((state) => state.searchResults);
+  const searchLoading = useExerciseCatalogStore((state) => state.searchLoading);
+  const searchError = useExerciseCatalogStore((state) => state.searchError);
   const bodyParts = useExerciseCatalogStore((state) => state.bodyParts);
+  const allExercises = useExerciseCatalogStore((state) => state.exercises);
   const [query, setQuery] = useState('');
   const [bodyPart, setBodyPart] = useState('');
   const installedPackIds = useExerciseCatalogStore((state) => state.installedPackIds);
 
+  // Déclenche la recherche réseau à chaque changement de requête
+  useEffect(() => {
+    searchAsync(query);
+  }, [query, searchAsync]);
+
   const exercises = useMemo(() => {
-    const searched = searchCatalog(query);
+    // Sans query : tout le catalogue local (navigable hors ligne),
+    // avec query : résultats du serveur
+    const source = query ? searchResults : allExercises;
     const filtered = bodyPart
-      ? searched.filter((exercise) => exercise.bodyPart === bodyPart)
-      : searched;
+      ? source.filter((exercise) => exercise.bodyPart === bodyPart)
+      : source;
     if (!targetEquipmentProfileId || targetEquipmentProfileId === 'full-gym') return filtered;
     return [...filtered].sort(
       (a, b) =>
         Number(isExerciseCompatibleWithProfile(b, targetEquipmentProfileId)) -
         Number(isExerciseCompatibleWithProfile(a, targetEquipmentProfileId))
     );
-  }, [bodyPart, query, searchCatalog, targetEquipmentProfileId]);
+  }, [bodyPart, query, searchResults, targetEquipmentProfileId, allExercises]);
 
-  return (
-    <View style={styles.wrapper}>
-      {onBrowseDownloads ? <TouchableOpacity style={styles.downloadBanner} onPress={onBrowseDownloads} activeOpacity={0.78}>
+  // État de chargement
+  if (searchLoading) {
+    return (
+      <View style={styles.wrapper}>
+        {renderDownloadBanner()}
+        {renderSearchBox()}
+        <View style={styles.empty}>
+          <EmptyState
+            icon="hourglass-outline"
+            title={t('exercise.loading')}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  // Indisponible ou non configuré
+  if (searchError !== 'none' && query) {
+    const isNotConfigured = searchError === 'server-not-configured';
+    return (
+      <View style={styles.wrapper}>
+        {renderDownloadBanner()}
+        {renderSearchBox()}
+        {renderMuscleChips()}
+        <View style={styles.empty}>
+          <EmptyState
+            icon="cloud-offline-outline"
+            title={isNotConfigured ? t('exercise.unavailable') : t('exercise.unavailable')}
+            subtitle={t('exercise.unavailableHelp')}
+            actionLabel={t('exercise.retry')}
+            onAction={() => searchAsync(query)}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  function renderDownloadBanner() {
+    if (!onBrowseDownloads) return null;
+    return (
+      <TouchableOpacity style={styles.downloadBanner} onPress={onBrowseDownloads} activeOpacity={0.78}>
         <View style={styles.downloadIcon}><Ionicons name="cloud-download-outline" size={20} color={c.primary} /></View>
-        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? t('exercise.catalogDownloaded') : t('exercise.moreExercises')}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? t('exercise.catalogDownloadedMeta', { count: exercises.length }) : t('exercise.catalogDownloadMeta')}</Text></View>
+        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? t('exercise.catalogDownloaded') : t('exercise.moreExercises')}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? t('exercise.catalogDownloadedMeta', { count: allExercises.length }) : t('exercise.catalogDownloadMeta')}</Text></View>
         <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
-      </TouchableOpacity> : null}
+      </TouchableOpacity>
+    );
+  }
+
+  function renderSearchBox() {
+    return (
       <View style={styles.searchBox}>
         <TextInput
           value={query}
@@ -126,7 +180,11 @@ export function ExerciseCatalogList({
           autoCapitalize="none"
         />
       </View>
+    );
+  }
 
+  function renderMuscleChips() {
+    return (
       <FlatList
         horizontal
         data={['', ...bodyParts]}
@@ -148,6 +206,14 @@ export function ExerciseCatalogList({
           );
         }}
       />
+    );
+  }
+
+  return (
+    <View style={styles.wrapper}>
+      {renderDownloadBanner()}
+      {renderSearchBox()}
+      {renderMuscleChips()}
 
       <FlatList
         data={exercises}
