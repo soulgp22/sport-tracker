@@ -121,6 +121,26 @@ introuvable.
 
 ---
 
+## Choix « maison » assumés — et pourquoi (règle 5 bis)
+
+Tout code maison remplaçant une solution existante doit être justifié. Voici
+l'inventaire à jour.
+
+| Code maison | Alternative écartée | Raison |
+|---|---|---|
+| Cache HTTP disque de `lst_catalog.py` (TTL, écriture atomique) | `nginx proxy_cache`, module `cache-handler` de Caddy | Caddy n'embarque **pas** de cache dans son binaire standard : il faudrait le recompiler avec `xcaddy`. Ajouter nginx signifierait un second serveur web devant celui qui tourne déjà. ~60 lignes de stdlib contre un service supplémentaire à maintenir. |
+| Recherche par sous-chaîne normalisée | `sqlite3` + **FTS5** (dans la stdlib Python) | FTS5 est objectivement supérieur — classement par pertinence, tolérance orthographique. Pour 873 entrées et une réponse sous la milliseconde, le filtre linéaire est proportionné. **À basculer sur FTS5** dès qu'on voudra du classement par pertinence, plutôt que de complexifier le filtre. |
+| `estimateActiveCaloriesFromSteps` | — | Règle métier, pas une capacité technique. Aucune bibliothèque ne connaît le rapport pas/poids voulu. |
+| `ensureInitialized` mémoïsé | — | Motif de trois lignes. Une dépendance serait disproportionnée. |
+| Plugins `withHealthConnect` / `withCleanDomBundle` | — | Aucune alternative : seuls les config plugins Expo survivent au `prebuild`. |
+
+**Leçon.** Ces choix se défendent, mais aucun n'avait été **justifié au moment
+de l'écrire** — ils venaient du mimétisme avec le code existant. Chercher
+l'existant AVANT, et écrire la justification dans le commit, fait partie du
+travail.
+
+---
+
 ## Outillage de vérification
 
 ```bash

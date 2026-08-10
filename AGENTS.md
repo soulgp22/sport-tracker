@@ -71,6 +71,37 @@ Before implementing an important capability, check:
 * Can it work without the current UI?
 * Should it expose an API, SDK or contract?
 
+### 5 bis. On ne réinvente pas la roue
+
+**Avant d'écrire du code maison pour une capacité technique, chercher ce qui
+existe déjà.** Dans cet ordre de priorité :
+
+1. **Déjà dans le projet** — un module, un motif, une fonction (voir
+   [reusable_functions.md](reusable_functions.md)) ;
+2. **API native** du langage, du framework ou de la plateforme (stdlib Python,
+   API Expo/React Native, primitives Android) ;
+3. **Brique d'infrastructure existante** — le serveur web, le SGBD ou l'outil
+   déjà déployé sait peut-être le faire nativement (cache, compression,
+   limitation de débit, TLS, journalisation) ;
+4. **Bibliothèque open source établie**, maintenue et adaptée à l'échelle du
+   besoin ;
+5. **Code maison** — en dernier recours seulement.
+
+**Proportionnalité.** L'inverse est vrai aussi : ne pas ajouter une dépendance
+lourde pour un besoin trivial. Trente lignes de stdlib valent mieux qu'un
+framework entier pour un seul point d'entrée. La question n'est pas « existe-t-il
+une bibliothèque ? » mais « qu'est-ce qui est le plus fiable et le plus simple
+à cette échelle ? ».
+
+**Obligation de justifier.** Tout code maison remplaçant une solution existante
+doit dire, dans le message de commit, **quelle alternative a été écartée et
+pourquoi**. « Je n'y ai pas pensé » n'est pas une justification ; « le module de
+cache de Caddy exige de recompiler le binaire, 30 lignes de stdlib suffisent »
+en est une.
+
+Un skill `reuse-first` est disponible dans l'environnement pour cadrer cette
+décision avant d'écrire.
+
 ### 6. Bugs
 
 * Reproduce the bug before fixing it when possible.
