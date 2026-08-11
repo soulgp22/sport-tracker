@@ -61,7 +61,7 @@ export default function FoodsLayout() {
                   hitSlop={8}
                   activeOpacity={0.7}
                   accessibilityRole="button"
-                  accessibilityLabel="Bases d’aliments communautaires">
+                  accessibilityLabel={t('foods.accessibility.communityFoods')}>
                   <Ionicons name="cloud-download-outline" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>
@@ -71,8 +71,19 @@ export default function FoodsLayout() {
                   hitSlop={8}
                   activeOpacity={0.7}
                   accessibilityRole="button"
-                  accessibilityLabel="Paramètres des aliments">
+                  accessibilityLabel={t('foods.accessibility.settings')}>
                   <Ionicons name="settings-outline" size={22} color={c.primary} />
+                </TouchableOpacity>
+              </Link>
+              <Link href="/(tabs)/foods/new" asChild>
+                <TouchableOpacity
+                  style={styles.settingsButton}
+                  hitSlop={8}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                  accessibilityLabel={t('foods.accessibility.addFood')}
+                  accessibilityHint={t('foods.newFood')}>
+                  <Ionicons name="add" size={22} color={c.primary} />
                 </TouchableOpacity>
               </Link>
             </View>

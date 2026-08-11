@@ -17,14 +17,21 @@ export interface EnergyProfile {
 
 export const DEFAULT_STEP_ESTIMATION_WEIGHT_KG = 70;
 
-export const ENERGY_SOURCE_LABEL_KEYS = {
-  healthConnectCalories: 'nutrition.balance.sourceHealthConnect',
-  healthConnectSteps: 'nutrition.balance.sourceSteps',
-  profile: 'nutrition.balance.sourceEstimate',
+export const BASAL_SOURCE_LABEL_KEYS = {
+  profile: 'nutrition.balance.basalProfile',
   unknown: 'nutrition.balance.sourceUnavailable',
 } as const;
 
-export type EnergySource = keyof typeof ENERGY_SOURCE_LABEL_KEYS;
+export const ACTIVITY_SOURCE_LABEL_KEYS = {
+  healthConnectActive: 'nutrition.balance.activityHealthConnectActive',
+  healthConnectDerived: 'nutrition.balance.activityHealthConnectDerived',
+  steps: 'nutrition.balance.activitySteps',
+  habitualEstimate: 'nutrition.balance.activityHabitualEstimate',
+  unknown: 'nutrition.balance.sourceUnavailable',
+} as const;
+
+export type BasalSource = keyof typeof BASAL_SOURCE_LABEL_KEYS;
+export type ActivitySource = keyof typeof ACTIVITY_SOURCE_LABEL_KEYS;
 
 export interface StepCaloriesEstimate {
   activeCaloriesKcal: number;
@@ -47,78 +54,98 @@ export function estimateActiveCaloriesFromSteps(
   };
 }
 
-export interface DailyEnergyExpenditureInput {
-  healthCalories: { active: number; total: number } | null;
-  healthSteps: number | null;
-  tdee: number | null;
-  profileComplete: boolean;
-  weightKg?: number;
-}
-
 export interface DailyEnergyExpenditure {
-  burnedKcal: number | null;
-  source: EnergySource;
-  sourceLabelKey: (typeof ENERGY_SOURCE_LABEL_KEYS)[EnergySource];
-  activeCaloriesKcal?: number;
-  activeCaloriesOnly: boolean;
+  basalKcal: number | null;
+  activityKcal: number | null;
+  totalKcal: number | null;
+  basalSource: BasalSource;
+  activitySource: ActivitySource;
+  basalSourceLabelKey: (typeof BASAL_SOURCE_LABEL_KEYS)[BasalSource];
+  activitySourceLabelKey: (typeof ACTIVITY_SOURCE_LABEL_KEYS)[ActivitySource];
+  /** true when activityKcal does not come from any real measurement */
+  activityIsEstimated: boolean;
   usedDefaultWeight: boolean;
 }
 
 /**
- * Choisit la depense du jour selon la hierarchie produit, sans dependance UI :
- * calories Health Connect, pas Health Connect, profil, puis inconnu.
+ * Decomposes daily energy expenditure into basal metabolism (BMR) and
+ * activity calories, following a strict source hierarchy:
+ *
+ * Activity source, in priority order:
+ * 1. healthCalories.active > 0          → healthConnectActive (measured)
+ * 2. healthCalories.total > 0 & BMR     → healthConnectDerived (total - BMR)
+ * 3. healthSteps > 0                    → steps (estimated from steps)
+ * 4. BMR known, no HC data              → habitualEstimate (BMR × (factor - 1))
+ * 5. otherwise                          → unknown (null)
+ *
+ * totalKcal = basalKcal + activityKcal, null when basalKcal is null.
+ * Never returns a total without a known basal metabolism.
  */
 export function resolveDailyEnergyExpenditure({
   healthCalories,
   healthSteps,
-  tdee,
-  profileComplete,
-  weightKg,
-}: DailyEnergyExpenditureInput): DailyEnergyExpenditure {
-  const healthCaloriesKcal = healthCalories
-    ? healthCalories.total > 0
-      ? healthCalories.total
-      : healthCalories.active
-    : 0;
-  if (healthCaloriesKcal > 0) {
-    return {
-      burnedKcal: healthCaloriesKcal,
-      source: 'healthConnectCalories',
-      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.healthConnectCalories,
-      activeCaloriesOnly: false,
-      usedDefaultWeight: false,
-    };
-  }
+  profile,
+}: {
+  healthCalories: { active: number; total: number } | null;
+  healthSteps: number | null;
+  profile: EnergyProfile;
+}): DailyEnergyExpenditure {
+  const bmr = calculateBmr(profile);
+  const weightKg = profile.weightKg;
 
-  if (healthSteps !== null && healthSteps > 0) {
+  const basalKcal = bmr;
+  const basalSource: BasalSource = bmr !== null ? 'profile' : 'unknown';
+
+  let activityKcal: number | null = null;
+  let activitySource: ActivitySource = 'unknown';
+  let usedDefaultWeight = false;
+
+  // 1. Active calories from Health Connect (measured)
+  if (healthCalories && healthCalories.active > 0) {
+    activityKcal = healthCalories.active;
+    activitySource = 'healthConnectActive';
+  }
+  // 2. Derive from total calories (total - BMR), BMR required
+  else if (healthCalories && healthCalories.total > 0 && bmr !== null) {
+    activityKcal = Math.max(0, healthCalories.total - bmr);
+    activitySource = 'healthConnectDerived';
+  }
+  // 3. Estimate from steps
+  else if (healthSteps !== null && healthSteps > 0) {
     const estimate = estimateActiveCaloriesFromSteps(healthSteps, weightKg);
-    const canUseTdee = profileComplete && tdee !== null && tdee > 0;
-    return {
-      burnedKcal: (canUseTdee ? tdee : 0) + estimate.activeCaloriesKcal,
-      source: 'healthConnectSteps',
-      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.healthConnectSteps,
-      activeCaloriesKcal: estimate.activeCaloriesKcal,
-      activeCaloriesOnly: !canUseTdee,
-      usedDefaultWeight: estimate.usedDefaultWeight,
-    };
+    activityKcal = estimate.activeCaloriesKcal;
+    activitySource = 'steps';
+    usedDefaultWeight = estimate.usedDefaultWeight;
+  }
+  // 4. Habitual estimate from activity level
+  else if (bmr !== null) {
+    const factor = ACTIVITY_FACTORS[profile.activityLevel];
+    activityKcal = Math.round(bmr * (factor - 1));
+    activitySource = 'habitualEstimate';
+  }
+  // 5. Unknown — no usable data
+  else {
+    activityKcal = null;
+    activitySource = 'unknown';
   }
 
-  if (profileComplete && tdee !== null && tdee > 0) {
-    return {
-      burnedKcal: tdee,
-      source: 'profile',
-      sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.profile,
-      activeCaloriesOnly: false,
-      usedDefaultWeight: false,
-    };
-  }
+  const totalKcal = basalKcal !== null ? basalKcal + (activityKcal ?? 0) : null;
+
+  const activityIsEstimated =
+    activitySource === 'steps' ||
+    activitySource === 'habitualEstimate' ||
+    activitySource === 'unknown';
 
   return {
-    burnedKcal: null,
-    source: 'unknown',
-    sourceLabelKey: ENERGY_SOURCE_LABEL_KEYS.unknown,
-    activeCaloriesOnly: false,
-    usedDefaultWeight: false,
+    basalKcal,
+    activityKcal,
+    totalKcal,
+    basalSource,
+    activitySource,
+    basalSourceLabelKey: BASAL_SOURCE_LABEL_KEYS[basalSource],
+    activitySourceLabelKey: ACTIVITY_SOURCE_LABEL_KEYS[activitySource],
+    activityIsEstimated,
+    usedDefaultWeight,
   };
 }
 

@@ -330,8 +330,15 @@ export default function AddMealScreen() {
                       icon="search-outline"
                       title={t('nutrition.add.noResults')}
                       subtitle={t('nutrition.add.noResultsHelp')}
-                      actionLabel={t('nutrition.add.createFoodCTA')}
-                      onAction={() => router.push('/(tabs)/foods/new' as never)}
+                      actionLabel={t('nutrition.add.scanBarcodeCTA')}
+                      onAction={() => setScannerVisible(true)}
+                      secondaryActionLabel={t('nutrition.add.manualEntryCTA')}
+                      onSecondaryAction={() =>
+                        router.push({
+                          pathname: '/(tabs)/foods/new',
+                          params: { name: query },
+                        } as never)
+                      }
                     />
                   ) : (
                     <EmptyState

@@ -16,7 +16,6 @@ import {
   calculateRemainingGoals,
 } from '../../../lib/nutritionCalc';
 import {
-  calculateTdee,
   missingEnergyProfileFields,
   resolveDailyEnergyBalance,
   resolveDailyEnergyExpenditure,
@@ -31,7 +30,10 @@ import {
 } from '../../../lib/healthConnect';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { healthConnectT as hct } from '../../../i18n/healthConnectFallback';
-import { PROFILE_COMPLETION_DESTINATION } from '../../../constants/routes';
+import {
+  FOODS_CATALOG_DESTINATION,
+  PROFILE_COMPLETION_DESTINATION,
+} from '../../../constants/routes';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -178,19 +180,15 @@ export default function NutritionScreen() {
   const progress = useMemo(() => calculateGoalProgress(totals, goals), [goals, totals]);
 
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
-  const tdee = calculateTdee({ sex, weightKg, heightCm, ageYears: age, activityLevel });
   const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
   const expenditure = resolveDailyEnergyExpenditure({
     healthCalories: healthData.status === 'granted' ? healthData.calories : null,
     healthSteps: healthData.status === 'granted' ? healthData.steps : null,
-    tdee,
-    profileComplete: missingFields.length === 0,
-    weightKg,
+    profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
   });
-  const burned = expenditure.burnedKcal;
+  const burned = expenditure.totalKcal;
   const balance = resolveDailyEnergyBalance(burned, totals.calories);
-  const showProfileInvite =
-    missingFields.length > 0 && expenditure.source !== 'healthConnectCalories';
+  const showProfileInvite = missingFields.length > 0;
   const missingFieldsLabel = missingFields
     .map((field) => hct(t, `nutrition.balance.field.${field}`))
     .join(', ');
@@ -220,14 +218,32 @@ export default function NutritionScreen() {
             </Text>
           ) : null}
 
-          <Text style={styles.balanceSource}>{t(expenditure.sourceLabelKey)}</Text>
-
-          {expenditure.source === 'healthConnectSteps' && expenditure.activeCaloriesOnly ? (
-            <Text style={styles.balanceHint}>{t('nutrition.balance.stepsActiveOnly')}</Text>
-          ) : null}
-
-          {expenditure.source === 'healthConnectSteps' && expenditure.usedDefaultWeight ? (
-            <Text style={styles.balanceHint}>{t('nutrition.balance.stepsDefaultWeight')}</Text>
+          {expenditure.basalKcal !== null ? (
+            <>
+              <Text style={styles.balanceHint}>
+                {t('nutrition.balance.decompositionMetabolism')}{' '}
+                {expenditure.basalKcal} kcal  ·  {' '}
+                {t('nutrition.balance.decompositionActivity')}{' '}
+                {expenditure.activityKcal ?? 0} kcal
+              </Text>
+              <Text style={styles.balanceSource}>
+                {t(expenditure.basalSourceLabelKey)}  ·  {t(expenditure.activitySourceLabelKey)}
+              </Text>
+              {(expenditure.activitySource === 'healthConnectActive' ||
+                expenditure.activitySource === 'healthConnectDerived') ? (
+                <Text style={styles.balanceHint}>
+                  {t('nutrition.balance.activityPartialNote')}
+                </Text>
+              ) : null}
+              {expenditure.activityIsEstimated ? (
+                <Text style={styles.balanceHint}>
+                  {t('nutrition.balance.activityEstimatedNote')}
+                </Text>
+              ) : null}
+              {expenditure.usedDefaultWeight ? (
+                <Text style={styles.balanceHint}>{t('nutrition.balance.stepsDefaultWeight')}</Text>
+              ) : null}
+            </>
           ) : null}
 
           {healthData.status !== 'granted' ? (
@@ -311,6 +327,13 @@ export default function NutritionScreen() {
             onPress={() => router.push('/(tabs)/nutrition/add' as never)}
           />
           <View style={styles.actionsRow}>
+            <Button
+              title={t('nav.foods')}
+              variant="soft"
+              compact
+              style={styles.actionsRowBtn}
+              onPress={() => router.push(FOODS_CATALOG_DESTINATION as never)}
+            />
             <Button
               title={t('nutrition.diaryTitle')}
               variant="soft"

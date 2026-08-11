@@ -23,6 +23,8 @@ export interface FoodFormValues {
 
 interface FoodFormProps {
   initialFood?: Food;
+  /** Nom pré-rempli (utilisé uniquement quand `initialFood` est absent). */
+  initialName?: string;
   categories: string[];
   submitLabel: string;
   onSubmit: (values: FoodFormValues) => void;
@@ -88,11 +90,11 @@ function nutritionTitle(
   return t('nutrition.form.perUnit', { unit: 'portion' });
 }
 
-export function FoodForm({ initialFood, categories, submitLabel, onSubmit }: FoodFormProps) {
+export function FoodForm({ initialFood, initialName, categories, submitLabel, onSubmit }: FoodFormProps) {
   const c = useColors();
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
-  const [name, setName] = useState(initialFood?.name ?? '');
+  const [name, setName] = useState(initialFood?.name ?? initialName ?? '');
   const [category, setCategory] = useState(initialFood?.category ?? '');
   const [unit, setUnit] = useState<FoodUnit>(initialFood?.unit ?? 'g');
   const [numberValues, setNumberValues] = useState({
