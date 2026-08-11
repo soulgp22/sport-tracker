@@ -3,6 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Food } from '../../types';
 import { useFoodStore } from '../foodStore';
 
+jest.mock('../../lib/catalogApi', () => ({
+  searchFoods: jest.fn(),
+  searchExercises: jest.fn(),
+}));
+
+import { searchFoods as searchFoodsApi } from '../../lib/catalogApi';
+
 function makeFood(overrides: Partial<Food> = {}): Food {
   return {
     id: 'custom_yaourt_epais',
@@ -17,7 +24,8 @@ function makeFood(overrides: Partial<Food> = {}): Food {
 
 beforeEach(async () => {
   await AsyncStorage.clear();
-  useFoodStore.setState({ customFoods: [] });
+  useFoodStore.setState({ customFoods: [], networkFoodResults: [], searchLoading: false, searchError: 'none' });
+  jest.clearAllMocks();
 });
 
 describe('foodStore', () => {
@@ -183,5 +191,48 @@ describe('foodStore', () => {
     expect(result.added).toBe(0);
     expect(result.duplicateIds).toContain('spaces_test');
     expect(useFoodStore.getState().getCustomFoods()).toHaveLength(1);
+  });
+
+  // T1 : searchError distingue « serveur vide » (none) et « serveur injoignable » (unavailable)
+  it('distingue une réponse serveur vide d\'une indisponibilité réseau via searchError', async () => {
+    const mockedSearch = searchFoodsApi as jest.MockedFunction<typeof searchFoodsApi>;
+
+    // Cas 1 : le serveur répond avec une liste vide → searchError = 'none'
+    mockedSearch.mockResolvedValueOnce({ kind: 'empty' });
+    await useFoodStore.getState().searchFoodsAsync('pizza');
+    expect(useFoodStore.getState().searchError).toBe('none');
+
+    // Cas 2 : le réseau échoue → searchError = 'unavailable'
+    mockedSearch.mockRejectedValueOnce(new Error('timeout'));
+    await useFoodStore.getState().searchFoodsAsync('pizza');
+    expect(useFoodStore.getState().searchError).toBe('unavailable');
+  });
+
+  // T2 : les aliments personnels survivent à une recherche serveur
+  it('conserve les aliments personnels dans les résultats fusionnés après une recherche serveur', async () => {
+    useFoodStore.getState().addCustomFood(
+      makeFood({ id: 'custom_test', name: 'Pizza Maison' }),
+    );
+
+    const mockedSearch = searchFoodsApi as jest.MockedFunction<typeof searchFoodsApi>;
+    mockedSearch.mockResolvedValueOnce({
+      kind: 'found',
+      items: [
+        {
+          id: 'server_pizza',
+          name: 'Pizza Margherita',
+          category: 'Plats',
+          unit: 'g',
+          nutritionPer100g: { calories: 250, protein: 10, carbs: 30, fat: 10 },
+        } as Food,
+      ],
+      total: 1,
+    });
+
+    await useFoodStore.getState().searchFoodsAsync('pizza');
+
+    const results = useFoodStore.getState().searchFoods('pizza');
+    expect(results.some((f) => f.id === 'custom_test')).toBe(true);
+    expect(results.some((f) => f.id === 'server_pizza')).toBe(true);
   });
 });

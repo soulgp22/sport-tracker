@@ -4,7 +4,7 @@ import type {
   OnboardingGoal,
   OnboardingLevel,
   OnboardingProfile,
-} from '../../store/onboardingStore';
+} from '../programRecommendation';
 
 const GOALS: OnboardingGoal[] = ['muscle', 'strength', 'weight_loss', 'fitness'];
 const LEVELS: OnboardingLevel[] = ['beginner', 'intermediate', 'advanced'];

@@ -54,6 +54,8 @@ export default function SessionScreen() {
           icon="barbell-outline"
           title={t('session.noPrograms')}
           subtitle={t('session.noProgramsSubtitle')}
+          actionLabel={t('nav.programs')}
+          onAction={() => router.push('/(tabs)/programs')}
         />
       ) : (
         <FlatList

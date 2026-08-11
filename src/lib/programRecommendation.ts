@@ -1,5 +1,27 @@
 import type { CommunityManifest, CommunityProgramEntry } from '../store/communityStore';
-import type { OnboardingProfile } from '../store/onboardingStore';
+
+// ⚠️ Ces types décrivent un profil d'onboarding qui N'EST PLUS COLLECTÉ par
+// l'application depuis la simplification de l'onboarding. Ce module n'est
+// appelé par aucun code d'exécution, seulement par son propre test.
+// Son sort (suppression ou réactivation) doit être tranché par le propriétaire.
+export type OnboardingGoal = 'muscle' | 'strength' | 'weight_loss' | 'fitness';
+export type OnboardingLevel = 'beginner' | 'intermediate' | 'advanced';
+export type OnboardingEquipmentProfileId =
+  | 'bodyweight'
+  | 'home-basic'
+  | 'dumbbells'
+  | 'machines'
+  | 'barbell'
+  | 'full-gym';
+export type OnboardingRetailer = string;
+
+export interface OnboardingProfile {
+  goal: OnboardingGoal;
+  level: OnboardingLevel;
+  daysPerWeek: number;
+  equipmentProfileId: OnboardingEquipmentProfileId;
+  retailer: OnboardingRetailer;
+}
 
 /**
  * Sélection du programme recommandé selon le profil d'onboarding.

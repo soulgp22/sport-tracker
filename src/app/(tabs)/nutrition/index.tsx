@@ -31,6 +31,7 @@ import {
 } from '../../../lib/healthConnect';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { healthConnectT as hct } from '../../../i18n/healthConnectFallback';
+import { PROFILE_COMPLETION_DESTINATION } from '../../../constants/routes';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
@@ -248,7 +249,7 @@ export default function NutritionScreen() {
               <Button
                 title={t('nutrition.balance.completeProfileCta')}
                 variant="secondary"
-                onPress={() => router.push('/(tabs)/settings' as never)}
+                onPress={() => router.push(PROFILE_COMPLETION_DESTINATION as never)}
               />
             </>
           ) : null}

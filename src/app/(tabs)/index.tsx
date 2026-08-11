@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { ComponentProps } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -34,32 +33,8 @@ import {
 } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
+import { HOME_TILES } from '../../constants/homeTiles';
 
-type IoniconsName = ComponentProps<typeof Ionicons>['name'];
-
-interface HomeTile {
-  key: string;
-  labelKey: string;
-  descriptionKey: string;
-  icon: IoniconsName;
-  accent: 'primary' | 'secondary' | 'success' | 'danger';
-  href:
-    | '/(tabs)/programs'
-    | '/(tabs)/exercises'
-    | '/(tabs)/foods'
-    | '/(tabs)/nutrition'
-    | '/(tabs)/history'
-    | '/(tabs)/progress';
-}
-
-const HOME_TILES: HomeTile[] = [
-  { key: 'programs', labelKey: 'home.programs', descriptionKey: 'home.programsDescription', icon: 'barbell', accent: 'primary', href: '/(tabs)/programs' },
-  { key: 'exercises', labelKey: 'home.exercises', descriptionKey: 'home.exercisesDescription', icon: 'accessibility', accent: 'secondary', href: '/(tabs)/exercises' },
-  { key: 'nutrition', labelKey: 'home.nutrition', descriptionKey: 'home.nutritionDescription', icon: 'nutrition', accent: 'success', href: '/(tabs)/nutrition' },
-  { key: 'foods', labelKey: 'home.foods', descriptionKey: 'home.foodsDescription', icon: 'fast-food', accent: 'danger', href: '/(tabs)/foods' },
-  { key: 'progress', labelKey: 'home.progress', descriptionKey: 'home.progressDescription', icon: 'analytics', accent: 'danger', href: '/(tabs)/progress' },
-  { key: 'history', labelKey: 'home.history', descriptionKey: 'home.historyDescription', icon: 'pulse', accent: 'secondary', href: '/(tabs)/history' },
-];
 
 export default function HomeScreen() {
   const c = useColors();
@@ -131,15 +106,26 @@ export default function HomeScreen() {
       <View style={[styles.content, compact ? styles.contentCompact : null]}>
         <View style={styles.brandRow}>
           <LifeSportLogo />
-          <TouchableOpacity
-            style={styles.settingsButton}
-            onPress={() => router.push('/(tabs)/settings')}
-            activeOpacity={0.72}
-            accessibilityRole="button"
-            accessibilityLabel={t('home.settings')}
-            accessibilityHint={t('home.settingsDescription')}>
-            <Ionicons name="options-outline" size={21} color={c.textPrimary} />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => router.push('/(tabs)/profile' as never)}
+              activeOpacity={0.72}
+              accessibilityRole="button"
+              accessibilityLabel={t('home.profile')}
+              accessibilityHint={t('home.profileHint')}>
+              <Ionicons name="person-circle-outline" size={21} color={c.textPrimary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.settingsButton}
+              onPress={() => router.push('/(tabs)/settings')}
+              activeOpacity={0.72}
+              accessibilityRole="button"
+              accessibilityLabel={t('home.settings')}
+              accessibilityHint={t('home.settingsDescription')}>
+              <Ionicons name="options-outline" size={21} color={c.textPrimary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <Animated.View

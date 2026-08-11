@@ -12,6 +12,7 @@ import type {
 } from '../types/performance';
 
 const MAX_DESCRIPTION_LENGTH = 4000;
+export const MAX_NAME_LENGTH = 60;
 
 interface PerformanceState extends PerformanceProfile {
   unlockedBadges: UnlockedBadge[];
@@ -24,12 +25,20 @@ interface PerformanceState extends PerformanceProfile {
   setMonthlySessionGoal: (goal: number) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   setProgramDescription: (description: string) => void;
+  setFirstName: (value?: string) => void;
+  setLastName: (value?: string) => void;
   unlockBadges: (ids: string[], unlockedAt?: string) => string[];
 }
 
 function clampInteger(value: number, minimum: number, maximum: number) {
   if (!Number.isFinite(value)) return minimum;
   return Math.min(maximum, Math.max(minimum, Math.round(value)));
+}
+
+export function normalizeName(value: string | undefined): string | undefined {
+  if (value === undefined) return undefined;
+  const trimmed = value.trim().slice(0, MAX_NAME_LENGTH);
+  return trimmed.length > 0 ? trimmed : undefined;
 }
 
 export const usePerformanceStore = create<PerformanceState>()(
@@ -44,6 +53,8 @@ export const usePerformanceStore = create<PerformanceState>()(
       monthlySessionGoal: performanceRules.goals.defaultMonthlySessions,
       notificationsEnabled: false,
       programDescription: '',
+      firstName: undefined,
+      lastName: undefined,
       unlockedBadges: [],
 
       setSex: (sex) => set({ sex }),
@@ -73,6 +84,8 @@ export const usePerformanceStore = create<PerformanceState>()(
       setProgramDescription: (programDescription) => set({
         programDescription: programDescription.slice(0, MAX_DESCRIPTION_LENGTH),
       }),
+      setFirstName: (firstName) => set({ firstName: normalizeName(firstName) }),
+      setLastName: (lastName) => set({ lastName: normalizeName(lastName) }),
       unlockBadges: (ids, unlockedAt = new Date().toISOString()) => {
         const existing = new Set(get().unlockedBadges.map((badge) => badge.id));
         const uniqueNewIds = [...new Set(ids)].filter((id) => !existing.has(id));

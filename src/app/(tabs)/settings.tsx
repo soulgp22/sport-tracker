@@ -57,14 +57,9 @@ import { LANGUAGE_OPTIONS, type LanguageId } from '../../i18n/translations';
 import { useTranslation } from '../../i18n/useTranslation';
 import { requestNotificationPermission } from '../../lib/restTimerNotifications';
 import { combineAiProgramPrompt } from '../../lib/aiProgramPrompt';
-import type { ActivityLevel, ExperienceLevel, PerformanceSex } from '../../types/performance';
+import type { ActivityLevel, ExperienceLevel } from '../../types/performance';
 import { cardShadow, radius, spacing } from '../../theme/tokens';
 
-const SEX_OPTIONS: { id: PerformanceSex; labelKey: string }[] = [
-  { id: 'unspecified', labelKey: 'performance.sexUnspecified' },
-  { id: 'female', labelKey: 'performance.sexFemale' },
-  { id: 'male', labelKey: 'performance.sexMale' },
-];
 
 const ACTIVITY_OPTIONS: { id: ActivityLevel; labelKey: string }[] = [
   { id: 'sedentary', labelKey: 'performance.activity.sedentary' },
@@ -181,12 +176,7 @@ export default function SettingsScreen() {
   const restartOnboarding = useOnboardingStore((s) => s.restart);
   const programDescription = usePerformanceStore((s) => s.programDescription);
   const setProgramDescription = usePerformanceStore((s) => s.setProgramDescription);
-  const performanceSex = usePerformanceStore((s) => s.sex);
-  const setPerformanceSex = usePerformanceStore((s) => s.setSex);
-  const performanceAge = usePerformanceStore((s) => s.age);
-  const setPerformanceAge = usePerformanceStore((s) => s.setAge);
-  const performanceHeightCm = usePerformanceStore((s) => s.heightCm);
-  const setPerformanceHeightCm = usePerformanceStore((s) => s.setHeightCm);
+
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
   const setActivityLevel = usePerformanceStore((s) => s.setActivityLevel);
   const experience = usePerformanceStore((s) => s.experience);
@@ -206,10 +196,7 @@ export default function SettingsScreen() {
   const [profileImporting, setProfileImporting] = useState(false);
   const [profileExporting, setProfileExporting] = useState(false);
   const [aiPromptCopyFeedback, setAiPromptCopyFeedback] = useState(0);
-  const [ageDraft, setAgeDraft] = useState<string | null>(null);
-  const ageInput = ageDraft ?? (performanceAge ? String(performanceAge) : '');
-  const [heightDraft, setHeightDraft] = useState<string | null>(null);
-  const heightInput = heightDraft ?? (performanceHeightCm ? String(performanceHeightCm) : '');
+
   const aiPromptCopied = aiPromptCopyFeedback > 0;
 
   useEffect(() => {
@@ -691,49 +678,11 @@ export default function SettingsScreen() {
           <Text style={styles.sectionTitle}>{t('performance.profileTitle')}</Text>
           <Text style={styles.helpText}>{t('performance.profileHelp')}</Text>
 
-          <Text style={styles.fieldLabel}>{t('performance.sex')}</Text>
-          <View style={styles.choiceRow}>
-            {SEX_OPTIONS.map((option) => {
-              const active = performanceSex === option.id;
-              return (
-                <TouchableOpacity
-                  key={option.id}
-                  style={[styles.choiceChip, active ? styles.choiceChipActive : null]}
-                  onPress={() => setPerformanceSex(option.id)}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked: active }}>
-                  <Text style={[styles.choiceText, active ? styles.choiceTextActive : null]}>
-                    {t(option.labelKey)}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          <TextInput
-            label={t('performance.age')}
-            value={ageInput}
-            onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))}
-            onEndEditing={() => {
-              setPerformanceAge(ageInput ? Number(ageInput) : undefined);
-              setAgeDraft(null);
-            }}
-            keyboardType="number-pad"
-            maxLength={3}
-            placeholder={t('performance.agePlaceholder')}
-          />
-
-          <TextInput
-            label={t('performance.height')}
-            value={heightInput}
-            onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))}
-            onEndEditing={() => {
-              setPerformanceHeightCm(heightInput ? Number(heightInput) : undefined);
-              setHeightDraft(null);
-            }}
-            keyboardType="number-pad"
-            maxLength={3}
-            placeholder={t('performance.heightPlaceholder')}
+          <Button
+            title={t('settings.goToProfile')}
+            variant="secondary"
+            onPress={() => router.push('/(tabs)/profile' as never)}
+            style={styles.actionBtn}
           />
 
           <Text style={styles.fieldLabel}>{t('performance.activityLevel')}</Text>
