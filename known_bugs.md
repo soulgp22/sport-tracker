@@ -197,6 +197,73 @@ d'exécution.
 
 ---
 
+## 11. Un texte d'aide envoie vers un écran qui ne contient plus le champ
+
+**Symptôme** — sur l'écran Nutrition, la carte « Bilan du jour » affiche
+« Il manque : ton sexe. » et un bouton « Compléter mon profil ». Le bouton menait
+aux **Réglages**, où le champ sexe n'existait plus : il venait d'être déplacé vers
+le nouvel écran `/(tabs)/profile`. L'utilisateur atterrissait sur un écran qui ne
+contenait pas ce qu'on venait de lui demander.
+
+**Cause** — une destination de navigation écrite en dur
+(`router.push('/(tabs)/settings')`) est restée en place quand les champs qu'elle
+visait ont déménagé. Rien ne reliait les deux : ni le type, ni un test.
+
+**Correctif** — destination extraite dans `src/constants/routes.ts`
+(`PROFILE_COMPLETION_DESTINATION`) et couverte par un test qui rougit si l'on
+remet l'ancienne valeur.
+
+**À éviter** — quand un champ change d'écran, chercher **tous** les endroits qui
+invitent à le renseigner, pas seulement ceux qui l'affichent. Un `grep` sur le nom
+du champ ne suffit pas : ces invitations le nomment en langage naturel, dans les
+traductions.
+
+---
+
+## 12. Une traduction nomme un onglet supprimé
+
+**Symptôme** — l'état vide de l'écran Séance affichait « Créez d'abord un programme
+**dans l'onglet Programmes** », alors que cet onglet venait d'être retiré de la
+barre de navigation.
+
+**Cause** — la clé `session.noProgramsSubtitle` a été *réutilisée* lors du
+remaniement de la navigation, sans que son contenu soit relu. Les tests de parité
+i18n vérifient qu'une clé existe dans les 4 langues, jamais que son texte est
+encore vrai.
+
+**Correctif** — reformuler dans les 4 langues pour décrire **l'action**
+(« Créez d'abord un programme pour démarrer une séance. ») plutôt que de nommer un
+emplacement de l'interface.
+
+**À éviter** — ne jamais nommer un onglet, un menu ou une position d'écran dans un
+texte : ces mots deviennent faux au premier remaniement. Décrire l'action, qui
+reste vraie quel que soit le chemin. Après toute modification de navigation,
+relire les textes des états vides — aucun test ne peut les valider.
+
+---
+
+## 13. Un module de données placé dans le répertoire de routes
+
+**Symptôme** — pas de défaut visible, mais `src/app/(tabs)/homeTiles.ts` et
+`src/app/(tabs)/__tests__/` avaient été créés pour rendre une constante testable.
+
+**Cause** — `src/app/` est le répertoire de routes d'expo-router : chaque fichier y
+est interprété comme une page. Un module sans export par défaut y provoque un
+avertissement de route invalide, et un fichier de **test** s'y retrouve embarqué
+dans l'application publiée.
+
+**Correctif** — déplacer vers `src/constants/`, qui accueille déjà `meals.ts`,
+`colors.ts`, `equipmentProfiles.ts` et son propre répertoire `__tests__`.
+
+**À éviter** — vérifier avant d'ajouter un fichier dans `src/app/` :
+
+```bash
+find src/app -type f ! -name "*.tsx"   # doit rester vide
+find src/app -type d -name "__tests__" # doit rester vide
+```
+
+---
+
 ## Pièges d'outillage (pas des bugs applicatifs)
 
 - **`adb emu kill` peut répondre OK sans tuer le processus.** Vérifier
