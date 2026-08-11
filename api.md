@@ -18,9 +18,17 @@ capacité réutilisable par un autre client (web, autre app).
 
 | Capacité | Aujourd'hui | Cible |
 |---|---|---|
-| Estimation de repas par photo | ✅ API serveur | inchangé |
+| Estimation de repas par photo | ✅ API serveur | contrat `/v1/meal/analyze` (voir plus bas) |
 | Scan de code-barres | ✅ API serveur (passerelle `/v1/products`) | inchangé |
-| Catalogue exercices / aliments | ❌ téléchargement de packs GitHub | API serveur à la demande |
+| Catalogue exercices / aliments | ✅ API serveur (`/v1/exercises`, `/v1/foods`) depuis la v1.5.0 | inchangé |
+| Données personnelles | ✅ locales (aucun compte) | inchangé, par décision produit |
+
+**Reste à faire :** l'estimation par photo passe encore par un contrat au format
+OpenAI (`/v1/chat/completions?engine=gemini`). Le remplacer par un
+`/v1/meal/analyze` propre est la dernière brique du plan
+([docs/architecture-decentralisation.md](docs/architecture-decentralisation.md)) :
+c'est elle qui doit accueillir la future couche d'estimation de profondeur sans
+que le contrat change à nouveau.
 
 ---
 
@@ -96,6 +104,42 @@ d'indisponibilité — message explicite.
 
 La page publique `offProductPageUrl` reste sur `https://world.openfoodfacts.org` :
 c'est un lien affiché à l'utilisateur, pas un appel d'API.
+
+---
+
+## 2 bis. Catalogues exercices et aliments — service `lst-catalog`
+
+Ajouté en **v1.5.0**. Même passerelle, même authentification que ci-dessus.
+
+**Client :** `src/lib/catalogApi.ts` (un seul module pour les deux catalogues)
+**Service :** `lst-catalog` sur le VPS, 127.0.0.1:8353
+
+```
+GET /v1/exercises?q=<texte>&limit=<n>&offset=<n>     873 exercices
+GET /v1/foods?q=<texte>&limit=<n>&offset=<n>         147 aliments
+```
+
+Réponse : `{ "items": [...], "total": n, "limit": n, "offset": n }`. Les entrées
+ont **exactement** la forme des types `CatalogExercise` et `Food` de l'app —
+aucune conversion côté client.
+
+Recherche insensible aux accents et à la casse, faite **par le serveur**.
+`limit` borné à 200. Sans `q`, le catalogue entier est renvoyé, paginé.
+
+L'app distingue les mêmes 4 cas que le scan : `found`, `empty` (le serveur a
+répondu, rien ne correspond), `server-not-configured` (URL vide, aucun appel
+réseau émis), `unavailable` (réseau, timeout, passerelle injoignable).
+
+⚠️ **`empty` et `unavailable` ne doivent jamais être confondus.** Afficher
+« aucun aliment trouvé » alors que le serveur est injoignable pousse
+l'utilisateur à recréer un aliment qui existe déjà. Un test dédié le vérifie
+(`src/store/__tests__/foodStore.test.ts`).
+
+Les aliments **personnels** de l'utilisateur (`isCustom`) restent locaux et sont
+fusionnés aux résultats du serveur par `foodStore.searchFoods`. Les fichiers
+`exercises.core.json` (53 Ko) et `foods.default.json` (40 Ko) restent embarqués
+comme valeurs initiales ; `exercises.catalog.json` (1,6 Mo) n'est importé par
+aucun code applicatif et ne part donc **pas** dans l'APK.
 
 ---
 
