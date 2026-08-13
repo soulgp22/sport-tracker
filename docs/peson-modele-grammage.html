@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peson — modèle d'estimation de grammage, documentation technique</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #555555;
+    --accent: #0b5cad;
+    --border: #d0d0d0;
+    --box-bg: #f5f7fa;
+    --table-head-bg: #eef1f5;
+    --table-alt: #f8fafc;
+    --warn-bg: #fff4e5;
+    --warn-border: #e0a800;
+    --code-bg: #f0f2f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --fg: #e6e6e6;
+      --muted: #a8a8b0;
+      --accent: #6cb2ff;
+      --border: #3a3d44;
+      --box-bg: #1e2127;
+      --table-head-bg: #262a31;
+      --table-alt: #1c1f25;
+      --warn-bg: #2c2413;
+      --warn-border: #c8961f;
+      --code-bg: #1c1f25;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 18px 72px;
+  }
+  h1 {
+    font-size: 1.7rem;
+    line-height: 1.3;
+    margin: 0 0 8px;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 12px;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 40px 0 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    scroll-margin-top: 12px;
+  }
+  h3 {
+    font-size: 1.1rem;
+    margin: 24px 0 8px;
+  }
+  p { margin: 10px 0; }
+  ul, ol { margin: 10px 0; padding-left: 24px; }
+  li { margin: 4px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+  pre code { background: transparent; padding: 0; }
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.02rem;
+    margin: 0 0 24px;
+  }
+  nav.toc {
+    background: var(--box-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0 8px;
+  }
+  nav.toc ol {
+    margin: 8px 0 0;
+    padding-left: 22px;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    margin: 14px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 320px;
+    font-size: 0.94rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--table-head-bg);
+    font-weight: 600;
+  }
+  tbody tr:nth-child(even) { background: var(--table-alt); }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  .flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 18px 0;
+  }
+  .box {
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    background: var(--box-bg);
+    padding: 10px 16px;
+    text-align: center;
+    max-width: 560px;
+    width: 100%;
+  }
+  .box .lbl { font-weight: 600; }
+  .box .sub { color: var(--muted); font-size: 0.9rem; }
+  .arrow {
+    font-size: 1.4rem;
+    color: var(--muted);
+    line-height: 1.2;
+    padding: 2px 0;
+  }
+  .branch {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .branch .box { width: auto; min-width: 200px; flex: 1 1 220px; }
+  .merge {
+    font-size: 0.95rem;
+    color: var(--muted);
+    padding: 4px 0;
+    font-weight: 600;
+  }
+  .note, .warn {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    background: var(--box-bg);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 14px 0;
+  }
+  .warn {
+    border-left-color: var(--warn-border);
+    background: var(--warn-bg);
+  }
+  .note .t, .warn .t {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+  footer {
+    margin-top: 40px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 id="titre">Peson</h1>
+<p class="sous-titre">Modèle d'estimation de grammage à partir d'une photo de repas — documentation technique</p>
+<p class="subtitle">Documentation technique — régression du poids d'un plat à partir d'une photographie.</p>
+
+<div class="note">
+  <span class="t">Résumé</span>
+  <p>Le modèle estime le poids en grammes d'un plat à partir d'une seule photo, via un empilement de deux briques : un extracteur de caractéristiques visuelles <code>facebook/dinov2-small</code> gelé, puis une tête MLP entraînée pour la régression. Entraîné sur Nutrition5k (4002 plats), il est évalué sur 700 plats de test. Il atteint une erreur moyenne de 43,7 g, une médiane de 17,3 g et un Spearman de 0,950 sur ce test. La tête seule se réentraîne en environ deux minutes, ce qui permet une recalibration rapide sur un autre jeu de données.</p>
+</div>
+
+<nav class="toc" aria-label="Table des matières">
+  <strong>Table des matières</strong>
+  <ol>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#backbone">Le backbone DINOv2</a></li>
+    <li><a href="#tete">La tête de régression</a></li>
+    <li><a href="#entrainement">Protocole d'entraînement</a></li>
+    <li><a href="#donnees">Données et découpages</a></li>
+    <li><a href="#resultats">Résultats</a></li>
+    <li><a href="#robustesse">Robustesse au point de vue</a></li>
+    <li><a href="#generalisation">Généralisation à un autre jeu de données</a></li>
+    <li><a href="#cout">Coût de calcul</a></li>
+    <li><a href="#limites">Limites connues</a></li>
+    <li><a href="#fichiers">Fichiers du projet</a></li>
+  </ol>
+</nav>
+
+<h2 id="architecture">1. Architecture</h2>
+<p>Empilement de deux briques :</p>
+<div class="table-wrap">
+  <table>
+    <tbody>
+      <tr><td><code>photo</code></td><td>redimensionnée <strong>224x224</strong></td></tr>
+      <tr><td><code>DINOv2 ViT-S/14</code> (gelé)</td><td><strong>257 jetons x 384 dims</strong></td></tr>
+      <tr><td>Agrégation</td><td><strong>CLS (384) + moyenne des patchs (384) = 768 nombres</strong></td></tr>
+      <tr><td>Tête MLP</td><td><strong>0,525 M paramètres</strong></td></tr>
+      <tr><td>Sortie</td><td>un seul nombre : les grammes</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="flow" role="img" aria-label="Schéma du flux : photo, redimensionnement, DINOv2, agrégation CLS et moyenne des patchs, tête MLP, grammes">
+  <div class="box">
+    <div class="lbl">Photo</div>
+    <div class="sub">image d'un plat</div>
+  </div>
+  <div class="arrow">&#8595;</div>
+  <div class="box">
+    <div class="lbl">Redimensionnement</div>
+    <div class="sub">224 x 224 px</div>
+  </div>
+  <div class="arrow">&#8595;</div>
+  <div class="box">
+    <div class="lbl">DINOv2 ViT-S/14 (gelé)</div>
+    <div class="sub">sortie brute (1, 257, 384) = 1 jeton CLS + 256 jetons de patch</div>
+  </div>
+  <div class="arrow">&#8595;</div>
+  <div class="branch">
+    <div class="box">
+      <div class="lbl">jeton CLS</div>
+      <div class="sub">384 dims</div>
+    </div>
+    <div class="box">
+      <div class="lbl">moyenne des patchs</div>
+      <div class="sub">384 dims</div>
+    </div>
+  </div>
+  <div class="merge">concaténation &#8594; 768 nombres</div>
+  <div class="arrow">&#8595;</div>
+  <div class="box">
+    <div class="lbl">Tête MLP</div>
+    <div class="sub">0,525 M paramètres (525 313 exactement)</div>
+  </div>
+  <div class="arrow">&#8595;</div>
+  <div class="box">
+    <div class="lbl">Grammes</div>
+    <div class="sub">un seul nombre</div>
+  </div>
+</div>
+
+<h2 id="backbone">2. Le backbone DINOv2</h2>
+<ul>
+  <li>Modèle : <code>facebook/dinov2-small</code>, Vision Transformer « Small », patchs de <strong>14 px</strong>.</li>
+  <li><strong>22,06 M paramètres</strong>. <strong>Gelé</strong> : jamais entraîné, jamais modifié.</li>
+  <li>Entrée <strong>224x224</strong>. Sortie brute <strong>(1, 257, 384)</strong> = 1 jeton CLS + 256 jetons de patch.</li>
+  <li>Entraîné en auto-supervision par Meta, sans étiquettes.</li>
+  <li>Agrégation retenue : concaténation <strong>CLS + moyenne des patchs = 768 dimensions</strong>.</li>
+</ul>
+<p>Raison du gel : <strong>4002 exemples</strong> d'entraînement, insuffisant pour réentraîner 22 M de paramètres sans surapprentissage ; et l'extraction se fait <strong>UNE fois</strong>, ce qui permet de réentraîner la tête en deux minutes.</p>
+
+<div class="warn">
+  <span class="t">Choix non vérifié</span>
+  <p>DINOv2 n'a été comparé à <strong>aucune</strong> alternative (CLIP, SigLIP, ResNet, ViT-B/14). Ce choix de backbone n'est pas validé par une comparaison expérimentale.</p>
+</div>
+
+<h2 id="tete">3. La tête de régression</h2>
+<pre><code>Linear(768 -&gt; 512) -&gt; GELU -&gt; Dropout(0,2)
+Linear(512 -&gt; 256) -&gt; GELU -&gt; Dropout(0,2)
+Linear(256 -&gt; 1)</code></pre>
+<p><strong>525 313 paramètres</strong> exactement, <strong>2 Mo</strong> sur disque en float32.</p>
+
+<h2 id="entrainement">4. Protocole d'entraînement</h2>
+<ul>
+  <li>Normalisation des 768 dimensions par la moyenne et l'écart-type du <strong>TRAIN seul</strong>.</li>
+  <li>Fonction de coût : <strong>L1</strong> (erreur absolue), pas L2. Raison : le jeu de test contient un plat à <strong>7974 g</strong> qui dominerait un coût quadratique.</li>
+  <li>Cible : <strong>logarithme des grammes</strong>, exponentielle en sortie, bornée à 0.</li>
+  <li>Optimiseur <strong>AdamW</strong>, lr <strong>1e-3</strong>, weight decay <strong>1e-2</strong>, décroissance cosinus sur <strong>300 époques</strong>, lots de <strong>128</strong>.</li>
+  <li>Arrêt précoce : <strong>10 %</strong> du train en validation interne, patience <strong>40 époques</strong>, on conserve les poids du meilleur passage.</li>
+  <li>Le choix de variante (taille de couche 128/256/512, cible grammes ou log) a été fait sur la validation interne, <strong>JAMAIS</strong> sur le test.</li>
+</ul>
+
+<div class="warn">
+  <span class="t">À signaler honnêtement</span>
+  <p>Sur la validation interne, la cible log donne <strong>63,43 g</strong> contre <strong>63,63 g</strong> pour les grammes directs. Écart négligeable, ce n'est pas une démonstration.</p>
+</div>
+
+<h2 id="donnees">5. Données et découpages</h2>
+<p>Nutrition5k (jeu de Google, plats pesés sur balance) :</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Caractéristique</th><th class="num">Valeur</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Plats d'entraînement</td><td class="num">4002</td></tr>
+      <tr><td>Plats de test (poids &ge; 10 g, image locale)</td><td class="num">700</td></tr>
+      <tr><td>Poids moyen train</td><td class="num">192 g</td></tr>
+      <tr><td>Poids moyen test</td><td class="num">194 g</td></tr>
+      <tr><td>Médiane</td><td class="num">146 g</td></tr>
+      <tr><td>Intersection train/test vérifiée</td><td class="num">0 plat commun</td></tr>
+      <tr><td>Référence triviale (prédire toujours 146 g)</td><td class="num">117,9 g d'erreur moyenne</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="resultats">6. Résultats sur Nutrition5k</h2>
+<p>Test 700 plats : erreur moyenne <strong>43,7 g</strong>, médiane <strong>17,3 g</strong>, erreur relative médiane <strong>14 %</strong>, Spearman <strong>0,950</strong>. Sur les 696 plats de la plage 10-800 g : <strong>32,1 g</strong>, Spearman <strong>0,957</strong>.</p>
+
+<h3>Sur les 68 plats également mesurés avec Gemini</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Modèle</th><th class="num">Erreur moyenne</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tête DINOv2</td><td class="num">24,8 g</td></tr>
+      <tr><td>v9</td><td class="num">45,0 g</td></tr>
+      <tr><td>Gemini</td><td class="num">52,0 g</td></tr>
+    </tbody>
+  </table>
+</div>
+<ul>
+  <li>DINOv2 vs Gemini : <strong>-27,2 g</strong>, Wilcoxon p = <strong>0,0004</strong></li>
+  <li>DINOv2 vs v9 : <strong>-20,2 g</strong>, Wilcoxon p = <strong>0,0116</strong></li>
+</ul>
+
+<h3>Intervalle nécessaire pour couvrir X % des plats (696 plats, 10-800 g)</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th class="num">Couverture</th><th class="num">Intervalle</th><th class="num">En pourcentage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">50 %</td><td class="num">&plusmn; 17 g</td><td class="num">14 %</td></tr>
+      <tr><td class="num">80 %</td><td class="num">&plusmn; 48 g</td><td class="num">28 %</td></tr>
+      <tr><td class="num">90 %</td><td class="num">&plusmn; 76 g</td><td class="num">46 %</td></tr>
+      <tr><td class="num">95 %</td><td class="num">&plusmn; 107 g</td><td class="num">67 %</td></tr>
+      <tr><td class="num">99 %</td><td class="num">&plusmn; 223 g</td><td class="num">148 %</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Pour comparaison, Gemini sur 68 plats : 50 % &rarr; &plusmn;33 g, 90 % &rarr; &plusmn;126 g, 99 % &rarr; &plusmn;261 g.</p>
+
+<h3>Par taille de plat</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Classe</th><th class="num">Effectif (n)</th><th class="num">Erreur moyenne</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Petits (0-100 g)</td><td class="num">249</td><td class="num">13,5 g</td></tr>
+      <tr><td>Moyens (100-250 g)</td><td class="num">267</td><td class="num">31,1 g</td></tr>
+      <tr><td>Gros (250-800 g)</td><td class="num">180</td><td class="num">59,0 g</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="robustesse">7. Robustesse au point de vue</h2>
+<p>Toutes les photos de Nutrition5k sont prises à la verticale, caméra fixe. Test avec les vues latérales du même jeu (caméras <strong>b1, c1, f1</strong>). Comme ces vues n'existent que pour les plats du split train, un nouveau découpage a été fait : <strong>700 plats</strong> du train <strong>ÉCARTÉS</strong> (jamais entraînés, sous aucune vue), entraînement sur les <strong>3302 restants</strong>.</p>
+
+<h3>Erreur moyenne par caméra (g)</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Entraînement</th><th class="num">dessus</th><th class="num">f1</th><th class="num">b1</th><th class="num">c1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tête entraînée sur les vues de dessus uniquement</td><td class="num">39,4 g</td><td class="num">53,5 g</td><td class="num">61,8 g</td><td class="num">64,4 g</td></tr>
+      <tr><td>Tête entraînée sur dessus + les 3 vues latérales des plats d'entraînement</td><td class="num">37,4 g</td><td class="num">41,0 g</td><td class="num">42,2 g</td><td class="num">41,9 g</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Comparaison sur les mêmes 150 plats, dessus &rarr; latéral c1</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Modèle</th><th class="num">dessus</th><th class="num">latéral c1</th><th class="num">Écart</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>v9 (VLM 450 M)</td><td class="num">59,4 g</td><td class="num">75,2 g</td><td class="num">+15,9 g</td></tr>
+      <tr><td>Tête entraînée dessus seul</td><td class="num">30,1 g</td><td class="num">53,6 g</td><td class="num">+23,5 g</td></tr>
+      <tr><td>Tête + augmentation de vues</td><td class="num">25,0 g</td><td class="num">33,8 g</td><td class="num">+8,8 g</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>La tête augmentée bat v9 des deux côtés : <strong>-34,3 g</strong> en dessus, <strong>-41,4 g</strong> en latéral, Wilcoxon p &lt; 1e-5 dans les deux cas.</p>
+
+<div class="note">
+  <span class="t">Conclusion</span>
+  <p>La fragilité au cadrage se corrige par l'augmentation de données, elle n'est pas intrinsèque à l'architecture.</p>
+</div>
+
+<h2 id="generalisation">8. Généralisation à NutritionVerse-Real</h2>
+<p>Autre jeu de données (Université de Waterloo, Kaggle), vraies photos prises au téléphone, autres assiettes : <strong>889 images</strong>, <strong>225 plats exploitables</strong>, poids moyen <strong>421 g</strong> contre 192 g pour Nutrition5k.</p>
+
+<h3>Sur 66 plats du split Val, tous les modèles sur les MÊMES images</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Modèle</th><th class="num">Erreur moyenne</th><th class="num">Biais</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Tête Nutrition5k ZERO-SHOT</td><td class="num">292,5 g</td><td class="num">-292,0 g</td></tr>
+      <tr><td>v9</td><td class="num">209,9 g</td><td class="num">-172,5 g</td></tr>
+      <tr><td>Référence triviale (toujours 328 g)</td><td class="num">187,5 g</td><td class="num">—</td></tr>
+      <tr><td>Gemini</td><td class="num">159,1 g</td><td class="num">-138,2 g</td></tr>
+      <tr><td>Tête RECALIBRÉE (droite y=50+2,89p)</td><td class="num">156,7 g</td><td class="num">+1,6 g</td></tr>
+      <tr><td>Tête RÉENTRAÎNÉE sur 158 plats</td><td class="num">118,1 g</td><td class="num">-27,4 g</td></tr>
+    </tbody>
+  </table>
+</div>
+<ul>
+  <li>Tête réentraînée vs Gemini : <strong>-41,0 g</strong>, Wilcoxon p = <strong>0,0077</strong></li>
+  <li>Tête réentraînée vs v9 : <strong>-91,9 g</strong>, Wilcoxon p = <strong>0,0002</strong></li>
+</ul>
+
+<div class="note">
+  <span class="t">Interprétation</span>
+  <p>En zero-shot le modèle est aussi mauvais qu'une constante, et son erreur est presque entièrement un <strong>BIAIS</strong>. Il a appris l'échelle de poids de son domaine d'entraînement. Il conserve pourtant l'ordre (Spearman 0,50 à 0,62), donc la vision transfère, pas l'échelle. Une droite à deux paramètres suffit à le ramener au niveau de Gemini.</p>
+</div>
+
+<h3>Combien de plats annotés il faut dans un nouveau domaine</h3>
+<p>Évaluation toujours sur le même Val, 3 tirages différents par taille :</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th class="num">Plats annotés</th><th class="num">Erreur moyenne</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">10</td><td class="num">318 g</td></tr>
+      <tr><td class="num">25</td><td class="num">217 g</td></tr>
+      <tr><td class="num">50</td><td class="num">150 g</td></tr>
+      <tr><td class="num">100</td><td class="num">122 g</td></tr>
+      <tr><td class="num">158</td><td class="num">103 g</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Référence triviale : 190 g. Le seuil utile est autour de <strong>50 plats</strong> ; en dessous de 25, l'écart entre deux tirages (44 g) dépasse ce que la méthode apporte.</p>
+
+<h2 id="cout">9. Coût de calcul</h2>
+<p>Mesure sur <strong>RTX 5080</strong>, une image de bout en bout (DINOv2 + tête) :</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Ressource</th><th class="num">Temps</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>GPU</td><td class="num">5,1 ms</td></tr>
+      <tr><td>CPU</td><td class="num">30,2 ms</td></tr>
+    </tbody>
+  </table>
+</div>
+<ul>
+  <li>Entraînement complet de la tête : environ <strong>2 minutes</strong> sur GPU.</li>
+  <li>Pour comparaison : v9 met <strong>1,3 à 2 s</strong> par image, Gemini demande un aller-retour réseau et consomme un quota.</li>
+</ul>
+
+<h2 id="limites">10. Limites connues</h2>
+<ul>
+  <li>Ne reconnaît aucun aliment : sort un poids total, sans nom ni liste.</li>
+  <li>Ne décompose pas par aliment : la version par boîte englobante n'est pas testée.</li>
+  <li>N'utilise aucune carte de profondeur.</li>
+  <li>Ne se transporte pas d'un décor à l'autre sans recalibration ou réentraînement.</li>
+  <li>DINOv2 n'a été comparé à aucun autre backbone.</li>
+  <li>Le choix log vs grammes directs repose sur un écart de 0,2 g, non significatif.</li>
+</ul>
+
+<h2 id="fichiers">11. Fichiers du projet</h2>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>Fichier</th><th>Rôle</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>dino_features.py</code></td><td>extraction des features Nutrition5k</td></tr>
+      <tr><td><code>dino_head.py</code></td><td>entraînement et évaluation de la tête</td></tr>
+      <tr><td><code>dino_vues.py</code></td><td>features dessus + vues latérales, découpage à 700 plats</td></tr>
+      <tr><td><code>dino_vues_train.py</code></td><td>features des vues latérales des plats d'entraînement</td></tr>
+      <tr><td><code>dino_vues_eval.py</code></td><td>comparaison des deux entraînements sur les 4 vues</td></tr>
+      <tr><td><code>nvreal_eval.py</code></td><td>NutritionVerse-Real : zero-shot, recalibré, réentraîné</td></tr>
+      <tr><td><code>nvreal_courbe.py</code></td><td>courbe d'efficacité en données</td></tr>
+      <tr><td><code>nvreal_vlm.py</code></td><td>Gemini et v9 sur NutritionVerse-Real</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>Documentation technique générée — fichier HTML autonome, sans ressource externe.</footer>
+
+
+</div>
+</body>
+</html>
