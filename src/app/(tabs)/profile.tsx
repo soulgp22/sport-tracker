@@ -12,7 +12,6 @@ import { useBodyWeightStore } from '../../store/bodyWeightStore';
 import { getBodyweightForDate } from '../../lib/performanceEngine';
 import { sanitizeWeightInput } from '../../lib/sanitizeWeightInput';
 import { fonts } from '../../theme/fonts';
-import { radius, spacing } from '../../theme/tokens';
 
 import type { ThemeColors } from '../../theme/palettes';
 import type { PerformanceSex } from '../../types/performance';
@@ -64,110 +63,141 @@ export default function ProfileScreen() {
     router.replace('/(tabs)' as never);
   };
 
+  const fullName = [firstNameValue, lastNameValue].filter((part) => part.length > 0).join(' ');
+
+  const handleOpenSettings = () => {
+    router.push('/(tabs)/settings' as never);
+  };
+
   return (
     <SafeAreaView style={styles.safe} edges={['bottom', 'top']}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={handleBack}
-          hitSlop={8}
-          activeOpacity={0.7}
-          accessibilityLabel={t('profile.backAccessibilityLabel')}>
-          <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.heading}>{t('profile.title')}</Text>
-        <View style={styles.headerSpacer} />
+        <View style={styles.headerTop}>
+          <TouchableOpacity
+            onPress={handleBack}
+            hitSlop={8}
+            activeOpacity={0.7}
+            accessibilityLabel={t('profile.backAccessibilityLabel')}>
+            <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
+          </TouchableOpacity>
+          <Text style={styles.headerKicker}>{t('nav.profile')}</Text>
+        </View>
+        <Text style={styles.headerTitle}>{fullName || t('profile.title')}</Text>
+        <Text style={styles.helpText}>{t('profile.help')}</Text>
       </View>
 
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled">
-        <View style={styles.section}>
-          <Text style={styles.helpText}>{t('profile.help')}</Text>
-
-          <TextInput
-            label={t('profile.firstName')}
-            value={firstNameValue}
-            onChangeText={(value) => setFirstNameDraft(value)}
-            onEndEditing={() => {
-              setFirstName(firstNameDraft?.trim() || undefined);
-              setFirstNameDraft(null);
-            }}
-            maxLength={60}
-          />
-
-          <TextInput
-            label={t('profile.lastName')}
-            value={lastNameValue}
-            onChangeText={(value) => setLastNameDraft(value)}
-            onEndEditing={() => {
-              setLastName(lastNameDraft?.trim() || undefined);
-              setLastNameDraft(null);
-            }}
-            maxLength={60}
-          />
-
-          <Text style={styles.fieldLabel}>{t('performance.sex')}</Text>
-          <View style={styles.choiceRow}>
-            {SEX_OPTIONS.map((option) => {
-              const checked = sex === option.id;
-              return (
-                <TouchableOpacity
-                  key={option.id}
-                  style={[styles.choiceChip, checked ? styles.choiceChipActive : null]}
-                  onPress={() => setSex(option.id)}
-                  accessibilityRole="radio"
-                  accessibilityState={{ checked }}>
-                  <Text style={[styles.choiceText, checked ? styles.choiceTextActive : null]}>
-                    {t(option.labelKey)}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+        <View>
+          <View style={styles.fieldRow}>
+            <TextInput
+              label={t('profile.firstName')}
+              value={firstNameValue}
+              onChangeText={(value) => setFirstNameDraft(value)}
+              onEndEditing={() => {
+                setFirstName(firstNameDraft?.trim() || undefined);
+                setFirstNameDraft(null);
+              }}
+              maxLength={60}
+            />
           </View>
 
-          <TextInput
-            label={t('performance.age')}
-            value={ageInput}
-            onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))}
-            onEndEditing={() => {
-              setAge(ageInput ? Number(ageInput) : undefined);
-              setAgeDraft(null);
-            }}
-            keyboardType="number-pad"
-            maxLength={3}
-            placeholder={t('performance.agePlaceholder')}
-          />
+          <View style={styles.fieldRow}>
+            <TextInput
+              label={t('profile.lastName')}
+              value={lastNameValue}
+              onChangeText={(value) => setLastNameDraft(value)}
+              onEndEditing={() => {
+                setLastName(lastNameDraft?.trim() || undefined);
+                setLastNameDraft(null);
+              }}
+              maxLength={60}
+            />
+          </View>
 
-          <TextInput
-            label={t('performance.height')}
-            value={heightInput}
-            onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))}
-            onEndEditing={() => {
-              setHeightCm(heightInput ? Number(heightInput) : undefined);
-              setHeightDraft(null);
-            }}
-            keyboardType="number-pad"
-            maxLength={3}
-            placeholder={t('performance.heightPlaceholder')}
-          />
+          <View style={styles.fieldRow}>
+            <Text style={styles.fieldLabel}>{t('performance.sex')}</Text>
+            <View style={styles.choiceRow}>
+              {SEX_OPTIONS.map((option) => {
+                const checked = sex === option.id;
+                return (
+                  <TouchableOpacity
+                    key={option.id}
+                    style={[styles.choiceChip, checked ? styles.choiceChipActive : null]}
+                    onPress={() => setSex(option.id)}
+                    accessibilityRole="radio"
+                    accessibilityState={{ checked }}>
+                    <Text style={[styles.choiceText, checked ? styles.choiceTextActive : null]}>
+                      {t(option.labelKey)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
 
-          <TextInput
-            label={t('profile.weight')}
-            value={weightInput}
-            onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))}
-            onEndEditing={() => {
-              const raw = weightDraft ?? '';
-              const normalized = raw.replace(',', '.');
-              const parsed = parseFloat(normalized);
-              if (raw.trim() && Number.isFinite(parsed) && parsed >= 30 && parsed <= 300) {
-                addBodyWeightEntry(parsed);
-              }
-              setWeightDraft(null);
-            }}
-            keyboardType="decimal-pad"
-            placeholder={t('profile.weightPlaceholder')}
-          />
+          <View style={styles.fieldRow}>
+            <TextInput
+              label={t('performance.age')}
+              value={ageInput}
+              onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))}
+              onEndEditing={() => {
+                setAge(ageInput ? Number(ageInput) : undefined);
+                setAgeDraft(null);
+              }}
+              keyboardType="number-pad"
+              maxLength={3}
+              placeholder={t('performance.agePlaceholder')}
+            />
+          </View>
+
+          <View style={styles.fieldRow}>
+            <TextInput
+              label={t('performance.height')}
+              value={heightInput}
+              onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))}
+              onEndEditing={() => {
+                setHeightCm(heightInput ? Number(heightInput) : undefined);
+                setHeightDraft(null);
+              }}
+              keyboardType="number-pad"
+              maxLength={3}
+              placeholder={t('performance.heightPlaceholder')}
+            />
+          </View>
+
+          <View style={styles.fieldRow}>
+            <TextInput
+              label={t('profile.weight')}
+              value={weightInput}
+              onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))}
+              onEndEditing={() => {
+                const raw = weightDraft ?? '';
+                const normalized = raw.replace(',', '.');
+                const parsed = parseFloat(normalized);
+                if (raw.trim() && Number.isFinite(parsed) && parsed >= 30 && parsed <= 300) {
+                  addBodyWeightEntry(parsed);
+                }
+                setWeightDraft(null);
+              }}
+              keyboardType="decimal-pad"
+              placeholder={t('profile.weightPlaceholder')}
+            />
+          </View>
+        </View>
+
+        <View style={styles.settingsSection}>
+          <Text style={styles.sectionKicker}>{t('nav.settings')}</Text>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={handleOpenSettings}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('settings.appearance')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -178,40 +208,58 @@ const makeStyles = (c: ThemeColors) =>
   StyleSheet.create({
     safe: { flex: 1, backgroundColor: c.bg },
     header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: spacing.md,
-      paddingVertical: 10,
-      borderBottomWidth: 1,
+      paddingHorizontal: 20,
+      paddingTop: 14,
+      paddingBottom: 16,
+      borderBottomWidth: 2,
       borderBottomColor: c.border,
       backgroundColor: c.bg,
     },
-    headerSpacer: { width: 24 },
-    heading: {
-      fontSize: 17,
-      fontFamily: fonts.sansBold,
+    headerTop: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      marginBottom: 10,
+    },
+    headerKicker: {
+      fontFamily: fonts.serifBold,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 1.54,
+      textTransform: 'uppercase',
+      color: c.secondary,
+    },
+    headerTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 26,
+      lineHeight: 32,
       color: c.textPrimary,
     },
-    content: { padding: spacing.md, gap: spacing.xl, paddingBottom: 40 },
-    section: { gap: 12 },
     helpText: {
-      fontSize: 13,
       fontFamily: fonts.sans,
-      color: c.textSecondary,
+      fontSize: 13,
       lineHeight: 18,
+      marginTop: 6,
+      color: c.textSecondary,
+    },
+    content: { paddingBottom: 40 },
+    fieldRow: {
+      paddingHorizontal: 20,
+      paddingVertical: 14,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+      minHeight: 58,
     },
     fieldLabel: {
-      fontSize: 13,
       fontFamily: fonts.sansSemi,
+      fontSize: 14,
       color: c.textPrimary,
     },
-    choiceRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+    choiceRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
     choiceChip: {
       minHeight: 38,
       justifyContent: 'center',
-      paddingHorizontal: spacing.sm,
-      borderRadius: radius.lg,
+      paddingHorizontal: 12,
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.surface,
@@ -221,9 +269,40 @@ const makeStyles = (c: ThemeColors) =>
       backgroundColor: c.accentSoft,
     },
     choiceText: {
-      fontSize: 12,
       fontFamily: fonts.sansSemi,
+      fontSize: 12,
       color: c.textSecondary,
     },
     choiceTextActive: { color: c.primary },
+    settingsSection: {
+      paddingTop: 18,
+      borderTopWidth: 2,
+      borderTopColor: c.border,
+      paddingBottom: 24,
+    },
+    sectionKicker: {
+      fontFamily: fonts.serifBold,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 1.54,
+      textTransform: 'uppercase',
+      color: c.secondary,
+      marginHorizontal: 20,
+      marginBottom: 8,
+    },
+    settingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 20,
+      paddingVertical: 14,
+      minHeight: 56,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+    },
+    settingLabel: {
+      fontFamily: fonts.sans,
+      fontSize: 14,
+      color: c.textPrimary,
+    },
   });
