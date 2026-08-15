@@ -52,14 +52,10 @@ export default function TabLayout() {
         tabBarItemStyle: { paddingVertical: 2 },
         sceneStyle: { backgroundColor: c.bg },
       }}>
-      {/* Onglets visibles : les 5 sections principales, à 1 tap du pouce. */}
+      {/* Onglets visibles : Accueil, Séance, Nutrition, Progression. */}
       <Tabs.Screen
         name="index"
         options={{ title: t('nav.home'), tabBarIcon: tabIcon('home') }}
-      />
-      <Tabs.Screen
-        name="programs"
-        options={{ title: t('nav.programs'), tabBarIcon: tabIcon('barbell') }}
       />
       <Tabs.Screen
         name="session"
@@ -75,11 +71,13 @@ export default function TabLayout() {
       />
       {/* Sections routables mais hors tab bar (accessibles depuis l'accueil
           ou les écrans parents) : aucune fonctionnalité ne disparaît. */}
+      <Tabs.Screen name="programs" options={{ href: null }} />
       <Tabs.Screen name="exercises" options={{ href: null }} />
       <Tabs.Screen name="foods" options={{ href: null }} />
       <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="community" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
+      <Tabs.Screen name="profile" options={{ href: null }} />
     </Tabs>
   );
 }

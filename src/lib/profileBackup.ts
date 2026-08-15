@@ -13,7 +13,7 @@ import { useFoodStore } from '../store/foodStore';
 import { useNutritionGoalsStore } from '../store/nutritionGoalsStore';
 import { useProgramStore } from '../store/programStore';
 import { useSessionStore } from '../store/sessionStore';
-import { usePerformanceStore } from '../store/performanceStore';
+import { normalizeName, usePerformanceStore } from '../store/performanceStore';
 import { assertImportTextSize } from './importLimits';
 import type { PerformanceProfile, UnlockedBadge } from '../types/performance';
 
@@ -127,6 +127,8 @@ export function buildProfileBackup(): string {
         monthlySessionGoal: usePerformanceStore.getState().monthlySessionGoal,
         notificationsEnabled: usePerformanceStore.getState().notificationsEnabled,
         programDescription: usePerformanceStore.getState().programDescription,
+        firstName: usePerformanceStore.getState().firstName,
+        lastName: usePerformanceStore.getState().lastName,
         unlockedBadges: usePerformanceStore.getState().unlockedBadges,
       },
     },
@@ -218,6 +220,14 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
         programDescription: typeof data.performanceProfile.programDescription === 'string'
           ? data.performanceProfile.programDescription
           : '',
+        firstName:
+          typeof data.performanceProfile.firstName === 'string'
+            ? normalizeName(data.performanceProfile.firstName as string)
+            : undefined,
+        lastName:
+          typeof data.performanceProfile.lastName === 'string'
+            ? normalizeName(data.performanceProfile.lastName as string)
+            : undefined,
         unlockedBadges: Array.isArray(data.performanceProfile.unlockedBadges)
           ? data.performanceProfile.unlockedBadges.filter(
               (badge): badge is UnlockedBadge =>
@@ -235,6 +245,8 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
         monthlySessionGoal: currentPerformance.monthlySessionGoal,
         notificationsEnabled: false,
         programDescription: '',
+        firstName: undefined,
+        lastName: undefined,
         unlockedBadges: [],
       };
 

@@ -47,19 +47,56 @@ EXPO_PUBLIC_MEAL_SERVER_API_KEY=…
 Hébergé chez Hetzner, exposé en HTTPS via un domaine DuckDNS, reverse proxy Caddy
 avec certificat Let's Encrypt.
 
-Quatre services `systemd` :
+Cinq services `systemd` :
 
-| Service | Rôle |
-|---|---|
-| `meal-server` | llama-server + modèle v9 (GGUF) |
-| `meal-router` | routeur v9 / Gemini, contrat OpenAI |
-| `meal-training-upload` | collecte des corrections opt-in |
-| `caddy` | HTTPS et reverse proxy |
+| Service | Port interne | Rôle |
+|---|---|---|
+| `meal-server` | — | llama-server + modèle v9 (GGUF) |
+| `meal-router` | 8352 | routeur v9 / Gemini, contrat OpenAI |
+| `meal-training-upload` | — | collecte des corrections opt-in |
+| `lst-catalog` | 8353 | catalogues exercices / aliments + proxy code-barres |
+| `caddy` | 443 | HTTPS et reverse proxy |
 
 Le routeur sert le modèle **v9 par défaut** ; l'app force `?engine=gemini`.
 La clé Gemini vit **sur le VPS**, jamais dans l'app.
 
-Commandes utiles : `journalctl -u meal-server -f`, `systemctl restart meal-router`.
+`lst-catalog` (`/opt/lst-catalog/lst_catalog.py`, stdlib Python) sert trois
+familles d'endpoints, routées par Caddy **avant** le `reverse_proxy` par défaut
+vers 8352 :
+
+```
+handle /v1/exercises*  { reverse_proxy 127.0.0.1:8353 }
+handle /v1/foods*      { reverse_proxy 127.0.0.1:8353 }
+handle /v1/products*   { reverse_proxy 127.0.0.1:8353 }
+```
+
+L'ordre compte : sans ces blocs placés en premier, ces chemins partiraient vers
+le routeur repas, qui répondrait 404.
+
+Commandes utiles : `journalctl -u meal-server -f`,
+`systemctl restart meal-router`, `systemctl status lst-catalog`.
+
+### Vérifier que le serveur est vivant, depuis l'extérieur
+
+```bash
+curl -s https://<domaine>/health          # -> {"status": "ok"}  (meal-router)
+```
+
+⚠️ **`/health` ne teste QUE le routeur repas.** Caddy ne l'achemine pas vers
+`lst-catalog` : ce service peut être arrêté alors que `/health` répond « ok ».
+Pour le contrôler, il faut un appel authentifié à l'un de ses endpoints :
+
+```bash
+curl -s -H "Authorization: Bearer $CLE" \
+  "https://<domaine>/v1/foods?q=riz&limit=1"
+```
+
+Un `401` sur `/v1/*` signifie que la passerelle fonctionne et que la clé est
+absente ou fausse — pas que le service est tombé.
+
+**Dernière vérification externe : 2026-08-11.** `/health` 200 ;
+`/v1/exercises?q=traction` → 15 résultats ; `/v1/foods?q=riz` → 4 résultats ;
+`/v1/products/<code>` → 401 sans clé.
 
 ---
 

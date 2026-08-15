@@ -42,7 +42,7 @@ export default function HistoryLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: t('nav.history'),
           headerLeft: () => <BackToHomeButton />,
         }}

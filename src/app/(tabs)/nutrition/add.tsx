@@ -104,6 +104,9 @@ export default function AddMealScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
   const searchFoods = useFoodStore((s) => s.searchFoods);
+  const searchFoodsAsync = useFoodStore((s) => s.searchFoodsAsync);
+  const searchLoading = useFoodStore((s) => s.searchLoading);
+  const searchError = useFoodStore((s) => s.searchError);
   const customFoods = useFoodStore((s) => s.customFoods);
   const getAllFoods = useFoodStore((s) => s.getAllFoods);
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
@@ -134,6 +137,11 @@ export default function AddMealScreen() {
       mounted = false;
     };
   }, []);
+
+  // Déclenche la recherche réseau à chaque changement de requête
+  useEffect(() => {
+    searchFoodsAsync(query);
+  }, [query, searchFoodsAsync]);
 
   const results = useMemo(() => searchFoods(query), [customFoods, query, searchFoods]);
   const quantityNumber = parseQuantity(quantity);
@@ -244,7 +252,7 @@ export default function AddMealScreen() {
         <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
           <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.heading}>Ajouter un repas</Text>
+        <Text style={styles.heading}>{t('nutrition.addMeal')}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -292,22 +300,58 @@ export default function AddMealScreen() {
               </View>
             ) : null}
 
-            <FlatList
-              data={results}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <FoodResultRow food={item} onPress={() => handleSelectFood(item)} />
-              )}
-              ListEmptyComponent={
+            {searchLoading ? (
+              <View style={styles.emptyList}>
                 <EmptyState
-                  icon="search-outline"
-                  title="Aucun aliment"
-                  subtitle="Essayez une autre recherche"
+                  icon="hourglass-outline"
+                  title={t('foods.loading')}
                 />
-              }
-              contentContainerStyle={results.length > 0 ? styles.resultsList : styles.emptyList}
-              keyboardShouldPersistTaps="handled"
-            />
+              </View>
+            ) : searchError !== 'none' && query.trim().length > 0 ? (
+              <View style={styles.emptyList}>
+                <EmptyState
+                  icon="cloud-offline-outline"
+                  title={t('foods.unavailable')}
+                  subtitle={t('foods.unavailableHelp')}
+                  actionLabel={t('foods.retry')}
+                  onAction={() => searchFoodsAsync(query)}
+                />
+              </View>
+            ) : (
+              <FlatList
+                data={results}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <FoodResultRow food={item} onPress={() => handleSelectFood(item)} />
+                )}
+                ListEmptyComponent={
+                  query.trim().length > 0 ? (
+                    <EmptyState
+                      icon="search-outline"
+                      title={t('nutrition.add.noResults')}
+                      subtitle={t('nutrition.add.noResultsHelp')}
+                      actionLabel={t('nutrition.add.scanBarcodeCTA')}
+                      onAction={() => setScannerVisible(true)}
+                      secondaryActionLabel={t('nutrition.add.manualEntryCTA')}
+                      onSecondaryAction={() =>
+                        router.push({
+                          pathname: '/(tabs)/foods/new',
+                          params: { name: query },
+                        } as never)
+                      }
+                    />
+                  ) : (
+                    <EmptyState
+                      icon="search-outline"
+                      title={t('nutrition.add.noResults')}
+                      subtitle={t('nutrition.add.noResultsHelp')}
+                    />
+                  )
+                }
+                contentContainerStyle={results.length > 0 ? styles.resultsList : styles.emptyList}
+                keyboardShouldPersistTaps="handled"
+              />
+            )}
           </View>
         ) : (
           <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -352,7 +396,7 @@ export default function AddMealScreen() {
             />
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Repas</Text>
+              <Text style={styles.sectionTitle}>{t('nutrition.add.mealSection')}</Text>
               <View style={styles.mealTypeRow}>
                 {selectableGroups.map((value) => {
                   const selected = !newGroupMode && value === mealType;

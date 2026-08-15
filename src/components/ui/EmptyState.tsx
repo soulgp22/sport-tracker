@@ -16,6 +16,9 @@ interface EmptyStateProps {
   /** CTA optionnel : transforme l'état vide en point de départ guidé. */
   actionLabel?: string;
   onAction?: () => void;
+  /** Action secondaire, moins appuyée (ex : alternative). */
+  secondaryActionLabel?: string;
+  onSecondaryAction?: () => void;
 }
 
 export function EmptyState({
@@ -24,6 +27,8 @@ export function EmptyState({
   subtitle,
   actionLabel,
   onAction,
+  secondaryActionLabel,
+  onSecondaryAction,
 }: EmptyStateProps) {
   const c = useColors();
   const { tr } = useTranslation();
@@ -37,6 +42,15 @@ export function EmptyState({
       {subtitle ? <Text style={styles.subtitle}>{tr(subtitle)}</Text> : null}
       {actionLabel && onAction ? (
         <Button title={actionLabel} variant="soft" compact onPress={onAction} style={styles.action} />
+      ) : null}
+      {secondaryActionLabel && onSecondaryAction ? (
+        <Button
+          title={secondaryActionLabel}
+          variant="secondary"
+          compact
+          onPress={onSecondaryAction}
+          style={styles.action}
+        />
       ) : null}
     </View>
   );

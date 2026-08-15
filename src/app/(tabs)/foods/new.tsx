@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from '../../../i18n/useTranslation';
 
@@ -10,6 +10,7 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { spacing } from '../../../theme/tokens';
+import { normalizeRouteParam } from '../../../lib/routeParamNormalizer';
 
 import { normalizeFoodName, useFoodStore } from '../../../store/foodStore';
 import type { Food } from '../../../types';
@@ -33,6 +34,8 @@ export default function NewFoodScreen() {
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
+  const { name: rawName } = useLocalSearchParams<{ name?: string }>();
+  const prefilledName = normalizeRouteParam(rawName);
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const getAllFoods = useFoodStore((s) => s.getAllFoods);
   const getCategories = useFoodStore((s) => s.getCategories);
@@ -65,7 +68,12 @@ export default function NewFoodScreen() {
         <View style={{ width: 24 }} />
       </View>
 
-      <FoodForm categories={categories} submitLabel="Créer l'aliment" onSubmit={handleSubmit} />
+      <FoodForm
+        categories={categories}
+        initialName={prefilledName}
+        submitLabel="Créer l'aliment"
+        onSubmit={handleSubmit}
+      />
     </SafeAreaView>
   );
 }

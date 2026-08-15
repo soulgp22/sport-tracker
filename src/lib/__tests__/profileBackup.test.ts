@@ -37,6 +37,8 @@ beforeEach(async () => {
     monthlySessionGoal: 12,
     notificationsEnabled: false,
     programDescription: '',
+    firstName: undefined,
+    lastName: undefined,
     unlockedBadges: [],
   });
 });
@@ -163,5 +165,119 @@ describe('profileBackup', () => {
   it('rejette des donnees manquantes', () => {
     const result = parseProfileBackup(JSON.stringify({ version: 1, exportedAt: 'now', data: {} }));
     expect(result).toContain('programs');
+  });
+
+  // T5 : aller-retour buildProfileBackup -> parseProfileBackup préserve firstName et lastName
+  it('aller-retour sauvegarde/restauration preserve firstName et lastName', () => {
+    usePerformanceStore.getState().setFirstName('Jeanne');
+    usePerformanceStore.getState().setLastName('Dupuis');
+
+    const text = buildProfileBackup();
+    const parsed = parseProfileBackup(text);
+    expect(typeof parsed).not.toBe('string');
+
+    const backup = parsed as Exclude<typeof parsed, string>;
+    expect(backup.data.performanceProfile.firstName).toBe('Jeanne');
+    expect(backup.data.performanceProfile.lastName).toBe('Dupuis');
+  });
+
+  // T6 : sauvegarde HOSTILE — valeurs non-string, chaîne de 100k caractères
+  it('parseProfileBackup résiste à une sauvegarde hostile sur firstName/lastName', () => {
+    const hostile = JSON.stringify({
+      version: 1,
+      exportedAt: '2026-08-11T00:00:00.000Z',
+      data: {
+        programs: [],
+        exercises: [],
+        sessions: [],
+        customFoods: [],
+        foodDiaryEntries: [],
+        bodyWeightEntries: [],
+        nutritionGoals: {
+          dailyCalories: 2000,
+          protein: 100,
+          carbs: 200,
+          fat: 60,
+          goalType: 'maintenance',
+        },
+        performanceProfile: {
+          firstName: 42,
+          lastName: null,
+        },
+      },
+    });
+
+    const result1 = parseProfileBackup(hostile);
+    expect(typeof result1).not.toBe('string');
+    const backup1 = result1 as Exclude<typeof result1, string>;
+    // 42 n'est pas une string -> undefined
+    expect(backup1.data.performanceProfile.firstName).toBeUndefined();
+    // null n'est pas une string -> undefined
+    expect(backup1.data.performanceProfile.lastName).toBeUndefined();
+
+    // Objet comme firstName
+    const hostileObj = JSON.stringify({
+      version: 1,
+      exportedAt: '2026-08-11T00:00:00.000Z',
+      data: {
+        programs: [],
+        exercises: [],
+        sessions: [],
+        customFoods: [],
+        foodDiaryEntries: [],
+        bodyWeightEntries: [],
+        nutritionGoals: {
+          dailyCalories: 2000,
+          protein: 100,
+          carbs: 200,
+          fat: 60,
+          goalType: 'maintenance',
+        },
+        performanceProfile: {
+          firstName: { value: 'malicious' },
+          lastName: {},
+        },
+      },
+    });
+
+    const result2 = parseProfileBackup(hostileObj);
+    expect(typeof result2).not.toBe('string');
+    const backup2 = result2 as Exclude<typeof result2, string>;
+    expect(backup2.data.performanceProfile.firstName).toBeUndefined();
+    expect(backup2.data.performanceProfile.lastName).toBeUndefined();
+
+    // Chaîne de 100 000 caractères -> bornée à MAX_NAME_LENGTH maximum
+    const hugeName = 'X'.repeat(100_000);
+    const huge = JSON.stringify({
+      version: 1,
+      exportedAt: '2026-08-11T00:00:00.000Z',
+      data: {
+        programs: [],
+        exercises: [],
+        sessions: [],
+        customFoods: [],
+        foodDiaryEntries: [],
+        bodyWeightEntries: [],
+        nutritionGoals: {
+          dailyCalories: 2000,
+          protein: 100,
+          carbs: 200,
+          fat: 60,
+          goalType: 'maintenance',
+        },
+        performanceProfile: {
+          firstName: hugeName,
+          lastName: hugeName,
+        },
+      },
+    });
+
+    const result3 = parseProfileBackup(huge);
+    expect(typeof result3).not.toBe('string');
+    const backup3 = result3 as Exclude<typeof result3, string>;
+    expect(backup3.data.performanceProfile.firstName).toHaveLength(60);
+    expect(backup3.data.performanceProfile.firstName!.length).toBeLessThanOrEqual(60);
+    expect(backup3.data.performanceProfile.lastName).toHaveLength(60);
+    expect(backup3.data.performanceProfile.lastName!.length).toBeLessThanOrEqual(60);
   });
 });

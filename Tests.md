@@ -64,6 +64,12 @@ est une régression déguisée.
 | Scan code-barres | `src/lib/__tests__/openFoodFacts.test.ts` | passerelle `/v1/products`, les 4 cas : trouvé, introuvable, serveur non configuré, injoignable |
 | Notifications | `src/lib/__tests__/performanceNotifications.test.ts` | déterminisme (`now` injecté) |
 | i18n | test de parité | les 4 langues (fr, en, es, de) restent complètes |
+| Recherche d'aliments | `src/store/__tests__/foodStore.test.ts` | « aucun résultat » et « serveur injoignable » restent deux états distincts ; les aliments personnels survivent à la fusion |
+| Profil (nom/prénom) | `src/store/__tests__/performanceStore.test.ts` | trim, bornage à 60 caractères, chaîne vide → `undefined` ; réhydratation réelle d'un état persisté antérieur |
+| Sauvegarde de profil | `src/lib/__tests__/profileBackup.test.ts` | aller-retour export/import ; sauvegarde hostile (nombre, objet, 100 000 caractères) |
+| Saisie du poids | `src/lib/__tests__/sanitizeWeightInput.test.ts` | un seul séparateur décimal, 6 caractères maximum |
+| Tuiles de l'accueil | `src/constants/__tests__/homeTiles.test.ts` | ni `programs` ni `foods`, exactement 4 entrées |
+| Destination du CTA profil | `src/constants/__tests__/routes.test.ts` | « Compléter mon profil » mène à l'écran qui contient réellement les champs |
 
 ---
 
@@ -76,6 +82,8 @@ ne les remplacent pas.
 |---|---|
 | Démarrage de l'APK release | trois crashs sont passés avec tous les tests verts |
 | Rendu visuel après changement de mise en page | CSS et markup valides séparément peuvent ne plus se connaître |
+| **Textes des états vides, après tout remaniement de navigation** | la parité i18n vérifie qu'une clé existe, jamais que son texte est encore *vrai*. Un sous-titre a continué de renvoyer vers un onglet supprimé (voir known_bugs.md n°12) |
+| **Destination des invitations à compléter un champ** | quand un champ change d'écran, les boutons qui invitent à le renseigner peuvent continuer de pointer vers l'ancien (voir known_bugs.md n°11) |
 | Health Connect avec de vraies données | l'émulateur n'a aucune donnée de santé |
 | Viewer 3D | les exercices avec modèle ne sont pas dans le catalogue de base |
 

@@ -13,12 +13,10 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
-import { cardShadow, radius, spacing } from '../../theme/tokens';
 
 import type { ThemeColors } from '../../theme/palettes';
 import type { CatalogExercise } from '../../types';
 import type { EquipmentProfileId } from '../../types/equipment';
-import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { TextInput } from '../ui/TextInput';
 import { EmptyState } from '../ui/EmptyState';
 
@@ -52,23 +50,18 @@ function ExerciseRow({
 
   return (
     <TouchableOpacity
-      style={[styles.card, selected && styles.cardSelected]}
+      style={styles.row}
       onPress={onPress}
-      activeOpacity={0.75}>
-      <AnimatedExerciseImage
-        id={exercise.id}
-        style={styles.thumb}
-        animate={false}
-        accessibilityLabel={displayName}
-      />
-      <View style={styles.cardBody}>
-        <Text style={styles.name} numberOfLines={2}>{displayName}</Text>
-        <Text style={styles.meta} numberOfLines={1}>
+      activeOpacity={0.75}
+      accessibilityRole="button">
+      <View style={styles.rowCopy}>
+        <Text style={styles.rowTitle} numberOfLines={1}>{displayName}</Text>
+        <Text style={styles.rowDetail} numberOfLines={1}>
           {translateMuscle(exercise.target, language)} · {' '}
           {translateEquipment(exercise.equipment, language)}
         </Text>
         {aliases.length > 0 ? (
-          <Text style={styles.alias} numberOfLines={1}>{aliases[0]}</Text>
+          <Text style={styles.rowAlias} numberOfLines={1}>{aliases[0]}</Text>
         ) : null}
       </View>
       {targetEquipmentProfileId && targetEquipmentProfileId !== 'full-gym' ? (
@@ -122,12 +115,28 @@ export function ExerciseCatalogList({
     );
   }, [bodyPart, query, searchResults, targetEquipmentProfileId, allExercises]);
 
+  function renderHeader() {
+    return (
+      <View style={styles.header}>
+        <Text style={styles.headerKicker}>{t('exercises.kicker')}</Text>
+        <Text style={styles.headerTitle}>{t('exercises.title')}</Text>
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder={t('exercise.search')}
+          autoCapitalize="none"
+          style={styles.searchInput}
+        />
+      </View>
+    );
+  }
+
   // État de chargement
   if (searchLoading) {
     return (
       <View style={styles.wrapper}>
+        {renderHeader()}
         {renderDownloadBanner()}
-        {renderSearchBox()}
         <View style={styles.empty}>
           <EmptyState
             icon="hourglass-outline"
@@ -140,16 +149,15 @@ export function ExerciseCatalogList({
 
   // Indisponible ou non configuré
   if (searchError !== 'none' && query) {
-    const isNotConfigured = searchError === 'server-not-configured';
     return (
       <View style={styles.wrapper}>
+        {renderHeader()}
         {renderDownloadBanner()}
-        {renderSearchBox()}
-        {renderMuscleChips()}
+        {renderFilterRow()}
         <View style={styles.empty}>
           <EmptyState
             icon="cloud-offline-outline"
-            title={isNotConfigured ? t('exercise.unavailable') : t('exercise.unavailable')}
+            title={t('exercise.unavailable')}
             subtitle={t('exercise.unavailableHelp')}
             actionLabel={t('exercise.retry')}
             onAction={() => searchAsync(query)}
@@ -163,61 +171,63 @@ export function ExerciseCatalogList({
     if (!onBrowseDownloads) return null;
     return (
       <TouchableOpacity style={styles.downloadBanner} onPress={onBrowseDownloads} activeOpacity={0.78}>
-        <View style={styles.downloadIcon}><Ionicons name="cloud-download-outline" size={20} color={c.primary} /></View>
-        <View style={styles.downloadCopy}><Text style={styles.downloadTitle}>{installedPackIds.length ? t('exercise.catalogDownloaded') : t('exercise.moreExercises')}</Text><Text style={styles.downloadMeta}>{installedPackIds.length ? t('exercise.catalogDownloadedMeta', { count: allExercises.length }) : t('exercise.catalogDownloadMeta')}</Text></View>
+        <View style={styles.downloadIcon}>
+          <Ionicons name="cloud-download-outline" size={20} color={c.primary} />
+        </View>
+        <View style={styles.downloadCopy}>
+          <Text style={styles.downloadTitle}>
+            {installedPackIds.length ? t('exercise.catalogDownloaded') : t('exercise.moreExercises')}
+          </Text>
+          <Text style={styles.downloadMeta}>
+            {installedPackIds.length
+              ? t('exercise.catalogDownloadedMeta', { count: allExercises.length })
+              : t('exercise.catalogDownloadMeta')}
+          </Text>
+        </View>
         <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
       </TouchableOpacity>
     );
   }
 
-  function renderSearchBox() {
+  function renderFilterRow() {
     return (
-      <View style={styles.searchBox}>
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          placeholder={t('exercise.search')}
-          autoCapitalize="none"
-        />
+      <View style={styles.filterRow}>
+        <View style={styles.filterInner}>
+          <Text style={styles.filterLabel}>{t('exercises.filterMuscle')}</Text>
+          <View style={styles.filterOptions}>
+            {['', ...bodyParts].map((item) => {
+              const selected = item === bodyPart;
+              return (
+                <TouchableOpacity
+                  key={item || 'all'}
+                  style={[styles.chip, selected && styles.chipSelected]}
+                  onPress={() => setBodyPart(item)}
+                  activeOpacity={0.75}>
+                  <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
+                    {item ? translateMuscle(item, language) : t('exercise.all')}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
       </View>
-    );
-  }
-
-  function renderMuscleChips() {
-    return (
-      <FlatList
-        horizontal
-        data={['', ...bodyParts]}
-        keyExtractor={(item) => item || 'all'}
-        showsHorizontalScrollIndicator={false}
-        style={styles.chipList}
-        contentContainerStyle={styles.chipRow}
-        renderItem={({ item }) => {
-          const selected = item === bodyPart;
-          return (
-            <TouchableOpacity
-              style={[styles.chip, selected && styles.chipSelected]}
-              onPress={() => setBodyPart(item)}
-              activeOpacity={0.75}>
-              <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                {item ? translateMuscle(item, language) : t('exercise.all')}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
     );
   }
 
   return (
     <View style={styles.wrapper}>
-      {renderDownloadBanner()}
-      {renderSearchBox()}
-      {renderMuscleChips()}
+      {renderHeader()}
 
       <FlatList
         data={exercises}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            {renderDownloadBanner()}
+            {renderFilterRow()}
+          </>
+        }
         renderItem={({ item }) => (
           <ExerciseRow
             exercise={item}
@@ -242,39 +252,118 @@ export function ExerciseCatalogList({
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   wrapper: { flex: 1 },
-  downloadBanner: { marginHorizontal: spacing.md, marginTop: spacing.xs, padding: spacing.md, borderRadius: radius.lg, backgroundColor: c.surface, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, shadowColor: c.overlay, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
-  downloadIcon: { width: 38, height: 38, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: c.accentSoft },
+
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 14,
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+  },
+  headerKicker: {
+    fontFamily: fonts.serifBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 1.54,
+    textTransform: 'uppercase',
+    color: c.secondary,
+  },
+  headerTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 34,
+    lineHeight: 40,
+    marginTop: 6,
+    marginBottom: 14,
+    color: c.textPrimary,
+  },
+  searchInput: { fontSize: 15, borderWidth: 1 },
+
+  downloadBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+  },
+  downloadIcon: {
+    width: 38,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: c.accentSoft,
+  },
   downloadCopy: { flex: 1 },
   downloadTitle: { fontSize: 14, fontFamily: fonts.sansHeavy, color: c.textPrimary },
   downloadMeta: { fontSize: 11, lineHeight: 15, color: c.textSecondary, marginTop: 2 },
-  searchBox: { paddingHorizontal: spacing.md, paddingTop: spacing.xs, paddingBottom: 6 },
-  chipList: { flexGrow: 0, flexShrink: 0 },
-  chipRow: { paddingHorizontal: spacing.md, gap: spacing.xs, paddingVertical: spacing.xs, alignItems: 'center' },
-  chip: {
-    height: 34,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.lg,
-    backgroundColor: c.surfaceAlt,
+
+  filterRow: {
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+    paddingVertical: 12,
   },
-  chipSelected: { backgroundColor: c.primary },
-  chipText: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary },
-  chipTextSelected: { color: c.primaryText },
-  list: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg, gap: 8 },
+  filterInner: {
+    paddingHorizontal: 20,
+    paddingTop: 4,
+    paddingBottom: 8,
+  },
+  filterLabel: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    color: c.textMuted,
+    marginBottom: 6,
+  },
+  filterOptions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  chip: {
+    minHeight: 34,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
+  chipText: { fontFamily: fonts.sans, fontSize: 12, color: c.textPrimary },
+  chipTextSelected: { color: c.bg },
+
+  list: { paddingBottom: 20 },
   empty: { flexGrow: 1 },
-  card: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: c.surface,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    gap: spacing.sm,
-    ...cardShadow(c),
+    gap: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    minHeight: 64,
+    borderBottomWidth: 1,
+    borderBottomColor: c.border,
   },
-  cardSelected: { borderWidth: 2, borderColor: c.primary },
-  thumb: { width: 58, height: 58, borderRadius: radius.sm, backgroundColor: c.surfaceAlt },
-  cardBody: { flex: 1, gap: 3 },
-  name: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
-  meta: { fontSize: 12, color: c.textSecondary },
-  alias: { fontSize: 11, color: c.primary, fontFamily: fonts.sansSemi },
+  rowCopy: { flex: 1 },
+  rowTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 15,
+    lineHeight: 19,
+    color: c.textPrimary,
+  },
+  rowDetail: {
+    fontFamily: fonts.sans,
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 2,
+    color: c.textSecondary,
+  },
+  rowAlias: {
+    fontFamily: fonts.sansSemi,
+    fontSize: 11,
+    lineHeight: 15,
+    marginTop: 2,
+    color: c.primary,
+  },
 });

@@ -16,6 +16,8 @@ export interface PerformanceProfile {
   monthlySessionGoal: number;
   notificationsEnabled: boolean;
   programDescription: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface OneRepMaxEstimate {
