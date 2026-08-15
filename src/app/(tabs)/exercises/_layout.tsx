@@ -42,7 +42,7 @@ export default function ExercisesLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: t('nav.exercises'),
           headerLeft: () => <BackToHomeButton />,
         }}
