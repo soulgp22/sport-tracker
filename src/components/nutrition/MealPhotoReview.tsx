@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
+  Easing,
   Image,
   Modal,
   ScrollView,
@@ -18,14 +20,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // l'appareil : l'app envoie la photo au serveur (llama-server, v9 GGUF).
 
 import { appAlert } from '../ui/AppDialog';
-import { Button } from '../ui/Button';
 import { TextInput } from '../ui/TextInput';
 import { useTranslation } from '../../i18n/useTranslation';
 import { mealPhotoT as mt } from '../../i18n/mealPhotoFallback';
 import { useColors } from '../../theme/useColors';
-import type { ThemeColors } from '../../theme/palettes';
+import { RAMP_WARM, type ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
-import { cardShadow, radius, spacing } from '../../theme/tokens';
 
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
 import {
@@ -73,6 +73,63 @@ let nextItemId = 1;
 function formatMacro(value: number): string {
   if (Number.isInteger(value)) return String(value);
   return value.toFixed(1).replace('.', ',');
+}
+
+// La maquette impose des blancs avec opacité (65 % et 40 %) sur fond sombre.
+// La palette ne contient aucun jeton « blanc » : on les déclare ici, à côté de
+// la maquette, plutôt que d'éparpiller des couleurs en dur dans les styles.
+const WHITE_65 = 'rgba(255, 255, 255, 0.65)';
+const WHITE_40 = 'rgba(255, 255, 255, 0.40)';
+
+const progressStyles = StyleSheet.create({
+  track: { height: 6, width: '100%', overflow: 'hidden' },
+  fill: { position: 'absolute', left: 0, height: 6 },
+});
+
+/**
+ * Barre de progression INDÉTERMINÉE : le serveur ne renvoie aucun pourcentage,
+ * on ne peut donc pas en afficher un. Une portion de 40 % parcourt la piste en
+ * aller-retour (Animated), sans dépendance nouvelle.
+ */
+function IndeterminateBar({ trackColor, fillColor }: { trackColor: string; fillColor: string }) {
+  const [translateX] = useState(() => new Animated.Value(0));
+  const [trackWidth, setTrackWidth] = useState(0);
+
+  useEffect(() => {
+    if (trackWidth <= 0) return;
+    const fillWidth = trackWidth * 0.4;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(translateX, {
+          toValue: trackWidth - fillWidth,
+          duration: 900,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateX, {
+          toValue: 0,
+          duration: 900,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [trackWidth, translateX]);
+
+  return (
+    <View
+      style={[progressStyles.track, { backgroundColor: trackColor }]}
+      onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}>
+      <Animated.View
+        style={[
+          progressStyles.fill,
+          { backgroundColor: fillColor, width: '40%', transform: [{ translateX }] },
+        ]}
+      />
+    </View>
+  );
 }
 
 /**
@@ -503,91 +560,127 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     return sum;
   }, [items]);
 
+  const showAnalyzing = isGenerating || closePending || (photoUri !== null && !items);
+  const screen: 'loading' | 'capture' | 'analyzing' | 'result' = showAnalyzing
+    ? 'analyzing'
+    : items
+      ? 'result'
+      : !isReady
+        ? 'loading'
+        : 'capture';
+
   return (
     <Modal visible animationType="slide" statusBarTranslucent onRequestClose={requestClose}>
-      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7}>
-            <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.heading}>{mt(t, 'mealPhoto.title')}</Text>
-          <View style={styles.headerSpacer} />
-        </View>
-
-        <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          {!isReady ? (
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>{mt(t, 'mealPhoto.modelLoading')}</Text>
-              <ActivityIndicator color={c.primary} />
+      <SafeAreaView
+        style={[styles.safe, screen === 'capture' && styles.safeCapture]}
+        edges={['top', 'bottom']}>
+        {screen === 'loading' ? (
+          <View style={styles.centerScreen}>
+            <ActivityIndicator color={c.primary} />
+            <Text style={styles.loadingText}>{mt(t, 'mealPhoto.modelLoading')}</Text>
+          </View>
+        ) : screen === 'capture' ? (
+          <View style={styles.captureScreen}>
+            <View style={styles.captureHeader}>
+              <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7}>
+                <Text style={styles.captureCancel}>{t('common.cancel')}</Text>
+              </TouchableOpacity>
+              <Text style={styles.captureHint}>{mt(t, 'mealPhoto.frameHint')}</Text>
             </View>
-          ) : null}
 
-          {photoUri ? <Image source={{ uri: photoUri }} style={styles.photo} /> : null}
+            <View style={styles.viewfinder}>
+              <View style={[styles.corner, styles.cornerTopLeft]} />
+              <View style={[styles.corner, styles.cornerTopRight]} />
+              <View style={[styles.corner, styles.cornerBottomLeft]} />
+              <View style={[styles.corner, styles.cornerBottomRight]} />
+            </View>
 
-          {isGenerating || closePending ? (
-            <View style={styles.analyzingRow}>
-              <ActivityIndicator color={c.primary} />
-              <Text style={styles.muted}>
-                {mt(t, closePending ? 'mealPhoto.closing' : 'mealPhoto.analyzing')}
+            <View style={styles.captureActions}>
+              <TouchableOpacity
+                style={[styles.captureButton, styles.captureButtonSolid]}
+                onPress={() => void pickImage('camera')}
+                activeOpacity={0.8}
+                accessibilityRole="button">
+                <Text style={styles.captureButtonSolidText}>{mt(t, 'mealPhoto.capture')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.captureButton, styles.captureButtonOutline]}
+                onPress={() => void pickImage('gallery')}
+                activeOpacity={0.8}
+                accessibilityRole="button">
+                <Text style={styles.captureButtonOutlineText}>{t('nutrition.import')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : screen === 'analyzing' ? (
+          <View style={styles.centerScreen}>
+            <Text style={styles.kicker}>{mt(t, 'mealPhoto.analyzingKicker')}</Text>
+            <Text style={styles.analyzingTitle}>{mt(t, 'mealPhoto.analyzingTitle')}</Text>
+            <View style={styles.progressBarWrap}>
+              <IndeterminateBar trackColor={c.border} fillColor={c.primary} />
+            </View>
+            <Text style={styles.analyzingSubtitle}>
+              {mt(t, closePending ? 'mealPhoto.closing' : 'mealPhoto.analyzingSubtitle')}
+            </Text>
+          </View>
+        ) : (
+          <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+            <View style={styles.resultHeader}>
+              <TouchableOpacity
+                onPress={requestClose}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={t('nav.nutrition')}>
+                <Text style={styles.resultBack}>← {t('nav.nutrition')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={resetFlow}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button">
+                <Text style={styles.resultRetry}>{mt(t, 'mealPhoto.retry')}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {photoUri ? (
+              <View style={styles.photoWrap}>
+                <Image source={{ uri: photoUri }} style={styles.photo} resizeMode="cover" />
+              </View>
+            ) : null}
+
+            <View style={styles.resultHeading}>
+              <Text style={styles.kicker}>{mt(t, 'mealPhoto.detectedKicker')}</Text>
+              <Text style={styles.resultTitle}>
+                {mt(t, 'mealPhoto.detectedCount', { count: items!.length })}
               </Text>
             </View>
-          ) : null}
 
-          {!items ? (
-            <View style={styles.actions}>
-              <Button
-                title={mt(t, 'mealPhoto.takePhoto')}
-                onPress={() => void pickImage('camera')}
-                disabled={!isReady || isGenerating}
-              />
-              <Button
-                title={mt(t, 'mealPhoto.pickFromGallery')}
-                variant="secondary"
-                onPress={() => void pickImage('gallery')}
-                disabled={!isReady || isGenerating}
-              />
+            <View style={styles.warningLine}>
+              <Ionicons name="warning-outline" size={16} color={c.textSecondary} />
+              <Text style={styles.warningText}>{mt(t, 'mealPhoto.warningBanner')}</Text>
             </View>
-          ) : (
-            <>
-              {totals ? (
-                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>{mt(t, 'mealPhoto.totalTitle')}</Text>
-                  <Text style={styles.totalCalories}>{totals.calories} kcal</Text>
-                  <Text style={styles.totalMacros}>
-                    {t('nutrition.facts.protein')} {formatMacro(totals.protein)} g
-                    {' · '}
-                    {t('nutrition.facts.carbs')} {formatMacro(totals.carbs)} g
-                    {' · '}
-                    {t('nutrition.facts.fat')} {formatMacro(totals.fat)} g
-                  </Text>
-                  <Text style={styles.muted}>{mt(t, 'mealPhoto.totalHint')}</Text>
-                </View>
-              ) : null}
 
-              <View style={styles.warningBanner}>
-                <Ionicons name="warning-outline" size={18} color={c.primary} />
-                <Text style={styles.warningText}>{mt(t, 'mealPhoto.warningBanner')}</Text>
-              </View>
-
-              {items.map((item) => (
-                <View key={item.id} style={styles.itemCard}>
-                  <View style={styles.itemHeader}>
-                    <Text style={styles.itemName} numberOfLines={1}>
+            {items!.map((item) => {
+              const nutrition = item.food
+                ? calculateNutritionForQuantity(item.food, item.grams)
+                : null;
+              return (
+                <View key={item.id} style={styles.foodItem}>
+                  <View style={styles.foodItemTop}>
+                    <Text style={styles.foodName} numberOfLines={1}>
                       {item.name || mt(t, 'mealPhoto.addItem')}
                     </Text>
-                    <TouchableOpacity
-                      onPress={() => removeItem(item.id)}
-                      hitSlop={8}
-                      activeOpacity={0.7}
-                      accessibilityRole="button"
-                      accessibilityLabel={mt(t, 'mealPhoto.remove')}>
-                      <Ionicons name="trash-outline" size={18} color={c.textMuted} />
-                    </TouchableOpacity>
+                    {nutrition ? <Text style={styles.foodKcal}>{nutrition.calories}</Text> : null}
                   </View>
 
-                  {item.food ? (
-                    <Text style={styles.itemMatch} numberOfLines={1}>
-                      {item.food.name} · {Math.round(item.food.nutritionPer100g.calories)} kcal/100g
+                  {nutrition ? (
+                    <Text style={styles.foodMacros}>
+                      {t('nutrition.facts.protein')} {formatMacro(nutrition.protein)} g
+                      {' · '}
+                      {t('nutrition.facts.carbs')} {formatMacro(nutrition.carbs)} g
+                      {' · '}
+                      {t('nutrition.facts.fat')} {formatMacro(nutrition.fat)} g
                     </Text>
                   ) : (
                     <View style={styles.itemSearchBlock}>
@@ -636,46 +729,98 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
                     </View>
                   )}
 
-                  <View style={styles.gramsRow}>
+                  <View style={styles.foodItemControls}>
+                    <View style={styles.gramsRow}>
+                      <TouchableOpacity
+                        style={[
+                          styles.stepButton,
+                          item.grams - GRAM_STEP < MIN_STEP_GRAMS && styles.stepButtonDisabled,
+                        ]}
+                        onPress={() => updateItem(item.id, { grams: item.grams - GRAM_STEP })}
+                        disabled={item.grams - GRAM_STEP < MIN_STEP_GRAMS}
+                        activeOpacity={0.75}
+                        accessibilityRole="button"
+                        accessibilityLabel="-25 g">
+                        <Text style={styles.stepButtonText}>−</Text>
+                      </TouchableOpacity>
+                      <View style={styles.gramsField}>
+                        <Text style={styles.gramsValue}>{item.grams} g</Text>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.stepButton}
+                        onPress={() => updateItem(item.id, { grams: item.grams + GRAM_STEP })}
+                        activeOpacity={0.75}
+                        accessibilityRole="button"
+                        accessibilityLabel="+25 g">
+                        <Text style={styles.stepButtonText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
                     <TouchableOpacity
-                      style={[styles.stepButton, item.grams - GRAM_STEP < MIN_STEP_GRAMS && styles.stepButtonDisabled]}
-                      onPress={() => updateItem(item.id, { grams: item.grams - GRAM_STEP })}
-                      disabled={item.grams - GRAM_STEP < MIN_STEP_GRAMS}
-                      activeOpacity={0.75}
+                      onPress={() => removeItem(item.id)}
+                      hitSlop={8}
+                      activeOpacity={0.7}
                       accessibilityRole="button"
-                      accessibilityLabel="-25 g">
-                      <Ionicons name="remove" size={18} color={c.textPrimary} />
-                    </TouchableOpacity>
-                    <Text style={styles.gramsValue}>{item.grams} g</Text>
-                    <TouchableOpacity
-                      style={styles.stepButton}
-                      onPress={() => updateItem(item.id, { grams: item.grams + GRAM_STEP })}
-                      activeOpacity={0.75}
-                      accessibilityRole="button"
-                      accessibilityLabel="+25 g">
-                      <Ionicons name="add" size={18} color={c.textPrimary} />
+                      accessibilityLabel={t('common.delete')}>
+                      <Text style={styles.deleteButton}>{t('common.delete')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-              ))}
+              );
+            })}
 
-              <View style={styles.actions}>
-                <Button
-                  title={mt(t, 'mealPhoto.addAll')}
-                  onPress={() => void handleAddAll()}
-                  loading={isAdding}
-                  disabled={addableCount === 0 && !isAdding}
-                />
-                <Button
-                  title={mt(t, 'mealPhoto.addItem')}
-                  variant="secondary"
-                  onPress={addManualItem}
-                />
-                <Button title={mt(t, 'mealPhoto.retry')} variant="secondary" onPress={resetFlow} />
+            <TouchableOpacity
+              style={styles.addItemButton}
+              onPress={addManualItem}
+              activeOpacity={0.8}
+              accessibilityRole="button">
+              <Text style={styles.addItemButtonText}>+ {mt(t, 'mealPhoto.addItem')}</Text>
+            </TouchableOpacity>
+
+            {totals ? (
+              <View style={styles.totalBlock}>
+                <View style={styles.totalRow}>
+                  <Text style={styles.totalLabel}>{mt(t, 'mealPhoto.totalLabel')}</Text>
+                  <View style={styles.totalCaloriesCol}>
+                    <Text style={styles.totalCaloriesValue}>{totals.calories}</Text>
+                    <Text style={styles.totalCaloriesUnit}>kcal</Text>
+                  </View>
+                </View>
+                <View style={styles.macroRow}>
+                  <View style={[styles.macroCol, styles.macroColDivider]}>
+                    <Text style={styles.macroLabel}>{t('nutrition.facts.protein')}</Text>
+                    <Text style={styles.macroValue}>{formatMacro(totals.protein)} g</Text>
+                  </View>
+                  <View style={[styles.macroCol, styles.macroColDivider]}>
+                    <Text style={styles.macroLabel}>{t('nutrition.facts.carbs')}</Text>
+                    <Text style={styles.macroValue}>{formatMacro(totals.carbs)} g</Text>
+                  </View>
+                  <View style={styles.macroCol}>
+                    <Text style={styles.macroLabel}>{t('nutrition.facts.fat')}</Text>
+                    <Text style={styles.macroValue}>{formatMacro(totals.fat)} g</Text>
+                  </View>
+                </View>
               </View>
-            </>
-          )}
-        </ScrollView>
+            ) : null}
+
+            <View style={styles.addToDayWrap}>
+              <TouchableOpacity
+                style={[
+                  styles.addToDayButton,
+                  addableCount === 0 && !isAdding && styles.addToDayDisabled,
+                ]}
+                onPress={() => void handleAddAll()}
+                disabled={addableCount === 0 && !isAdding}
+                activeOpacity={0.8}
+                accessibilityRole="button">
+                {isAdding ? (
+                  <ActivityIndicator color={c.bg} size="small" />
+                ) : (
+                  <Text style={styles.addToDayText}>{mt(t, 'mealPhoto.addToDay')}</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        )}
       </SafeAreaView>
     </Modal>
   );
@@ -683,87 +828,280 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
-  header: {
+  safeCapture: { backgroundColor: RAMP_WARM[900] },
+  content: { paddingBottom: 32 },
+
+  // Prise de vue (plein écran sombre)
+  captureScreen: { flex: 1, backgroundColor: RAMP_WARM[900] },
+  captureHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 16,
   },
-  heading: { fontSize: 18, fontFamily: fonts.sansBold, color: c.textPrimary },
-  headerSpacer: { width: 24 },
-  content: { padding: spacing.md, gap: spacing.md, paddingBottom: 32 },
-  card: {
-    backgroundColor: c.surface,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    gap: spacing.sm,
-    ...cardShadow(c),
+  captureCancel: {
+    fontFamily: fonts.sansBold,
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1.12,
+    textTransform: 'uppercase',
+    color: c.bg,
   },
-  cardTitle: { fontSize: 14, fontFamily: fonts.sansBold, color: c.textPrimary },
-  totalCalories: { fontSize: 26, fontFamily: fonts.sansHeavy, color: c.primary },
-  totalMacros: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
-  muted: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary },
-  photo: { width: '100%', height: 200, borderRadius: radius.lg, backgroundColor: c.surfaceAlt },
-  analyzingRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  actions: { gap: 12 },
-  warningBanner: {
+  captureHint: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    color: WHITE_65,
+  },
+  viewfinder: { flex: 1, marginHorizontal: 20, backgroundColor: RAMP_WARM[800] },
+  corner: { position: 'absolute', width: 40, height: 40, borderColor: c.secondary },
+  cornerTopLeft: { top: 0, left: 0, borderTopWidth: 2, borderLeftWidth: 2 },
+  cornerTopRight: { top: 0, right: 0, borderTopWidth: 2, borderRightWidth: 2 },
+  cornerBottomLeft: { bottom: 0, left: 0, borderBottomWidth: 2, borderLeftWidth: 2 },
+  cornerBottomRight: { bottom: 0, right: 0, borderBottomWidth: 2, borderRightWidth: 2 },
+  captureActions: { flexDirection: 'row', gap: 12, padding: 20 },
+  captureButton: {
+    flex: 1,
+    height: 64,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+  },
+  captureButtonSolid: { backgroundColor: c.bg },
+  captureButtonOutline: { backgroundColor: 'transparent', borderWidth: 1, borderColor: WHITE_40 },
+  captureButtonSolidText: {
+    fontFamily: fonts.serifBold,
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1.12,
+    textTransform: 'uppercase',
+    color: c.primary,
+  },
+  captureButtonOutlineText: {
+    fontFamily: fonts.serifBold,
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1.12,
+    textTransform: 'uppercase',
+    color: c.bg,
+  },
+
+  // Écrans centrés (chargement du moteur / analyse)
+  centerScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
+  kicker: {
+    fontFamily: fonts.serifBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 1.54,
+    textTransform: 'uppercase',
+    color: c.secondary,
+    textAlign: 'center',
+  },
+  analyzingTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 30,
+    lineHeight: 36,
+    marginTop: 8,
+    color: c.textPrimary,
+    textAlign: 'center',
+  },
+  progressBarWrap: { width: '100%', marginTop: 24 },
+  analyzingSubtitle: {
+    fontFamily: fonts.sans,
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 16,
+    color: c.textSecondary,
+    textAlign: 'center',
+  },
+  loadingText: {
+    fontFamily: fonts.sans,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 12,
+    color: c.textSecondary,
+  },
+  // Résultat
+  resultHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
-    backgroundColor: c.surfaceAlt,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: c.border,
-    padding: spacing.sm,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 12,
   },
-  warningText: { flex: 1, fontSize: 13, fontFamily: fonts.sansBold, color: c.textPrimary },
-  itemCard: {
-    backgroundColor: c.surface,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    gap: spacing.sm,
-    ...cardShadow(c),
+  resultBack: {
+    fontFamily: fonts.serifBold,
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: 0.96,
+    textTransform: 'uppercase',
+    color: c.textPrimary,
   },
-  itemHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10 },
-  itemName: { flex: 1, fontSize: 16, fontFamily: fonts.sansBold, color: c.textPrimary },
-  itemMatch: { fontSize: 13, fontFamily: fonts.sansBold, color: c.primary },
-  itemSearchBlock: { gap: 8 },
-  itemNotFound: { fontSize: 13, fontFamily: fonts.sansBold, color: c.textSecondary },
+  resultRetry: {
+    fontFamily: fonts.serifBold,
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: 0.96,
+    textTransform: 'uppercase',
+    color: c.secondary,
+  },
+  photoWrap: { paddingHorizontal: 20 },
+  photo: { width: '100%', height: 170, backgroundColor: c.surfaceAlt },
+  resultHeading: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 },
+  resultTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 28,
+    lineHeight: 32,
+    marginTop: 6,
+    color: c.textPrimary,
+  },
+  warningLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingBottom: 12,
+  },
+  warningText: { flex: 1, fontFamily: fonts.sans, fontSize: 12, lineHeight: 16, color: c.textSecondary },
+
+  foodItem: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: c.border,
+  },
+  foodItemTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  foodName: { flex: 1, fontFamily: fonts.serifBold, fontSize: 16, lineHeight: 20, color: c.textPrimary },
+  foodKcal: { fontFamily: fonts.serifBold, fontSize: 18, lineHeight: 22, color: c.textPrimary },
+  foodMacros: { fontFamily: fonts.sans, fontSize: 12, lineHeight: 16, marginTop: 4, color: c.secondary },
+  foodItemControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginTop: 12,
+  },
+
+  // Recherche manuelle (aliment sans match)
+  itemSearchBlock: { gap: 8, marginTop: 8 },
+  itemNotFound: { fontFamily: fonts.sans, fontSize: 13, lineHeight: 17, color: c.textSecondary },
   itemSearch: { gap: 6 },
   searchResult: {
     backgroundColor: c.surfaceAlt,
-    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: c.border,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
-  searchResultText: { fontSize: 13, fontFamily: fonts.sans, color: c.textPrimary },
-  gramsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 },
+  searchResultText: { fontFamily: fonts.sans, fontSize: 13, color: c.textPrimary },
+
+  // Stepper de grammage
+  gramsRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   stepButton: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.lg,
+    width: 48,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: c.surfaceAlt,
     borderWidth: 1,
     borderColor: c.border,
   },
   stepButtonDisabled: { opacity: 0.4 },
-  gramsValue: {
-    minWidth: 80,
-    textAlign: 'center',
-    fontSize: 18,
-    fontFamily: fonts.sansHeavy,
+  stepButtonText: { fontFamily: fonts.sansBold, fontSize: 20, lineHeight: 22, color: c.textPrimary },
+  gramsField: {
+    minWidth: 78,
+    height: 44,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: c.border,
+  },
+  gramsValue: { fontFamily: fonts.sansHeavy, fontSize: 18, lineHeight: 22, color: c.textPrimary },
+  deleteButton: {
+    fontFamily: fonts.sansBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 0.88,
+    textTransform: 'uppercase',
+    color: c.textSecondary,
+  },
+
+  // « + Ajouter un aliment » (filet 2 px en dessous)
+  addItemButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+  },
+  addItemButtonText: {
+    fontFamily: fonts.serifBold,
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: 0.96,
+    textTransform: 'uppercase',
     color: c.textPrimary,
   },
-  license: {
-    fontSize: 12,
+
+  // Total + macros
+  totalBlock: { paddingHorizontal: 20, paddingTop: 18 },
+  totalRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
+  totalLabel: { fontFamily: fonts.serifBold, fontSize: 16, lineHeight: 20, color: c.textPrimary },
+  totalCaloriesCol: { alignItems: 'flex-end' },
+  totalCaloriesValue: { fontFamily: fonts.displayHeavy, fontSize: 38, lineHeight: 40, color: c.primary },
+  totalCaloriesUnit: {
     fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
     color: c.textMuted,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
+  },
+  macroRow: {
+    flexDirection: 'row',
+    marginTop: 16,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: c.border,
+  },
+  macroCol: { flex: 1, alignItems: 'center', paddingVertical: 12, gap: 4 },
+  macroColDivider: { borderRightWidth: 1, borderRightColor: c.border },
+  macroLabel: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    color: c.textMuted,
+  },
+  macroValue: { fontFamily: fonts.serifBold, fontSize: 20, lineHeight: 24, color: c.textPrimary },
+
+  // « Ajouter à ma journée »
+  addToDayWrap: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 8 },
+  addToDayButton: {
+    backgroundColor: c.primary,
+    minHeight: 56,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  addToDayDisabled: { opacity: 0.5 },
+  addToDayText: {
+    fontFamily: fonts.serifBold,
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1.12,
+    textTransform: 'uppercase',
+    color: c.bg,
   },
 });
