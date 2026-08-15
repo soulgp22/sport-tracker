@@ -30,7 +30,7 @@ import { isExerciseCompatibleWithProfile } from '../../../constants/equipmentPro
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import { makeShadows, radius, spacing } from '../../../theme/tokens';
-import type { ThemeColors } from '../../../theme/palettes';
+import { RAMP_WARM, type ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
 import {
@@ -205,6 +205,16 @@ export default function ActiveSessionScreen() {
   );
   const totalSets = active.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
 
+  const currentCatalogExercise = currentEx
+    ? getCatalogExercise(currentEx.exerciseId)
+    : undefined;
+  const currentExerciseName = currentCatalogExercise
+    ? getExerciseDisplayName(currentCatalogExercise)
+    : currentEx.exerciseName;
+  const currentExerciseMeta = currentCatalogExercise
+    ? `${translateMuscle(currentCatalogExercise.target)} · ${translateEquipment(currentCatalogExercise.equipment)}`
+    : undefined;
+
   const selectExercise = (ei: number) => {
     const ex = active.exercises[ei];
     const firstPending = ex.sets.findIndex((s) => !s.completed);
@@ -303,19 +313,38 @@ export default function ActiveSessionScreen() {
         style={styles.keyboardAvoiding}
         behavior={keyboardAvoidingBehavior}
         keyboardVerticalOffset={keyboardVerticalOffset}>
-        {/* Top bar */}
-        <View style={styles.topBar}>
-          <TouchableOpacity onPress={handleCancel} hitSlop={8} style={styles.headerBtn}>
-            <Ionicons name="close" size={24} color={c.textSecondary} />
-          </TouchableOpacity>
-          <View style={styles.topCenter}>
-            <Text style={styles.topTitle} numberOfLines={1}>{active.programName}</Text>
-            <Text style={styles.topSub}>{active.dayName} · {fmt(elapsed)}</Text>
+        {/* En-tête : chrono + position à gauche, bouton Terminer à droite */}
+        <View style={styles.header}>
+          <View style={styles.headerCopy}>
+            <Text style={styles.headerKicker}>
+              {t('session.activeHeaderKicker', { time: fmt(elapsed) })}
+            </Text>
+            <Text style={styles.headerTitle}>
+              {t('session.exercisePosition', { position: exIdx + 1 })}
+            </Text>
           </View>
-          <TouchableOpacity onPress={handleFinish} hitSlop={8}>
-            <Text style={styles.finishLink}>{t('session.finishButton')}</Text>
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity onPress={handleCancel} hitSlop={8} style={styles.headerBtn}>
+              <Ionicons name="close" size={22} color={c.textSecondary} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleFinish} style={styles.finishButton}>
+              <Text style={styles.finishButtonLabel}>{t('session.finishButton')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Exercice courant */}
+        <View style={styles.currentSection}>
+          <Text style={styles.currentTitle}>
+            {currentExerciseName || t('session.exerciseFallback', { index: exIdx + 1 })}
+          </Text>
+          {currentExerciseMeta ? (
+            <Text style={styles.currentMeta}>{currentExerciseMeta}</Text>
+          ) : null}
+        </View>
+
+        {/* Visuel de l'exercice */}
+        <View style={styles.visualBlock} />
 
         {/* Progress bar */}
         <View style={styles.progressTrack}>
@@ -473,26 +502,84 @@ const makeStyles = (c: ThemeColors) => {
   return StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   keyboardAvoiding: { flex: 1 },
-  topBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: spacing.sm,
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+  },
   headerBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  topCenter: { flex: 1, alignItems: 'center' },
-  topTitle: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
-  topSub: { fontSize: 13, color: c.textSecondary },
-  finishLink: { fontSize: 14, fontFamily: fonts.sansSemi, color: c.primary, paddingVertical: spacing.xs, paddingHorizontal: spacing.xxs },
-  progressTrack: { height: 6, backgroundColor: c.border, marginHorizontal: spacing.md, borderRadius: 3 },
-  progressFill: { height: 6, backgroundColor: c.primary, borderRadius: 3 },
-  progressLabel: { fontSize: 12, color: c.textMuted, paddingHorizontal: spacing.md, marginTop: spacing.xxs },
-  content: { padding: spacing.md, gap: spacing.sm, paddingBottom: spacing.md },
-  exSection: {
-    backgroundColor: c.surface,
-    borderRadius: radius.lg,
+  headerCopy: { flex: 1, minWidth: 0 },
+  headerKicker: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    color: c.textSecondary,
+  },
+  headerTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 14,
+    lineHeight: 18,
+    marginTop: 2,
+    color: c.textPrimary,
+  },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  finishButton: {
+    minHeight: 44,
+    paddingHorizontal: spacing.sm,
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: c.border,
-    padding: spacing.md,
-    opacity: 0.65,
-    ...shadows.card,
   },
-  exSectionActive: { opacity: 1, borderWidth: 2, borderColor: c.primary },
+  finishButtonLabel: {
+    fontFamily: fonts.serifBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 0.88,
+    textTransform: 'uppercase',
+    color: c.textPrimary,
+  },
+  currentSection: {
+    paddingHorizontal: 20,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  currentTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 30,
+    lineHeight: 34,
+    color: c.textPrimary,
+  },
+  currentMeta: {
+    fontFamily: fonts.sans,
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 4,
+    color: c.textSecondary,
+  },
+  visualBlock: {
+    height: 150,
+    marginHorizontal: 20,
+    backgroundColor: RAMP_WARM[300],
+  },
+  progressTrack: { height: 6, backgroundColor: c.border, marginHorizontal: 20 },
+  progressFill: { height: 6, backgroundColor: c.primary },
+  progressLabel: { fontSize: 12, color: c.textMuted, paddingHorizontal: 20, marginTop: spacing.xxs },
+  content: { paddingBottom: spacing.md },
+  exSection: {
+    paddingHorizontal: 20,
+    paddingVertical: spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: c.border,
+    opacity: 0.65,
+  },
+  exSectionActive: { opacity: 1, borderTopWidth: 2, borderTopColor: c.primary },
   exRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: spacing.sm },
   infoBtn: { padding: spacing.xxs, minWidth: 36, minHeight: 36, alignItems: 'center', justifyContent: 'center' },
   replaceBtn: {
