@@ -1,309 +1,437 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useMemo } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import {
-  AccessibilityInfo,
-  Animated,
-  Easing,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { LifeSportLogo } from '../../components/brand/LifeSportLogo';
-import { Card } from '../../components/ui/Card';
-import { canUseMealPhoto } from '../../lib/mealPhotoCapability';
-import { calculateConsistencyMetrics } from '../../lib/performanceEngine';
+import { resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
+import { calculateDailyTotals } from '../../lib/nutritionCalc';
+import { getBodyweightForDate } from '../../lib/performanceEngine';
+import { useTranslation } from '../../i18n/useTranslation';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
+import { useBodyWeightStore } from '../../store/bodyWeightStore';
+import { useFoodDiaryStore } from '../../store/foodDiaryStore';
+import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../store/performanceStore';
 import { useSessionStore } from '../../store/sessionStore';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
-import {
-  makeShadows,
-  makeTypeScale,
-  radius,
-  spacing,
-  type ShadowSet,
-  type TypeScale,
-} from '../../theme/tokens';
+import { spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
-import { useTranslation } from '../../i18n/useTranslation';
-import { HOME_TILES } from '../../constants/homeTiles';
 
+
+/** Clé de date ISO du jour, alignée sur le journal alimentaire. */
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function formatHeaderDate(date: Date, locale: string) {
+  try {
+    return new Intl.DateTimeFormat(locale, {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    }).format(date);
+  } catch {
+    return date.toLocaleDateString(locale);
+  }
+}
+
+function formatActivityDate(date: Date, locale: string) {
+  try {
+    return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date);
+  } catch {
+    return date.toLocaleDateString(locale);
+  }
+}
+
+function formatInteger(value: number, locale: string) {
+  try {
+    return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value);
+  } catch {
+    return String(value);
+  }
+}
+
+/** Numéro de semaine ISO 8601 (lundi = premier jour de la semaine). */
+function isoWeekNumber(date: Date) {
+  const target = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = target.getUTCDay() || 7;
+  target.setUTCDate(target.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+  return Math.ceil(((target.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+}
 
 export default function HomeScreen() {
   const c = useColors();
-  const { t } = useTranslation();
-  const styles = useMemo(() => makeStyles(c, makeShadows(c), makeTypeScale()), [c]);
+  const { t, locale } = useTranslation();
+  const styles = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
-  const active = useActiveSessionStore((state) => state.active);
-  const sessions = useSessionStore((state) => state.sessions);
-  const weeklyGoal = usePerformanceStore((state) => state.weeklySessionGoal);
-  const monthlyGoal = usePerformanceStore((state) => state.monthlySessionGoal);
-  const { height, width } = useWindowDimensions();
-  const compact = height < 700;
-  const tileWidth = Math.floor((width - spacing.md * 2 - spacing.sm) / 2);
-  const [animations] = useState(() => HOME_TILES.map(() => new Animated.Value(0)));
-  const [sessionAnimation] = useState(() => new Animated.Value(0));
-  const [photoScanAvailable, setPhotoScanAvailable] = useState(false);
 
-  // Bouton « scan de repas » : visible uniquement sur Android compatible quand
-  // la configuration du serveur d'analyse est complète.
-  useEffect(() => {
-    let mounted = true;
-    void canUseMealPhoto().then((capability) => {
-      if (mounted && capability.ok) setPhotoScanAvailable(true);
-    });
-    return () => {
-      mounted = false;
-    };
-  }, []);
-  const consistency = useMemo(
-    () => calculateConsistencyMetrics(sessions, weeklyGoal, monthlyGoal),
-    [monthlyGoal, sessions, weeklyGoal]
-  );
+  const firstName = usePerformanceStore((s) => s.firstName);
+  const sex = usePerformanceStore((s) => s.sex);
+  const age = usePerformanceStore((s) => s.age);
+  const heightCm = usePerformanceStore((s) => s.heightCm);
+  const activityLevel = usePerformanceStore((s) => s.activityLevel);
+  const weightEntries = useBodyWeightStore((s) => s.entries);
+  const goals = useNutritionGoalsStore((s) => s.goals);
+  const entriesState = useFoodDiaryStore((s) => s.entries);
+  const sessions = useSessionStore((s) => s.sessions);
+  const active = useActiveSessionStore((s) => s.active);
 
-  useEffect(() => {
-    let cancelled = false;
-    void AccessibilityInfo.isReduceMotionEnabled().then((reduceMotion) => {
-      if (cancelled) return;
-      if (reduceMotion) {
-        sessionAnimation.setValue(1);
-        animations.forEach((value) => value.setValue(1));
-        return;
-      }
+  const totals = useMemo(() => {
+    const key = todayKey();
+    return calculateDailyTotals(
+      entriesState.filter((entry) => entry.date.slice(0, 10) === key)
+    );
+  }, [entriesState]);
+  const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
+  const expenditure = resolveDailyEnergyExpenditure({
+    healthCalories: null,
+    healthSteps: null,
+    profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
+  });
 
-      Animated.parallel([
-        Animated.timing(sessionAnimation, {
-          toValue: 1,
-          duration: 360,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }),
-        Animated.stagger(
-          55,
-          animations.map((value) => Animated.timing(value, {
-            toValue: 1,
-            duration: 300,
-            easing: Easing.out(Easing.cubic),
-            useNativeDriver: true,
-          }))
-        ),
-      ]).start();
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [animations, sessionAnimation]);
+  const consumed = totals.calories;
+  const goal = goals.dailyCalories;
+  const burned = expenditure.activityKcal;
+  const progress = goal > 0 ? Math.min(1, consumed / goal) : 0;
+  const remaining = burned !== null ? goal - consumed + burned : null;
+
+  const now = new Date();
+  const dateLabel = formatHeaderDate(now, locale);
+  const weekLabel = t('home.week', { week: isoWeekNumber(now) });
+  const greeting = firstName ? t('home.greetingName', { name: firstName }) : t('home.greeting');
+  const recentSessions = sessions.slice(0, 3);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={[styles.content, compact ? styles.contentCompact : null]}>
-        <View style={styles.brandRow}>
-          <LifeSportLogo />
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-            <TouchableOpacity
-              style={styles.settingsButton}
-              onPress={() => router.push('/(tabs)/profile' as never)}
-              activeOpacity={0.72}
-              accessibilityRole="button"
-              accessibilityLabel={t('home.profile')}
-              accessibilityHint={t('home.profileHint')}>
-              <Ionicons name="person-circle-outline" size={21} color={c.textPrimary} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.settingsButton}
-              onPress={() => router.push('/(tabs)/settings')}
-              activeOpacity={0.72}
-              accessibilityRole="button"
-              accessibilityLabel={t('home.settings')}
-              accessibilityHint={t('home.settingsDescription')}>
-              <Ionicons name="options-outline" size={21} color={c.textPrimary} />
-            </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {/* 1. En-tête */}
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <Text style={styles.dateKicker}>{dateLabel}</Text>
+            <Text style={styles.weekLabel}>{weekLabel}</Text>
+          </View>
+          <Text style={styles.greeting}>{greeting}</Text>
+        </View>
+
+        {/* 2. Deux colonnes chiffrées */}
+        <View style={styles.columns}>
+          <View style={[styles.column, styles.columnDivider]}>
+            <Text style={styles.columnLabel}>{t('home.calories')}</Text>
+            <Text style={styles.bigNumber}>{formatInteger(consumed, locale)}</Text>
+            <Text style={styles.columnHint}>
+              {t('home.caloriesGoal', { goal: formatInteger(goal, locale) })}
+            </Text>
+            <View style={styles.progressTrack}>
+              <View style={[styles.progressFill, { flex: progress }]} />
+            </View>
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.columnLabel}>{t('home.remaining')}</Text>
+            <Text style={styles.bigNumber}>
+              {remaining !== null ? formatInteger(remaining, locale) : '—'}
+            </Text>
+            <Text style={styles.columnHint}>
+              {burned !== null
+                ? t('home.burnedKcal', { kcal: formatInteger(burned, locale) })
+                : '—'}
+            </Text>
+            <View style={styles.segments}>
+              <View style={[styles.segment, { backgroundColor: c.textPrimary }]} />
+              <View style={[styles.segment, { backgroundColor: c.border }]} />
+              <View style={[styles.segment, { backgroundColor: c.surfaceAlt }]} />
+            </View>
           </View>
         </View>
 
-        <Animated.View
-          style={{
-            opacity: sessionAnimation,
-            transform: [{ translateY: sessionAnimation.interpolate({ inputRange: [0, 1], outputRange: [10, 0] }) }],
-          }}>
+        {/* 3. Action principale */}
+        <View style={styles.actionWrap}>
           <TouchableOpacity
+            style={styles.actionButton}
             onPress={() => router.push('/(tabs)/session')}
             activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={active ? t('home.resumeSession') : t('home.startSession')}>
-            <LinearGradient
-              colors={[c.primary, c.secondary]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.sessionCard, compact ? styles.sessionCardCompact : null]}>
-              <View style={styles.heroOrbTop} />
-              <View style={styles.heroOrbBottom} />
-              <View style={styles.sessionIconBox}>
-                <Ionicons name={active ? 'refresh' : 'play'} size={22} color={c.primary} />
-              </View>
-              <View style={styles.sessionCopy}>
-                <Text style={styles.sessionKicker}>
-                  {active ? t('home.activeSession') : t('home.nextEffort')}
-                </Text>
-                <Text style={styles.sessionTitle}>
-                  {active ? t('home.resumeSession') : t('home.startSession')}
-                </Text>
-                <Text style={styles.sessionSubtitle} numberOfLines={1}>
-                  {active ? `${active.programName} · ${active.dayName}` : t('home.chooseProgram')}
-                </Text>
-              </View>
-              <View style={styles.sessionArrow}>
-                <Ionicons name="arrow-forward" size={19} color={c.primaryText} />
-              </View>
-            </LinearGradient>
+            <Text style={styles.actionKicker}>
+              {active ? t('home.activeSession') : t('home.nextEffort')}
+            </Text>
+            <Text style={styles.actionTitle}>
+              {active ? t('home.resumeSession') : t('home.startSession')}
+            </Text>
+            <Text style={styles.actionSubtitle} numberOfLines={1}>
+              {active ? `${active.programName} · ${active.dayName}` : t('home.chooseProgram')}
+            </Text>
           </TouchableOpacity>
-        </Animated.View>
+        </View>
 
-        {photoScanAvailable ? (
-          <Card
+        {/* 4. Deux raccourcis */}
+        <View style={styles.shortcuts}>
+          <TouchableOpacity
+            style={[styles.shortcut, styles.shortcutDivider]}
             onPress={() => router.push('/(tabs)/nutrition/photo' as never)}
-            accessibilityLabel={t('home.scanMeal')}
-            accessibilityHint={t('home.scanMealDescription')}
-            style={[styles.mealScanCard, compact ? styles.mealScanCardCompact : null]}>
-            <View style={styles.mealScanIconBox}>
-              <Ionicons name="camera" size={24} color={c.primary} />
-            </View>
-            <View style={styles.sessionCopy}>
-              <Text style={styles.mealScanKicker}>{t('home.scanMealKicker')}</Text>
-              <Text style={styles.mealScanTitle}>{t('home.scanMeal')}</Text>
-              <Text style={styles.mealScanSubtitle} numberOfLines={1}>
-                {t('home.scanMealDescription')}
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={c.textMuted} />
-          </Card>
-        ) : null}
-
-        <View style={styles.sectionHeader}>
-          <View>
-            <Text style={styles.sectionEyebrow}>{t('home.allInOne')}</Text>
-            <Text style={styles.sectionTitle}>{t('home.tracking')}</Text>
-          </View>
-          <View style={styles.goalPill}>
-            <Ionicons name="flame" size={14} color={c.primary} />
-            <Text style={styles.goalPillText}>{consistency.thisWeek}/{weeklyGoal}</Text>
-          </View>
+            activeOpacity={0.78}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.analyzeMeal')}>
+            <Text style={styles.shortcutTitle}>{t('home.analyzeMeal')}</Text>
+            <Text style={styles.shortcutSubtitle}>{t('home.analyzeMealSubtitle')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.shortcut}
+            onPress={() => router.push('/(tabs)/nutrition' as never)}
+            activeOpacity={0.78}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.calorieTracking')}>
+            <Text style={styles.shortcutTitle}>{t('home.calorieTracking')}</Text>
+            <Text style={styles.shortcutSubtitle}>{t('home.calorieTrackingSubtitle')}</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.grid}>
-          {HOME_TILES.map((tile, index) => (
-            <Animated.View
-              key={tile.key}
-              style={{
-                width: tileWidth,
-                opacity: animations[index],
-                transform: [{ translateY: animations[index].interpolate({ inputRange: [0, 1], outputRange: [8, 0] }) }],
-              }}>
-              <Card
-                onPress={() => router.push(tile.href as never)}
-                accessibilityLabel={t(tile.labelKey)}
-                accessibilityHint={t(tile.descriptionKey)}
-                style={[styles.tile, compact ? styles.tileCompact : null]}>
-                <View style={[styles.tileAccent, { backgroundColor: c[tile.accent] }]} />
-                <View style={[styles.iconBox, { backgroundColor: `${c[tile.accent]}1A` }]}>
-                  <Ionicons name={tile.icon} size={compact ? 19 : 22} color={c[tile.accent]} />
+        {/* 5. Dernière activité */}
+        <View style={styles.activitySection}>
+          <View style={styles.activityHeader}>
+            <Text style={styles.activityTitle}>{t('home.lastActivity')}</Text>
+            <TouchableOpacity
+              onPress={() => router.push('/(tabs)/history' as never)}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={t('nav.history')}>
+              <Text style={styles.historyLink}>{t('nav.history')}</Text>
+            </TouchableOpacity>
+          </View>
+          {recentSessions.length === 0 ? (
+            <Text style={styles.emptyActivity}>{t('history.emptyTitle')}</Text>
+          ) : (
+            recentSessions.map((session) => {
+              const title = session.programName ?? t('history.freeSession');
+              const meta = session.dayName;
+              const when = formatActivityDate(new Date(session.date), locale);
+              return (
+                <View key={session.id} style={styles.activityRow}>
+                  <View style={styles.activityCopy}>
+                    <Text style={styles.activityRowTitle} numberOfLines={1}>
+                      {title}
+                    </Text>
+                    {meta ? (
+                      <Text style={styles.activityRowMeta} numberOfLines={1}>
+                        {meta}
+                      </Text>
+                    ) : null}
+                  </View>
+                  <Text style={styles.activityRowWhen}>{when}</Text>
                 </View>
-                <View style={styles.tileCopy}>
-                  <Text style={styles.tileLabel} numberOfLines={1}>{t(tile.labelKey)}</Text>
-                  <Text style={styles.tileDescription} numberOfLines={compact ? 1 : 2}>
-                    {t(tile.descriptionKey)}
-                  </Text>
-                </View>
-              </Card>
-            </Animated.View>
-          ))}
+              );
+            })
+          )}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const makeStyles = (c: ThemeColors, shadows: ShadowSet, type: TypeScale) =>
+const makeStyles = (c: ThemeColors) =>
   StyleSheet.create({
     safe: { flex: 1, backgroundColor: c.bg },
-    content: { flex: 1, paddingHorizontal: spacing.md, paddingTop: spacing.sm },
-    contentCompact: { paddingTop: spacing.xxs },
-    brandRow: {
-      minHeight: 50,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: spacing.sm,
+    content: { paddingBottom: spacing.lg },
+
+    header: {
+      paddingHorizontal: 20,
+      paddingTop: 14,
+      paddingBottom: 14,
+      borderBottomWidth: 2,
+      borderBottomColor: c.border,
     },
-    settingsButton: {
-      width: 40,
-      height: 40,
-      borderRadius: radius.md,
-      alignItems: 'center',
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+    },
+    dateKicker: {
+      fontFamily: fonts.serifBold,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 1.54,
+      textTransform: 'uppercase',
+      color: c.secondary,
+    },
+    weekLabel: {
+      fontFamily: fonts.sans,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 0.66,
+      textTransform: 'uppercase',
+      color: c.textMuted,
+    },
+    greeting: {
+      fontFamily: fonts.serifBold,
+      fontSize: 34,
+      lineHeight: 40,
+      marginTop: 6,
+      color: c.textPrimary,
+    },
+
+    columns: {
+      flexDirection: 'row',
+      borderBottomWidth: 2,
+      borderBottomColor: c.border,
+    },
+    column: { flex: 1, paddingHorizontal: 20, paddingVertical: 16 },
+    columnDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    columnLabel: {
+      fontFamily: fonts.sans,
+      fontSize: 10,
+      lineHeight: 13,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: c.textMuted,
+    },
+    bigNumber: {
+      fontFamily: fonts.displayHeavy,
+      fontSize: 40,
+      lineHeight: 40,
+      marginTop: 4,
+      color: c.textPrimary,
+    },
+    columnHint: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      marginTop: 4,
+      color: c.textSecondary,
+    },
+    progressTrack: {
+      height: 6,
+      marginTop: 10,
+      flexDirection: 'row',
+      overflow: 'hidden',
+      backgroundColor: c.surfaceAlt,
+    },
+    progressFill: { height: 6, backgroundColor: c.primary },
+    segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
+    segment: { flex: 1, height: 6 },
+
+    actionWrap: { padding: 20 },
+    actionButton: {
+      minHeight: 96,
+      paddingHorizontal: 20,
+      paddingVertical: 18,
       justifyContent: 'center',
-      backgroundColor: c.surface,
-      borderWidth: 1,
+      gap: 6,
+      backgroundColor: c.primary,
+    },
+    actionKicker: {
+      fontFamily: fonts.sans,
+      fontSize: 10,
+      lineHeight: 13,
+      letterSpacing: 1.4,
+      textTransform: 'uppercase',
+      color: c.primaryText,
+      opacity: 0.85,
+    },
+    actionTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 28,
+      lineHeight: 30,
+      letterSpacing: -0.42,
+      color: c.primaryText,
+    },
+    actionSubtitle: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      color: c.primaryText,
+      opacity: 0.85,
+    },
+
+    shortcuts: {
+      flexDirection: 'row',
+      borderTopWidth: 2,
+      borderBottomWidth: 2,
       borderColor: c.border,
     },
-    sessionCard: {
-      minHeight: 96,
-      marginTop: spacing.sm,
-      borderRadius: radius.xl,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.md,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-      overflow: 'hidden',
-      ...shadows.raised,
+    shortcut: {
+      flex: 1,
+      minHeight: 88,
+      paddingHorizontal: 20,
+      paddingVertical: 18,
+      justifyContent: 'center',
     },
-    sessionCardCompact: { minHeight: 80, paddingVertical: spacing.sm },
-    heroOrbTop: { position: 'absolute', width: 120, height: 120, borderRadius: 60, right: -40, top: -62, backgroundColor: 'rgba(255,255,255,0.10)' },
-    heroOrbBottom: { position: 'absolute', width: 72, height: 72, borderRadius: 36, right: 52, bottom: -50, backgroundColor: 'rgba(255,255,255,0.08)' },
-    sessionIconBox: { width: 48, height: 48, borderRadius: radius.md, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' },
-    sessionCopy: { flex: 1, minWidth: 0, gap: 2 },
-    sessionKicker: { ...type.tiny, color: c.primaryText, opacity: 0.76 },
-    sessionTitle: { ...type.title, fontFamily: fonts.sansHeavy, color: c.primaryText },
-    sessionSubtitle: { ...type.micro, fontFamily: fonts.sans, color: c.primaryText, opacity: 0.84 },
-    sessionArrow: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.16)' },
-    sectionHeader: { marginTop: spacing.lg, marginBottom: spacing.sm, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
-    sectionEyebrow: { ...type.tiny, color: c.primary },
-    sectionTitle: { ...type.title, color: c.textPrimary },
-    goalPill: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs, paddingHorizontal: 10, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: c.accentSoft },
-    goalPillText: { ...type.micro, fontFamily: fonts.sansBold, color: c.primary },
-    grid: { flexDirection: 'row', flexWrap: 'wrap', alignContent: 'flex-start', gap: spacing.sm },
-    tile: {
-      minHeight: 84,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-      paddingHorizontal: spacing.sm,
-      paddingVertical: spacing.sm,
-      overflow: 'hidden',
+    shortcutDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    shortcutTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 16,
+      lineHeight: 20,
+      color: c.textPrimary,
     },
-    tileCompact: { minHeight: 72, paddingVertical: spacing.xs },
-    tileAccent: { position: 'absolute', left: 0, top: 16, bottom: 16, width: 3, borderTopRightRadius: 3, borderBottomRightRadius: 3 },
-    iconBox: { width: 40, height: 40, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },
-    tileCopy: { flex: 1, minWidth: 0, gap: 2 },
-    tileLabel: { ...type.micro, fontFamily: fonts.sansBold, fontSize: 13, color: c.textPrimary },
-    tileDescription: { ...type.tiny, fontFamily: fonts.sans, letterSpacing: 0, textTransform: 'none', color: c.textMuted },
-    mealScanCard: {
-      marginTop: spacing.sm,
-      minHeight: 92,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
+    shortcutSubtitle: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      marginTop: 4,
+      color: c.textSecondary,
     },
-    mealScanCardCompact: { minHeight: 80, paddingVertical: spacing.sm },
-    mealScanIconBox: { width: 48, height: 48, borderRadius: radius.md, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' },
-    mealScanKicker: { ...type.tiny, color: c.primary },
-    mealScanTitle: { ...type.subtitle, fontFamily: fonts.sansHeavy, color: c.textPrimary },
-    mealScanSubtitle: { ...type.micro, fontFamily: fonts.sans, color: c.textSecondary },
+
+    activitySection: { flex: 1 },
+    activityHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      paddingHorizontal: 20,
+      paddingTop: 18,
+      paddingBottom: 8,
+    },
+    activityTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 16,
+      lineHeight: 20,
+      color: c.textPrimary,
+    },
+    historyLink: {
+      fontFamily: fonts.sans,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 0.88,
+      textTransform: 'uppercase',
+      color: c.primary,
+    },
+    activityRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 12,
+      paddingHorizontal: 20,
+      paddingVertical: 13,
+      borderTopWidth: 1,
+      borderTopColor: c.border,
+    },
+    activityCopy: { flex: 1, minWidth: 0 },
+    activityRowTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 14,
+      lineHeight: 18,
+      color: c.textPrimary,
+    },
+    activityRowMeta: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      marginTop: 2,
+      color: c.textMuted,
+    },
+    activityRowWhen: {
+      fontFamily: fonts.sans,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 0.66,
+      textTransform: 'uppercase',
+      color: c.textMuted,
+    },
+    emptyActivity: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      paddingHorizontal: 20,
+      paddingVertical: 13,
+      color: c.textMuted,
+    },
   });
