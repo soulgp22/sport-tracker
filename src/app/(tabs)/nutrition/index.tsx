@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,7 +9,7 @@ import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
-import { makeShadows, makeTypeScale, radius, spacing } from '../../../theme/tokens';
+import { collectMealGroups, mealTypeLabel } from '../../../constants/meals';
 import {
   calculateDailyTotals,
   calculateGoalProgress,
@@ -179,6 +179,23 @@ export default function NutritionScreen() {
   const remaining = useMemo(() => calculateRemainingGoals(totals, goals), [goals, totals]);
   const progress = useMemo(() => calculateGoalProgress(totals, goals), [goals, totals]);
 
+  const mealGroups = useMemo(() => collectMealGroups(entries), [entries]);
+  const meals = useMemo(
+    () =>
+      mealGroups.map((mealType) => {
+        const mealEntries = entries.filter((entry) => entry.mealType === mealType);
+        return {
+          mealType,
+          label: mealTypeLabel(mealType, t),
+          count: mealEntries.length,
+          kcal: calculateDailyTotals(mealEntries).calories,
+        };
+      }),
+    [mealGroups, entries, t]
+  );
+
+  const goPhoto = () => router.push('/(tabs)/nutrition/photo' as never);
+
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
   const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
   const expenditure = resolveDailyEnergyExpenditure({
@@ -196,11 +213,74 @@ export default function NutritionScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('nutrition.balance.title')}</Text>
+        {/* 1. En-tête : kicker + titre */}
+        <View style={styles.header}>
+          <Text style={styles.headerKicker}>{t('nav.nutrition')}</Text>
+          <Text style={styles.headerTitle}>{t('nutrition.title')}</Text>
+        </View>
+
+        {/* 2. Action principale + deux sous-actions */}
+        <View style={styles.actionWrap}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={goPhoto}
+            activeOpacity={0.86}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.analyzeMeal')}>
+            <Text style={styles.actionTitle}>{t('home.analyzeMeal')}</Text>
+            <Text style={styles.actionSubtitle}>{t('nutrition.analyzeSubtitle')}</Text>
+          </TouchableOpacity>
+          <View style={styles.subActions}>
+            <TouchableOpacity
+              style={[styles.subAction, styles.subActionDivider]}
+              onPress={goPhoto}
+              activeOpacity={0.78}
+              accessibilityRole="button"
+              accessibilityLabel={t('nutrition.camera')}>
+              <Text style={styles.subActionLabel}>{t('nutrition.camera')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.subAction}
+              onPress={goPhoto}
+              activeOpacity={0.78}
+              accessibilityRole="button"
+              accessibilityLabel={t('nutrition.import')}>
+              <Text style={styles.subActionLabel}>{t('nutrition.import')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* 3. Liste des repas du jour */}
+        <View style={styles.mealsSection}>
+          <Text style={styles.sectionTitle}>{t('nutrition.today')}</Text>
+          {meals.length === 0 ? (
+            <Text style={styles.emptyMeals}>{t('nutrition.diary.emptyTitle')}</Text>
+          ) : (
+            meals.map((meal) => (
+              <View key={meal.mealType} style={styles.mealRow}>
+                <View style={styles.mealCopy}>
+                  <Text style={styles.mealName} numberOfLines={1}>
+                    {meal.label}
+                  </Text>
+                  <Text style={styles.mealDetail}>
+                    {t('nutrition.mealItems', { count: meal.count })}
+                  </Text>
+                </View>
+                <View style={styles.mealKcalCol}>
+                  <Text style={styles.mealKcal}>{meal.kcal}</Text>
+                  <Text style={styles.mealKcalUnit}>kcal</Text>
+                </View>
+              </View>
+            ))
+          )}
+        </View>
+
+        {/* 4. Bilan du jour (conservé, déplacé sous la liste des repas) */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('nutrition.balance.title')}</Text>
 
           <View style={styles.balanceRow}>
-            <View style={styles.balanceCol}>
+            <View style={[styles.balanceCol, styles.balanceColDivider]}>
               <Text style={styles.balanceValue}>{totals.calories}</Text>
               <Text style={styles.balanceLabel}>{t('nutrition.balance.consumed')}</Text>
             </View>
@@ -210,6 +290,7 @@ export default function NutritionScreen() {
             </View>
           </View>
 
+          <View style={styles.sectionBody}>
           {balance.status !== 'unavailable' ? (
             <Text style={[styles.balanceHint, balance.status === 'over' ? styles.overGoal : null]}>
               {balance.status === 'remaining'
@@ -269,34 +350,25 @@ export default function NutritionScreen() {
               />
             </>
           ) : null}
+          </View>
         </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('nutrition.today')}</Text>
+        {/* 5. Macros (conservé) */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('nutrition.macros')}</Text>
 
-          <View style={styles.caloriesBlock}>
-            <Text style={styles.caloriesValue}>
-              {totals.calories} / {goals.dailyCalories} kcal
-            </Text>
+          <View style={styles.sectionBody}>
+            <MacroBar
+              label={t('nutrition.form.calories')}
+              current={totals.calories}
+              goal={goals.dailyCalories}
+              unit="kcal"
+              percent={progress.calories}
+            />
             <Text style={[styles.remaining, remaining.calories < 0 ? styles.overGoal : null]}>
               {remaining.calories >= 0
                 ? t('nutrition.remaining', { count: remaining.calories })
                 : t('nutrition.overGoal', { count: Math.abs(remaining.calories) })}
             </Text>
-          </View>
-
-          <MacroBar
-            label={t('nutrition.form.calories')}
-            current={totals.calories}
-            goal={goals.dailyCalories}
-            unit="kcal"
-            percent={progress.calories}
-          />
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t('nutrition.macros')}</Text>
-
-          <View style={styles.macroBars}>
             <MacroBar
               label={t('nutrition.facts.protein')}
               current={roundedMacro(totals.protein)}
@@ -321,40 +393,43 @@ export default function NutritionScreen() {
           </View>
         </View>
 
-        <View style={styles.actions}>
-          <Button
-            title={t('nutrition.addMeal')}
-            onPress={() => router.push('/(tabs)/nutrition/add' as never)}
-          />
-          <View style={styles.actionsRow}>
+        {/* 6. Actions */}
+        <View style={styles.section}>
+          <View style={styles.actions}>
             <Button
-              title={t('nav.foods')}
-              variant="soft"
-              compact
-              style={styles.actionsRowBtn}
-              onPress={() => router.push(FOODS_CATALOG_DESTINATION as never)}
+              title={t('nutrition.addMeal')}
+              onPress={() => router.push('/(tabs)/nutrition/add' as never)}
             />
-            <Button
-              title={t('nutrition.diaryTitle')}
-              variant="soft"
-              compact
-              style={styles.actionsRowBtn}
-              onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
-            />
-            <Button
-              title={t('nutrition.historyTitle')}
-              variant="soft"
-              compact
-              style={styles.actionsRowBtn}
-              onPress={() => router.push('/(tabs)/nutrition/history' as never)}
-            />
-            <Button
-              title={t('nutrition.goals.title')}
-              variant="soft"
-              compact
-              style={styles.actionsRowBtn}
-              onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
-            />
+            <View style={styles.actionsRow}>
+              <Button
+                title={t('nav.foods')}
+                variant="soft"
+                compact
+                style={styles.actionsRowBtn}
+                onPress={() => router.push(FOODS_CATALOG_DESTINATION as never)}
+              />
+              <Button
+                title={t('nutrition.diaryTitle')}
+                variant="soft"
+                compact
+                style={styles.actionsRowBtn}
+                onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
+              />
+              <Button
+                title={t('nutrition.historyTitle')}
+                variant="soft"
+                compact
+                style={styles.actionsRowBtn}
+                onPress={() => router.push('/(tabs)/nutrition/history' as never)}
+              />
+              <Button
+                title={t('nutrition.goals.title')}
+                variant="soft"
+                compact
+                style={styles.actionsRowBtn}
+                onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -362,35 +437,173 @@ export default function NutritionScreen() {
   );
 }
 
-const makeStyles = (c: ThemeColors) => {
-  const shadows = makeShadows(c);
-  const type = makeTypeScale();
-  return StyleSheet.create({
-  safe: { flex: 1, backgroundColor: c.bg },
-  content: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl },
-  card: {
-    backgroundColor: c.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: c.border,
-    padding: spacing.md,
-    gap: spacing.md,
-    ...shadows.card,
-  },
-  cardTitle: { ...type.micro, fontFamily: fonts.sansBold, color: c.textPrimary },
-  balanceRow: { flexDirection: 'row', gap: spacing.sm },
-  balanceCol: { flex: 1, alignItems: 'center', gap: spacing.xxs },
-  balanceValue: { fontSize: 26, fontFamily: fonts.serifBold, color: c.primary },
-  balanceLabel: { ...type.micro, fontFamily: fonts.sansSemi, color: c.textSecondary },
-  balanceHint: { ...type.caption, color: c.textSecondary },
-  balanceSource: { ...type.micro, fontFamily: fonts.sans, color: c.textMuted },
-  caloriesBlock: { gap: spacing.xxs },
-  caloriesValue: { ...type.display, fontFamily: fonts.serifBold, color: c.primary },
-  remaining: { ...type.subtitle, fontFamily: fonts.sansBold, color: c.textSecondary },
-  overGoal: { color: c.danger },
-  macroBars: { gap: spacing.sm },
-  actions: { gap: spacing.sm },
-  actionsRow: { flexDirection: 'row', gap: spacing.xs },
-  actionsRowBtn: { flex: 1 },
+const makeStyles = (c: ThemeColors) =>
+  StyleSheet.create({
+    safe: { flex: 1, backgroundColor: c.bg },
+    content: { paddingBottom: 32 },
+
+    // En-tête
+    header: {
+      paddingHorizontal: 20,
+      paddingTop: 14,
+      paddingBottom: 14,
+      borderBottomWidth: 2,
+      borderBottomColor: c.border,
+    },
+    headerKicker: {
+      fontFamily: fonts.serifBold,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 1.54,
+      textTransform: 'uppercase',
+      color: c.secondary,
+    },
+    headerTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 34,
+      lineHeight: 40,
+      marginTop: 6,
+      color: c.textPrimary,
+    },
+
+    // Action principale + sous-actions
+    actionWrap: { padding: 20, paddingBottom: 4 },
+    actionButton: {
+      minHeight: 88,
+      paddingHorizontal: 20,
+      paddingVertical: 18,
+      justifyContent: 'center',
+      gap: 6,
+      backgroundColor: c.primary,
+    },
+    actionTitle: {
+      fontFamily: fonts.serifBold,
+      fontSize: 26,
+      lineHeight: 28,
+      color: c.primaryText,
+    },
+    actionSubtitle: {
+      fontFamily: fonts.sans,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 1.1,
+      textTransform: 'uppercase',
+      marginTop: 6,
+      color: c.primaryText,
+      opacity: 0.85,
+    },
+    subActions: {
+      flexDirection: 'row',
+      marginTop: 12,
+      borderWidth: 1,
+      borderColor: c.border,
+    },
+    subAction: {
+      flex: 1,
+      minHeight: 48,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      justifyContent: 'center',
+    },
+    subActionDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    subActionLabel: {
+      fontFamily: fonts.serifBold,
+      fontSize: 12,
+      lineHeight: 15,
+      letterSpacing: 0.96,
+      textTransform: 'uppercase',
+      color: c.textPrimary,
+    },
+
+    // Liste des repas
+    mealsSection: { paddingTop: 20 },
+    sectionTitle: {
+      paddingHorizontal: 20,
+      paddingBottom: 8,
+      fontFamily: fonts.serifBold,
+      fontSize: 16,
+      lineHeight: 20,
+      color: c.textPrimary,
+    },
+    mealRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap: 12,
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      borderTopWidth: 1,
+      borderTopColor: c.border,
+      minHeight: 66,
+    },
+    mealCopy: { flex: 1, minWidth: 0 },
+    mealName: { fontFamily: fonts.serifBold, fontSize: 16, lineHeight: 20, color: c.textPrimary },
+    mealDetail: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      marginTop: 3,
+      color: c.textSecondary,
+    },
+    mealKcalCol: { alignItems: 'flex-end' },
+    mealKcal: { fontFamily: fonts.serifBold, fontSize: 20, lineHeight: 24, color: c.textPrimary },
+    mealKcalUnit: {
+      fontFamily: fonts.sans,
+      fontSize: 10,
+      lineHeight: 13,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: c.textMuted,
+    },
+    emptyMeals: {
+      fontFamily: fonts.sans,
+      fontSize: 12,
+      lineHeight: 16,
+      paddingHorizontal: 20,
+      paddingVertical: 13,
+      color: c.textMuted,
+    },
+
+    // Sections conservées (bilan, macros, actions)
+    section: {
+      borderTopWidth: 2,
+      borderTopColor: c.border,
+      paddingTop: 18,
+    },
+    sectionBody: {
+      paddingHorizontal: 20,
+      paddingTop: 12,
+      paddingBottom: 20,
+      gap: 12,
+    },
+
+    balanceRow: {
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+    },
+    balanceCol: {
+      flex: 1,
+      paddingHorizontal: 20,
+      paddingVertical: 16,
+      alignItems: 'center',
+      gap: 4,
+    },
+    balanceColDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    balanceValue: { fontFamily: fonts.serifBold, fontSize: 26, lineHeight: 30, color: c.primary },
+    balanceLabel: { fontFamily: fonts.sans, fontSize: 12, lineHeight: 15, color: c.textSecondary },
+    balanceHint: { fontFamily: fonts.sans, fontSize: 12, lineHeight: 16, color: c.textSecondary },
+    balanceSource: { fontFamily: fonts.sans, fontSize: 11, lineHeight: 15, color: c.textMuted },
+    overGoal: { color: c.danger },
+
+    remaining: { fontFamily: fonts.sansBold, fontSize: 16, lineHeight: 20, color: c.textSecondary },
+
+    actions: {
+      paddingHorizontal: 20,
+      paddingTop: 12,
+      paddingBottom: 20,
+      gap: 12,
+    },
+    actionsRow: { flexDirection: 'row', gap: 8 },
+    actionsRowBtn: { flex: 1 },
   });
-};
