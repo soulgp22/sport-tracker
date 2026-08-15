@@ -130,6 +130,8 @@ export default function ProgressScreen() {
     [bodyWeightEntries]
   );
 
+  const currentWeight = bodyWeightPoints.at(-1)?.value ?? null;
+
   const handleSaveWeight = () => {
     if (!canSaveWeight) return;
     addBodyWeightEntry(parsedWeight);
@@ -144,52 +146,55 @@ export default function ProgressScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
-      <View style={styles.modeRow}>
+      <View style={styles.header}>
+        <Text style={styles.headerKicker}>{t('nav.progress')}</Text>
+        <Text style={styles.headerTitle}>{t('progress.title')}</Text>
+      </View>
+      <View style={styles.tabRow}>
         <TouchableOpacity
-          style={[styles.modeChip, mode === 'exercises' && styles.modeChipSelected]}
+          style={[styles.tab, mode === 'exercises' && styles.tabSelected]}
           onPress={() => setMode('exercises')}
-          activeOpacity={0.75}>
-          <Ionicons
-            name="barbell-outline"
-            size={17}
-            color={mode === 'exercises' ? c.primaryText : c.textSecondary}
-          />
+          activeOpacity={0.75}
+          accessibilityRole="button">
           <Text
             numberOfLines={1}
-            style={[styles.modeChipText, mode === 'exercises' && styles.modeChipTextSelected]}>
+            style={[styles.tabText, mode === 'exercises' && styles.tabTextSelected]}>
             {t('progress.exercises')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.modeChip, mode === 'bodyWeight' && styles.modeChipSelected]}
+          style={[styles.tab, mode === 'bodyWeight' && styles.tabSelected]}
           onPress={() => setMode('bodyWeight')}
-          activeOpacity={0.75}>
-          <Ionicons
-            name="scale-outline"
-            size={17}
-            color={mode === 'bodyWeight' ? c.primaryText : c.textSecondary}
-          />
+          activeOpacity={0.75}
+          accessibilityRole="button">
           <Text
             numberOfLines={1}
-            style={[styles.modeChipText, mode === 'bodyWeight' && styles.modeChipTextSelected]}>
+            style={[styles.tabText, mode === 'bodyWeight' && styles.tabTextSelected]}>
             {t('progress.bodyWeight')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.modeChip, mode === 'performance' && styles.modeChipSelected]}
+          style={[styles.tab, mode === 'performance' && styles.tabSelected]}
           onPress={() => setMode('performance')}
-          activeOpacity={0.75}>
-          <Ionicons
-            name="trophy-outline"
-            size={17}
-            color={mode === 'performance' ? c.primaryText : c.textSecondary}
-          />
+          activeOpacity={0.75}
+          accessibilityRole="button">
           <Text
             numberOfLines={1}
-            style={[styles.modeChipText, mode === 'performance' && styles.modeChipTextSelected]}>
+            style={[styles.tabText, mode === 'performance' && styles.tabTextSelected]}>
             {t('progress.performance')}
           </Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.currentWeightBlock}>
+        <Text style={styles.currentWeightLabel}>{t('progress.currentWeight')}</Text>
+        <Text style={styles.currentWeightValue}>
+          {currentWeight === null ? '—' : (
+            <>
+              {currentWeight}
+              <Text style={styles.currentWeightUnit}> kg</Text>
+            </>
+          )}
+        </Text>
       </View>
 
       {mode === 'exercises' ? (
@@ -351,21 +356,76 @@ export default function ProgressScreen() {
 
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
-  modeRow: { flexDirection: 'row', paddingHorizontal: spacing.sm, paddingBottom: spacing.sm, gap: 6 },
-  modeChip: {
-    flex: 1,
-    minHeight: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xxs,
-    paddingHorizontal: 7,
-    borderRadius: radius.lg,
-    backgroundColor: c.surfaceAlt,
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 14,
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
   },
-  modeChipSelected: { backgroundColor: c.primary },
-  modeChipText: { flexShrink: 1, fontSize: 11, fontFamily: fonts.sansBold, color: c.textSecondary },
-  modeChipTextSelected: { color: c.primaryText },
+  headerKicker: {
+    fontFamily: fonts.serifBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 1.54,
+    textTransform: 'uppercase',
+    color: c.secondary,
+  },
+  headerTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 34,
+    lineHeight: 40,
+    marginTop: 6,
+    color: c.textPrimary,
+  },
+  tabRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 2,
+    borderBottomColor: c.border,
+  },
+  tab: {
+    flex: 1,
+    minHeight: 48,
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    borderRightWidth: 1,
+    borderRightColor: c.border,
+  },
+  tabSelected: { backgroundColor: c.primary },
+  tabText: {
+    fontFamily: fonts.serifBold,
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 0.66,
+    textTransform: 'uppercase',
+    textAlign: 'left',
+    color: c.textPrimary,
+  },
+  tabTextSelected: { color: c.bg },
+  currentWeightBlock: {
+    paddingTop: 18,
+    paddingHorizontal: 20,
+  },
+  currentWeightLabel: {
+    fontFamily: fonts.sans,
+    fontSize: 10,
+    lineHeight: 13,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    color: c.textSecondary,
+  },
+  currentWeightValue: {
+    fontFamily: fonts.displayHeavy,
+    fontSize: 52,
+    lineHeight: 47,
+    marginTop: 6,
+    color: c.textPrimary,
+  },
+  currentWeightUnit: {
+    fontSize: 20,
+    color: c.textPrimary,
+  },
   content: { paddingHorizontal: spacing.md, gap: spacing.md, paddingBottom: 32 },
   exerciseSelector: {
     minHeight: 88,
