@@ -52,7 +52,7 @@ export default function TabLayout() {
         tabBarItemStyle: { paddingVertical: 2 },
         sceneStyle: { backgroundColor: c.bg },
       }}>
-      {/* Onglets visibles : Accueil, Séance, Nutrition, Progression. */}
+      {/* Onglets visibles : Accueil, Séance, Nutrition, Progression, Profil. */}
       <Tabs.Screen
         name="index"
         options={{ title: t('nav.home'), tabBarIcon: tabIcon('home') }}
@@ -69,6 +69,10 @@ export default function TabLayout() {
         name="progress"
         options={{ title: t('nav.progress'), tabBarIcon: tabIcon('analytics') }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }}
+      />
       {/* Sections routables mais hors tab bar (accessibles depuis l'accueil
           ou les écrans parents) : aucune fonctionnalité ne disparaît. */}
       <Tabs.Screen name="programs" options={{ href: null }} />
@@ -77,7 +81,6 @@ export default function TabLayout() {
       <Tabs.Screen name="history" options={{ href: null }} />
       <Tabs.Screen name="community" options={{ href: null }} />
       <Tabs.Screen name="settings" options={{ href: null }} />
-      <Tabs.Screen name="profile" options={{ href: null }} />
     </Tabs>
   );
 }
