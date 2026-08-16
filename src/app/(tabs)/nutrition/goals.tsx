@@ -24,7 +24,7 @@ import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import type { GoalType, NutritionGoals } from '../../../types';
 
 type RequiredGoalField = 'dailyCalories' | 'protein' | 'carbs' | 'fat';
-type OptionalWeightField = 'currentWeight' | 'targetWeight';
+type OptionalWeightField = 'targetWeight';
 type GoalField = RequiredGoalField | OptionalWeightField;
 
 const goalTypes: { labelKey: string; value: GoalType }[] = [
@@ -66,7 +66,6 @@ export default function NutritionGoalsScreen() {
     protein: numberToInput(goals.protein),
     carbs: numberToInput(goals.carbs),
     fat: numberToInput(goals.fat),
-    currentWeight: numberToInput(goals.currentWeight),
     targetWeight: numberToInput(goals.targetWeight),
   });
   const [goalType, setGoalType] = useState<GoalType>(goals.goalType);
@@ -79,7 +78,7 @@ export default function NutritionGoalsScreen() {
 
   const validate = () => {
     const requiredFields: RequiredGoalField[] = ['dailyCalories', 'protein', 'carbs', 'fat'];
-    const weightFields: OptionalWeightField[] = ['currentWeight', 'targetWeight'];
+    const weightFields: OptionalWeightField[] = ['targetWeight'];
     const nextErrors: Partial<Record<GoalField, string>> = {};
     const patch: NutritionGoals = {
       dailyCalories: 0,
@@ -205,16 +204,6 @@ export default function NutritionGoalsScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>{t('nutrition.goals.weightSection')}</Text>
             <View style={styles.twoColumns}>
-              <View style={styles.columnField}>
-                <TextInput
-                  label={t('nutrition.goals.currentWeight')}
-                  value={values.currentWeight}
-                  onChangeText={(value) => setValue('currentWeight', value)}
-                  error={errors.currentWeight}
-                  keyboardType="numeric"
-                  placeholder={t('nutrition.form.optional')}
-                />
-              </View>
               <View style={styles.columnField}>
                 <TextInput
                   label={t('nutrition.goals.targetWeight')}

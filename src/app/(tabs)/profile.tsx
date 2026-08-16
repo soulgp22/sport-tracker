@@ -8,9 +8,6 @@ import { TextInput } from '../../components/ui/TextInput';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
 import { usePerformanceStore } from '../../store/performanceStore';
-import { useBodyWeightStore } from '../../store/bodyWeightStore';
-import { getBodyweightForDate } from '../../lib/performanceEngine';
-import { sanitizeWeightInput } from '../../lib/sanitizeWeightInput';
 import { fonts } from '../../theme/fonts';
 
 import type { ThemeColors } from '../../theme/palettes';
@@ -39,21 +36,15 @@ export default function ProfileScreen() {
   const lastName = usePerformanceStore((s) => s.lastName);
   const setLastName = usePerformanceStore((s) => s.setLastName);
 
-  const bodyWeightEntries = useBodyWeightStore((s) => s.entries);
-  const addBodyWeightEntry = useBodyWeightStore((s) => s.addEntry);
-
   const [firstNameDraft, setFirstNameDraft] = useState<string | null>(null);
   const [lastNameDraft, setLastNameDraft] = useState<string | null>(null);
   const [ageDraft, setAgeDraft] = useState<string | null>(null);
   const [heightDraft, setHeightDraft] = useState<string | null>(null);
-  const [weightDraft, setWeightDraft] = useState<string | null>(null);
 
   const firstNameValue = firstNameDraft ?? (firstName ?? '');
   const lastNameValue = lastNameDraft ?? (lastName ?? '');
   const ageInput = ageDraft ?? (age ? String(age) : '');
   const heightInput = heightDraft ?? (heightCm ? String(heightCm) : '');
-  const latestWeight = getBodyweightForDate(bodyWeightEntries, new Date().toISOString());
-  const weightInput = weightDraft ?? (latestWeight ? String(latestWeight).replace('.', ',') : '');
 
   const handleBack = () => {
     if (router.canGoBack()) {
@@ -165,25 +156,6 @@ export default function ProfileScreen() {
               keyboardType="number-pad"
               maxLength={3}
               placeholder={t('performance.heightPlaceholder')}
-            />
-          </View>
-
-          <View style={styles.fieldRow}>
-            <TextInput
-              label={t('profile.weight')}
-              value={weightInput}
-              onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))}
-              onEndEditing={() => {
-                const raw = weightDraft ?? '';
-                const normalized = raw.replace(',', '.');
-                const parsed = parseFloat(normalized);
-                if (raw.trim() && Number.isFinite(parsed) && parsed >= 30 && parsed <= 300) {
-                  addBodyWeightEntry(parsed);
-                }
-                setWeightDraft(null);
-              }}
-              keyboardType="decimal-pad"
-              placeholder={t('profile.weightPlaceholder')}
             />
           </View>
         </View>
