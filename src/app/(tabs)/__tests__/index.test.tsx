@@ -77,8 +77,26 @@ describe('HomeScreen', () => {
     // resolveDailyEnergyExpenditure renvoie une dépense nulle (null).
     render(<HomeScreen />);
 
-    // La colonne « Restantes » et la dépense affichent « — », pas un « 0 ».
-    expect(screen.getAllByText('—')).toHaveLength(2);
+    // La colonne « Restantes », la dépense et le poids (sans pesée)
+    // affichent « — », pas un « 0 ».
+    expect(screen.getAllByText('—')).toHaveLength(3);
     expect(screen.queryByText('0 kcal dépensées')).toBeNull();
+  });
+
+  it('affiche « — » pour le poids quand aucune pesée n’est enregistrée', () => {
+    render(<HomeScreen />);
+
+    expect(screen.getByText('Poids actuel')).toBeTruthy();
+    expect(screen.getByTestId('home-weight-value').props.children).toBe('—');
+  });
+
+  it('affiche la dernière pesée sur l’accueil', () => {
+    useBodyWeightStore.setState({
+      entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 }],
+    });
+
+    render(<HomeScreen />);
+
+    expect(screen.getByText('81.7 kg')).toBeTruthy();
   });
 });

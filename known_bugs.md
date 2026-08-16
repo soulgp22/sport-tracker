@@ -276,3 +276,74 @@ find src/app -type d -name "__tests__" # doit rester vide
 - **Ne jamais filtrer la sortie d'un build** (`| tail`, `| grep`) : en cas
   d'échec, le message d'erreur est perdu. Rediriger vers un fichier.
 - **`npm` standard est cassé sur cette machine** : utiliser celui de kimi-desktop.
+
+---
+
+## Le garde-fou de média cachait l'animation de 850 exercices
+
+**Symptôme** — l'écran de séance affichait une bande grise vide de 150 dp
+au-dessus de la liste des exercices, et l'écran de détail restait souvent muet.
+
+**Cause** — le test de disponibilité du média, dupliqué dans
+`ExerciseDetailView` et repris tel quel ailleurs :
+
+```ts
+Boolean(exerciseGifs[id] || exerciseMedia[id] || exercise.remoteMediaBaseUrl)
+```
+
+est beaucoup plus restrictif que le composant qu'il protège. Mesures :
+`exerciseGifs` ne contient que **23** entrées groupées, `exerciseMedia` est un
+objet **vide** (`= {}`), et `remoteMediaBaseUrl` n'est renseigné que pour les
+exercices installés depuis un pack communautaire (`communityStore.ts`). Or
+`AnimatedExerciseImage` retombe seul sur `DEFAULT_EXERCISE_MEDIA_BASE_URL` :
+
+```
+curl -sI .../media/exercises/offline-001.webp  → 200, 48 850 octets, RIFF/WEBP
+curl -sI .../media/exercises/offline-010.webp  → 200, 67 450 octets
+curl -sI .../media/exercises/offline-100.webp  → 200, 93 780 octets
+```
+
+873 fichiers y sont servis. Le garde-fou masquait donc ce qui existait.
+
+**Correctif** — inverser la logique : afficher par défaut, masquer seulement
+après échec réel. `AnimatedExerciseImage` reçoit une prop optionnelle
+`onUnavailable`, appelée depuis un effet (jamais pendant le rendu), et le parent
+retire son cadre à ce moment-là.
+
+**À éviter** — ne pas dupliquer un test de disponibilité en amont d'un composant
+qui sait déjà décider. Le bon critère n'est pas « je sais d'avance qu'un média
+existe » mais « le composant a essayé et a échoué ».
+
+## Un bloc placé entre l'en-tête et les branches d'onglets s'affiche partout
+
+**Symptôme** — « POIDS ACTUEL 93 KG » visible sur les trois onglets de
+Progression, y compris Exercices et Niveaux.
+
+**Cause** — dans `progress/index.tsx`, le bloc était écrit entre la rangée
+d'onglets et le premier `mode === …`. Il n'appartenait donc à aucune branche.
+Il n'y avait pas de condition fautive à corriger : il fallait déplacer le bloc.
+
+**À éviter** — dans un écran à onglets rendu par une chaîne de ternaires, tout
+ce qui est écrit avant la chaîne est un en-tête partagé. Vérifier à l'écran, pas
+seulement dans le code : un test qui ne monte qu'un seul onglet ne voit rien.
+
+## `app.json` n'est pas la source du numéro de version Android
+
+Rappel : `android/` est généré et gitignoré, Gradle lit
+`android/app/build.gradle` (`versionCode`, `versionName`). Modifier les DEUX
+avant publication, puis vérifier sur l'appareil :
+
+```bash
+adb shell dumpsys package com.sportracker.app | grep -E "versionCode|versionName"
+```
+
+## Pièges d'émulateur rencontrés le 2026-08-16
+
+- **Un APK debug ne s'installe pas par-dessus un build release**
+  (`INSTALL_FAILED_UPDATE_INCOMPATIBLE`) : signatures différentes. Désinstaller
+  d'abord — ce qui efface les données de l'app.
+- **Le dev-client n'ouvre pas le bundle tout seul** : il affiche son lanceur.
+  Passer par le schéma de l'app, pas par `expo-development-client` :
+  `adb shell am start -a android.intent.action.VIEW -d "sport-tracker://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"`
+- **La bulle flottante du dev-client masque le bouton d'en-tête droit.**
+  La déplacer par un `input swipe` avant de viser un `+` ou un engrenage.

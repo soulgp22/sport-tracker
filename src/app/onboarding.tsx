@@ -20,10 +20,10 @@ import type { ThemeColors } from '../theme/palettes';
 import { useColors } from '../theme/useColors';
 
 const copy: Record<LanguageId, Record<string, string>> = {
-  fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', profile: 'Ton profil', profileHelp: 'Optionnel — ces infos servent à estimer ta dépense quotidienne (bilan nutrition).', profileAge: 'Âge', profileHeight: 'Taille (cm)', profileWeight: 'Poids actuel (kg)', next: 'Continuer', back: 'Retour' },
-  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', profile: 'Your profile', profileHelp: 'Optional — used to estimate your daily energy burn (nutrition balance).', profileAge: 'Age', profileHeight: 'Height (cm)', profileWeight: 'Current weight (kg)', next: 'Continue', back: 'Back' },
-  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', profile: 'Tu perfil', profileHelp: 'Opcional — sirve para estimar tu gasto diario (balance de nutrición).', profileAge: 'Edad', profileHeight: 'Altura (cm)', profileWeight: 'Peso actual (kg)', next: 'Continuar', back: 'Atrás' },
-  de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', profile: 'Dein Profil', profileHelp: 'Optional — dient zur Schätzung deines täglichen Verbrauchs (Ernährungsbilanz).', profileAge: 'Alter', profileHeight: 'Größe (cm)', profileWeight: 'Aktuelles Gewicht (kg)', next: 'Weiter', back: 'Zurück' },
+  fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', profile: 'Ton profil', profileFirstName: 'Prénom', profileHelp: 'Optionnel — ces infos servent à estimer ta dépense quotidienne (bilan nutrition).', profileAge: 'Âge', profileHeight: 'Taille (cm)', profileWeight: 'Poids actuel (kg)', next: 'Continuer', back: 'Retour' },
+  en: { welcome: 'Build your starting point', intro: 'A few answers let us tailor programs, exercises and foods.', language: 'Your language', profile: 'Your profile', profileFirstName: 'First name', profileHelp: 'Optional — used to estimate your daily energy burn (nutrition balance).', profileAge: 'Age', profileHeight: 'Height (cm)', profileWeight: 'Current weight (kg)', next: 'Continue', back: 'Back' },
+  es: { welcome: 'Crea tu punto de partida', intro: 'Unas respuestas bastan para adaptar programas, ejercicios y alimentos.', language: 'Tu idioma', profile: 'Tu perfil', profileFirstName: 'Nombre', profileHelp: 'Opcional — sirve para estimar tu gasto diario (balance de nutrición).', profileAge: 'Edad', profileHeight: 'Altura (cm)', profileWeight: 'Peso actual (kg)', next: 'Continuar', back: 'Atrás' },
+  de: { welcome: 'Dein persönlicher Start', intro: 'Mit wenigen Antworten passen wir Programme, Übungen und Lebensmittel an.', language: 'Deine Sprache', profile: 'Dein Profil', profileFirstName: 'Vorname', profileHelp: 'Optional — dient zur Schätzung deines täglichen Verbrauchs (Ernährungsbilanz).', profileAge: 'Alter', profileHeight: 'Größe (cm)', profileWeight: 'Aktuelles Gewicht (kg)', next: 'Weiter', back: 'Zurück' },
 };
 
 export default function OnboardingScreen() {
@@ -35,8 +35,10 @@ export default function OnboardingScreen() {
   const complete = useOnboardingStore((state) => state.complete);
   const performanceAge = usePerformanceStore((state) => state.age);
   const performanceHeightCm = usePerformanceStore((state) => state.heightCm);
+  const performanceFirstName = usePerformanceStore((state) => state.firstName);
   const setPerformanceAge = usePerformanceStore((state) => state.setAge);
   const setPerformanceHeightCm = usePerformanceStore((state) => state.setHeightCm);
+  const setPerformanceFirstName = usePerformanceStore((state) => state.setFirstName);
   const bodyWeightEntries = useBodyWeightStore((state) => state.entries);
   const addBodyWeightEntry = useBodyWeightStore((state) => state.addEntry);
   const [step, setStep] = useState(0);
@@ -44,6 +46,7 @@ export default function OnboardingScreen() {
   const [ageDraft, setAgeDraft] = useState('');
   const [heightDraft, setHeightDraft] = useState('');
   const [weightDraft, setWeightDraft] = useState('');
+  const [firstNameDraft, setFirstNameDraft] = useState('');
   const totalSteps = 2;
   const [profileDraftsReady, setProfileDraftsReady] = useState(false);
 
@@ -53,13 +56,15 @@ export default function OnboardingScreen() {
     if (step !== 1 || profileDraftsReady) return;
     setAgeDraft(performanceAge ? String(performanceAge) : '');
     setHeightDraft(performanceHeightCm ? String(performanceHeightCm) : '');
+    setFirstNameDraft(performanceFirstName ?? '');
     const latestWeight = getBodyweightForDate(bodyWeightEntries, new Date().toISOString());
     setWeightDraft(latestWeight ? String(latestWeight).replace('.', ',') : '');
     setProfileDraftsReady(true);
-  }, [step, profileDraftsReady, performanceAge, performanceHeightCm, bodyWeightEntries]);
+  }, [step, profileDraftsReady, performanceAge, performanceHeightCm, performanceFirstName, bodyWeightEntries]);
 
   // Sauvegarde le profil énergétique au passage à l'étape suivante.
   const saveEnergyProfile = () => {
+    setPerformanceFirstName(firstNameDraft);
     const parsedAge = parseInt(ageDraft, 10);
     if (ageDraft.trim() && Number.isFinite(parsedAge) && parsedAge >= 10 && parsedAge <= 100) {
       setPerformanceAge(parsedAge);
@@ -95,6 +100,14 @@ export default function OnboardingScreen() {
       {step === 1 ? <>
         <Text style={styles.subtitle}>{text.profileHelp}</Text>
         <View style={styles.profileFields}>
+          <TextInput
+            label={text.profileFirstName}
+            value={firstNameDraft}
+            onChangeText={setFirstNameDraft}
+            maxLength={60}
+            autoCapitalize="words"
+            placeholder="Marc"
+          />
           <TextInput label={text.profileAge} value={ageDraft} onChangeText={(value) => setAgeDraft(value.replace(/\D/g, '').slice(0, 3))} keyboardType="number-pad" maxLength={3} placeholder="30" />
           <TextInput label={text.profileHeight} value={heightDraft} onChangeText={(value) => setHeightDraft(value.replace(/\D/g, '').slice(0, 3))} keyboardType="number-pad" maxLength={3} placeholder="175" />
           <TextInput label={text.profileWeight} value={weightDraft} onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))} keyboardType="decimal-pad" placeholder="70" />

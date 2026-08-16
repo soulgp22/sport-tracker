@@ -2,15 +2,15 @@ import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 
+import { appAlert } from '../../components/ui/AppDialog';
 import { TextInput } from '../../components/ui/TextInput';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
+import { useOnboardingStore } from '../../store/onboardingStore';
 import { usePerformanceStore } from '../../store/performanceStore';
-import { useBodyWeightStore } from '../../store/bodyWeightStore';
-import { getBodyweightForDate } from '../../lib/performanceEngine';
-import { sanitizeWeightInput } from '../../lib/sanitizeWeightInput';
 import { fonts } from '../../theme/fonts';
 
 import type { ThemeColors } from '../../theme/palettes';
@@ -38,48 +38,42 @@ export default function ProfileScreen() {
   const setFirstName = usePerformanceStore((s) => s.setFirstName);
   const lastName = usePerformanceStore((s) => s.lastName);
   const setLastName = usePerformanceStore((s) => s.setLastName);
-
-  const bodyWeightEntries = useBodyWeightStore((s) => s.entries);
-  const addBodyWeightEntry = useBodyWeightStore((s) => s.addEntry);
+  const restartOnboarding = useOnboardingStore((s) => s.restart);
 
   const [firstNameDraft, setFirstNameDraft] = useState<string | null>(null);
   const [lastNameDraft, setLastNameDraft] = useState<string | null>(null);
   const [ageDraft, setAgeDraft] = useState<string | null>(null);
   const [heightDraft, setHeightDraft] = useState<string | null>(null);
-  const [weightDraft, setWeightDraft] = useState<string | null>(null);
 
   const firstNameValue = firstNameDraft ?? (firstName ?? '');
   const lastNameValue = lastNameDraft ?? (lastName ?? '');
   const ageInput = ageDraft ?? (age ? String(age) : '');
   const heightInput = heightDraft ?? (heightCm ? String(heightCm) : '');
-  const latestWeight = getBodyweightForDate(bodyWeightEntries, new Date().toISOString());
-  const weightInput = weightDraft ?? (latestWeight ? String(latestWeight).replace('.', ',') : '');
-
-  const handleBack = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-    router.replace('/(tabs)' as never);
-  };
 
   const fullName = [firstNameValue, lastNameValue].filter((part) => part.length > 0).join(' ');
 
-  const handleOpenSettings = () => {
-    router.push('/(tabs)/settings' as never);
+  const handleRedoOnboarding = () => {
+    appAlert(
+      t('settings.redoOnboarding'),
+      t('profile.redoOnboardingWarning'),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('settings.redoOnboarding'),
+          style: 'destructive',
+          onPress: () => {
+            restartOnboarding();
+            router.replace('/onboarding' as never);
+          },
+        },
+      ]
+    );
   };
 
   return (
     <SafeAreaView style={styles.safe} edges={['bottom', 'top']}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <TouchableOpacity
-            onPress={handleBack}
-            hitSlop={8}
-            activeOpacity={0.7}
-            accessibilityLabel={t('profile.backAccessibilityLabel')}>
-            <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-          </TouchableOpacity>
           <Text style={styles.headerKicker}>{t('nav.profile')}</Text>
         </View>
         <Text style={styles.headerTitle}>{fullName || t('profile.title')}</Text>
@@ -167,37 +161,64 @@ export default function ProfileScreen() {
               placeholder={t('performance.heightPlaceholder')}
             />
           </View>
-
-          <View style={styles.fieldRow}>
-            <TextInput
-              label={t('profile.weight')}
-              value={weightInput}
-              onChangeText={(value) => setWeightDraft(sanitizeWeightInput(value))}
-              onEndEditing={() => {
-                const raw = weightDraft ?? '';
-                const normalized = raw.replace(',', '.');
-                const parsed = parseFloat(normalized);
-                if (raw.trim() && Number.isFinite(parsed) && parsed >= 30 && parsed <= 300) {
-                  addBodyWeightEntry(parsed);
-                }
-                setWeightDraft(null);
-              }}
-              keyboardType="decimal-pad"
-              placeholder={t('profile.weightPlaceholder')}
-            />
-          </View>
         </View>
 
         <View style={styles.settingsSection}>
-          <Text style={styles.sectionKicker}>{t('nav.settings')}</Text>
+          <Text style={styles.sectionKicker}>{t('profile.settingsSection')}</Text>
           <TouchableOpacity
             style={styles.settingRow}
-            onPress={handleOpenSettings}
+            onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('profile.goals')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={() => router.push('/(tabs)/settings' as never)}
             activeOpacity={0.7}
             accessibilityRole="button">
             <Text style={styles.settingLabel}>{t('settings.appearance')}</Text>
             <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={() => router.push('/(tabs)/programs' as never)}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('nav.programs')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={() => router.push('/(tabs)/history' as never)}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('nav.history')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={() => router.push('/(tabs)/settings' as never)}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('profile.backup')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingRow}
+            onPress={handleRedoOnboarding}
+            activeOpacity={0.7}
+            accessibilityRole="button">
+            <Text style={styles.settingLabel}>{t('settings.redoOnboarding')}</Text>
+            <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+          </TouchableOpacity>
+          <View style={styles.settingRow}>
+            <Text style={styles.settingLabel}>{t('profile.version')}</Text>
+            <Text style={[styles.settingLabel, { color: c.textMuted }]}>
+              {Constants.expoConfig?.version ?? '?'}
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

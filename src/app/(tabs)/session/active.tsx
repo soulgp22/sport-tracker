@@ -17,6 +17,7 @@ import { useRestTimer } from '../../../hooks/useRestTimer';
 import { RestTimerModal } from '../../../components/session/RestTimerModal';
 import { ExerciseDetailView } from '../../../components/exercises/ExerciseDetailView';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
+import { AnimatedExerciseImage } from '../../../components/exercises/AnimatedExerciseImage';
 import { Button } from '../../../components/ui/Button';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { TextInput } from '../../../components/ui/TextInput';
@@ -30,7 +31,7 @@ import { isExerciseCompatibleWithProfile } from '../../../constants/equipmentPro
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import { makeShadows, radius, spacing } from '../../../theme/tokens';
-import { RAMP_WARM, type ThemeColors } from '../../../theme/palettes';
+import { type ThemeColors } from '../../../theme/palettes';
 import { keyboardAvoidingBehavior, keyboardVerticalOffset } from '../../../constants/keyboard';
 import { getRelatedExerciseIds } from '../../../lib/exerciseRelations';
 import {
@@ -158,6 +159,7 @@ export default function ActiveSessionScreen() {
   const [elapsed, setElapsed] = useState(0);
   const [detailId, setDetailId] = useState<string | null>(null);
   const [replacementExerciseIndex, setReplacementExerciseIndex] = useState<number | null>(null);
+  const [mediaUnavailable, setMediaUnavailable] = useState<Record<string, true>>({});
 
   const exIdx = active?.currentExerciseIndex ?? 0;
   const setIdx = active?.currentSetIndex ?? 0;
@@ -344,7 +346,23 @@ export default function ActiveSessionScreen() {
         </View>
 
         {/* Visuel de l'exercice */}
-        <View style={styles.visualBlock} />
+        {currentEx && !mediaUnavailable[currentEx.exerciseId] ? (
+          <View style={styles.visualBlock}>
+            <AnimatedExerciseImage
+              id={currentEx.exerciseId}
+              animate
+              style={styles.visualMedia}
+              accessibilityLabel={currentExerciseName}
+              onUnavailable={() =>
+                setMediaUnavailable((previous) =>
+                  previous[currentEx.exerciseId]
+                    ? previous
+                    : { ...previous, [currentEx.exerciseId]: true },
+                )
+              }
+            />
+          </View>
+        ) : null}
 
         {/* Progress bar */}
         <View style={styles.progressTrack}>
@@ -566,10 +584,16 @@ const makeStyles = (c: ThemeColors) => {
   visualBlock: {
     height: 150,
     marginHorizontal: 20,
-    backgroundColor: RAMP_WARM[300],
+    backgroundColor: c.surfaceAlt,
+    overflow: 'hidden',
+  },
+  visualMedia: {
+    flex: 1,
+    borderRadius: 0,
+    backgroundColor: c.surfaceAlt,
   },
   progressTrack: { height: 6, backgroundColor: c.border, marginHorizontal: 20 },
-  progressFill: { height: 6, backgroundColor: c.primary },
+  progressFill: { height: 6, backgroundColor: c.secondary },
   progressLabel: { fontSize: 12, color: c.textMuted, paddingHorizontal: 20, marginTop: spacing.xxs },
   content: { paddingBottom: spacing.md },
   exSection: {

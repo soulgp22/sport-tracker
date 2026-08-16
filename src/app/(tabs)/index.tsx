@@ -145,6 +145,24 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Poids actuel */}
+        <TouchableOpacity
+          style={styles.weightBand}
+          onPress={() => router.push('/(tabs)/progress?tab=bodyWeight' as never)}
+          activeOpacity={0.78}
+          accessibilityRole="button"
+          accessibilityLabel={t('progress.currentWeight')}>
+          <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
+          <Text style={styles.weightBandValue} testID="home-weight-value">
+            {weightKg === undefined ? '—' : (
+              <>
+                {weightKg}
+                <Text style={styles.weightBandUnit}> kg</Text>
+              </>
+            )}
+          </Text>
+        </TouchableOpacity>
+
         {/* 3. Action principale */}
         <View style={styles.actionWrap}>
           <TouchableOpacity
@@ -306,9 +324,37 @@ const makeStyles = (c: ThemeColors) =>
       overflow: 'hidden',
       backgroundColor: c.surfaceAlt,
     },
-    progressFill: { height: 6, backgroundColor: c.primary },
+    progressFill: { height: 6, backgroundColor: c.secondary },
     segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
     segment: { flex: 1, height: 6 },
+
+    weightBand: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+      paddingHorizontal: 20,
+      paddingVertical: 14,
+      borderBottomWidth: 2,
+      borderBottomColor: c.border,
+      minHeight: 48,
+    },
+    weightBandLabel: {
+      fontFamily: fonts.sans,
+      fontSize: 11,
+      lineHeight: 15,
+      letterSpacing: 0.66,
+      textTransform: 'uppercase',
+      color: c.textMuted,
+    },
+    weightBandValue: {
+      fontFamily: fonts.displayHeavy,
+      fontSize: 24,
+      color: c.textPrimary,
+    },
+    weightBandUnit: {
+      fontSize: 12,
+      color: c.textSecondary,
+    },
 
     actionWrap: { padding: 20 },
     actionButton: {

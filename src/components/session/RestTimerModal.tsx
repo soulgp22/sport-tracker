@@ -14,7 +14,7 @@ import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/acti
 import { fonts } from '../../theme/fonts';
 import { radius, spacing } from '../../theme/tokens';
 
-import { BRAND_BRASS, type ThemeColors } from '../../theme/palettes';
+import { type ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 
 const RING_SIZE = 248;
@@ -283,7 +283,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     width: 15,
     height: 15,
     borderRadius: radius.sm,
-    backgroundColor: BRAND_BRASS,
+    backgroundColor: c.secondary,
     borderWidth: 2,
     borderColor: c.surface,
   },

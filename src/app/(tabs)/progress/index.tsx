@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
 
 import { WeightChart } from '../../../components/progress/WeightChart';
 import { VolumeChart } from '../../../components/progress/VolumeChart';
@@ -37,6 +38,8 @@ import {
 
 type ProgressMode = 'exercises' | 'bodyWeight' | 'performance';
 
+const MODES = ['exercises', 'bodyWeight', 'performance'] as const;
+
 function parseNumberInput(value: string) {
   return Number(value.trim().replace(',', '.'));
 }
@@ -52,7 +55,11 @@ export default function ProgressScreen() {
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const exercises = useExercisesWithHistory();
-  const [mode, setMode] = useState<ProgressMode>('exercises');
+  const params = useLocalSearchParams<{ tab?: string }>();
+  const [mode, setMode] = useState<ProgressMode>(() => {
+    const knownMode = MODES.find((candidate) => candidate === params.tab);
+    return knownMode ?? 'exercises';
+  });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -185,17 +192,6 @@ export default function ProgressScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.currentWeightBlock}>
-        <Text style={styles.currentWeightLabel}>{t('progress.currentWeight')}</Text>
-        <Text style={styles.currentWeightValue}>
-          {currentWeight === null ? '—' : (
-            <>
-              {currentWeight}
-              <Text style={styles.currentWeightUnit}> kg</Text>
-            </>
-          )}
-        </Text>
-      </View>
 
       {mode === 'exercises' ? (
         exercises.length === 0 ? (
@@ -253,6 +249,17 @@ export default function ProgressScreen() {
         )
       ) : mode === 'bodyWeight' ? (
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+          <View style={styles.currentWeightBlock}>
+            <Text style={styles.currentWeightLabel}>{t('progress.currentWeight')}</Text>
+            <Text style={styles.currentWeightValue}>
+              {currentWeight === null ? '—' : (
+                <>
+                  {currentWeight}
+                  <Text style={styles.currentWeightUnit}> kg</Text>
+                </>
+              )}
+            </Text>
+          </View>
           <View style={styles.formRow}>
             <View style={styles.weightInput}>
               <TextInput
