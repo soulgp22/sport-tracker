@@ -10,19 +10,19 @@ describe('identité visuelle unique « Life Sport Tracker »', () => {
     expect(DEFAULT_PALETTE).toBe('lst');
 
     expect(PALETTES.lst.colors).toEqual({
-      bg: '#f5f1e6',
-      surface: '#ebe5d4',
-      surfaceAlt: '#e6e1d3',
-      border: '#d5cfbe',
+      bg: '#fbfbfa',
+      surface: '#ffffff',
+      surfaceAlt: '#f2f4f7',
+      border: '#e4e6ea',
       textPrimary: '#16233b',
-      textSecondary: '#4a4c50',
-      textMuted: '#8d897c',
+      textSecondary: '#55606f',
+      textMuted: '#8a94a3',
       primary: '#16233b',
-      primaryText: '#f5f1e6',
-      secondary: '#0e7a58',
-      success: '#0e7a58',
-      danger: '#ec3013',
-      accentSoft: 'rgba(22,35,59,0.10)',
+      primaryText: '#ffffff',
+      secondary: '#1f5fe0',
+      success: '#10a06a',
+      danger: '#ef3d2a',
+      accentSoft: 'rgba(31,95,224,0.10)',
       overlay: 'rgba(14,23,39,0.50)',
     });
   });

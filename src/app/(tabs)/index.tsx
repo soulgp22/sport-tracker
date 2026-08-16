@@ -306,7 +306,7 @@ const makeStyles = (c: ThemeColors) =>
       overflow: 'hidden',
       backgroundColor: c.surfaceAlt,
     },
-    progressFill: { height: 6, backgroundColor: c.primary },
+    progressFill: { height: 6, backgroundColor: c.secondary },
     segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
     segment: { flex: 1, height: 6 },
 
