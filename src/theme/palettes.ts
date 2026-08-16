@@ -17,6 +17,8 @@ export interface ThemeColors {
   primary: string;
   primaryText: string;
   secondary: string;
+  /** Vert emeraude : la couleur du domaine nutrition et des etats de reussite. */
+  tertiary: string;
   success: string;
   danger: string;
   accentSoft: string;
@@ -42,7 +44,8 @@ export const PALETTES: Record<
       primary: '#16233b',
       primaryText: '#ffffff',
       secondary: '#1f5fe0',
-      success: '#10a06a',
+      tertiary: '#047857',
+      success: '#047857',
       danger: '#ef3d2a',
       accentSoft: 'rgba(31,95,224,0.10)',
       overlay: 'rgba(14,23,39,0.50)',
