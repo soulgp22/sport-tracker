@@ -18,6 +18,8 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.pickFromGallery': 'Choisir depuis la galerie',
   'mealPhoto.permissionCamera': "L'accès à l'appareil photo est nécessaire pour photographier ton repas.",
   'mealPhoto.permissionCta': 'Autoriser',
+  'mealPhoto.captureFailed': "La photo n'a pas pu être prise. Réessaie.",
+  'mealPhoto.cameraUnavailable': 'Appareil photo indisponible',
   'mealPhoto.downloading': 'Téléchargement du modèle IA… {{percent}} %',
   'mealPhoto.downloadWarning':
     "Environ 4,5 Go : connexion wifi recommandée. Garde l'app ouverte pendant le téléchargement.",

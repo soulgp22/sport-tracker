@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // Chargé uniquement via require() dynamique depuis add.tsx/photo.tsx : ce
 // fichier n'est jamais évalué sous Jest. Le modèle ne tourne plus sur
@@ -26,6 +27,7 @@ import { mealPhotoT as mt } from '../../i18n/mealPhotoFallback';
 import { useColors } from '../../theme/useColors';
 import { RAMP_WARM, type ThemeColors } from '../../theme/palettes';
 import { fonts } from '../../theme/fonts';
+import { radius } from '../../theme/tokens';
 
 import { buildPrompt, mapItemToFood, parseModelOutput } from '../../lib/mealPhotoAi';
 import {
@@ -141,6 +143,9 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const c = useColors();
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
+
+  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const cameraRef = useRef<CameraView | null>(null);
 
   const getAllFoods = useFoodStore((s) => s.getAllFoods);
   const searchFoods = useFoodStore((s) => s.searchFoods);
@@ -379,22 +384,21 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     setItems(null);
   }
 
-  const pickImage = async (source: 'camera' | 'gallery') => {
-    if (source === 'camera') {
-      const permission = await ImagePicker.requestCameraPermissionsAsync();
-      if (!permission.granted) {
-        appAlert(mt(t, 'mealPhoto.title'), mt(t, 'mealPhoto.permissionCamera'));
-        return;
-      }
-    }
-
-    const result =
-      source === 'camera'
-        ? await ImagePicker.launchCameraAsync({ quality: 0.7 })
-        : await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
-
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
     const uri = result.canceled ? null : result.assets[0]?.uri;
     if (uri) setPhotoUri(uri);
+  };
+
+  const capturePhoto = async () => {
+    const camera = cameraRef.current;
+    if (!camera) return;
+    try {
+      const photo = await camera.takePictureAsync({ quality: 0.7 });
+      if (photo?.uri) setPhotoUri(photo.uri);
+    } catch {
+      appAlert(mt(t, 'mealPhoto.title'), mt(t, 'mealPhoto.captureFailed'));
+    }
   };
 
   const updateItem = (id: string, patch: Partial<ReviewItem>) => {
@@ -569,6 +573,19 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         ? 'loading'
         : 'capture';
 
+  // Demande la permission caméra à l'entrée de l'écran de capture (et non au
+  // montage du composant), sur le même modèle que BarcodeScannerModal.
+  useEffect(() => {
+    if (
+      screen === 'capture' &&
+      cameraPermission &&
+      !cameraPermission.granted &&
+      cameraPermission.canAskAgain
+    ) {
+      void requestCameraPermission();
+    }
+  }, [screen, cameraPermission, requestCameraPermission]);
+
   return (
     <Modal visible animationType="slide" statusBarTranslucent onRequestClose={requestClose}>
       <SafeAreaView
@@ -589,6 +606,30 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
             </View>
 
             <View style={styles.viewfinder}>
+              {cameraPermission?.granted ? (
+                <CameraView
+                  ref={cameraRef}
+                  style={StyleSheet.absoluteFill}
+                  facing="back"
+                  testID="meal-camera"
+                />
+              ) : (
+                <View
+                  style={styles.viewfinderFallback}
+                  accessibilityLabel={mt(t, 'mealPhoto.cameraUnavailable')}>
+                  <Text style={styles.viewfinderFallbackText}>
+                    {mt(t, 'mealPhoto.permissionCamera')}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => void requestCameraPermission()}
+                    accessibilityRole="button"
+                    style={styles.viewfinderFallbackButton}>
+                    <Text style={styles.viewfinderFallbackButtonText}>
+                      {mt(t, 'mealPhoto.permissionCta')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={[styles.corner, styles.cornerTopLeft]} />
               <View style={[styles.corner, styles.cornerTopRight]} />
               <View style={[styles.corner, styles.cornerBottomLeft]} />
@@ -597,15 +638,20 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
             <View style={styles.captureActions}>
               <TouchableOpacity
-                style={[styles.captureButton, styles.captureButtonSolid]}
-                onPress={() => void pickImage('camera')}
+                style={[
+                  styles.captureButton,
+                  styles.captureButtonSolid,
+                  !cameraPermission?.granted && styles.captureButtonDisabled,
+                ]}
+                onPress={() => void capturePhoto()}
+                disabled={!cameraPermission?.granted}
                 activeOpacity={0.8}
                 accessibilityRole="button">
                 <Text style={styles.captureButtonSolidText}>{mt(t, 'mealPhoto.capture')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.captureButton, styles.captureButtonOutline]}
-                onPress={() => void pickImage('gallery')}
+                onPress={() => void pickImage()}
                 activeOpacity={0.8}
                 accessibilityRole="button">
                 <Text style={styles.captureButtonOutlineText}>{t('nutrition.import')}</Text>
@@ -857,12 +903,47 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     textTransform: 'uppercase',
     color: WHITE_65,
   },
-  viewfinder: { flex: 1, marginHorizontal: 20, backgroundColor: RAMP_WARM[800] },
+  viewfinder: {
+    flex: 1,
+    marginHorizontal: 20,
+    backgroundColor: RAMP_WARM[800],
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+  },
   corner: { position: 'absolute', width: 40, height: 40, borderColor: c.secondary },
   cornerTopLeft: { top: 0, left: 0, borderTopWidth: 2, borderLeftWidth: 2 },
   cornerTopRight: { top: 0, right: 0, borderTopWidth: 2, borderRightWidth: 2 },
   cornerBottomLeft: { bottom: 0, left: 0, borderBottomWidth: 2, borderLeftWidth: 2 },
   cornerBottomRight: { bottom: 0, right: 0, borderBottomWidth: 2, borderRightWidth: 2 },
+  viewfinderFallback: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+    paddingHorizontal: 24,
+    backgroundColor: 'transparent',
+  },
+  viewfinderFallbackText: {
+    fontFamily: fonts.sans,
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+    color: WHITE_65,
+  },
+  viewfinderFallbackButton: {
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: WHITE_40,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    backgroundColor: 'transparent',
+  },
+  viewfinderFallbackButtonText: {
+    fontFamily: fonts.sansBold,
+    fontSize: 14,
+    lineHeight: 18,
+    color: c.bg,
+  },
   captureActions: { flexDirection: 'row', gap: 12, padding: 20 },
   captureButton: {
     flex: 1,
@@ -870,9 +951,11 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingHorizontal: 20,
+    borderRadius: radius.md,
   },
   captureButtonSolid: { backgroundColor: c.bg },
   captureButtonOutline: { backgroundColor: 'transparent', borderWidth: 1, borderColor: WHITE_40 },
+  captureButtonDisabled: { opacity: 0.4 },
   captureButtonSolidText: {
     fontFamily: fonts.serifBold,
     fontSize: 14,
