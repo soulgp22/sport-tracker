@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { act, render, screen } from '@testing-library/react-native';
 
 import HomeScreen from '../index';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
@@ -97,6 +97,32 @@ describe('HomeScreen', () => {
 
     render(<HomeScreen />);
 
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
     expect(screen.getByText('81.7 kg')).toBeTruthy();
+  });
+
+  it('au premier rendu, les calories affichées sont inférieures à la valeur finale (le compteur monte)', () => {
+    useFoodDiaryStore.setState({
+      entries: [
+        {
+          id: 'f-1',
+          date: '2026-08-14T08:00:00.000Z',
+          mealType: 'breakfast',
+          foodId: 'food-1',
+          foodName: 'Test',
+          quantity: 100,
+          unit: 'g',
+          calculatedNutrition: { calories: 500, protein: 0, carbs: 0, fat: 0 },
+        },
+      ],
+    });
+
+    render(<HomeScreen />);
+
+    const calories = screen.getByTestId('home-calories-value');
+    expect(Number(calories.props.children)).toBeLessThan(500);
   });
 });
