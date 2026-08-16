@@ -119,3 +119,30 @@ l'est — dans les deux cas il faut comprendre avant de toucher.
 
 Un exécutant qui rapporte « tout est vert » doit être **vérifié** : relancer les
 tests soi-même et lire le diff.
+
+---
+
+## Tests ajoutés le 2026-08-16 (5 correctifs après la 1.8.0)
+
+Chacun a été **vérifié par sabotage** : le défaut est réintroduit, le test doit
+rougir, puis le code est restauré. Le message d'échec obtenu est indiqué.
+
+| Fichier | Ce qu'il prouve | Message obtenu au sabotage |
+|---|---|---|
+| `src/components/exercises/__tests__/ExerciseDetailView.test.tsx` | l'animation est rendue pour un exercice absent de `exerciseGifs`, `exerciseMedia` et sans `remoteMediaBaseUrl` — le cas de ~850 exercices sur 873 | `Unable to find an element with testID: expo-image` |
+| `src/app/(tabs)/progress/__tests__/index.test.tsx` | « Poids actuel » est absent de l'onglet Exercices et présent sur Poids corporel | `Found multiple elements with text: Poids actuel` et `expect(received).toBeNull()` |
+| `src/app/(tabs)/__tests__/index.test.tsx` | l'accueil affiche « — » sans pesée, la valeur sinon | `Expected: "—" / Received: "0"` |
+| `src/app/__tests__/onboarding.test.tsx` | le prénom saisi arrive dans `performanceStore` ; vide → `undefined`, pas chaîne vide | `Expected: "Marc" / Received: undefined` |
+| `src/app/(tabs)/__tests__/profile.test.tsx` | chaque rangée du Profil ouvre la bonne destination | `Expected: "/(tabs)/nutrition/goals" / Received: "/(tabs)/settings"` |
+
+Contre-exemple conservé : le premier test livré pour le média montait
+`AnimatedExerciseImage` **seul**, alors que le garde-fou fautif était chez le
+parent. Il restait vert avec la régression en place. Il est gardé — il documente
+le composant — mais il ne protège de rien. **Toujours tester au niveau où vit le
+défaut.**
+
+### Vérification à l'écran (émulateur `SportTracker_Pixel8`)
+
+Un changement visuel n'est pas validé par la suite de tests. Parcours effectué :
+onboarding complet, accueil, Progression (3 onglets), Profil, création d'un
+programme, séance active. `adb logcat -b crash -d` vide.
