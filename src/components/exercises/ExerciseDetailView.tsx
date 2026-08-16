@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,8 +18,6 @@ import { RAMP_WARM } from '../../theme/palettes';
 import { AnimatedExerciseImage } from './AnimatedExerciseImage';
 import { ExerciseModel3D } from './ExerciseModel3D';
 import { exerciseModels } from '../../data/exerciseModels';
-import { exerciseGifs } from '../../data/exercises.gifs';
-import { exerciseMedia } from '../../data/exerciseMedia';
 import { EmptyState } from '../ui/EmptyState';
 
 export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () => void }) {
@@ -31,9 +29,12 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
   const group = exercise ? translateMuscle(exercise.bodyPart, language) : '';
   const equipment = exercise ? translateEquipment(exercise.equipment, language) : '';
   const model = exercise ? exerciseModels[exercise.id] : undefined;
-  const hasImageMedia = exercise
-    ? Boolean(exerciseGifs[exercise.id] || exerciseMedia[exercise.id] || exercise.remoteMediaBaseUrl)
-    : false;
+  const [mediaUnavailable, setMediaUnavailable] = useState(false);
+  const [previousId, setPreviousId] = useState(id);
+  if (previousId !== id) {
+    setPreviousId(id);
+    setMediaUnavailable(false);
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -55,12 +56,13 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
           <View style={styles.hero}>
             {model ? (
               <ExerciseModel3D model={model} style={styles.heroMedia} />
-            ) : hasImageMedia ? (
+            ) : !mediaUnavailable ? (
               <AnimatedExerciseImage
                 id={exercise.id}
                 animate
                 style={styles.heroMedia}
                 accessibilityLabel={displayName}
+                onUnavailable={() => setMediaUnavailable(true)}
               />
             ) : null}
           </View>

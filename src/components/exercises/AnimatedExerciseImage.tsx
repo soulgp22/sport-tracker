@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -25,6 +25,9 @@ interface AnimatedExerciseImageProps {
   style?: StyleProp<ViewStyle>;
   animate?: boolean;
   accessibilityLabel?: string;
+  /** Appele quand aucune image n'a pu etre affichee (source absente ou echec
+   *  de chargement distant). Permet au parent de masquer son cadre. */
+  onUnavailable?: () => void;
 }
 
 export function AnimatedExerciseImage({
@@ -33,6 +36,7 @@ export function AnimatedExerciseImage({
   style,
   animate = true,
   accessibilityLabel,
+  onUnavailable,
 }: AnimatedExerciseImageProps) {
   const c = useColors();
   const { t } = useTranslation();
@@ -96,6 +100,19 @@ export function AnimatedExerciseImage({
       fade.stopAnimation();
     };
   }, [fade, bundledSource, sourceA]);
+
+  // --- Signale au parent l'indisponibilite du media (jamais pendant le rendu) ---
+  const onUnavailableRef = useRef(onUnavailable);
+  useEffect(() => {
+    onUnavailableRef.current = onUnavailable;
+  });
+
+  const mediaUnavailable = !bundledSource && (imageError || !displaySource);
+  useEffect(() => {
+    if (mediaUnavailable) {
+      onUnavailableRef.current?.();
+    }
+  }, [mediaUnavailable]);
 
   if (!displaySource && !bundledSource) {
     return (
