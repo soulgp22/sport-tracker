@@ -23,6 +23,7 @@ import {
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { radius } from '../../../theme/tokens';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useFoodStore, type ImportFoodsResult } from '../../../store/foodStore';
 import type { Food } from '../../../types';
@@ -495,7 +496,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   helpText: { fontSize: 13, color: c.textSecondary, lineHeight: 18 },
   codeBlock: {
     backgroundColor: c.surfaceAlt,
-    borderRadius: 8,
+    borderRadius: radius.sm,
     padding: 12,
   },
   code: {
@@ -519,7 +520,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: c.surface,
-    borderRadius: 12,
+    borderRadius: radius.md,
     padding: 14,
     gap: 8,
     shadowColor: c.overlay,

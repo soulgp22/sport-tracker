@@ -74,7 +74,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   preview: { fontSize: 13, color: c.primary, fontFamily: fonts.sansSemi },
   badge: {
     backgroundColor: c.secondary,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     paddingHorizontal: spacing.xs,
     paddingVertical: 3,
   },

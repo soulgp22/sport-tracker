@@ -119,7 +119,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   meta: { fontSize: 14, color: c.primary, fontFamily: fonts.sansSemi },
   badge: {
     backgroundColor: c.secondary,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     paddingHorizontal: spacing.xs,
     paddingVertical: 3,
   },

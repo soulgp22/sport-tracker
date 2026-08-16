@@ -388,7 +388,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   scoreCircle: {
     width: 62,
     height: 62,
-    borderRadius: 31,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: c.accentSoft,
@@ -442,7 +442,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     gap: 3,
     paddingHorizontal: 7,
     paddingVertical: spacing.xxs,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     backgroundColor: c.accentSoft,
   },
   issuePillText: { fontSize: 11, fontFamily: fonts.sansHeavy, color: c.danger },

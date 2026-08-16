@@ -125,4 +125,22 @@ describe('HomeScreen', () => {
     const calories = screen.getByTestId('home-calories-value');
     expect(Number(calories.props.children)).toBeLessThan(500);
   });
+
+  it("pendant la montée, le poids ne montre jamais plus d'une décimale", () => {
+    useBodyWeightStore.setState({
+      entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 }],
+    });
+
+    render(<HomeScreen />);
+
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
+    const weight = screen.getByTestId('home-weight-value');
+    const children = weight.props.children;
+    const numericText = Array.isArray(children) ? String(children[0]) : String(children);
+
+    expect(numericText).toMatch(/^-?\d+(\.\d)?$/);
+  });
 });

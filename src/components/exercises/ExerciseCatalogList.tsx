@@ -15,6 +15,7 @@ import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
 
 import type { ThemeColors } from '../../theme/palettes';
+import { radius } from '../../theme/tokens';
 import type { CatalogExercise } from '../../types';
 import type { EquipmentProfileId } from '../../types/equipment';
 import { TextInput } from '../ui/TextInput';
@@ -327,6 +328,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
+    borderRadius: radius.pill,
     borderColor: c.border,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },

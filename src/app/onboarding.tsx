@@ -125,7 +125,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   progress: { height: '100%', borderRadius: 3, backgroundColor: c.primary },
   step: { fontFamily: fonts.sansBold, color: c.textMuted, fontSize: 12 },
   content: { padding: spacing.lg, paddingTop: 30, paddingBottom: 20 },
-  heroIcon: { width: 72, height: 72, borderRadius: 23, alignItems: 'center', justifyContent: 'center', backgroundColor: c.primary, marginBottom: 26 },
+  heroIcon: { width: 72, height: 72, borderRadius: radius.xl, alignItems: 'center', justifyContent: 'center', backgroundColor: c.primary, marginBottom: 26 },
   eyebrow: { fontFamily: fonts.sansBold, fontSize: 11, letterSpacing: 1.8, color: c.primary, marginBottom: 10 },
   title: { fontFamily: fonts.sansHeavy, fontSize: 32, lineHeight: 37, color: c.textPrimary, marginBottom: 12 },
   subtitle: { fontFamily: fonts.sans, fontSize: 16, lineHeight: 23, color: c.textSecondary, marginBottom: 28 },

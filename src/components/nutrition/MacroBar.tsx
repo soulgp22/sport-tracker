@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
+import { radius } from '../../theme/tokens';
 import { macroStatusColor } from '../../lib/nutritionCalc';
 
 interface MacroBarProps {
@@ -53,9 +54,9 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   percent: { fontSize: 13, fontFamily: fonts.sansHeavy },
   track: {
     height: 8,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     backgroundColor: c.surfaceAlt,
     overflow: 'hidden',
   },
-  fill: { height: 8, borderRadius: 999 },
+  fill: { height: 8, borderRadius: radius.pill },
 });

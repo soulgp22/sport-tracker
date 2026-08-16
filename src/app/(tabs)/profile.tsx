@@ -14,6 +14,7 @@ import { usePerformanceStore } from '../../store/performanceStore';
 import { fonts } from '../../theme/fonts';
 
 import type { ThemeColors } from '../../theme/palettes';
+import { radius } from '../../theme/tokens';
 import type { PerformanceSex } from '../../types/performance';
 
 const SEX_OPTIONS: { id: PerformanceSex; labelKey: string }[] = [
@@ -282,6 +283,7 @@ const makeStyles = (c: ThemeColors) =>
       justifyContent: 'center',
       paddingHorizontal: 12,
       borderWidth: 1,
+      borderRadius: radius.pill,
       borderColor: c.border,
       backgroundColor: c.surface,
     },

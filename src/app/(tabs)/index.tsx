@@ -179,7 +179,7 @@ export default function HomeScreen() {
               <AnimatedNumber
                 value={weightKg}
                 duration={ANIMATION_DURATION_MS}
-                format={(v) => String(v)}
+                format={(v) => String(Math.round(v * 10) / 10)}
                 style={styles.weightBandValue}
                 testID="home-weight-value">
                 <Text style={styles.weightBandUnit}> kg</Text>
