@@ -74,7 +74,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navigationTheme}>
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }} />
         <RestTimerBanner />
         <AppDialog />
         <StatusBar style={mode === 'light' ? 'dark' : 'light'} />
