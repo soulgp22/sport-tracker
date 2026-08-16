@@ -12,6 +12,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
+import { radius } from '../../../theme/tokens';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { Program, ProgramDay } from '../../../types';
 
@@ -118,7 +119,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     backgroundColor: c.surface,
     marginHorizontal: 16,
     marginTop: 8,
-    borderRadius: 12,
+    borderRadius: radius.md,
     padding: 14,
     shadowColor: c.overlay,
     shadowOpacity: 0.05,
@@ -134,7 +135,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginHorizontal: 24,
     marginTop: 2,
     backgroundColor: c.surfaceAlt,
-    borderRadius: 12,
+    borderRadius: radius.md,
     padding: 12,
   },
   daySelected: { backgroundColor: c.accentSoft },

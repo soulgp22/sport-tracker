@@ -33,6 +33,7 @@ export default function ExercisesLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
+        animation: 'slide_from_right',
         headerStyle: { backgroundColor: c.bg },
         headerTintColor: c.textPrimary,
         headerTitleStyle: { fontFamily: fonts.sansBold },

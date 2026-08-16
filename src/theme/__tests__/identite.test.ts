@@ -27,8 +27,8 @@ describe('identité visuelle unique « Life Sport Tracker »', () => {
     });
   });
 
-  it('T2 : tous les rayons valent 0', () => {
-    expect(radius).toEqual({ sm: 0, md: 0, lg: 0, xl: 0, pill: 0 });
+  it('T2 : échelle de rayons arrondie (sm 8, md 12, lg 16, xl 24, pill 999)', () => {
+    expect(radius).toEqual({ sm: 8, md: 12, lg: 16, xl: 24, pill: 999 });
   });
 
   it('T3 : aucun jeton ne référence OstrichSans-Black et chaque jeton est non vide', () => {

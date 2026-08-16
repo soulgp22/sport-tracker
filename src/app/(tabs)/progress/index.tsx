@@ -387,8 +387,13 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   tabRow: {
     flexDirection: 'row',
-    borderBottomWidth: 2,
-    borderBottomColor: c.border,
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 4,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: c.border,
   },
   tab: {
     flex: 1,
@@ -466,7 +471,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   statCard: {
     flex: 1,
     padding: 13,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     backgroundColor: c.accentSoft,
   },
   statLabel: { fontSize: 11, fontFamily: fonts.sans, color: c.textSecondary },

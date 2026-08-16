@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { WeightTrend } from '../../components/progress/WeightTrend';
+import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
 import { resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
 import { getBodyweightForDate } from '../../lib/performanceEngine';
@@ -15,9 +17,12 @@ import { usePerformanceStore } from '../../store/performanceStore';
 import { useSessionStore } from '../../store/sessionStore';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
-import { spacing } from '../../theme/tokens';
+import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 
+
+/** Durée de montée des compteurs de l'accueil, en millisecondes. */
+const ANIMATION_DURATION_MS = 900;
 
 /** Clé de date ISO du jour, alignée sur le journal alimentaire. */
 function todayKey() {
@@ -119,7 +124,13 @@ export default function HomeScreen() {
         <View style={styles.columns}>
           <View style={[styles.column, styles.columnDivider]}>
             <Text style={styles.columnLabel}>{t('home.calories')}</Text>
-            <Text style={styles.bigNumber}>{formatInteger(consumed, locale)}</Text>
+            <AnimatedNumber
+              value={consumed}
+              duration={ANIMATION_DURATION_MS}
+              format={(v) => formatInteger(Math.round(v), locale)}
+              style={styles.bigNumber}
+              testID="home-calories-value"
+            />
             <Text style={styles.columnHint}>
               {t('home.caloriesGoal', { goal: formatInteger(goal, locale) })}
             </Text>
@@ -129,9 +140,16 @@ export default function HomeScreen() {
           </View>
           <View style={styles.column}>
             <Text style={styles.columnLabel}>{t('home.remaining')}</Text>
-            <Text style={styles.bigNumber}>
-              {remaining !== null ? formatInteger(remaining, locale) : '—'}
-            </Text>
+            {remaining !== null ? (
+              <AnimatedNumber
+                value={remaining}
+                duration={ANIMATION_DURATION_MS}
+                format={(v) => formatInteger(Math.round(v), locale)}
+                style={styles.bigNumber}
+              />
+            ) : (
+              <Text style={styles.bigNumber}>—</Text>
+            )}
             <Text style={styles.columnHint}>
               {burned !== null
                 ? t('home.burnedKcal', { kcal: formatInteger(burned, locale) })
@@ -153,14 +171,21 @@ export default function HomeScreen() {
           accessibilityRole="button"
           accessibilityLabel={t('progress.currentWeight')}>
           <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
-          <Text style={styles.weightBandValue} testID="home-weight-value">
-            {weightKg === undefined ? '—' : (
-              <>
-                {weightKg}
+          <View style={styles.weightBandGroup}>
+            <WeightTrend entries={weightEntries} />
+            {weightKg === undefined ? (
+              <Text style={styles.weightBandValue} testID="home-weight-value">—</Text>
+            ) : (
+              <AnimatedNumber
+                value={weightKg}
+                duration={ANIMATION_DURATION_MS}
+                format={(v) => String(Math.round(v * 10) / 10)}
+                style={styles.weightBandValue}
+                testID="home-weight-value">
                 <Text style={styles.weightBandUnit}> kg</Text>
-              </>
+              </AnimatedNumber>
             )}
-          </Text>
+          </View>
         </TouchableOpacity>
 
         {/* 3. Action principale */}
@@ -322,11 +347,12 @@ const makeStyles = (c: ThemeColors) =>
       marginTop: 10,
       flexDirection: 'row',
       overflow: 'hidden',
+      borderRadius: radius.pill,
       backgroundColor: c.surfaceAlt,
     },
-    progressFill: { height: 6, backgroundColor: c.secondary },
+    progressFill: { height: 6, borderRadius: radius.pill, backgroundColor: c.secondary },
     segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
-    segment: { flex: 1, height: 6 },
+    segment: { flex: 1, height: 6, borderRadius: radius.pill },
 
     weightBand: {
       flexDirection: 'row',
@@ -355,6 +381,11 @@ const makeStyles = (c: ThemeColors) =>
       fontSize: 12,
       color: c.textSecondary,
     },
+    weightBandGroup: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
 
     actionWrap: { padding: 20 },
     actionButton: {
@@ -363,6 +394,7 @@ const makeStyles = (c: ThemeColors) =>
       paddingVertical: 18,
       justifyContent: 'center',
       gap: 6,
+      borderRadius: radius.lg,
       backgroundColor: c.primary,
     },
     actionKicker: {

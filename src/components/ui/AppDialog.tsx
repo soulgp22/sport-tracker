@@ -15,6 +15,7 @@ import {
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import { fonts } from '../../theme/fonts';
+import { radius } from '../../theme/tokens';
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -212,13 +213,13 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   headerCopy: { flex: 1 },
   eyebrow: { fontFamily: fonts.sansBold, fontSize: 9, letterSpacing: 1.4, color: c.primary, marginBottom: 3 },
-  closeButton: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surfaceAlt },
+  closeButton: { width: 38, height: 38, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', backgroundColor: c.surfaceAlt },
   icon: {
     width: 44,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 15,
+    borderRadius: radius.xl,
     backgroundColor: c.accentSoft,
   },
   iconDanger: { backgroundColor: `${c.danger}18` },
@@ -232,7 +233,7 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
    *  overflows, keeping header and actions fully visible without overlap. */
   bodyArea: { flexShrink: 1 },
   messageScroll: { marginTop: 16 },
-  messageContent: { padding: 14, borderRadius: 14, backgroundColor: c.surfaceAlt },
+  messageContent: { padding: 14, borderRadius: radius.lg, backgroundColor: c.surfaceAlt },
   message: {
     fontFamily: fonts.sans,
     fontSize: 14,
@@ -248,7 +249,7 @@ const makeStyles = (c: ThemeColors, cardMaxHeight: number) => StyleSheet.create(
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 14,
-    borderRadius: 12,
+    borderRadius: radius.md,
     backgroundColor: c.primary,
   },
   actionCancel: { backgroundColor: c.surfaceAlt, borderWidth: 1, borderColor: c.border },

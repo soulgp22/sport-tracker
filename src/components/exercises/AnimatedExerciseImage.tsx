@@ -18,6 +18,7 @@ import { getCatalogExercise } from '../../store/exerciseCatalogStore';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useColors } from '../../theme/useColors';
 import type { ThemeColors } from '../../theme/palettes';
+import { radius } from '../../theme/tokens';
 
 interface AnimatedExerciseImageProps {
   id: string;
@@ -179,7 +180,7 @@ export function AnimatedExerciseImage({
 const makeStyles = (c: ThemeColors) =>
   StyleSheet.create({
     image: {
-      borderRadius: 8,
+      borderRadius: radius.lg,
       backgroundColor: c.surfaceAlt,
       overflow: 'hidden',
     },
