@@ -9,6 +9,7 @@ import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
+import { radius } from '../../../theme/tokens';
 import { collectMealGroups, mealTypeLabel } from '../../../constants/meals';
 import {
   calculateDailyTotals,
@@ -474,7 +475,8 @@ const makeStyles = (c: ThemeColors) =>
       paddingVertical: 18,
       justifyContent: 'center',
       gap: 6,
-      backgroundColor: c.primary,
+      borderRadius: radius.lg,
+      backgroundColor: c.tertiary,
     },
     actionTitle: {
       fontFamily: fonts.serifBold,
@@ -497,6 +499,8 @@ const makeStyles = (c: ThemeColors) =>
       marginTop: 12,
       borderWidth: 1,
       borderColor: c.border,
+      borderRadius: radius.md,
+      overflow: 'hidden',
     },
     subAction: {
       flex: 1,

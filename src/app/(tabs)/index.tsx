@@ -156,7 +156,7 @@ export default function HomeScreen() {
                 : '—'}
             </Text>
             <View style={styles.segments}>
-              <View style={[styles.segment, { backgroundColor: c.textPrimary }]} />
+              <View style={[styles.segment, { backgroundColor: c.tertiary }]} />
               <View style={[styles.segment, { backgroundColor: c.border }]} />
               <View style={[styles.segment, { backgroundColor: c.surfaceAlt }]} />
             </View>
@@ -350,7 +350,7 @@ const makeStyles = (c: ThemeColors) =>
       borderRadius: radius.pill,
       backgroundColor: c.surfaceAlt,
     },
-    progressFill: { height: 6, borderRadius: radius.pill, backgroundColor: c.secondary },
+    progressFill: { height: 6, borderRadius: radius.pill, backgroundColor: c.tertiary },
     segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
     segment: { flex: 1, height: 6, borderRadius: radius.pill },
 
