@@ -2,7 +2,7 @@
   "expo": {
     "name": "Life Sport Tracker",
     "slug": "sport-tracker",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sport-tracker",
