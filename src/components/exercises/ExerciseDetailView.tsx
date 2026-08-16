@@ -12,6 +12,7 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
+import { radius } from '../../theme/tokens';
 
 import type { ThemeColors } from '../../theme/palettes';
 import { RAMP_WARM } from '../../theme/palettes';
@@ -111,11 +112,12 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     height: 230,
     marginTop: 8,
     backgroundColor: RAMP_WARM[300],
+    borderRadius: radius.lg,
     overflow: 'hidden',
   },
   heroMedia: {
     flex: 1,
-    borderRadius: 0,
+    borderRadius: radius.lg,
     backgroundColor: RAMP_WARM[300],
   },
 

@@ -15,7 +15,7 @@ import { usePerformanceStore } from '../../store/performanceStore';
 import { useSessionStore } from '../../store/sessionStore';
 import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
-import { spacing } from '../../theme/tokens';
+import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 
 
@@ -322,11 +322,12 @@ const makeStyles = (c: ThemeColors) =>
       marginTop: 10,
       flexDirection: 'row',
       overflow: 'hidden',
+      borderRadius: radius.pill,
       backgroundColor: c.surfaceAlt,
     },
-    progressFill: { height: 6, backgroundColor: c.secondary },
+    progressFill: { height: 6, borderRadius: radius.pill, backgroundColor: c.secondary },
     segments: { flexDirection: 'row', gap: 4, marginTop: 10 },
-    segment: { flex: 1, height: 6 },
+    segment: { flex: 1, height: 6, borderRadius: radius.pill },
 
     weightBand: {
       flexDirection: 'row',
@@ -363,6 +364,7 @@ const makeStyles = (c: ThemeColors) =>
       paddingVertical: 18,
       justifyContent: 'center',
       gap: 6,
+      borderRadius: radius.lg,
       backgroundColor: c.primary,
     },
     actionKicker: {
