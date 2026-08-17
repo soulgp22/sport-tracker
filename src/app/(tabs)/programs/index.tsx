@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { FlatList, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as DocumentPicker from 'expo-document-picker';
@@ -176,19 +177,36 @@ export default function ProgramsScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <View style={styles.wrapper}>
+        <View style={styles.headerActionsRow}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={handleImport}
+            disabled={importing}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={t('settings.importProgram')}>
+            <Ionicons name="code-slash-outline" size={22} color={c.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={handleExport}
+            disabled={programs.length === 0 || exporting}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={t('settings.exportPrograms')}>
+            <Ionicons name="share-outline" size={22} color={c.primary} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.importExportRow}>
           <Button
-            title={t('settings.importProgram')}
-            onPress={handleImport}
-            loading={importing}
+            title={t('program.downloadProgram')}
+            onPress={() => router.push({ pathname: '/(tabs)/community' as never, params: { tab: 'programs' } })}
             style={styles.halfBtn}
           />
           <Button
-            title={t('settings.exportPrograms')}
+            title={t('program.createProgram')}
             variant="secondary"
-            onPress={handleExport}
-            loading={exporting}
-            disabled={programs.length === 0}
+            onPress={() => router.push('/(tabs)/programs/new')}
             style={styles.halfBtn}
           />
         </View>
@@ -219,6 +237,8 @@ export default function ProgramsScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   wrapper: { flex: 1 },
+  headerActionsRow: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm },
+  iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   importExportRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: 4 },
   halfBtn: { flex: 1 },
   list: { paddingBottom: 20 },
