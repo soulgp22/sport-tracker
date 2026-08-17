@@ -1,15 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { useMemo, type ComponentProps } from 'react';
-import type { ColorValue } from 'react-native';
+import { type ComponentProps } from 'react';
+import { View, type ColorValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fonts } from '../../theme/fonts';
-import { makeShadows } from '../../theme/tokens';
+import { radius } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
 
-type IoniconsName = ComponentProps<typeof Ionicons>['name'];
+type FeatherName = ComponentProps<typeof Feather>['name'];
 
 /** Hauteur (dp) de la zone de contenu de la tab bar (icônes + libellés).
  *  Le fond de la barre se prolonge derrière la barre de navigation système en
@@ -18,9 +18,21 @@ type IoniconsName = ComponentProps<typeof Ionicons>['name'];
  *  un appareil à trois boutons, ~16 dp sur une barre de geste, 0 sans barre. */
 const TAB_BAR_CONTENT_HEIGHT = 62;
 
-function tabIcon(name: IoniconsName) {
+function tabIcon(name: FeatherName) {
   return function TabIcon({ color, focused }: { color: ColorValue; focused: boolean }) {
-    return <Ionicons name={focused ? name : (`${name}-outline` as IoniconsName)} size={22} color={color} />;
+    return (
+      <View style={{ alignItems: 'center', gap: 4 }}>
+        <View
+          style={{
+            width: 18,
+            height: 2,
+            borderRadius: radius.pill,
+            backgroundColor: focused ? color : 'transparent',
+          }}
+        />
+        <Feather name={name} size={21} color={color} />
+      </View>
+    );
   };
 }
 
@@ -28,7 +40,6 @@ export default function TabLayout() {
   const c = useColors();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const shadows = useMemo(() => makeShadows(c), [c]);
 
   return (
     <Tabs
@@ -39,7 +50,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: c.textMuted,
         tabBarLabelStyle: { fontFamily: fonts.sansSemi, fontSize: 10, marginBottom: 2 },
         tabBarStyle: {
-          backgroundColor: c.surface,
+          backgroundColor: c.bg,
           borderTopWidth: 1,
           borderTopColor: c.border,
           // Hauteur explicite : la zone de contenu conserve exactement sa
@@ -48,7 +59,6 @@ export default function TabLayout() {
           height: TAB_BAR_CONTENT_HEIGHT + insets.bottom,
           paddingTop: 6,
           paddingBottom: insets.bottom,
-          ...shadows.raised,
         },
         tabBarItemStyle: { paddingVertical: 2 },
         sceneStyle: { backgroundColor: c.bg },
@@ -60,19 +70,19 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="session"
-        options={{ title: t('nav.session'), tabBarIcon: tabIcon('play-circle') }}
+        options={{ title: t('nav.session'), tabBarIcon: tabIcon('activity') }}
       />
       <Tabs.Screen
         name="nutrition"
-        options={{ title: t('nav.nutrition'), tabBarIcon: tabIcon('nutrition') }}
+        options={{ title: t('nav.nutrition'), tabBarIcon: tabIcon('coffee') }}
       />
       <Tabs.Screen
         name="progress"
-        options={{ title: t('nav.progress'), tabBarIcon: tabIcon('analytics') }}
+        options={{ title: t('nav.progress'), tabBarIcon: tabIcon('trending-up') }}
       />
       <Tabs.Screen
         name="profile"
-        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }}
+        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('user') }}
       />
       {/* Sections routables mais hors tab bar (accessibles depuis l'accueil
           ou les écrans parents) : aucune fonctionnalité ne disparaît. */}
