@@ -1,11 +1,9 @@
-import { useMemo } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { Link, Stack, useRouter } from 'expo-router';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
+import { TouchableOpacity } from 'react-native';
 
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
-import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
 
 function BackToHomeButton() {
@@ -31,7 +29,6 @@ function BackToHomeButton() {
 export default function SessionLayout() {
   const c = useColors();
   const { t } = useTranslation();
-  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
       screenOptions={{
@@ -48,37 +45,9 @@ export default function SessionLayout() {
         options={{
           headerShown: true,
           title: t('nav.session'),
-          headerRight: () => (
-            <View style={styles.headerActions}>
-              <Link href="/(tabs)/programs" asChild>
-                <TouchableOpacity
-                  style={styles.iconButton}
-                  activeOpacity={0.7}
-                  accessibilityRole="button"
-                  accessibilityLabel={t('nav.programs')}
-                  accessibilityHint={t('session.manageProgramsHint')}>
-                  <Ionicons name="barbell-outline" size={22} color={c.primary} />
-                </TouchableOpacity>
-              </Link>
-            </View>
-          ),
         }}
       />
       <Stack.Screen name="active" options={{ headerShown: false }} />
     </Stack>
   );
 }
-
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

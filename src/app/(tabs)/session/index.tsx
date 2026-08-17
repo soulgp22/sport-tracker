@@ -106,6 +106,23 @@ export default function SessionScreen() {
           <Button title={t('session.startDay', { day: selectedDay.name })} onPress={handleStart} />
         </View>
       )}
+
+      <View style={styles.actionsRow}>
+        <Button
+          title={t('session.managePrograms')}
+          variant="soft"
+          compact
+          onPress={() => router.push('/(tabs)/programs')}
+          style={styles.actionBtn}
+        />
+        <Button
+          title={t('nav.exercises')}
+          variant="soft"
+          compact
+          onPress={() => router.push('/(tabs)/exercises')}
+          style={styles.actionBtn}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -142,6 +159,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontFamily: fonts.sansSemi },
   dayMeta: { fontSize: 13, color: c.textMuted },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
+  actionsRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingBottom: 16 },
+  actionBtn: { flex: 1 },
   resumeContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
   resumeTitle: { fontSize: 22, fontFamily: fonts.sansBold, color: c.textPrimary },
   resumeSub: { fontSize: 15, color: c.textSecondary },
