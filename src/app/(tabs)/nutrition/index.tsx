@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useReducer, useState } from 'react';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -242,11 +243,11 @@ export default function NutritionScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.subAction}
-              onPress={goPhoto}
+              onPress={() => router.push('/(tabs)/nutrition/add' as never)}
               activeOpacity={0.78}
               accessibilityRole="button"
-              accessibilityLabel={t('nutrition.import')}>
-              <Text style={styles.subActionLabel}>{t('nutrition.import')}</Text>
+              accessibilityLabel={t('nutrition.addMeal')}>
+              <Text style={styles.subActionLabel}>{t('nutrition.addMeal')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -402,34 +403,38 @@ export default function NutritionScreen() {
               onPress={() => router.push('/(tabs)/nutrition/add' as never)}
             />
             <View style={styles.actionsRow}>
-              <Button
-                title={t('nav.foods')}
-                variant="soft"
-                compact
-                style={styles.actionsRowBtn}
+              <TouchableOpacity
+                style={styles.iconAction}
                 onPress={() => router.push(FOODS_CATALOG_DESTINATION as never)}
-              />
-              <Button
-                title={t('nutrition.diaryTitle')}
-                variant="soft"
-                compact
-                style={styles.actionsRowBtn}
+                activeOpacity={0.78}
+                accessibilityRole="button"
+                accessibilityLabel={t('nav.foods')}>
+                <Feather name="list" size={20} color={c.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.iconAction}
                 onPress={() => router.push('/(tabs)/nutrition/diary' as never)}
-              />
-              <Button
-                title={t('nutrition.historyTitle')}
-                variant="soft"
-                compact
-                style={styles.actionsRowBtn}
+                activeOpacity={0.78}
+                accessibilityRole="button"
+                accessibilityLabel={t('nutrition.diaryTitle')}>
+                <Feather name="book-open" size={20} color={c.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.iconAction}
                 onPress={() => router.push('/(tabs)/nutrition/history' as never)}
-              />
-              <Button
-                title={t('nutrition.goals.title')}
-                variant="soft"
-                compact
-                style={styles.actionsRowBtn}
+                activeOpacity={0.78}
+                accessibilityRole="button"
+                accessibilityLabel={t('nutrition.historyTitle')}>
+                <Feather name="clock" size={20} color={c.primary} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.iconAction}
                 onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
-              />
+                activeOpacity={0.78}
+                accessibilityRole="button"
+                accessibilityLabel={t('nutrition.goals.title')}>
+                <Feather name="target" size={20} color={c.primary} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -609,5 +614,14 @@ const makeStyles = (c: ThemeColors) =>
       gap: 12,
     },
     actionsRow: { flexDirection: 'row', gap: 8 },
-    actionsRowBtn: { flex: 1 },
+    iconAction: {
+      flex: 1,
+      minHeight: 48,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: c.border,
+      borderRadius: radius.md,
+      backgroundColor: c.surface,
+    },
   });

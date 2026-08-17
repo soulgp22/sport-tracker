@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import NutritionScreen from '../index';
 import { useBodyWeightStore } from '../../../../store/bodyWeightStore';
@@ -8,15 +8,24 @@ import { useLanguageStore } from '../../../../store/languageStore';
 import { useNutritionGoalsStore } from '../../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../../store/performanceStore';
 
+const mockPush = jest.fn();
+
 jest.mock('expo-router', () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: mockPush,
     replace: jest.fn(),
     back: jest.fn(),
     canGoBack: jest.fn(),
   }),
   useFocusEffect: () => {},
 }));
+
+jest.mock('@expo/vector-icons', () => {
+  const React = jest.requireActual<any>('react');
+  const { Text } = jest.requireActual<any>('react-native');
+  const Icon = ({ name, ...rest }: any) => React.createElement(Text, rest, name);
+  return { Feather: Icon, Ionicons: Icon };
+});
 
 jest.mock('react-native-safe-area-context', () => {
   const React = jest.requireActual<any>('react');
@@ -45,6 +54,7 @@ function resetStores() {
 
 beforeEach(() => {
   jest.useFakeTimers({ now: NOW });
+  mockPush.mockClear();
   resetStores();
 });
 
@@ -93,5 +103,31 @@ describe('NutritionScreen', () => {
     expect(screen.getByText('Aucun repas aujourd\'hui')).toBeTruthy();
     expect(screen.queryByText('Petit-déjeuner')).toBeNull();
     expect(screen.queryByText('Déjeuner')).toBeNull();
+  });
+
+  it('chaque bouton de navigation pousse la bonne destination', () => {
+    render(<NutritionScreen />);
+
+    // La rangée subActions affiche désormais « Ajouter un repas », tout comme
+    // le CTA plus bas : deux occurrences portent ce libellé. La première dans
+    // l'arbre est celle de la rangée du haut.
+    const addMealButtons = screen.getAllByLabelText('Ajouter un repas');
+    expect(addMealButtons.length).toBeGreaterThanOrEqual(1);
+    mockPush.mockClear();
+    fireEvent.press(addMealButtons[0]);
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/nutrition/add');
+
+    const iconActions: [string, string][] = [
+      ['Aliments', '/(tabs)/foods'],
+      ['Journal du jour', '/(tabs)/nutrition/diary'],
+      ['Tendance calories', '/(tabs)/nutrition/history'],
+      ['Objectifs', '/(tabs)/nutrition/goals'],
+    ];
+
+    for (const [label, destination] of iconActions) {
+      mockPush.mockClear();
+      fireEvent.press(screen.getByLabelText(label));
+      expect(mockPush).toHaveBeenCalledWith(destination);
+    }
   });
 });
