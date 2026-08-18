@@ -45,6 +45,7 @@ export default function SessionLayout() {
         options={{
           headerShown: true,
           title: t('nav.session'),
+          headerLeft: () => <BackToHomeButton />,
         }}
       />
       <Stack.Screen name="active" options={{ headerShown: false }} />

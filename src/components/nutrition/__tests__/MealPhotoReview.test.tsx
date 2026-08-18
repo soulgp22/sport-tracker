@@ -42,10 +42,16 @@ jest.mock('react-native-safe-area-context', () => {
   };
 });
 
+jest.mock('../../ui/AppDialog', () => ({
+  appAlert: jest.fn(),
+}));
+
 const expoCameraMock = jest.requireMock('expo-camera') as {
   takePictureAsync: jest.Mock;
   useCameraPermissions: jest.Mock;
 };
+
+const appAlertMock = jest.requireMock('../../ui/AppDialog').appAlert as jest.Mock;
 
 const grantedPermission = {
   granted: true,
@@ -107,5 +113,64 @@ describe('MealPhotoReview — capture intégrée (CameraView)', () => {
 
     expect(ImagePicker.launchCameraAsync).not.toHaveBeenCalled();
     expect(expoCameraMock.takePictureAsync).toHaveBeenCalledWith({ quality: 0.7 });
+  });
+});
+
+describe('MealPhotoReview — régressions UI (abandon + erreur moteur)', () => {
+  beforeEach(() => {
+    useLanguageStore.setState({ language: 'fr' });
+    expoCameraMock.useCameraPermissions.mockReturnValue([null, jest.fn()]);
+    appAlertMock.mockClear();
+  });
+
+  afterEach(() => {
+    cleanup();
+    global.fetch = originalFetch;
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
+
+  it("affiche un bouton d'abandon dans l'écran de chargement et ferme à l'appui", async () => {
+    global.fetch = jest.fn().mockRejectedValue(
+      new Error('fetch failed: Fetch request has been canceled')
+    ) as unknown as typeof fetch;
+
+    const onClose = jest.fn();
+    render(
+      <MealPhotoReview
+        mealType="lunch"
+        date="2026-08-16"
+        onClose={onClose}
+        onAdded={jest.fn()}
+      />
+    );
+
+    const cancel = await screen.findByText('Annuler');
+    fireEvent.press(cancel);
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("n'affiche pas le détail technique brut dans l'alerte d'erreur moteur", async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    global.fetch = jest.fn().mockRejectedValue(
+      new Error('fetch failed: Fetch request has been canceled')
+    ) as unknown as typeof fetch;
+
+    render(
+      <MealPhotoReview
+        mealType="lunch"
+        date="2026-08-16"
+        onClose={jest.fn()}
+        onAdded={jest.fn()}
+      />
+    );
+
+    await waitFor(() => expect(appAlertMock).toHaveBeenCalled());
+
+    const message = appAlertMock.mock.calls[0][1] as string | undefined;
+    expect(message).toBe("Le modèle n'a pas pu analyser la photo. Réessaie plus tard.");
+    expect(message).not.toContain('fetch failed');
+    expect(warnSpy).toHaveBeenCalledWith('fetch failed: Fetch request has been canceled');
   });
 });

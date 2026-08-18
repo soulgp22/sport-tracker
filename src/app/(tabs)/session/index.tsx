@@ -109,7 +109,7 @@ export default function SessionScreen() {
                       color={selectedDay?.id === day.id ? c.primary : c.textMuted}
                     />
                     <Text style={styles.dayName}>{day.name}</Text>
-                    <Text style={styles.dayMeta}>{t('session.dayExercises', { count: day.exercises.length })}</Text>
+                    <Text style={styles.dayMeta}>{t(day.exercises.length !== 1 ? 'program.exerciseCount.other' : 'program.exerciseCount.one', { count: day.exercises.length })}</Text>
                   </TouchableOpacity>
                 ))}
             </View>

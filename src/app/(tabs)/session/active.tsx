@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -134,6 +134,7 @@ export default function ActiveSessionScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const navigation = useNavigation();
+  const leavingRef = useRef(false);
 
   // Plein écran pendant l'effort : la tab bar disparaît le temps de la séance
   // et revient dès qu'on quitte cet écran.
@@ -186,9 +187,11 @@ export default function ActiveSessionScreen() {
       return set.completedAt > latest.completedAt ? set : latest;
     }, undefined);
 
-  // Redirige si plus de séance active (dans un effet, jamais pendant le render)
+  // Redirige si plus de séance active (dans un effet, jamais pendant le render).
+  // Quand la sortie est volontaire (fin ou annulation), leavingRef est déjà à true
+  // et la redirection est assurée par le handler : on évite un second replace.
   useEffect(() => {
-    if (!active) router.replace('/(tabs)/session');
+    if (!active && !leavingRef.current) router.replace('/(tabs)/session');
   }, [active, router]);
 
   // Chrono
@@ -236,6 +239,7 @@ export default function ActiveSessionScreen() {
         text: t('session.finishButton'),
         style: 'destructive',
         onPress: () => {
+          leavingRef.current = true;
           const previousSessions = useSessionStore.getState().sessions.filter(
             (storedSession) => storedSession.id !== active.id
           );
@@ -273,7 +277,7 @@ export default function ActiveSessionScreen() {
   const handleCancel = () => {
     appAlert(t('session.cancelSessionTitle'), t('session.cancelSessionMessage'), [
       { text: t('session.no'), style: 'cancel' },
-      { text: t('session.yes'), style: 'destructive', onPress: () => { cancelSession(); router.replace('/(tabs)/session'); } },
+      { text: t('session.yes'), style: 'destructive', onPress: () => { leavingRef.current = true; cancelSession(); router.replace('/(tabs)/session'); } },
     ]);
   };
 

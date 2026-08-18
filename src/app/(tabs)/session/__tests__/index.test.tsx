@@ -88,3 +88,41 @@ describe('SessionScreen — boutons secondaires', () => {
     expect(screen.queryByText('Exercices')).toBeNull();
   });
 });
+
+describe('SessionScreen — pluralisation du nombre d’exercices', () => {
+  it('affiche « 1 exercice » (singulier) pour un jour à exactement un exercice', () => {
+    useProgramStore.setState({
+      programs: [
+        {
+          id: 'p1',
+          name: 'Push',
+          days: [
+            {
+              id: 'd1',
+              name: 'Jour 1',
+              order: 0,
+              exercises: [
+                {
+                  id: 'e1',
+                  exerciseId: 'c1',
+                  exerciseName: 'Développé couché',
+                  order: 0,
+                  sets: [{ reps: 10, weight: 0, restSeconds: 90 }],
+                },
+              ],
+            },
+          ],
+          createdAt: '2026-01-01T00:00:00.000Z',
+          updatedAt: '2026-01-01T00:00:00.000Z',
+        },
+      ],
+    });
+
+    render(<SessionScreen />);
+    fireEvent.press(screen.getByText('Push'));
+
+    expect(screen.getByText('1 exercice')).toBeTruthy();
+    expect(screen.queryByText('1 exercices')).toBeNull();
+  });
+});
+

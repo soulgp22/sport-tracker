@@ -146,3 +146,41 @@ défaut.**
 Un changement visuel n'est pas validé par la suite de tests. Parcours effectué :
 onboarding complet, accueil, Progression (3 onglets), Profil, création d'un
 programme, séance active. `adb logcat -b crash -d` vide.
+
+## Tests ajoutés le 2026-08-18 (audit UI/UX écran par écran, avant la 1.14.0)
+
+Chaque test ci-dessous a été **vérifié par sabotage** : le défaut a été réintroduit,
+le test a rougi, puis le correctif a été remis. Un test qui passe avant comme après
+n'aurait rien prouvé.
+
+| Test | Fichier | Ce qu'il attrape | Rouge constaté au sabotage |
+|---|---|---|---|
+| Fin de séance → historique, jamais session | `src/app/(tabs)/session/__tests__/active.test.tsx` | le `replace` parasite de l'effet de garde | `Number of calls: 2`, dont `/(tabs)/session` |
+| Bouton d'abandon sur l'écran de chargement | `src/components/nutrition/__tests__/MealPhotoReview.test.tsx` | l'état `loading` redevenu cul-de-sac | `Unable to find an element with text: Annuler` |
+| Pas de détail technique dans l'alerte | idem | le retour de la concaténation `${detail}` | message contenant `fetch failed` |
+| « 1 exercice » au singulier | `src/app/(tabs)/session/__tests__/index.test.tsx` | le retour de la clé toujours-plurielle | `Unable to find an element with text: 1 exercice` |
+| Minuteur de repos en anglais | `src/components/session/__tests__/RestTimerModal.test.tsx` | tout littéral français réintroduit | mot français rendu alors que `language: 'en'` |
+| Libellés visibles des 4 icônes Nutrition | `src/app/(tabs)/nutrition/__tests__/index.test.tsx` | icônes redevenues muettes | `getByText` sur le libellé |
+
+### Ce que ces tests ne peuvent PAS attraper
+
+Deux défauts de cette série sont **invisibles en test unitaire** et n'ont été trouvés
+qu'à l'écran, sur l'APK release installé sur `SportTracker_Pixel8` :
+
+- le **chevauchement** du titre Historique avec la barre système (`edges` sans
+  `'top'`) : RNTL ne calcule aucune mise en page, tout élément est « présent » ;
+- l'**écran blanc** lui-même : il fallait voir le rendu pour constater qu'il n'y
+  avait plus rien. Le test de régression écrit ensuite cible la *cause* (le double
+  `replace`), pas le symptôme.
+
+C'est le rappel du niveau 4 du portail : un écran se vérifie sur un appareil.
+
+### Piège d'outillage rencontré
+
+`npx jest "src/app/(tabs)/..."` ne trouve **aucun test** : jest interprète le motif
+comme une expression régulière et les parenthèses de `(tabs)` cassent la
+correspondance. Cibler par nom (`npx jest -t "nom du test"`) ou échapper le chemin.
+
+De même, `npx tsc --noEmit | grep -v "npm notice"` renvoie le code de sortie du
+`grep`, pas celui de `tsc` : un `$?` à 1 y signifie « grep n'a rien filtré », pas
+« la compilation a échoué ». Rediriger vers un fichier et lire `$?` juste après.

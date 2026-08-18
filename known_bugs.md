@@ -347,3 +347,111 @@ adb shell dumpsys package com.sportracker.app | grep -E "versionCode|versionName
   `adb shell am start -a android.intent.action.VIEW -d "sport-tracker://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"`
 - **La bulle flottante du dev-client masque le bouton d'en-tête droit.**
   La déplacer par un `input swipe` avant de viser un `+` ou un engrenage.
+
+## Deux navigations concurrentes laissent un écran blanc sans issue
+
+**Symptôme** — terminer une séance amenait sur un écran « Séance » sans barre
+d'onglets, avec une flèche retour ; appuyer sur cette flèche donnait un écran
+**totalement vide** (dump uiautomator : 0 élément cliquable, 0 texte). Seul le
+bouton retour matériel d'Android permettait d'en sortir.
+
+**Cause** — dans `session/active.tsx`, deux navigations partaient pour le même
+événement. `handleFinish` appelait `finishSession()` (qui met `active` à `null`)
+puis `router.replace('/(tabs)/history')`. Mais l'effet de garde
+
+```ts
+useEffect(() => { if (!active) router.replace('/(tabs)/session'); }, [active, router]);
+```
+
+réagissait au même passage à `null` et lançait un **second** `replace`. C'est lui
+qui empilait un écran Séance au-dessus du navigateur d'onglets — d'où la barre du
+bas disparue — et la flèche retour dépilait alors vers la route `active` désormais
+sans séance, qui ne rend rien.
+
+Cause aggravante : `session/_layout.tsx` déclarait `BackToHomeButton` **sans jamais
+le brancher**, contrairement aux 7 autres layouts qui font tous
+`headerLeft: () => <BackToHomeButton />`. L'écran utilisait donc la flèche par
+défaut du Stack, qui dépile aveuglément.
+
+**Correctif** — un `leavingRef` passé à `true` avant `finishSession()` et
+`cancelSession()`, testé dans l'effet (`if (!active && !leavingRef.current)`), et
+le `headerLeft` enfin branché.
+
+**À éviter** — quand un handler navigue *et* modifie un état qu'un effet surveille
+pour naviguer aussi, les deux partent. Le symptôme visible (écran blanc) est à deux
+sauts de la cause (double `replace`) : ne pas corriger l'écran d'arrivée.
+
+## Un écran de chargement sans bouton d'abandon est un cul-de-sac
+
+**Symptôme** — Nutrition > Appareil photo, serveur d'analyse injoignable :
+« Chargement du modèle IA… » restait affiché indéfiniment, sans croix, sans
+en-tête, sans bouton. Aucune sortie par l'interface.
+
+**Cause** — dans `MealPhotoReview.tsx`, la branche `screen === 'loading'` ne rendait
+qu'un `ActivityIndicator` et un `Text`, alors que la branche `screen === 'capture'`
+juste en dessous possédait, elle, un bouton `common.cancel` câblé sur `requestClose`.
+L'affordance existait, elle n'avait pas été reportée sur l'état voisin.
+
+**À éviter** — vérifier que **chaque** état d'un composant à états offre une sortie.
+Un `onRequestClose` sur la `Modal` ne suffit pas : il ne couvre que le retour
+matériel Android, invisible pour l'utilisateur.
+
+## Un message d'erreur technique brut livré en production
+
+**Symptôme** — la modale d'échec d'analyse affichait littéralement
+`fetch failed: Fetch request has been canceled`.
+
+**Cause** — `MealPhotoReview.tsx` concaténait volontairement `engineError.message`
+au message utilisateur, avec un commentaire assumant le choix (« le message
+générique masque la cause réelle »). Utile en développement, mais livré à tous.
+
+**Correctif** — le détail part dans `console.warn`, l'utilisateur ne voit que le
+message traduit.
+
+**À éviter** — une affordance de débogage volontaire doit être conditionnée à
+`__DEV__` ou envoyée dans les logs, jamais rendue à l'écran par défaut.
+
+## Un `SafeAreaView` sans `edges: top` sous un `headerShown: false`
+
+**Symptôme** — le titre « HISTORIQUE / Activité » se superposait à l'heure et aux
+icônes système.
+
+**Cause** — `history/_layout.tsx` déclare `headerShown: false` (l'écran dessine son
+propre en-tête), mais `history/index.tsx` ouvrait
+`<SafeAreaView edges={['bottom']}>` : aucune marge haute, le contenu démarrait à
+y=0.
+
+**À éviter** — dès qu'un écran passe en `headerShown: false`, ses `edges` doivent
+inclure `'top'`. Le défaut ne se voit qu'à l'écran : RNTL ne calcule aucune mise en
+page et ne peut pas l'attraper.
+
+## Un compteur toujours au pluriel, alors que le motif correct existait déjà
+
+**Symptôme** — « 1 exercices » dans l'onglet Séance, alors que l'écran Programmes
+affichait correctement « 1 exercice » pour la même donnée.
+
+**Cause** — `session/index.tsx` utilisait `session.dayExercises`, dont la valeur est
+figée au pluriel dans les 4 langues. Le projet possédait pourtant déjà
+`program.exerciseCount.one` / `.other` et le motif
+`t(n !== 1 ? '...other' : '...one', { count: n })`, utilisé dans `programs/[id]/index.tsx`.
+
+**À éviter** — chercher le motif existant avant d'ajouter une clé. Ici la
+correction n'a demandé **aucune** nouvelle traduction.
+
+## Le minuteur de repos n'était pas internationalisé du tout
+
+**Symptôme** — non visible en français. En anglais, espagnol ou allemand, le
+minuteur affiché à chaque série restait en français : « REPOS », « RESTANT »,
+« Passer », « Série 1 / 3 », « Précédente : … ».
+
+**Cause** — `RestTimerModal.tsx` n'importait même pas `useTranslation` : tous ses
+textes étaient des littéraux français.
+
+**Pourquoi les tests ne l'ont pas vu** — le test de parité i18n compare les **clés
+déclarées** entre les 4 langues. Un texte en dur ne passe par aucune clé : il est
+invisible pour ce test, par construction. La parité était verte et le composant
+monolingue.
+
+**À éviter** — la parité des clés ne prouve pas l'internationalisation. Pour le
+vérifier, rendre un écran avec `language: 'en'` et assurer qu'aucun mot français
+n'y apparaît.

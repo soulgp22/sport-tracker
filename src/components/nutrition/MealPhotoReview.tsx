@@ -262,17 +262,17 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
   const requestClose = () => exitFlow.requestClose(isGenerating);
 
-  // Serveur injoignable : alerte + retour. Le détail est toujours affiché —
-  // le message générique masque la cause réelle (réseau, mauvaise IP…).
+  // Serveur injoignable : alerte + retour. Seul le message générique est montré
+  // à l'utilisateur ; le détail technique (réseau, mauvaise IP…) est conservé
+  // pour le diagnostic via console.warn, jamais affiché en production.
   useEffect(() => {
     if (!engineError) return;
     const detail =
       engineError instanceof Error ? engineError.message : String(engineError);
-    appAlert(
-      mt(t, 'mealPhoto.errorTitle'),
-      `${mt(t, 'mealPhoto.errorMessage')}\n\n${detail}`,
-      [{ text: 'OK', onPress: onClose }]
-    );
+    console.warn(detail);
+    appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
+      { text: 'OK', onPress: onClose },
+    ]);
   }, [engineError, onClose, t]);
 
   const analyze = async (uri: string) => {
@@ -595,6 +595,12 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
           <View style={styles.centerScreen}>
             <ActivityIndicator color={c.primary} />
             <Text style={styles.loadingText}>{mt(t, 'mealPhoto.modelLoading')}</Text>
+            {/* Sans bouton d'abandon, cet écran est un cul-de-sac quand le serveur
+                est injoignable. captureCancel est conçu pour le fond sombre de la
+                caméra : on réutilise son habillage en assombrissant la couleur. */}
+            <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7} style={{ marginTop: 20 }}>
+              <Text style={[styles.captureCancel, { color: c.textPrimary }]}>{t('common.cancel')}</Text>
+            </TouchableOpacity>
           </View>
         ) : screen === 'capture' ? (
           <View style={styles.captureScreen}>

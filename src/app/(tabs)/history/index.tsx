@@ -51,7 +51,7 @@ export default function HistoryScreen() {
   }, [sessions, locale]);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <Text style={styles.headerKicker}>{t('nav.history')}</Text>
         <Text style={styles.headerTitle}>{t('history.title')}</Text>
