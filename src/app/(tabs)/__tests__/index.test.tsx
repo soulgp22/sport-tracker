@@ -77,10 +77,22 @@ describe('HomeScreen', () => {
     // resolveDailyEnergyExpenditure renvoie une dépense nulle (null).
     render(<HomeScreen />);
 
-    // La colonne « Restantes », la dépense et le poids (sans pesée)
+    // Le grand nombre « Restantes » et le poids (sans pesée)
     // affichent « — », pas un « 0 ».
-    expect(screen.getAllByText('—')).toHaveLength(3);
+    expect(screen.getAllByText('—')).toHaveLength(2);
     expect(screen.queryByText('0 kcal dépensées')).toBeNull();
+  });
+
+  it("invite à compléter le profil quand la dépense estimée est indisponible", () => {
+    render(<HomeScreen />);
+
+    // Le sous-titre de la colonne « Restantes » remplace le tiret muet
+    // par une invitation courte à compléter le profil.
+    expect(screen.getByText('Complète ton profil')).toBeTruthy();
+
+    // Le tiret seul ne figure plus à cet emplacement : il ne reste que le
+    // grand nombre « Restantes » et le poids.
+    expect(screen.getAllByText('—')).toHaveLength(2);
   });
 
   it('affiche « — » pour le poids quand aucune pesée n’est enregistrée', () => {

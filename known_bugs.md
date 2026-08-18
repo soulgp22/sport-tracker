@@ -455,3 +455,30 @@ monolingue.
 **À éviter** — la parité des clés ne prouve pas l'internationalisation. Pour le
 vérifier, rendre un écran avec `language: 'en'` et assurer qu'aucun mot français
 n'y apparaît.
+
+## Défauts constatés à l'audit du 2026-08-18 mais NON corrigés en 1.14.0
+
+Trois points relevés en parcourant l'app écran par écran, volontairement laissés de
+côté : leur correction demande un changement de structure, pas un correctif minimal,
+et ce n'est pas ce qu'on fait la veille d'une publication.
+
+**1. « Sauvegarde et restauration » et « Apparence et langue » mènent au même écran.**
+`profile.tsx` lignes 179 et 202 poussent toutes deux vers `/(tabs)/settings`. La
+sauvegarde existe bien (DocumentPicker, Sharing, `restoreProfileBackup`), mais plus
+bas dans l'écran : le lien dépose l'utilisateur en haut, sur l'apparence, ce qui
+donne l'impression d'un lien cassé. Corriger proprement demande soit un paramètre de
+section avec défilement automatique, soit d'extraire la sauvegarde dans son propre
+écran. À noter : `profile.test.tsx:64` **fige ce comportement comme attendu** — le
+test devra changer en même temps.
+
+**2. Quitter les réglages ramène sur l'Accueil, pas sur Profil.**
+`settings` est déclaré comme onglet caché (`href: null`) dans `(tabs)/_layout.tsx` ;
+`router.push('/(tabs)/settings')` bascule donc d'onglet au lieu d'empiler un écran,
+et le retour matériel revient à l'onglet par défaut. Le corriger demande de sortir
+les réglages du navigateur d'onglets — changement d'architecture de navigation.
+
+**3. Grandes zones vides sur la fiche exercice et pendant une séance.**
+Ce n'est pas un défaut de mise en page : ces écrans n'ont simplement pas de contenu
+à afficher (aucune description n'existe pour les ~870 exercices du catalogue, et la
+liste des exercices d'une séance se remplit à mesure). Ajouter du contenu serait une
+fonctionnalité, pas un correctif. À traiter comme un sujet produit.

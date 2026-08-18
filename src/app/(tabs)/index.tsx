@@ -153,7 +153,7 @@ export default function HomeScreen() {
             <Text style={styles.columnHint}>
               {burned !== null
                 ? t('home.burnedKcal', { kcal: formatInteger(burned, locale) })
-                : '—'}
+                : t('home.completeProfileHint')}
             </Text>
             <View style={styles.segments}>
               <View style={[styles.segment, { backgroundColor: c.tertiary }]} />
