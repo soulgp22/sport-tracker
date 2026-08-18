@@ -62,4 +62,29 @@ describe('SessionScreen — boutons secondaires', () => {
 
     expect(mockPush).toHaveBeenCalledTimes(rows.length);
   });
+
+  it('n’affiche pas les deux boutons pendant une séance active', () => {
+    useActiveSessionStore.setState({
+      active: {
+        id: 's1',
+        programId: 'p1',
+        programDayId: 'd1',
+        programName: 'Push',
+        dayName: 'Jour 1',
+        startedAt: new Date().toISOString(),
+        currentExerciseIndex: 0,
+        currentSetIndex: 0,
+        exercises: [],
+        restTimerActive: false,
+        restEndsAt: null,
+        restTimerMinimized: false,
+      },
+    });
+
+    render(<SessionScreen />);
+
+    expect(screen.getByText('Séance en cours')).toBeTruthy();
+    expect(screen.queryByText('Modifier ou ajouter des programmes')).toBeNull();
+    expect(screen.queryByText('Exercices')).toBeNull();
+  });
 });

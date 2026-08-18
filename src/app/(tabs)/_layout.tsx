@@ -74,7 +74,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="nutrition"
-        options={{ title: t('nav.nutrition'), tabBarIcon: tabIcon('coffee') }}
+        options={{ title: t('nav.nutrition'), tabBarIcon: tabIcon('pie-chart') }}
       />
       <Tabs.Screen
         name="progress"
