@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Circle } from 'react-native-svg';
 
 import { getRemainingRestSeconds, useActiveSessionStore } from '../../store/activeSessionStore';
+import { useTranslation } from '../../i18n/useTranslation';
 import { fonts } from '../../theme/fonts';
 import { radius, spacing } from '../../theme/tokens';
 
@@ -58,6 +60,7 @@ export function RestTimerModal({
   previousReps,
 }: RestTimerModalProps) {
   const c = useColors();
+  const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const active = useActiveSessionStore((s) => s.active);
   const addRestSeconds = useActiveSessionStore((s) => s.addRestSeconds);
@@ -110,9 +113,9 @@ export function RestTimerModal({
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
           bounces={false}>
-          <Text style={styles.restLabel}>REPOS</Text>
+          <Text style={styles.restLabel}>{t('session.restLabel')}</Text>
 
-          <View style={styles.ringContainer} accessibilityLabel={`Repos restant ${mins} minutes ${secs} secondes`}>
+          <View style={styles.ringContainer} accessibilityLabel={t('session.restRemainingA11y', { mins, secs })}>
             <Svg width={RING_SIZE} height={RING_SIZE} style={styles.ring}>
               <Circle
                 cx={RING_SIZE / 2}
@@ -140,7 +143,7 @@ export function RestTimerModal({
               <Text style={styles.timer}>
                 {pad(mins)}:{pad(secs)}
               </Text>
-              <Text style={styles.remainingLabel}>RESTANT</Text>
+              <Text style={styles.remainingLabel}>{t('session.restRemaining')}</Text>
             </View>
           </View>
 
@@ -149,24 +152,24 @@ export function RestTimerModal({
               {exerciseName ? <Text style={styles.exerciseName}>{exerciseName}</Text> : null}
               {hasSetPosition ? (
                 <Text style={styles.setPosition}>
-                  Série {currentSetNumber} / {totalSets}
+                  {t('session.setPosition', { current: currentSetNumber, total: totalSets })}
                 </Text>
               ) : null}
               {hasTarget ? (
                 <Text style={styles.target}>
-                  {formatWeight(targetWeight)} kg × {targetReps} reps
+                  {t('session.targetSummary', { weight: formatWeight(targetWeight), reps: targetReps })}
                 </Text>
               ) : null}
               {hasPrevious ? (
                 <Text style={styles.previous}>
-                  Précédente : {formatWeight(previousWeight)} kg × {previousReps} reps
+                  {t('session.previousSummary', { weight: formatWeight(previousWeight), reps: previousReps })}
                 </Text>
               ) : null}
             </View>
           ) : null}
 
           {typeof totalSets === 'number' && totalSets > 0 ? (
-            <View style={styles.setDots} accessibilityLabel={`${completedSets} séries terminées sur ${totalSets}`}>
+            <View style={styles.setDots} accessibilityLabel={t('session.setsCompletedA11y', { completed: completedSets, total: totalSets })}>
               {Array.from({ length: totalSets }, (_, index) => {
                 const isCompleted = index < completedSets;
                 const isCurrent = index === (currentSetNumber ?? 0) - 1;
@@ -190,29 +193,29 @@ export function RestTimerModal({
               onPress={() => adjustRest(-15)}
               activeOpacity={0.8}
               accessibilityRole="button">
-              <Text style={styles.controlLabel}>−15 s</Text>
+              <Text style={styles.controlLabel}>{t('session.minus15s')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.controlButton, styles.skipButton]}
               onPress={skip}
               activeOpacity={0.8}
               accessibilityRole="button">
-              <Text style={[styles.controlLabel, styles.skipLabel]}>Passer</Text>
+              <Text style={[styles.controlLabel, styles.skipLabel]}>{t('session.skip')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.controlButton, styles.minimizeButton]}
               onPress={onMinimize}
               activeOpacity={0.8}
               accessibilityRole="button"
-              accessibilityLabel="Réduire le minuteur">
-              <Text style={[styles.controlLabel, styles.minimizeIcon]}>⏬</Text>
+              accessibilityLabel={t('session.minimizeTimer')}>
+              <Feather name="minimize-2" size={18} color={c.textPrimary} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.controlButton}
               onPress={() => adjustRest(15)}
               activeOpacity={0.8}
               accessibilityRole="button">
-              <Text style={styles.controlLabel}>+15 s</Text>
+              <Text style={styles.controlLabel}>{t('session.plus15s')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -303,5 +306,4 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   controlLabel: { color: c.textPrimary, fontFamily: fonts.sansBold, fontSize: 15 },
   skipLabel: { color: c.primaryText },
   minimizeButton: { backgroundColor: c.surfaceAlt, borderColor: c.border },
-  minimizeIcon: { fontSize: 18 },
 });

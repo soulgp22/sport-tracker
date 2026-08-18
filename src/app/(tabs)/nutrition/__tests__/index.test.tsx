@@ -130,4 +130,16 @@ describe('NutritionScreen', () => {
       expect(mockPush).toHaveBeenCalledWith(destination);
     }
   });
+
+  it('affiche un libellé visible sous chacune des quatre icônes de raccourci', () => {
+    render(<NutritionScreen />);
+
+    // Ces textes sont rendus dans un <Text> (visible), pas seulement dans un
+    // accessibilityLabel : getByText échoue si le libellé n'est présent qu'en
+    // tant qu'accessibilityLabel sur le TouchableOpacity.
+    expect(screen.getByText('Aliments')).toBeTruthy();
+    expect(screen.getByText('Journal du jour')).toBeTruthy();
+    expect(screen.getByText('Tendance calories')).toBeTruthy();
+    expect(screen.getByText('Objectifs')).toBeTruthy();
+  });
 });

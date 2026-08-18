@@ -10,7 +10,7 @@ import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
-import { radius } from '../../../theme/tokens';
+import { radius, spacing } from '../../../theme/tokens';
 import { collectMealGroups, mealTypeLabel } from '../../../constants/meals';
 import {
   calculateDailyTotals,
@@ -410,6 +410,7 @@ export default function NutritionScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={t('nav.foods')}>
                 <Feather name="list" size={20} color={c.primary} />
+                <Text style={styles.iconActionLabel}>{t('nav.foods')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconAction}
@@ -418,6 +419,7 @@ export default function NutritionScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={t('nutrition.diaryTitle')}>
                 <Feather name="book-open" size={20} color={c.primary} />
+                <Text style={styles.iconActionLabel}>{t('nutrition.diaryTitle')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconAction}
@@ -426,6 +428,7 @@ export default function NutritionScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={t('nutrition.historyTitle')}>
                 <Feather name="clock" size={20} color={c.primary} />
+                <Text style={styles.iconActionLabel}>{t('nutrition.historyTitle')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.iconAction}
@@ -434,6 +437,7 @@ export default function NutritionScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={t('nutrition.goals.title')}>
                 <Feather name="target" size={20} color={c.primary} />
+                <Text style={styles.iconActionLabel}>{t('nutrition.goals.title')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -619,9 +623,18 @@ const makeStyles = (c: ThemeColors) =>
       minHeight: 48,
       alignItems: 'center',
       justifyContent: 'center',
+      gap: spacing.xs,
+      paddingHorizontal: spacing.xs,
       borderWidth: 1,
       borderColor: c.border,
       borderRadius: radius.md,
       backgroundColor: c.surface,
+    },
+    iconActionLabel: {
+      fontFamily: fonts.sansSemi,
+      fontSize: 10,
+      lineHeight: 13,
+      textAlign: 'center',
+      color: c.textSecondary,
     },
   });
