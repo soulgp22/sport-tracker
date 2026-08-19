@@ -7,6 +7,7 @@ import { useFoodDiaryStore } from '../../../../store/foodDiaryStore';
 import { useLanguageStore } from '../../../../store/languageStore';
 import { useNutritionGoalsStore } from '../../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../../store/performanceStore';
+import { calculateDailyTotals } from '../../../../lib/nutritionCalc';
 
 const mockPush = jest.fn();
 
@@ -141,5 +142,64 @@ describe('NutritionScreen', () => {
     expect(screen.getByText('Journal du jour')).toBeTruthy();
     expect(screen.getByText('Tendance calories')).toBeTruthy();
     expect(screen.getByText('Objectifs')).toBeTruthy();
+  });
+
+  describe('ajout rapide de calories', () => {
+    it('ajoute une entrée au journal du jour avec les calories saisies et des macros à 0', () => {
+      render(<NutritionScreen />);
+
+      fireEvent.press(screen.getByLabelText('Ajout rapide'));
+      fireEvent.changeText(screen.getByTestId('quick-calories-input'), '450');
+      fireEvent.press(screen.getByText('Ajouter'));
+
+      const entries = useFoodDiaryStore.getState().entries;
+      expect(entries).toHaveLength(1);
+      expect(entries[0]).toMatchObject({
+        date: '2026-08-14',
+        mealType: 'breakfast',
+        foodId: 'quick-calories',
+        foodName: 'Repas rapide',
+        quantity: 1,
+        unit: 'portion',
+        calculatedNutrition: { calories: 450, protein: 0, carbs: 0, fat: 0 },
+      });
+    });
+
+    it('utilise le libellé saisi quand il est renseigné', () => {
+      render(<NutritionScreen />);
+
+      fireEvent.press(screen.getByLabelText('Ajout rapide'));
+      fireEvent.changeText(screen.getByTestId('quick-calories-input'), '320');
+      fireEvent.changeText(screen.getByTestId('quick-calories-label'), 'Pizza maison');
+      fireEvent.press(screen.getByText('Ajouter'));
+
+      const entries = useFoodDiaryStore.getState().entries;
+      expect(entries[0].foodName).toBe('Pizza maison');
+    });
+
+    it.each(['', '0', '-50', 'abc'])(
+      'une saisie invalide (« %s ») n’ajoute rien au journal',
+      (value) => {
+        render(<NutritionScreen />);
+
+        fireEvent.press(screen.getByLabelText('Ajout rapide'));
+        fireEvent.changeText(screen.getByTestId('quick-calories-input'), value);
+        fireEvent.press(screen.getByText('Ajouter'));
+
+        expect(useFoodDiaryStore.getState().entries).toHaveLength(0);
+        expect(screen.getByText('Saisis un nombre de calories entier et positif.')).toBeTruthy();
+      }
+    );
+
+    it('augmente le total de calories du jour du montant saisi', () => {
+      render(<NutritionScreen />);
+
+      fireEvent.press(screen.getByLabelText('Ajout rapide'));
+      fireEvent.changeText(screen.getByTestId('quick-calories-input'), '300');
+      fireEvent.press(screen.getByText('Ajouter'));
+
+      const todayEntries = useFoodDiaryStore.getState().getEntriesByDate('2026-08-14');
+      expect(calculateDailyTotals(todayEntries).calories).toBe(300);
+    });
   });
 });

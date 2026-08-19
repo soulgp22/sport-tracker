@@ -184,3 +184,25 @@ correspondance. Cibler par nom (`npx jest -t "nom du test"`) ou échapper le che
 De même, `npx tsc --noEmit | grep -v "npm notice"` renvoie le code de sortie du
 `grep`, pas celui de `tsc` : un `$?` à 1 y signifie « grep n'a rien filtré », pas
 « la compilation a échoué ». Rediriger vers un fichier et lire `$?` juste après.
+
+
+## Tests ajoutes le 2026-08-19 (ajout rapide de calories, pas sur l'accueil)
+
+| Test | Ce qu'il attrape | Rouge constate au sabotage |
+|---|---|---|
+| Ajout rapide ecrit bien au journal | l'appel a `addFoodEntry` supprime | `Expected length: 1 / Received length: 0` |
+| Macros a 0 sur un ajout calorique | une repartition macro devinee | idem |
+| Total du jour augmente du montant | le total non recalcule | idem |
+| Pas + calories rendus sur l'accueil | le rendu des metriques retire | `Unable to find an element with text: 8000 pas` |
+| Aucun « 0 » trompeur sans donnee | un fallback a zero | — |
+
+**Piege rencontre pendant la verification** : le premier sabotage de l'ajout rapide a
+ete applique sur `QuickCaloriesModal.tsx`, alors que l'appel a `addFoodEntry` se
+trouve dans `nutrition/index.tsx`. Le `sed` n'a rien modifie, le test est reste vert,
+et cela ressemblait a un test qui ne prouve rien. **Toujours verifier que le sabotage
+a reellement change le fichier** (relire la ligne apres modification) avant de
+conclure qu'un test est inutile.
+
+**Non verifiable sur emulateur** : l'affichage reel des pas. L'image `google_apis`
+n'embarque pas Health Connect. Seul l'etat « donnee indisponible » a pu etre constate
+a l'ecran ; l'affichage des valeurs demande un appareil reel.

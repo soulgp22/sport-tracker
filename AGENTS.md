@@ -32,6 +32,28 @@ un test dans `Tests.md`. Une fonction réutilisable s'inscrit dans
 
 ## Core Development Rules
 
+### 0. Communication pendant l'exécution
+
+Sois extrêmement concis dans tes sorties utilisateur.
+
+Pendant une tâche :
+- N'explique pas ce que tu es en train de faire.
+- N'affiche pas les commandes, fichiers lus, raisonnements, analyses ou détails intermédiaires sauf si une intervention utilisateur est nécessaire.
+- Affiche uniquement l'état d'avancement sous la forme :
+  `1/6`
+  `2/6`
+  `3/6`
+  etc.
+- Regroupe les opérations lorsque le nombre exact d'étapes n'est pas connu au départ.
+- Ne commente pas chaque modification ou commande exécutée.
+
+À la fin :
+- Donne uniquement un résumé de 4 à 5 lignes maximum avec le moins de blabla et le maximum de détails.
+- Mentionne : résultat, fichiers principaux modifiés, tests effectués et éventuel problème restant.
+- Ne fournis les détails, logs, diffs ou explications techniques que si je les demande explicitement.
+
+Cette règle concerne uniquement la communication avec l'utilisateur et ne doit jamais réduire la profondeur de l'analyse, des vérifications, des tests ou du travail effectué.
+
 ### 1. Understand before coding
 
 * Inspect the existing implementation before modifying anything.
@@ -119,6 +141,7 @@ Never declare a task complete until:
 * production build passes;
 * the final diff has been inspected;
 * no unrelated files were modified.
+* après chaque ajout faire un screenshot et vérifier qu'il fonctionne/s'affiche correctement si oui valider sinon refaire ou demander à la delegation de refaire jusqu'à ce que tu valides 
 
 Never disable or weaken tests simply to make validation pass.
 

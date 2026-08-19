@@ -8,6 +8,7 @@ import { MacroBar } from '../../../components/nutrition/MacroBar';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
+import { QuickCaloriesModal } from './QuickCaloriesModal';
 import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { radius, spacing } from '../../../theme/tokens';
@@ -23,13 +24,10 @@ import {
   resolveDailyEnergyExpenditure,
 } from '../../../lib/energyBalance';
 import {
-  hasHealthPermissions,
-  isHealthConnectAvailable,
   openHealthConnectPermissionsForApp,
-  readCaloriesBurnedToday,
-  readStepsToday,
   requestHealthPermissionsWithStatus,
 } from '../../../lib/healthConnect';
+import { useHealthToday } from '../../../hooks/useHealthToday';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { healthConnectT as hct } from '../../../i18n/healthConnectFallback';
 import {
@@ -41,6 +39,7 @@ import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
+import type { MealType } from '../../../types';
 
 const HC_PACKAGE = 'com.google.android.apps.healthdata';
 
@@ -79,49 +78,20 @@ export default function NutritionScreen() {
   const goals = useNutritionGoalsStore((s) => s.goals);
   const entriesState = useFoodDiaryStore((s) => s.entries);
   const getEntriesByDate = useFoodDiaryStore((s) => s.getEntriesByDate);
+  const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
   const sex = usePerformanceStore((s) => s.sex);
   const age = usePerformanceStore((s) => s.age);
   const heightCm = usePerformanceStore((s) => s.heightCm);
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
   const weightEntries = useBodyWeightStore((s) => s.entries);
-  const [healthData, setHealthData] = useState<
-    | {
-        status: 'granted';
-        calories: Awaited<ReturnType<typeof readCaloriesBurnedToday>>;
-        steps: Awaited<ReturnType<typeof readStepsToday>>;
-      }
-    | { status: 'needsPermission' }
-    | { status: 'unavailable' }
-  >({ status: 'unavailable' });
+  const { healthData, loadHealthToday: loadHealthBurn } = useHealthToday();
   const [connecting, setConnecting] = useState(false);
-
-  const loadHealthBurn = useCallback(async () => {
-    const available = await isHealthConnectAvailable();
-    if (!available) {
-      setHealthData({ status: 'unavailable' });
-      return;
-    }
-    const granted = await hasHealthPermissions();
-    if (!granted) {
-      setHealthData({ status: 'needsPermission' });
-      return;
-    }
-    const [calories, steps] = await Promise.all([
-      readCaloriesBurnedToday(),
-      readStepsToday(),
-    ]);
-    setHealthData({
-      status: 'granted',
-      calories,
-      steps,
-    });
-  }, []);
+  const [quickAddVisible, setQuickAddVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       forceTick();
-      loadHealthBurn();
-    }, [loadHealthBurn])
+    }, [forceTick])
   );
 
   const handleConnectHealth = async () => {
@@ -197,6 +167,19 @@ export default function NutritionScreen() {
   );
 
   const goPhoto = () => router.push('/(tabs)/nutrition/photo' as never);
+
+  const handleQuickAdd = (payload: { calories: number; mealType: MealType; label: string }) => {
+    addFoodEntry({
+      date: todayKey(),
+      mealType: payload.mealType,
+      foodId: 'quick-calories',
+      foodName: payload.label || t('nutrition.quickAdd.defaultLabel'),
+      quantity: 1,
+      unit: 'portion',
+      calculatedNutrition: { calories: payload.calories, protein: 0, carbs: 0, fat: 0 },
+    });
+    setQuickAddVisible(false);
+  };
 
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
   const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
@@ -402,6 +385,11 @@ export default function NutritionScreen() {
               title={t('nutrition.addMeal')}
               onPress={() => router.push('/(tabs)/nutrition/add' as never)}
             />
+            <Button
+              title={t('nutrition.quickAdd')}
+              variant="secondary"
+              onPress={() => setQuickAddVisible(true)}
+            />
             <View style={styles.actionsRow}>
               <TouchableOpacity
                 style={styles.iconAction}
@@ -443,6 +431,12 @@ export default function NutritionScreen() {
           </View>
         </View>
       </ScrollView>
+
+      <QuickCaloriesModal
+        visible={quickAddVisible}
+        onClose={() => setQuickAddVisible(false)}
+        onSubmit={handleQuickAdd}
+      />
     </SafeAreaView>
   );
 }

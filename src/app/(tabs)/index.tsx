@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { WeightTrend } from '../../components/progress/WeightTrend';
 import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
-import { resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
+import { estimateActiveCaloriesFromSteps, resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
 import { getBodyweightForDate } from '../../lib/performanceEngine';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -19,6 +19,7 @@ import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
+import { useHealthToday } from '../../hooks/useHealthToday';
 
 
 /** Durée de montée des compteurs de l'accueil, en millisecondes. */
@@ -89,10 +90,19 @@ export default function HomeScreen() {
       entriesState.filter((entry) => entry.date.slice(0, 10) === key)
     );
   }, [entriesState]);
+  const { healthData } = useHealthToday();
+  const healthSteps = healthData.status === 'granted' ? healthData.steps : null;
+
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
+  const steps = healthSteps !== null && healthSteps > 0 ? healthSteps : null;
+  const stepsCalories =
+    steps !== null && weightKg !== undefined
+      ? estimateActiveCaloriesFromSteps(steps, weightKg).activeCaloriesKcal
+      : null;
+
   const expenditure = resolveDailyEnergyExpenditure({
     healthCalories: null,
-    healthSteps: null,
+    healthSteps,
     profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
   });
 
@@ -185,6 +195,28 @@ export default function HomeScreen() {
                 <Text style={styles.weightBandUnit}> kg</Text>
               </AnimatedNumber>
             )}
+            {steps !== null ? (
+              <>
+                <AnimatedNumber
+                  value={steps}
+                  duration={ANIMATION_DURATION_MS}
+                  format={(v) => String(Math.round(v))}
+                  style={styles.weightBandMetaValue}
+                  testID="home-steps-value">
+                  <Text style={styles.weightBandMetaUnit}> {t('home.steps')}</Text>
+                </AnimatedNumber>
+                {stepsCalories !== null ? (
+                  <AnimatedNumber
+                    value={stepsCalories}
+                    duration={ANIMATION_DURATION_MS}
+                    format={(v) => String(Math.round(v))}
+                    style={styles.weightBandMetaValue}
+                    testID="home-steps-calories-value">
+                    <Text style={styles.weightBandMetaUnit}> kcal</Text>
+                  </AnimatedNumber>
+                ) : null}
+              </>
+            ) : null}
           </View>
         </TouchableOpacity>
 
@@ -380,6 +412,15 @@ const makeStyles = (c: ThemeColors) =>
     weightBandUnit: {
       fontSize: 12,
       color: c.textSecondary,
+    },
+    weightBandMetaValue: {
+      fontFamily: fonts.sansBold,
+      fontSize: 12,
+      color: c.textSecondary,
+    },
+    weightBandMetaUnit: {
+      fontSize: 10,
+      color: c.textMuted,
     },
     weightBandGroup: {
       flexDirection: 'row',

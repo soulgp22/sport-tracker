@@ -9,14 +9,34 @@ import { useLanguageStore } from '../../../store/languageStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
 import { useSessionStore } from '../../../store/sessionStore';
+import { estimateActiveCaloriesFromSteps } from '../../../lib/energyBalance';
+import {
+  hasHealthPermissions,
+  isHealthConnectAvailable,
+  readCaloriesBurnedToday,
+  readStepsToday,
+} from '../../../lib/healthConnect';
 
-jest.mock('expo-router', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    back: jest.fn(),
-    canGoBack: jest.fn(),
-  }),
+jest.mock('expo-router', () => {
+  const React = jest.requireActual<any>('react');
+  return {
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      back: jest.fn(),
+      canGoBack: jest.fn(),
+    }),
+    useFocusEffect: (effect: () => void) => {
+      React.useEffect(effect, [effect]);
+    },
+  };
+});
+
+jest.mock('../../../lib/healthConnect', () => ({
+  isHealthConnectAvailable: jest.fn(),
+  hasHealthPermissions: jest.fn(),
+  readCaloriesBurnedToday: jest.fn(),
+  readStepsToday: jest.fn(),
 }));
 
 jest.mock('react-native-safe-area-context', () => {
@@ -49,6 +69,10 @@ function resetStores() {
 
 beforeEach(() => {
   jest.useFakeTimers({ now: NOW });
+  (isHealthConnectAvailable as jest.Mock).mockResolvedValue(false);
+  (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
+  (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+  (readStepsToday as jest.Mock).mockResolvedValue(null);
   resetStores();
 });
 
@@ -154,5 +178,47 @@ describe('HomeScreen', () => {
     const numericText = Array.isArray(children) ? String(children[0]) : String(children);
 
     expect(numericText).toMatch(/^-?\d+(\.\d)?$/);
+  });
+
+  it('affiche les pas et les calories brûlées estimées quand les pas sont disponibles', async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(8000);
+
+    useBodyWeightStore.setState({
+      entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 }],
+    });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    const expectedCalories = estimateActiveCaloriesFromSteps(8000, 81.7).activeCaloriesKcal;
+
+    expect(screen.getByText('8000 pas')).toBeTruthy();
+    expect(screen.getByText(`${expectedCalories} kcal`)).toBeTruthy();
+  });
+
+  it("sans donnée de pas, n'affiche aucun « 0 » ni valeur trompeuse à la place des pas et calories", async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(null);
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    expect(screen.queryByText('0 pas')).toBeNull();
+    expect(screen.queryByText('0 kcal')).toBeNull();
+    expect(screen.queryByTestId('home-steps-value')).toBeNull();
+    expect(screen.queryByTestId('home-steps-calories-value')).toBeNull();
   });
 });

@@ -546,3 +546,34 @@ headerShown: false dans le _layout   +   SafeAreaView edges sans 'top'
 Tous les autres ecrans ont `headerShown: true` et recoivent leur marge de l'en-tete
 natif ; leur `edges={['bottom']}` est donc correct. Verifier les deux conditions
 ensemble, pas `edges` seul.
+
+## Une modale maison qui ne compense pas l'inset bas
+
+**Symptome** — dans « Ajout rapide de calories », les boutons « Ajouter » et
+« Annuler » etaient coupes en deux par la barre de navigation systeme. Cliquables,
+mais illisibles.
+
+**Cause** — la modale declare `navigationBarTranslucent` : sur Android la barre de
+navigation se superpose alors au contenu. Il faut compenser par un `paddingBottom`
+egal a l'inset bas.
+
+**Ce qui rend ce bug agacant** — `src/components/ui/AppDialog.tsx` traitait DEJA
+exactement ce cas, commentaire d'explication a l'appui. La solution existait dans le
+projet et n'a pas ete reutilisee lors de la creation d'une nouvelle modale.
+
+**A eviter** — avant d'ecrire une Modal, regarder comment AppDialog gere ses insets.
+Et surtout : ce defaut est INVISIBLE en test unitaire (RNTL ne calcule aucune mise en
+page). Il ne se voit qu'a l'ecran, sur un appareil a barre de navigation a trois
+boutons.
+
+## Les pas n'etaient jamais lus sur l'ecran d'accueil
+
+`src/app/(tabs)/index.tsx` passait `healthSteps: null` EN DUR a
+`resolveDailyEnergyExpenditure`. L'accueil ne consultait donc jamais Health Connect,
+ce qui rendait la depense estimee indisponible meme quand l'autorisation etait
+accordee et que les pas existaient.
+
+Le bloc de lecture (disponibilite -> permission -> lecture, rafraichi au focus)
+existait dans l'ecran Nutrition. Il est desormais extrait dans
+`src/hooks/useHealthToday.ts` et consomme par les DEUX ecrans, au lieu d'etre
+duplique.
