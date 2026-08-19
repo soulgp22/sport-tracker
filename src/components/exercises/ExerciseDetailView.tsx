@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import {
+  getExerciseDisplayInstructions,
   getExerciseDisplayName,
   translateEquipment,
   translateMuscle,
@@ -12,7 +13,7 @@ import { useTranslation } from '../../i18n/useTranslation';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useColors } from '../../theme/useColors';
 import { fonts } from '../../theme/fonts';
-import { radius } from '../../theme/tokens';
+import { radius, spacing } from '../../theme/tokens';
 
 import type { ThemeColors } from '../../theme/palettes';
 import { RAMP_WARM } from '../../theme/palettes';
@@ -29,6 +30,13 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
   const displayName = exercise ? getExerciseDisplayName(exercise, language) : t('nav.exercises');
   const group = exercise ? translateMuscle(exercise.bodyPart, language) : '';
   const equipment = exercise ? translateEquipment(exercise.equipment, language) : '';
+  const primaryMuscle = exercise ? translateMuscle(exercise.target, language) : '';
+  const secondaryLabels = exercise
+    ? exercise.secondaryMuscles
+        .map((muscle) => translateMuscle(muscle, language))
+        .filter((label) => label.length > 0)
+    : [];
+  const instructions = exercise ? getExerciseDisplayInstructions(exercise, language) : [];
   const model = exercise ? exerciseModels[exercise.id] : undefined;
   const [mediaUnavailable, setMediaUnavailable] = useState(false);
   const [previousId, setPreviousId] = useState(id);
@@ -78,6 +86,43 @@ export function ExerciseDetailView({ id, onClose }: { id: string; onClose: () =>
                 </View>
               ) : null}
             </View>
+          </View>
+
+          <View style={styles.details}>
+            {primaryMuscle || secondaryLabels.length > 0 || equipment ? (
+              <View style={styles.infoCard}>
+                {primaryMuscle ? (
+                  <View style={styles.infoRow}>
+                    <Text style={styles.kicker}>{t('exercise.primary')}</Text>
+                    <Text style={styles.infoValue}>{primaryMuscle}</Text>
+                  </View>
+                ) : null}
+                {secondaryLabels.length > 0 ? (
+                  <View style={styles.infoRow}>
+                    <Text style={styles.kicker}>{t('exercise.secondary')}</Text>
+                    <Text style={styles.infoValue}>{secondaryLabels.join(' · ')}</Text>
+                  </View>
+                ) : null}
+                {equipment ? (
+                  <View style={styles.infoRow}>
+                    <Text style={styles.kicker}>{t('exercise.equipment')}</Text>
+                    <Text style={styles.infoValue}>{equipment}</Text>
+                  </View>
+                ) : null}
+              </View>
+            ) : null}
+
+            {instructions.length > 0 ? (
+              <View style={styles.instructions}>
+                <Text style={styles.sectionTitle}>{t('exercise.instructions')}</Text>
+                {instructions.map((step, index) => (
+                  <View key={index} style={styles.instructionRow}>
+                    <Text style={styles.instructionNumber}>{index + 1}</Text>
+                    <Text style={styles.instructionText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
           </View>
         </ScrollView>
       )}
@@ -158,6 +203,62 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     lineHeight: 14,
     letterSpacing: 0.8,
     textTransform: 'uppercase',
+    color: c.textPrimary,
+  },
+
+  details: {
+    paddingHorizontal: 20,
+    gap: spacing.md,
+  },
+  infoCard: {
+    backgroundColor: c.surface,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: c.border,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+  },
+  infoValue: {
+    flex: 1,
+    fontFamily: fonts.sans,
+    fontSize: 14,
+    lineHeight: 20,
+    color: c.textPrimary,
+    textAlign: 'right',
+  },
+  instructions: {
+    gap: spacing.sm,
+  },
+  sectionTitle: {
+    fontFamily: fonts.serifBold,
+    fontSize: 16,
+    lineHeight: 20,
+    color: c.textPrimary,
+  },
+  instructionRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+  },
+  instructionNumber: {
+    fontFamily: fonts.sansBold,
+    fontSize: 13,
+    lineHeight: 20,
+    color: c.secondary,
+    minWidth: 20,
+    textAlign: 'right',
+  },
+  instructionText: {
+    flex: 1,
+    fontFamily: fonts.sans,
+    fontSize: 14,
+    lineHeight: 20,
     color: c.textPrimary,
   },
 });

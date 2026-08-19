@@ -478,7 +478,71 @@ et le retour matériel revient à l'onglet par défaut. Le corriger demande de s
 les réglages du navigateur d'onglets — changement d'architecture de navigation.
 
 **3. Grandes zones vides sur la fiche exercice et pendant une séance.**
-Ce n'est pas un défaut de mise en page : ces écrans n'ont simplement pas de contenu
-à afficher (aucune description n'existe pour les ~870 exercices du catalogue, et la
-liste des exercices d'une séance se remplit à mesure). Ajouter du contenu serait une
-fonctionnalité, pas un correctif. À traiter comme un sujet produit.
+
+⚠️ **Correction du 2026-08-19 — l'analyse initiale était FAUSSE.** Il était écrit ici
+qu'« aucune description n'existe pour les ~870 exercices du catalogue ». Vérification
+faite dans `src/data/exercises.catalog.json` (873 entrées) :
+
+| Champ | Renseigné |
+|---|---|
+| `instructionsFr` | **873 / 873** (4,3 étapes en moyenne) |
+| `target`, `equipment`, `bodyPart`, `nameFr` | 873 / 873 |
+| `secondaryMuscles` | 601 / 873 |
+
+Le vide n'était donc pas une absence de données : c'est de la donnée **déjà embarquée
+dans l'APK et jamais rendue**. `ExerciseDetailView.tsx` n'affichait que `bodyPart` et
+`equipment`. Pire, le helper `getExerciseDisplayInstructions()` existait dans
+`constants/exerciseI18n.ts` et n'était appelé **nulle part** dans l'application.
+
+**La leçon** : avant de classer un écran vide en « manque de contenu », ouvrir le jeu
+de données et compter. L'affirmation inverse avait été écrite sans vérifier, et elle
+aurait envoyé le sujet en backlog produit alors qu'il suffisait de rendre l'existant.
+
+Reste vrai en revanche pour la séance en cours : la liste se remplit à mesure que les
+exercices du jour sont ajoutés, il n'y a rien de plus à afficher.
+
+
+## La fiche exercice n'affichait pas des donnees pourtant embarquees
+
+**Symptome** — environ 60 % de blanc sous l'image et le titre d'un exercice.
+
+**Cause** — `ExerciseDetailView.tsx` ne rendait que `bodyPart` et `equipment`, alors
+que le catalogue embarque `target`, `secondaryMuscles` et surtout `instructionsFr`
+pour 873 exercices sur 873. Le helper `getExerciseDisplayInstructions()` existait
+dans `constants/exerciseI18n.ts`, gerait meme le repli anglais — et n'etait appele
+**nulle part**. Les cles i18n `exercise.instructions`, `exercise.secondary` et
+`exercise.equipment` etaient elles aussi deja traduites dans les 4 langues.
+
+Ce n'etait donc pas une fonctionnalite a creer mais un **branchement oublie** : le
+travail de donnees et de traduction avait ete fait, l'ecran n'a jamais consomme le
+resultat.
+
+**Correctif** — carte d'informations (principal / secondaires / materiel) puis
+instructions numerotees. Une seule cle ajoutee : `exercise.primary`.
+
+**Piege a eviter** — une ligne dont la donnee manque ne doit pas s'afficher :
+272 exercices sur 873 n'ont aucun muscle secondaire, et un libelle suivi du vide
+aurait recree le defaut de « ligne fantome » reproche ailleurs a l'app. Le test le
+verifie et rougit si la garde saute.
+
+**Comment le trouver ailleurs** — chercher les helpers exportes qui n'ont aucun
+appelant :
+`grep -rln "nomDuHelper" src/` ne renvoyant que son fichier de definition est le
+signe d'un branchement oublie.
+
+## `edges` sans `'top'` : le meme defaut sur un second ecran
+
+Apres correction sur `history/index.tsx`, le meme chevauchement du titre avec la
+barre systeme a ete constate sur `exercises/index.tsx` (« BIBLIOTHEQUE » sous
+l'heure). Il avait ete **rate au premier passage de l'audit** : l'ecran avait ete
+ouvert et juge correct.
+
+Balayage fait ensuite sur tout le projet — c'etait le dernier. Le critere exact :
+
+```
+headerShown: false dans le _layout   +   SafeAreaView edges sans 'top'
+```
+
+Tous les autres ecrans ont `headerShown: true` et recoivent leur marge de l'en-tete
+natif ; leur `edges={['bottom']}` est donc correct. Verifier les deux conditions
+ensemble, pas `edges` seul.

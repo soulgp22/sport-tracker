@@ -13,7 +13,7 @@ export default function ExercisesScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <ExerciseCatalogList
         onBrowseDownloads={() => router.push({ pathname: '/(tabs)/community' as never, params: { tab: 'exercises' } })}
         onSelect={(exercise) =>
