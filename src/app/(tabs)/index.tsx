@@ -197,6 +197,9 @@ export default function HomeScreen() {
             )}
             {steps !== null ? (
               <>
+                {/* Filet vertical : sans lui, « 78 kg 8000 pas 240 kcal » se lit
+                    comme une seule suite de chiffres. */}
+                <View style={styles.weightBandDivider} />
                 <AnimatedNumber
                   value={steps}
                   duration={ANIMATION_DURATION_MS}
@@ -412,6 +415,12 @@ const makeStyles = (c: ThemeColors) =>
     weightBandUnit: {
       fontSize: 12,
       color: c.textSecondary,
+    },
+    weightBandDivider: {
+      width: 1,
+      height: 16,
+      backgroundColor: c.border,
+      marginHorizontal: spacing.xs,
     },
     weightBandMetaValue: {
       fontFamily: fonts.sansBold,
