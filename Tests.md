@@ -206,3 +206,20 @@ conclure qu'un test est inutile.
 **Non verifiable sur emulateur** : l'affichage reel des pas. L'image `google_apis`
 n'embarque pas Health Connect. Seul l'etat « donnee indisponible » a pu etre constate
 a l'ecran ; l'affichage des valeurs demande un appareil reel.
+
+## Test ajoute le 2026-08-19 (catalogue d'exercices par defaut)
+
+`src/store/__tests__/communityCatalogDefault.test.ts` importe
+`community/bodyweight-fitness-beginner.json` TEL QUEL, sans installer aucun
+pack au prealable, et verifie que les 12 exercices qu'il reference se
+resolvent tous et que chaque jour importe contient au moins un exercice.
+
+Sabotage : import remis sur `exercises.core.json` (22 exercices) -> le test
+rougit avec les 12 noms exacts dans `unknownExercises`
+(« Bodyweight Squat », « Dead Bug », ... ). Restaure -> vert.
+
+**Piege de fixture identifie en ecrivant ce test** : les tests d'import
+existants de `programStore.test.ts` installent deja le catalogue complet dans
+un `beforeAll`, ce qui les faisait passer meme quand l'app reelle, au premier
+lancement, ne le contenait pas. Un test isole, dans son propre fichier, sans
+cette installation prealable, etait necessaire pour prouver le defaut.

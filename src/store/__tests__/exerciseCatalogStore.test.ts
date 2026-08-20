@@ -1,9 +1,12 @@
 import { useExerciseCatalogStore } from '../exerciseCatalogStore';
 
 describe('exerciseCatalogStore', () => {
-  it('returns only the exercises required by the starter programs offline', () => {
+  it('bundles the full exercise catalog by default (no partial import against community programs)', () => {
     const all = useExerciseCatalogStore.getState().all();
-    expect(all).toHaveLength(22);
+    // Les programmes communautaires référencent des exercices du catalogue
+    // complet : un catalogue par défaut réduit vidait silencieusement la
+    // plupart des jours importés (voir known_bugs.md).
+    expect(all.length).toBeGreaterThan(800);
     expect(all[0].id).toBeDefined();
     expect(all[0].name.length).toBeGreaterThan(0);
     expect(all[0].gif.a).toMatch(/-a\.(gif|jpe?g|png)$/);

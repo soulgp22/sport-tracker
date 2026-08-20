@@ -577,3 +577,46 @@ Le bloc de lecture (disponibilite -> permission -> lecture, rafraichi au focus)
 existait dans l'ecran Nutrition. Il est desormais extrait dans
 `src/hooks/useHealthToday.ts` et consomme par les DEUX ecrans, au lieu d'etre
 duplique.
+
+## Les programmes communautaires arrivaient vides : mauvais catalogue par defaut
+
+**Symptome** — Islam : « tous les programmes ils sont la juste pour remplir mais
+une fois dedans y a rien d'interessant ». Le catalogue de 90 programmes
+telechargeables (`community/*.json`) existait bien, mais telecharger un
+programme produisait des jours vides ou quasi vides.
+
+**Cause** — l'app charge par defaut `exercises.core.json` (22 exercices), pas
+le catalogue complet `exercises.catalog.json` (873). Les 90 fichiers de
+`community/` referencent leurs exercices par NOM (leur `exerciseId` est
+systematiquement `null`), et l'import resout ce nom contre le catalogue
+CHARGE, pas contre le catalogue complet distant. Mesure faite sur les 90
+fichiers : **80 % des exercices ne se resolvaient pas** contre les 22 par
+defaut ; les programmes `bodyweight-*` tombaient a **0 %** — telecharges,
+ils arrivaient entierement vides.
+
+Le pack qui aurait comble ce manque existait deja
+(`community/exercises-all.json`, 851 exercices, expose comme
+`exercisePacks` dans `index.json`), mais rien ne le liait au telechargement
+d'un programme : il fallait penser a aller le chercher separement via
+« Plus d'exercices » dans l'onglet Exercices.
+
+**Pourquoi les tests ne l'ont pas vu** — `programStore.test.ts` installe le
+pack complet (`installPack('test-remote-pack', remoteCatalog.exercises)`)
+dans un `beforeAll`, AVANT tous les tests d'import du fichier. Les tests
+tournaient donc contre un catalogue complet que l'app elle-meme n'avait
+jamais au premier lancement. Un `beforeAll` qui prepare un etat plus riche
+que l'etat reel de production masque le defaut au lieu de le prouver.
+
+**Correctif retenu (decision produit, pas une simple correction)** — trois
+options ont ete presentees : telechargement automatique du pack au moment
+d'importer un programme, confirmation explicite avant de completer l'import,
+ou embarquer le catalogue complet des le depart. Choisi : la troisieme.
+`exerciseCatalogStore.ts` charge desormais `exercises.catalog.json`
+directement. Cout accepte : +1,6 Mo sur la taille de l'APK pour tous les
+utilisateurs, en echange de zero friction et zero surprise, pour toujours.
+
+**A eviter** — un `beforeAll`/fixture qui installe plus de donnees que l'etat
+initial reel de l'application est un angle mort : il valide un scenario qui
+n'est pas celui du premier lancement. Le test de regression ajoute
+(`communityCatalogDefault.test.ts`) importe un vrai fichier de `community/`
+SANS aucun pack pre-installe, precisement pour couvrir cet etat.

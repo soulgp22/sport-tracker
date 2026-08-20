@@ -6,10 +6,14 @@ import {
 } from '../constants/exerciseI18n';
 import { searchExercises } from '../lib/catalogApi';
 import type { CatalogSearchResult } from '../lib/catalogApi';
-import coreCatalogJson from '../data/exercises.core.json';
+import coreCatalogJson from '../data/exercises.catalog.json';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 import type { CatalogExercise } from '../types';
 
+// Catalogue complet (873 exercices) embarqué par défaut depuis la 1.16.0 : les
+// programmes communautaires référencent des exercices absents du petit
+// catalogue « core » (22 entrées), ce qui vidait silencieusement la plupart
+// des jours importés. Voir known_bugs.md.
 const coreCatalog = coreCatalogJson as CatalogExercise[];
 
 function normalize(value: string) {
