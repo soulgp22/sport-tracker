@@ -165,6 +165,8 @@ export default function ProgressScreen() {
           accessibilityRole="button">
           <Text
             numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.55}
             style={[styles.tabText, mode === 'exercises' && styles.tabTextSelected]}>
             {t('progress.exercises')}
           </Text>
@@ -176,6 +178,8 @@ export default function ProgressScreen() {
           accessibilityRole="button">
           <Text
             numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.55}
             style={[styles.tabText, mode === 'bodyWeight' && styles.tabTextSelected]}>
             {t('progress.bodyWeight')}
           </Text>
@@ -187,6 +191,8 @@ export default function ProgressScreen() {
           accessibilityRole="button">
           <Text
             numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.55}
             style={[styles.tabText, mode === 'performance' && styles.tabTextSelected]}>
             {t('progress.performance')}
           </Text>
@@ -385,36 +391,38 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginTop: 6,
     color: c.textPrimary,
   },
+  // Aligné sur la rangée d'onglets de l'écran Communauté : conteneur teinté,
+  // pastilles arrondies individuelles, texte centré. Voir community/index.tsx.
   tabRow: {
     flexDirection: 'row',
-    marginHorizontal: 20,
-    marginTop: 12,
-    marginBottom: 4,
+    gap: spacing.xxs,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs,
+    padding: spacing.xxs,
     borderRadius: radius.md,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: c.border,
+    backgroundColor: c.surfaceAlt,
   },
   tab: {
     flex: 1,
-    minHeight: 48,
-    paddingHorizontal: 8,
-    paddingVertical: 12,
+    minWidth: 70,
+    minHeight: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    borderRightWidth: 1,
-    borderRightColor: c.border,
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.sm,
   },
   tabSelected: { backgroundColor: c.primary },
   tabText: {
-    fontFamily: fonts.serifBold,
-    fontSize: 11,
-    lineHeight: 15,
-    letterSpacing: 0.66,
-    textTransform: 'uppercase',
-    textAlign: 'left',
-    color: c.textPrimary,
+    flexShrink: 1,
+    fontSize: 12,
+    fontFamily: fonts.sansBold,
+    textAlign: 'center',
+    color: c.textSecondary,
   },
-  tabTextSelected: { color: c.bg },
+  tabTextSelected: { color: c.primaryText },
   currentWeightBlock: {
     paddingTop: 18,
     paddingHorizontal: 20,

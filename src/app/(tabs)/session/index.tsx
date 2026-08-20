@@ -12,7 +12,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
-import { radius } from '../../../theme/tokens';
+import { radius, spacing } from '../../../theme/tokens';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { Program, ProgramDay } from '../../../types';
 
@@ -51,17 +51,17 @@ export default function SessionScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['bottom']}>
       <View style={styles.actionsRow}>
+        {/* Même couple de variantes et même taille que la rangée de l'écran
+            Programmes (primaire + secondaire, sans `compact`), pour que les
+            deux menus se ressemblent. Voir programs/index.tsx. */}
         <Button
           title={t('session.managePrograms')}
-          variant="soft"
-          compact
           onPress={() => router.push('/(tabs)/programs')}
           style={styles.actionBtn}
         />
         <Button
           title={t('nav.exercises')}
-          variant="soft"
-          compact
+          variant="secondary"
           onPress={() => router.push('/(tabs)/exercises')}
           style={styles.actionBtn}
         />
@@ -159,7 +159,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontFamily: fonts.sansSemi },
   dayMeta: { fontSize: 13, color: c.textMuted },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
-  actionsRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingVertical: 16 },
+  actionsRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.sm },
   actionBtn: { flex: 1 },
   resumeContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
   resumeTitle: { fontSize: 22, fontFamily: fonts.sansBold, color: c.textPrimary },
