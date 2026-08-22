@@ -680,3 +680,35 @@ catalogue doit etre repercutee dans le pack.**
 **A eviter** — ne jamais laisser une generation par LLM ecrire dans un fichier de
 donnees sans validation automatique de sa sortie. Et se mefier des exemples few-shot
 contenant des reponses completes : ils deviennent des reponses par defaut.
+
+## Un pack telecharge ecrasait a vie le catalogue embarque
+
+**Symptome** — Islam, apres la retraduction des 873 noms : « les exercices sont
+toujours n'importe quoi ». Les anciens noms fautifs revenaient malgre la correction.
+
+**Cause** — `mergeCatalog` donnait la priorite aux exercices TELECHARGES :
+
+```ts
+const merged = new Map(coreCatalog.map((e) => [e.id, e]));
+downloaded.forEach((e) => merged.set(e.id, e));   // le pack ecrase l'embarque
+```
+
+Or `downloadedExercises` est PERSISTE dans AsyncStorage (`partialize`). Un
+utilisateur ayant installe le pack « Plus d'exercices » avant le correctif gardait
+donc ses anciennes donnees **a vie** : a chaque demarrage, `merge` rejouait le pack
+perime par-dessus le catalogue livre avec l'app. Mettre a jour l'application n'y
+changeait rien — c'est ce qui rendait le correctif invisible cote utilisateur.
+
+**Correctif** — le catalogue embarque fait autorite : un pack ne peut qu'AJOUTER des
+exercices absents, jamais ecraser une entree livree avec l'app. C'est sans perte
+depuis la 1.16.0, ou les 873 exercices sont embarques : le pack est devenu redondant
+(ses 851 ids existent tous dans le catalogue).
+
+**A eviter** — quand une donnee livree avec l'application peut etre recouverte par une
+donnee persistee cote client, toute correction de cette donnee devient invisible pour
+les utilisateurs existants. Se demander systematiquement : *qui gagne au prochain
+demarrage ?* Un correctif de contenu ne suffit pas si le cache local le rejoue.
+
+**Lecon de diagnostic** : le correctif des noms etait juste, mais je l'ai declare
+livre sans verifier le chemin de MISE A JOUR — seulement le premier lancement. Le
+defaut n'etait pas dans la donnee corrigee mais dans ce qui la recouvrait.

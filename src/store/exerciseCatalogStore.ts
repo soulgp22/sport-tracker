@@ -35,7 +35,17 @@ function rebuildIndexes(exercises: CatalogExercise[]) {
 
 function mergeCatalog(downloaded: CatalogExercise[]) {
   const merged = new Map(coreCatalog.map((exercise) => [exercise.id, exercise]));
-  downloaded.forEach((exercise) => merged.set(exercise.id, exercise));
+  // Le catalogue EMBARQUÉ fait autorité : un pack téléchargé ne peut qu'AJOUTER
+  // des exercices absents, jamais écraser une entrée livrée avec l'app.
+  //
+  // Avant, le pack gagnait — et comme il est persisté dans AsyncStorage, un
+  // utilisateur ayant téléchargé « Plus d'exercices » gardait ses anciennes
+  // données à VIE : la correction des 873 noms français de la 1.18.0 était
+  // réécrite par le pack périmé à chaque démarrage, et mettre à jour l'app n'y
+  // changeait rien. Voir known_bugs.md.
+  downloaded.forEach((exercise) => {
+    if (!merged.has(exercise.id)) merged.set(exercise.id, exercise);
+  });
   return [...merged.values()];
 }
 
