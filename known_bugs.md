@@ -620,3 +620,63 @@ initial reel de l'application est un angle mort : il valide un scenario qui
 n'est pas celui du premier lancement. Le test de regression ajoute
 (`communityCatalogDefault.test.ts`) importe un vrai fichier de `community/`
 SANS aucun pack pre-installe, precisement pour couvrir cet etat.
+
+## Les noms francais d'exercices etaient faux : few-shot recopie, sans aucun controle
+
+**Symptome** — signale par Islam sur captures : « Elevation laterale aux halteres »
+affiche sur un exercice de bonds lateraux sur cones, « Tirage vertical » sur un
+auto-massage au rouleau. Le nom, l'image et les instructions ne parlaient pas du
+meme exercice.
+
+**Cause** — `scripts/retranslate-names.mjs` faisait traduire les 873 noms par un LLM
+local (Ollama qwen3:14b) avec des exemples few-shot contenant les REPONSES completes :
+
+```
+Dumbbell Lateral Raise [shoulders] => Elevation laterale aux halteres
+Lat Pulldown [lats]                => Tirage vertical
+```
+
+Face a un nom qu'il ne savait pas traduire, le modele RECOPIAIT l'exemple le plus
+proche par ressemblance superficielle. « **Lat**eral Cone Hops » a herite du premier,
+« **Lat**issimus Dorsi-SMR » du second, « London Bridges » du troisieme.
+
+**Ampleur mesuree** : 141 noms FR annoncaient un materiel contredisant le champ
+`equipment`, et 31 noms FR etaient partages par 65 exercices. Les noms ANGLAIS,
+eux, etaient corrects — c'est la traduction seule qui etait corrompue.
+
+**Le vrai defaut n'etait pas le modele, c'est qu'aucun controle ne validait sa
+sortie.** Changer de modele reduit le risque sans l'eliminer : n'importe quel LLM
+peut halluciner sur « London Bridges ».
+
+**Correctif** — trois pieces :
+1. `scripts/validate-exercise-names.mjs` : R1 unicite, R2 coherence materiel,
+   R3 coherence de mouvement EN<->FR **dans les deux sens**, R4 non vide ;
+2. le script de traduction passe sur l'API DeepSeek, par lots, et **re-soumet au
+   modele toute traduction rejetee** (3 tentatives) ;
+3. **repli sur le nom anglais** si une regle bloquante resiste. Principe acte :
+   *un nom francais faux est pire qu'un nom anglais non traduit* — « London Bridges »
+   fait chercher ailleurs, « Tirage vertical a la barre, assis » fait faire le
+   mauvais exercice.
+
+**Severite des regles — decision importante.** R1/R2/R4 sont BLOQUANTES (objectives,
+sans faux positif). R3 est un AVERTISSEMENT : les noms anglais emploient des
+formulations variees qui designent pourtant le bon mouvement (« Floor Press »,
+« Board Press », « Front Delt Raise »). Mesure : 211 declenchements avant
+retraduction, dont une large majorite de faux positifs. En faire une regle bloquante
+aurait degrade ~150 traductions CORRECTES en anglais — pire que le defaut soigne.
+
+**Resultat** : 854 traduits, 179 reprises, 19 replis en anglais, violations bloquantes
+153 -> 0. Les 28 avertissements R3 restants ont ete relus un par un ; 3 vraies erreurs
+d'halterophilie en sont sorties et ont ete corrigees a la main (Power Clean n'est pas
+un souleve de terre, Snatch Pull non plus, Split Clean n'est pas un epaule-JETE).
+
+**Piege decouvert par les tests** : `community/exercises-all.json` est une COPIE du
+catalogue (851 exercices) servie en pack telechargeable. Corriger
+`src/data/exercises.catalog.json` seul ne suffisait pas : les exercices telecharges
+ont priorite dans `mergeCatalog`, donc le pack aurait REECRIT les anciens noms fautifs
+par-dessus les corrections. 768 noms y ont ete resynchronises. **Toute correction du
+catalogue doit etre repercutee dans le pack.**
+
+**A eviter** — ne jamais laisser une generation par LLM ecrire dans un fichier de
+donnees sans validation automatique de sa sortie. Et se mefier des exemples few-shot
+contenant des reponses completes : ils deviennent des reponses par defaut.

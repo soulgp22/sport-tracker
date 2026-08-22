@@ -223,3 +223,20 @@ existants de `programStore.test.ts` installent deja le catalogue complet dans
 un `beforeAll`, ce qui les faisait passer meme quand l'app reelle, au premier
 lancement, ne le contenait pas. Un test isole, dans son propre fichier, sans
 cette installation prealable, etait necessaire pour prouver le defaut.
+
+## Test ajoute le 2026-08-21 (noms d'exercices)
+
+`scripts/validate-exercise-names.test.js` lance le validateur sur le vrai catalogue et
+echoue s'il reste une violation BLOQUANTE (R1 unicite / R2 materiel / R4 vide).
+
+R3 (coherence de mouvement) est volontairement NON bloquante : trop de faux positifs
+(« Floor Press » -> « Developpe couche au sol » est correct mais viole la regle). Elle
+sert de rapport a relire, pas de barriere.
+
+Sabotage verifie : en reintroduisant le doublon d'origine (offline-110 et offline-283
+tous deux « Elevation laterale aux halteres ») le validateur sort en 1 et le test
+rougit ; apres restauration il repasse au vert.
+
+**Ce que ce test aurait attrape** : le defaut vivait dans les donnees depuis des mois,
+invisible pour toute la suite existante — aucun test ne regardait la coherence entre
+`name`, `nameFr` et `equipment`.
