@@ -701,20 +701,20 @@
     {
       "id": "bodyweight-muscle-beginner",
       "name": "Poids du corps — Hypertrophie — Débutant",
-      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme hypertrophie niveau débutant, 3 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 12,
+      "exercisesCount": 18,
       "file": "bodyweight-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -727,20 +727,20 @@
     {
       "id": "bodyweight-strength-beginner",
       "name": "Poids du corps — Force — Débutant",
-      "description": "Programme force niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme force niveau débutant, 3 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 12,
+      "exercisesCount": 18,
       "file": "bodyweight-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 32,
+      "sessionMinutes": 47,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -753,20 +753,20 @@
     {
       "id": "bodyweight-weight_loss-beginner",
       "name": "Poids du corps — Perte de poids — Débutant",
-      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme perte de poids niveau débutant, 3 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 21,
       "file": "bodyweight-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 22,
+      "sessionMinutes": 31,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -779,20 +779,20 @@
     {
       "id": "bodyweight-fitness-beginner",
       "name": "Poids du corps — Forme & santé — Débutant",
-      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme forme & santé niveau débutant, 3 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 12,
+      "exercisesCount": 18,
       "file": "bodyweight-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 24,
+      "sessionMinutes": 35,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -805,20 +805,20 @@
     {
       "id": "bodyweight-muscle-intermediate",
       "name": "Poids du corps — Hypertrophie — Intermédiaire",
-      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme hypertrophie niveau intermédiaire, 4 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 16,
+      "exercisesCount": 24,
       "file": "bodyweight-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 26,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -831,20 +831,20 @@
     {
       "id": "bodyweight-strength-intermediate",
       "name": "Poids du corps — Force — Intermédiaire",
-      "description": "Programme force niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme force niveau intermédiaire, 4 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 16,
+      "exercisesCount": 24,
       "file": "bodyweight-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 36,
+      "sessionMinutes": 52,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -857,20 +857,20 @@
     {
       "id": "bodyweight-weight_loss-intermediate",
       "name": "Poids du corps — Perte de poids — Intermédiaire",
-      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme perte de poids niveau intermédiaire, 4 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 20,
+      "exercisesCount": 28,
       "file": "bodyweight-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 22,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -883,20 +883,20 @@
     {
       "id": "bodyweight-fitness-intermediate",
       "name": "Poids du corps — Forme & santé — Intermédiaire",
-      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme forme & santé niveau intermédiaire, 4 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 16,
+      "exercisesCount": 24,
       "file": "bodyweight-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 23,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -909,20 +909,20 @@
     {
       "id": "bodyweight-muscle-advanced",
       "name": "Poids du corps — Hypertrophie — Avancé",
-      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme hypertrophie niveau avancé, 5 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 23,
+      "exercisesCount": 30,
       "file": "bodyweight-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 30,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -935,20 +935,20 @@
     {
       "id": "bodyweight-strength-advanced",
       "name": "Poids du corps — Force — Avancé",
-      "description": "Programme force niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme force niveau avancé, 5 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 23,
+      "exercisesCount": 30,
       "file": "bodyweight-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 41,
+      "sessionMinutes": 51,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -961,20 +961,20 @@
     {
       "id": "bodyweight-weight_loss-advanced",
       "name": "Poids du corps — Perte de poids — Avancé",
-      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme perte de poids niveau avancé, 5 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 28,
+      "exercisesCount": 35,
       "file": "bodyweight-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 24,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -987,20 +987,20 @@
     {
       "id": "bodyweight-fitness-advanced",
       "name": "Poids du corps — Forme & santé — Avancé",
-      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, aucun matériel (100 % poids du corps).",
+      "description": "Programme forme & santé niveau avancé, 5 séances par semaine, poids du corps (barre de traction ou table pour les tirages).",
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 23,
+      "exercisesCount": 30,
       "file": "bodyweight-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
-      "equipment": "Aucun matériel (100 % poids du corps)",
+      "equipment": "Poids du corps (barre de traction ou table pour les tirages)",
       "equipmentProfileIds": [
         "bodyweight"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 27,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1017,7 +1017,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "home-basic-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
@@ -1026,7 +1026,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 33,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1043,7 +1043,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "home-basic-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
@@ -1052,7 +1052,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 40,
+      "sessionMinutes": 46,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1069,7 +1069,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 18,
+      "exercisesCount": 21,
       "file": "home-basic-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
@@ -1078,7 +1078,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1095,7 +1095,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "home-basic-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
@@ -1104,7 +1104,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 29,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1121,7 +1121,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "home-basic-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
@@ -1130,7 +1130,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 35,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1147,7 +1147,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "home-basic-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
@@ -1156,7 +1156,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 48,
+      "sessionMinutes": 58,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1173,7 +1173,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 26,
+      "exercisesCount": 32,
       "file": "home-basic-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
@@ -1182,7 +1182,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1199,7 +1199,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "home-basic-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
@@ -1208,7 +1208,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 39,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1225,7 +1225,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "home-basic-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
@@ -1234,7 +1234,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 32,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1251,7 +1251,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "home-basic-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
@@ -1260,7 +1260,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 44,
+      "sessionMinutes": 57,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1277,7 +1277,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 30,
+      "exercisesCount": 40,
       "file": "home-basic-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
@@ -1286,7 +1286,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1303,7 +1303,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "home-basic-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
@@ -1312,7 +1312,7 @@
         "home-basic"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 28,
+      "sessionMinutes": 38,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1329,7 +1329,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "dumbbells-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
@@ -1338,7 +1338,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 33,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1355,7 +1355,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "dumbbells-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
@@ -1364,7 +1364,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 40,
+      "sessionMinutes": 46,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1381,7 +1381,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 18,
+      "exercisesCount": 21,
       "file": "dumbbells-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
@@ -1390,7 +1390,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1407,7 +1407,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "dumbbells-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
@@ -1416,7 +1416,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 29,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1433,7 +1433,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "dumbbells-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
@@ -1442,7 +1442,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 35,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1459,7 +1459,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "dumbbells-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
@@ -1468,7 +1468,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 48,
+      "sessionMinutes": 58,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1485,7 +1485,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 26,
+      "exercisesCount": 32,
       "file": "dumbbells-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
@@ -1494,7 +1494,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1511,7 +1511,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "dumbbells-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
@@ -1520,7 +1520,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 39,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1537,7 +1537,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "dumbbells-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
@@ -1546,7 +1546,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 32,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1563,7 +1563,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "dumbbells-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
@@ -1572,7 +1572,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 44,
+      "sessionMinutes": 57,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1589,7 +1589,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 30,
+      "exercisesCount": 40,
       "file": "dumbbells-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
@@ -1598,7 +1598,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1615,7 +1615,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "dumbbells-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
@@ -1624,7 +1624,7 @@
         "dumbbells"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 28,
+      "sessionMinutes": 38,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1641,7 +1641,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "machines-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
@@ -1650,7 +1650,7 @@
         "machines"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 33,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1667,7 +1667,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "machines-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
@@ -1676,7 +1676,7 @@
         "machines"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 40,
+      "sessionMinutes": 46,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1693,7 +1693,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 18,
+      "exercisesCount": 21,
       "file": "machines-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
@@ -1702,7 +1702,7 @@
         "machines"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1719,7 +1719,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "machines-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
@@ -1728,7 +1728,7 @@
         "machines"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 29,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1745,7 +1745,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "machines-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
@@ -1754,7 +1754,7 @@
         "machines"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 35,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1771,7 +1771,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "machines-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
@@ -1780,7 +1780,7 @@
         "machines"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 48,
+      "sessionMinutes": 58,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1797,7 +1797,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 26,
+      "exercisesCount": 32,
       "file": "machines-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
@@ -1806,7 +1806,7 @@
         "machines"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1823,7 +1823,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "machines-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
@@ -1832,7 +1832,7 @@
         "machines"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 39,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1849,7 +1849,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "machines-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
@@ -1858,7 +1858,7 @@
         "machines"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 32,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1875,7 +1875,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "machines-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
@@ -1884,7 +1884,7 @@
         "machines"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 44,
+      "sessionMinutes": 57,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1901,7 +1901,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 30,
+      "exercisesCount": 40,
       "file": "machines-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
@@ -1910,7 +1910,7 @@
         "machines"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -1927,7 +1927,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "machines-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
@@ -1936,7 +1936,7 @@
         "machines"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 28,
+      "sessionMinutes": 38,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -1953,7 +1953,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "barbell-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
@@ -1962,7 +1962,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 33,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -1979,7 +1979,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "barbell-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
@@ -1988,7 +1988,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 40,
+      "sessionMinutes": 46,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2005,7 +2005,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 18,
+      "exercisesCount": 21,
       "file": "barbell-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
@@ -2014,7 +2014,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2031,7 +2031,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "barbell-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
@@ -2040,7 +2040,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 29,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -2057,7 +2057,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "barbell-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
@@ -2066,7 +2066,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 35,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2083,7 +2083,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "barbell-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
@@ -2092,7 +2092,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 48,
+      "sessionMinutes": 58,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2109,7 +2109,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 26,
+      "exercisesCount": 32,
       "file": "barbell-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
@@ -2118,7 +2118,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2135,7 +2135,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "barbell-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
@@ -2144,7 +2144,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 39,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -2161,7 +2161,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "barbell-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
@@ -2170,7 +2170,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 32,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2187,7 +2187,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "barbell-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
@@ -2196,7 +2196,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 44,
+      "sessionMinutes": 57,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2213,7 +2213,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 30,
+      "exercisesCount": 40,
       "file": "barbell-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
@@ -2222,7 +2222,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2239,7 +2239,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "barbell-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
@@ -2248,7 +2248,7 @@
         "barbell"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 28,
+      "sessionMinutes": 38,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -2265,7 +2265,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "full-gym-muscle-beginner.json",
       "goal": "Hypertrophie (Débutant)",
       "goalId": "muscle",
@@ -2274,7 +2274,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 33,
+      "sessionMinutes": 38,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2291,7 +2291,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "full-gym-strength-beginner.json",
       "goal": "Force (Débutant)",
       "goalId": "strength",
@@ -2300,7 +2300,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 40,
+      "sessionMinutes": 46,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2317,7 +2317,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 18,
+      "exercisesCount": 21,
       "file": "full-gym-weight_loss-beginner.json",
       "goal": "Perte de poids (Débutant)",
       "goalId": "weight_loss",
@@ -2326,7 +2326,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 26,
+      "sessionMinutes": 30,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2343,7 +2343,7 @@
       "author": "Life Sport Tracker",
       "level": "beginner",
       "daysCount": 3,
-      "exercisesCount": 15,
+      "exercisesCount": 18,
       "file": "full-gym-fitness-beginner.json",
       "goal": "Forme & santé (Débutant)",
       "goalId": "fitness",
@@ -2352,7 +2352,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 3,
-      "sessionMinutes": 29,
+      "sessionMinutes": 34,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -2369,7 +2369,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "full-gym-muscle-intermediate.json",
       "goal": "Hypertrophie (Intermédiaire)",
       "goalId": "muscle",
@@ -2378,7 +2378,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 35,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2395,7 +2395,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "full-gym-strength-intermediate.json",
       "goal": "Force (Intermédiaire)",
       "goalId": "strength",
@@ -2404,7 +2404,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 48,
+      "sessionMinutes": 58,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2421,7 +2421,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 26,
+      "exercisesCount": 32,
       "file": "full-gym-weight_loss-intermediate.json",
       "goal": "Perte de poids (Intermédiaire)",
       "goalId": "weight_loss",
@@ -2430,7 +2430,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 28,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2447,7 +2447,7 @@
       "author": "Life Sport Tracker",
       "level": "intermediate",
       "daysCount": 4,
-      "exercisesCount": 22,
+      "exercisesCount": 28,
       "file": "full-gym-fitness-intermediate.json",
       "goal": "Forme & santé (Intermédiaire)",
       "goalId": "fitness",
@@ -2456,7 +2456,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 4,
-      "sessionMinutes": 31,
+      "sessionMinutes": 39,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",
@@ -2473,7 +2473,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "full-gym-muscle-advanced.json",
       "goal": "Hypertrophie (Avancé)",
       "goalId": "muscle",
@@ -2482,7 +2482,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 32,
+      "sessionMinutes": 43,
       "progression": "Double progression à RIR 1–3 : augmentez d’abord les répétitions dans la fourchette, puis ajoutez 2,5 kg (haut du corps) ou 5 kg (bas du corps) quand le haut de fourchette est atteint sur toutes les séries. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2499,7 +2499,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "full-gym-strength-advanced.json",
       "goal": "Force (Avancé)",
       "goalId": "strength",
@@ -2508,7 +2508,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 44,
+      "sessionMinutes": 57,
       "progression": "Double progression orientée force : conservez 1–2 répétitions en réserve sur les mouvements lourds, montez la charge de 2,5 kg quand toutes les séries sont réussies avec une technique propre. Deload toutes les 4 à 6 semaines.",
       "tags": [
         "gen-onboarding",
@@ -2525,7 +2525,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 30,
+      "exercisesCount": 40,
       "file": "full-gym-weight_loss-advanced.json",
       "goal": "Perte de poids (Avancé)",
       "goalId": "weight_loss",
@@ -2534,7 +2534,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 26,
+      "sessionMinutes": 34,
       "progression": "Progression en densité : réduisez d’abord les temps de repos, puis augmentez les répétitions, puis la charge. L’objectif est de maintenir la masse musculaire tout en augmentant la dépense.",
       "tags": [
         "gen-onboarding",
@@ -2551,7 +2551,7 @@
       "author": "Life Sport Tracker",
       "level": "advanced",
       "daysCount": 5,
-      "exercisesCount": 25,
+      "exercisesCount": 35,
       "file": "full-gym-fitness-advanced.json",
       "goal": "Forme & santé (Avancé)",
       "goalId": "fitness",
@@ -2560,7 +2560,7 @@
         "full-gym"
       ],
       "sessionsPerWeek": 5,
-      "sessionMinutes": 28,
+      "sessionMinutes": 38,
       "progression": "Progression douce : ajoutez une répétition par exercice et par séance quand c’est confortable, puis augmentez légèrement la charge. Régularité avant intensité.",
       "tags": [
         "gen-onboarding",

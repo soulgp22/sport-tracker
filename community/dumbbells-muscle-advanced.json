@@ -121,6 +121,52 @@
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
               ]
+            },
+            {
+              "exerciseName": "Dumbbell One-Arm Triceps Extension",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
             }
           ]
         },
@@ -197,7 +243,7 @@
               ]
             },
             {
-              "exerciseName": "Dumbbell Bicep Curl",
+              "exerciseName": "Side Lateral Raise",
               "sets": [
                 {
                   "reps": 12,
@@ -216,7 +262,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Dumbbell Alternate Bicep Curl"
+                "Seated Side Lateral Raise"
               ]
             },
             {
@@ -240,6 +286,52 @@
               ],
               "alternativeExerciseNames": [
                 "Dumbbell Bicep Curl"
+              ]
+            },
+            {
+              "exerciseName": "Hammer Curls",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dumbbell Bicep Curl"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Crunches"
               ]
             }
           ]
@@ -317,6 +409,29 @@
               ]
             },
             {
+              "exerciseName": "Inchworm",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -342,7 +457,32 @@
               ]
             },
             {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Standing Dumbbell Calf Raise",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "Crunches",
               "sets": [
                 {
                   "reps": 12,
@@ -439,7 +579,30 @@
               ]
             },
             {
-              "exerciseName": "Hammer Curls",
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "One-Arm Dumbbell Row"
+              ]
+            },
+            {
+              "exerciseName": "Incline Dumbbell Curl",
               "sets": [
                 {
                   "reps": 12,
@@ -462,7 +625,7 @@
               ]
             },
             {
-              "exerciseName": "Lying Dumbbell Tricep Extension",
+              "exerciseName": "Standing Dumbbell Triceps Extension",
               "sets": [
                 {
                   "reps": 12,
@@ -482,6 +645,29 @@
               ],
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Cross-Body Crunch",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             }
           ]
@@ -559,6 +745,29 @@
               ]
             },
             {
+              "exerciseName": "Floor Glute-Ham Raise",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -584,7 +793,7 @@
               ]
             },
             {
-              "exerciseName": "Crunches",
+              "exerciseName": "Cross-Body Crunch",
               "sets": [
                 {
                   "reps": 12,
@@ -604,6 +813,29 @@
               ],
               "alternativeExerciseNames": [
                 "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Fast Skipping",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             }
           ]

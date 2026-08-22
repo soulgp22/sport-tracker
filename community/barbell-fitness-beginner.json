@@ -100,20 +100,43 @@
               ]
             },
             {
-              "exerciseName": "Dead Bug",
+              "exerciseName": "Seated Triceps Press",
               "sets": [
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 }
@@ -220,20 +243,40 @@
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
-                  "reps": 40,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 }
@@ -317,7 +360,30 @@
               ]
             },
             {
-              "exerciseName": "Push-Ups - Close Triceps Position",
+              "exerciseName": "Seated Side Lateral Raise",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Side Lateral Raise"
+              ]
+            },
+            {
+              "exerciseName": "Dumbbell One-Arm Triceps Extension",
               "sets": [
                 {
                   "reps": 12,
@@ -340,23 +406,26 @@
               ]
             },
             {
-              "exerciseName": "Standing Dumbbell Calf Raise",
+              "exerciseName": "Plank",
               "sets": [
                 {
-                  "reps": 15,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 15,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 15,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 }
+              ],
+              "alternativeExerciseNames": [
+                "Crunches"
               ]
             }
           ]

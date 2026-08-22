@@ -118,6 +118,52 @@
               "alternativeExerciseNames": [
                 "Triceps Pushdown"
               ]
+            },
+            {
+              "exerciseName": "Triceps Pushdown",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dip Machine"
+              ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Smith Machine Hip Raise"
+              ]
             }
           ]
         },
@@ -194,7 +240,7 @@
               ]
             },
             {
-              "exerciseName": "Machine Bicep Curl",
+              "exerciseName": "Cable Seated Lateral Raise",
               "sets": [
                 {
                   "reps": 12,
@@ -211,9 +257,6 @@
                   "weight": 0,
                   "restSeconds": 60
                 }
-              ],
-              "alternativeExerciseNames": [
-                "Cable Hammer Curls - Rope Attachment"
               ]
             },
             {
@@ -237,6 +280,52 @@
               ],
               "alternativeExerciseNames": [
                 "Cable Hammer Curls - Rope Attachment"
+              ]
+            },
+            {
+              "exerciseName": "Cable Hammer Curls - Rope Attachment",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Machine Bicep Curl"
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Hip Raise",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Ab Crunch Machine"
               ]
             }
           ]
@@ -311,7 +400,53 @@
               ]
             },
             {
-              "exerciseName": "Seated Calf Raise",
+              "exerciseName": "Pull Through",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Glute Ham Raise"
+              ]
+            },
+            {
+              "exerciseName": "Standing Calf Raises",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Calf Press On The Leg Press Machine"
+              ]
+            },
+            {
+              "exerciseName": "Calf Press On The Leg Press Machine",
               "sets": [
                 {
                   "reps": 15,
@@ -431,30 +566,30 @@
               ]
             },
             {
-              "exerciseName": "Cable Hammer Curls - Rope Attachment",
+              "exerciseName": "Seated Cable Rows",
               "sets": [
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 60
+                  "restSeconds": 75
                 },
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 60
+                  "restSeconds": 75
                 },
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 60
+                  "restSeconds": 75
                 }
               ],
               "alternativeExerciseNames": [
-                "Machine Bicep Curl"
+                "Leverage Iso Row"
               ]
             },
             {
-              "exerciseName": "Cable Rope Overhead Triceps Extension",
+              "exerciseName": "Machine Bicep Curl",
               "sets": [
                 {
                   "reps": 12,
@@ -473,7 +608,53 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Dip Machine"
+                "Cable Hammer Curls - Rope Attachment"
+              ]
+            },
+            {
+              "exerciseName": "Dip Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Triceps Pushdown"
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Hip Raise",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Ab Crunch Machine"
               ]
             }
           ]
@@ -548,7 +729,30 @@
               ]
             },
             {
-              "exerciseName": "Calf Press On The Leg Press Machine",
+              "exerciseName": "Seated Cable Rows",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Glute Ham Raise"
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -571,7 +775,7 @@
               ]
             },
             {
-              "exerciseName": "Ab Crunch Machine",
+              "exerciseName": "Smith Machine Hip Raise",
               "sets": [
                 {
                   "reps": 12,
@@ -590,7 +794,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Smith Machine Hip Raise"
+                "Ab Crunch Machine"
+              ]
+            },
+            {
+              "exerciseName": "Rowing, Stationary",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Bicycling, Stationary"
               ]
             }
           ]

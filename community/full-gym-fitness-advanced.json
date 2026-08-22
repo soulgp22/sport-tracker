@@ -121,6 +121,52 @@
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
               ]
+            },
+            {
+              "exerciseName": "Standing Dumbbell Triceps Extension",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
             }
           ]
         },
@@ -197,7 +243,7 @@
               ]
             },
             {
-              "exerciseName": "Hammer Curls",
+              "exerciseName": "Reverse Flyes",
               "sets": [
                 {
                   "reps": 12,
@@ -216,7 +262,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Barbell Curl"
+                "Side Lateral Raise"
               ]
             },
             {
@@ -240,6 +286,52 @@
               ],
               "alternativeExerciseNames": [
                 "Barbell Curl"
+              ]
+            },
+            {
+              "exerciseName": "Machine Bicep Curl",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Barbell Curl"
+              ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             }
           ]
@@ -317,7 +409,30 @@
               ]
             },
             {
-              "exerciseName": "Standing Calf Raises",
+              "exerciseName": "Inchworm",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -336,11 +451,34 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Standing Dumbbell Calf Raise"
+                "Standing Calf Raises"
               ]
             },
             {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Calf Press On The Leg Press Machine",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Standing Calf Raises"
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Hip Raise",
               "sets": [
                 {
                   "reps": 12,
@@ -437,7 +575,30 @@
               ]
             },
             {
-              "exerciseName": "Machine Bicep Curl",
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Bent Over Barbell Row"
+              ]
+            },
+            {
+              "exerciseName": "Cable Preacher Curl",
               "sets": [
                 {
                   "reps": 12,
@@ -460,7 +621,7 @@
               ]
             },
             {
-              "exerciseName": "Machine Triceps Extension",
+              "exerciseName": "Push-Ups - Close Triceps Position",
               "sets": [
                 {
                   "reps": 12,
@@ -480,6 +641,29 @@
               ],
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Crunches"
               ]
             }
           ]
@@ -557,7 +741,30 @@
               ]
             },
             {
-              "exerciseName": "Calf Press On The Leg Press Machine",
+              "exerciseName": "Floor Glute-Ham Raise",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 75
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -580,26 +787,49 @@
               ]
             },
             {
-              "exerciseName": "Smith Machine Hip Raise",
+              "exerciseName": "Plank",
               "sets": [
                 {
-                  "reps": 12,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 12,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 12,
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 }
               ],
               "alternativeExerciseNames": [
-                "Plank"
+                "Crunches"
+              ]
+            },
+            {
+              "exerciseName": "Mountain Climbers",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Freehand Jump Squat"
               ]
             }
           ]

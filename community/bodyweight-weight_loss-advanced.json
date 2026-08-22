@@ -120,6 +120,29 @@
               ]
             },
             {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Mountain Climbers",
               "sets": [
                 {
@@ -142,10 +165,10 @@
           ]
         },
         {
-          "name": "Chaîne postérieure",
+          "name": "Tirage",
           "exercises": [
             {
-              "exerciseName": "Hyperextensions With No Hyperextension Bench",
+              "exerciseName": "Chin-Up",
               "sets": [
                 {
                   "reps": 12,
@@ -164,11 +187,80 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Superman"
+                "Pullups"
               ]
             },
             {
-              "exerciseName": "Prone Manual Hamstring",
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Scapular Pull-Up"
+              ]
+            },
+            {
+              "exerciseName": "Wide-Grip Rear Pull-Up",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Pullups"
+              ]
+            },
+            {
+              "exerciseName": "Pullups",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Chin-Up"
+              ]
+            },
+            {
+              "exerciseName": "Inchworm",
               "sets": [
                 {
                   "reps": 15,
@@ -191,66 +283,20 @@
               ]
             },
             {
-              "exerciseName": "Butt Lift (Bridge)",
+              "exerciseName": "3/4 Sit-Up",
               "sets": [
                 {
                   "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
-              ],
-              "alternativeExerciseNames": [
-                "Single Leg Glute Bridge"
-              ]
-            },
-            {
-              "exerciseName": "One Half Locust",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
-              ],
-              "alternativeExerciseNames": [
-                "Superman"
-              ]
-            },
-            {
-              "exerciseName": "Side Bridge",
-              "sets": [
-                {
-                  "reps": 45,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 }
@@ -377,26 +423,49 @@
               ]
             },
             {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Glute Kickback",
               "sets": [
                 {
                   "reps": 15,
                   "weight": 0,
-                  "restSeconds": 30
+                  "restSeconds": 45
                 },
                 {
                   "reps": 15,
                   "weight": 0,
-                  "restSeconds": 30
+                  "restSeconds": 45
                 },
                 {
                   "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
                   "weight": 0,
                   "restSeconds": 30
                 }
               ],
               "alternativeExerciseNames": [
-                "Plank"
+                "Crunches"
               ]
             },
             {
@@ -448,6 +517,72 @@
               ]
             },
             {
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Scapular Pull-Up"
+              ]
+            },
+            {
+              "exerciseName": "Handstand Push-Ups",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "V-Bar Pullup",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Pullups"
+              ]
+            },
+            {
               "exerciseName": "Body Tricep Press",
               "sets": [
                 {
@@ -471,30 +606,7 @@
               ]
             },
             {
-              "exerciseName": "Inchworm",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 45
-                }
-              ],
-              "alternativeExerciseNames": [
-                "Superman"
-              ]
-            },
-            {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Crunches",
               "sets": [
                 {
                   "reps": 15,
@@ -611,26 +723,72 @@
               ]
             },
             {
-              "exerciseName": "Plank",
+              "exerciseName": "Floor Glute-Ham Raise",
               "sets": [
                 {
-                  "reps": 45,
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Bodyweight Squat",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Freehand Jump Squat"
+              ]
+            },
+            {
+              "exerciseName": "Cross-Body Crunch",
+              "sets": [
+                {
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 }
               ],
               "alternativeExerciseNames": [
-                "Crunches"
+                "Plank"
               ]
             },
             {

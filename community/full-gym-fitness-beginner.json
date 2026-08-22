@@ -100,20 +100,43 @@
               ]
             },
             {
-              "exerciseName": "Dead Bug",
+              "exerciseName": "Lying Dumbbell Tricep Extension",
               "sets": [
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 }
@@ -220,20 +243,43 @@
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "Standing Calf Raises",
               "sets": [
                 {
-                  "reps": 40,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Standing Dumbbell Calf Raise"
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 }
@@ -317,7 +363,30 @@
               ]
             },
             {
-              "exerciseName": "Standing Dumbbell Triceps Extension",
+              "exerciseName": "Back Flyes - With Bands",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Side Lateral Raise"
+              ]
+            },
+            {
+              "exerciseName": "Seated Triceps Press",
               "sets": [
                 {
                   "reps": 12,
@@ -340,26 +409,26 @@
               ]
             },
             {
-              "exerciseName": "Standing Dumbbell Calf Raise",
+              "exerciseName": "Ab Crunch Machine",
               "sets": [
                 {
-                  "reps": 15,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 15,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 15,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 }
               ],
               "alternativeExerciseNames": [
-                "Standing Calf Raises"
+                "Plank"
               ]
             }
           ]

@@ -144,6 +144,29 @@
               "alternativeExerciseNames": [
                 "Dip Machine"
               ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Smith Machine Hip Raise"
+              ]
             }
           ]
         },
@@ -217,7 +240,30 @@
               ]
             },
             {
-              "exerciseName": "Calf Press On The Leg Press Machine",
+              "exerciseName": "One-Legged Cable Kickback",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Glute Ham Raise"
+              ]
+            },
+            {
+              "exerciseName": "Seated Calf Raise",
               "sets": [
                 {
                   "reps": 12,
@@ -245,7 +291,7 @@
               ]
             },
             {
-              "exerciseName": "Smith Machine Hip Raise",
+              "exerciseName": "Ab Crunch Machine",
               "sets": [
                 {
                   "reps": 12,
@@ -264,7 +310,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Ab Crunch Machine"
+                "Smith Machine Hip Raise"
+              ]
+            },
+            {
+              "exerciseName": "Rowing, Stationary",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Bicycling, Stationary"
               ]
             }
           ]
@@ -406,6 +475,29 @@
               "alternativeExerciseNames": [
                 "Cable Hammer Curls - Rope Attachment"
               ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Smith Machine Hip Raise"
+              ]
             }
           ]
         },
@@ -479,35 +571,58 @@
               ]
             },
             {
-              "exerciseName": "Standing Calf Raises",
+              "exerciseName": "Reverse Hyperextension",
               "sets": [
                 {
-                  "reps": 12,
+                  "reps": 10,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 90
                 },
                 {
-                  "reps": 12,
+                  "reps": 10,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 90
                 },
                 {
-                  "reps": 12,
+                  "reps": 10,
                   "weight": 0,
-                  "restSeconds": 45
-                },
-                {
-                  "reps": 12,
-                  "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 90
                 }
               ],
               "alternativeExerciseNames": [
-                "Calf Press On The Leg Press Machine"
+                "Glute Ham Raise"
               ]
             },
             {
-              "exerciseName": "Smith Machine Hip Raise",
+              "exerciseName": "Calf Press On The Leg Press Machine",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Standing Calf Raises"
+              ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
               "sets": [
                 {
                   "reps": 12,
@@ -526,7 +641,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Ab Crunch Machine"
+                "Smith Machine Hip Raise"
+              ]
+            },
+            {
+              "exerciseName": "Bicycling, Stationary",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Rowing, Stationary"
               ]
             }
           ]

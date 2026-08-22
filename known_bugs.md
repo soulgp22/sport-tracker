@@ -712,3 +712,38 @@ demarrage ?* Un correctif de contenu ne suffit pas si le cache local le rejoue.
 **Lecon de diagnostic** : le correctif des noms etait juste, mais je l'ai declare
 livre sans verifier le chemin de MISE A JOUR — seulement le premier lancement. Le
 defaut n'etait pas dans la donnee corrigee mais dans ce qui la recouvrait.
+
+## Programmes communautaires : jours incoherents et seances trop legeres
+
+**Symptome** — Islam : « les programmes sont n'importe quoi », « trop peu
+d'exercices par seance ».
+
+**Mesure avant correctif** : 353 jours, **5,3 exercices par seance** en moyenne
+(min 4). Et surtout, sur le profil poids du corps, le jour « Haut du corps A »
+contenait *Prone Manual Hamstring* (ischio-jambiers) et *Russian Twist* — 2
+exercices sur 4 seulement concernaient le haut du corps. Les jours « Full Body »
+n'avaient **aucun exercice de tirage**.
+
+**Cause** — dans `scripts/generate-community-programs.py`, les splits du profil
+`bodyweight` n'utilisaient aucun slot de tirage. Un commentaire l'assumait :
+« aucune traction/rowing sans barre n'existe ». Les slots libres etaient combles
+par `posterior`, dont les cibles sont `hamstrings` et `glutes` — d'ou des
+exercices de JAMBES dans des jours de HAUT DU CORPS.
+
+Or le catalogue contient bien *Pullups*, *Chin-Up*, *Inverted Row*,
+*Scapular Pull-Up*, *V-Bar Pullup*, tous classes `body only`. L'affirmation du
+commentaire etait fausse.
+
+**Correctif** — les splits bodyweight reprennent de vrais slots de tirage, et la
+densite passe de 5 a 6-7 slots par jour sur tous les profils. Resultat mesure :
+**6,7 exercices par seance** (min 5, max 8), 2351 exercices references, 0 non
+resolu, validate-community.mjs vert.
+
+**Consequence assumee et documentee** : une traction demande une barre. La
+description du profil ne peut donc plus promettre « Aucun materiel (100 % poids du
+corps) » — elle annonce desormais « Poids du corps (barre de traction ou table
+pour les tirages) ». Mieux vaut une promesse exacte qu'un programme sans dos.
+
+**A eviter** — quand un slot ne peut pas etre rempli, le boucher avec ce qui reste
+disponible produit un jour qui ne correspond plus a son titre. Soit on trouve un
+exercice coherent, soit on renomme le jour honnetement.

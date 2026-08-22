@@ -146,6 +146,29 @@
               ]
             },
             {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Mountain Climbers",
               "sets": [
                 {
@@ -240,6 +263,29 @@
               ]
             },
             {
+              "exerciseName": "One Half Locust",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -260,20 +306,20 @@
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "3/4 Sit-Up",
               "sets": [
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 }
@@ -284,6 +330,29 @@
             },
             {
               "exerciseName": "Freehand Jump Squat",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
+              ]
+            },
+            {
+              "exerciseName": "Knee Tuck Jump",
               "sets": [
                 {
                   "reps": 30,
@@ -446,6 +515,29 @@
               ]
             },
             {
+              "exerciseName": "Crunches",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Knee Tuck Jump",
               "sets": [
                 {
@@ -540,6 +632,29 @@
               ]
             },
             {
+              "exerciseName": "Glute Kickback",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -560,30 +675,53 @@
               ]
             },
             {
-              "exerciseName": "Plank",
+              "exerciseName": "Crunches",
               "sets": [
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 }
               ],
               "alternativeExerciseNames": [
-                "Crunches"
+                "Plank"
               ]
             },
             {
               "exerciseName": "Star Jump",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
+              ]
+            },
+            {
+              "exerciseName": "Fast Skipping",
               "sets": [
                 {
                   "reps": 30,

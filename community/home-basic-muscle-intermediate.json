@@ -141,6 +141,29 @@
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
               ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
             }
           ]
         },
@@ -217,6 +240,29 @@
               ]
             },
             {
+              "exerciseName": "One Half Locust",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Calf Raises - With Bands",
               "sets": [
                 {
@@ -242,26 +288,49 @@
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "3/4 Sit-Up",
               "sets": [
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 }
               ],
               "alternativeExerciseNames": [
                 "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Freehand Jump Squat",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             }
           ]
@@ -400,6 +469,29 @@
               "alternativeExerciseNames": [
                 "Chin-Up"
               ]
+            },
+            {
+              "exerciseName": "Crunches",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
             }
           ]
         },
@@ -476,6 +568,29 @@
               ]
             },
             {
+              "exerciseName": "Glute Kickback",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Calf Raises - With Bands",
               "sets": [
                 {
@@ -501,26 +616,49 @@
               ]
             },
             {
-              "exerciseName": "Plank",
+              "exerciseName": "Crunches",
               "sets": [
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 },
                 {
-                  "reps": 40,
+                  "reps": 12,
                   "weight": 0,
                   "restSeconds": 45
                 }
               ],
               "alternativeExerciseNames": [
-                "Crunches"
+                "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Star Jump",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             }
           ]

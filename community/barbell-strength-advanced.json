@@ -126,6 +126,52 @@
               "alternativeExerciseNames": [
                 "Dips - Triceps Version"
               ]
+            },
+            {
+              "exerciseName": "Push-Ups - Close Triceps Position",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
             }
           ]
         },
@@ -207,7 +253,7 @@
               ]
             },
             {
-              "exerciseName": "Hammer Curls",
+              "exerciseName": "Side Lateral Raise",
               "sets": [
                 {
                   "reps": 8,
@@ -226,7 +272,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Barbell Curl"
+                "Seated Side Lateral Raise"
               ]
             },
             {
@@ -250,6 +296,52 @@
               ],
               "alternativeExerciseNames": [
                 "Barbell Curl"
+              ]
+            },
+            {
+              "exerciseName": "Barbell Curl",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "EZ-Bar Curl"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Crunches"
               ]
             }
           ]
@@ -332,6 +424,29 @@
               ]
             },
             {
+              "exerciseName": "Inchworm",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -357,7 +472,32 @@
               ]
             },
             {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Standing Dumbbell Calf Raise",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ]
+            },
+            {
+              "exerciseName": "Crunches",
               "sets": [
                 {
                   "reps": 10,
@@ -459,30 +599,30 @@
               ]
             },
             {
-              "exerciseName": "Barbell Curl",
+              "exerciseName": "Bent Over Barbell Row",
               "sets": [
                 {
-                  "reps": 8,
+                  "reps": 6,
                   "weight": 0,
-                  "restSeconds": 90
+                  "restSeconds": 120
                 },
                 {
-                  "reps": 8,
+                  "reps": 6,
                   "weight": 0,
-                  "restSeconds": 90
+                  "restSeconds": 120
                 },
                 {
-                  "reps": 8,
+                  "reps": 6,
                   "weight": 0,
-                  "restSeconds": 90
+                  "restSeconds": 120
                 }
               ],
               "alternativeExerciseNames": [
-                "EZ-Bar Curl"
+                "One-Arm Dumbbell Row"
               ]
             },
             {
-              "exerciseName": "Dips - Triceps Version",
+              "exerciseName": "EZ-Bar Curl",
               "sets": [
                 {
                   "reps": 8,
@@ -501,7 +641,53 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Lying Triceps Press"
+                "Barbell Curl"
+              ]
+            },
+            {
+              "exerciseName": "Lying Triceps Press",
+              "sets": [
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 8,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "Cross-Body Crunch",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             }
           ]
@@ -584,6 +770,29 @@
               ]
             },
             {
+              "exerciseName": "Floor Glute-Ham Raise",
+              "sets": [
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                },
+                {
+                  "reps": 6,
+                  "weight": 0,
+                  "restSeconds": 120
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Standing Dumbbell Calf Raise",
               "sets": [
                 {
@@ -609,7 +818,7 @@
               ]
             },
             {
-              "exerciseName": "Crunches",
+              "exerciseName": "Cross-Body Crunch",
               "sets": [
                 {
                   "reps": 10,
@@ -629,6 +838,29 @@
               ],
               "alternativeExerciseNames": [
                 "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Fast Skipping",
+              "sets": [
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 30,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             }
           ]

@@ -54,7 +54,30 @@
               ]
             },
             {
-              "exerciseName": "Prone Manual Hamstring",
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Scapular Pull-Up"
+              ]
+            },
+            {
+              "exerciseName": "Rear Leg Raises",
               "sets": [
                 {
                   "reps": 10,
@@ -77,20 +100,43 @@
               ]
             },
             {
-              "exerciseName": "Russian Twist",
+              "exerciseName": "Body Tricep Press",
               "sets": [
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
                   "weight": 0,
-                  "restSeconds": 45
+                  "restSeconds": 60
                 },
                 {
                   "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Push-Ups - Close Triceps Position"
+              ]
+            },
+            {
+              "exerciseName": "Side Bridge",
+              "sets": [
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 40,
                   "weight": 0,
                   "restSeconds": 45
                 }
@@ -151,7 +197,53 @@
               ]
             },
             {
-              "exerciseName": "Push-Ups - Close Triceps Position",
+              "exerciseName": "Scapular Pull-Up",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Inverted Row"
+              ]
+            },
+            {
+              "exerciseName": "Bodyweight Walking Lunge",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Split Squats"
+              ]
+            },
+            {
+              "exerciseName": "Body-Up",
               "sets": [
                 {
                   "reps": 12,
@@ -170,11 +262,11 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Body Tricep Press"
+                "Push-Ups - Close Triceps Position"
               ]
             },
             {
-              "exerciseName": "Dead Bug",
+              "exerciseName": "3/4 Sit-Up",
               "sets": [
                 {
                   "reps": 12,
@@ -248,7 +340,30 @@
               ]
             },
             {
-              "exerciseName": "One Half Locust",
+              "exerciseName": "Inverted Row",
+              "sets": [
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                },
+                {
+                  "reps": 10,
+                  "weight": 0,
+                  "restSeconds": 90
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Scapular Pull-Up"
+              ]
+            },
+            {
+              "exerciseName": "Inchworm",
               "sets": [
                 {
                   "reps": 10,
@@ -271,7 +386,30 @@
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "Push-Ups - Close Triceps Position",
+              "sets": [
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                },
+                {
+                  "reps": 12,
+                  "weight": 0,
+                  "restSeconds": 60
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Body Tricep Press"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
               "sets": [
                 {
                   "reps": 40,
@@ -290,7 +428,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Plank"
+                "Crunches"
               ]
             }
           ]

@@ -43,7 +43,12 @@ EQUIP_LABEL = {
 }
 
 EQUIP_DESCRIPTION = {
-    'bodyweight': 'Aucun matériel (100 % poids du corps)',
+    # Les jours « haut du corps » incluent desormais de vrais tirages (tractions,
+    # rowing inverse) : sans eux, le dos n'etait jamais travaille et les slots
+    # etaient combles par des ischio-jambiers. Une barre de traction — ou une
+    # table pour le rowing inverse — devient donc necessaire : la description ne
+    # peut plus promettre « aucun materiel ».
+    'bodyweight': 'Poids du corps (barre de traction ou table pour les tirages)',
     'home-basic': 'Élastiques, ballon ou kettlebell (petit matériel)',
     'dumbbells': 'Une paire d’haltères',
     'machines': 'Machines guidées et poulies',
@@ -177,6 +182,14 @@ PROFILE_CANDIDATE_OVERRIDES = {
         'triceps': [
             'Push-Ups - Close Triceps Position', 'Body Tricep Press', 'Body-Up',
         ],
+        # Un programme au poids du corps SANS aucun tirage est un defaut de
+        # programmation : le dos n'est jamais travaille, et les jours « Haut du
+        # corps » se retrouvaient remplis d'ischio-jambiers via le slot
+        # `posterior`. Le tirage horizontal se fait sous une table ou une barre
+        # basse ; le tirage vertical demande une barre de traction.
+        'horizontal_pull': ['Inverted Row', 'Scapular Pull-Up'],
+        'vertical_pull': ['Pullups', 'Chin-Up', 'V-Bar Pullup', 'Wide-Grip Rear Pull-Up'],
+        'biceps': ['Chin-Up', 'Pullups'],
     },
     'home-basic': {'biceps': ['Chin-Up', 'Pullups', 'V-Bar Pullup']},
 }
@@ -194,22 +207,22 @@ PROFILE_SLOT_DROP = {
 PROFILE_SPLIT_OVERRIDES = {
     'bodyweight': {
         'beginner': [
-            ('Full Body A', ['squat', 'horizontal_push', 'posterior', 'core']),
-            ('Full Body B', ['hinge', 'horizontal_push', 'triceps', 'core']),
-            ('Full Body C', ['lunge', 'horizontal_push', 'posterior', 'core']),
+            ('Full Body A', ['squat', 'horizontal_push', 'horizontal_pull', 'posterior', 'triceps', 'core']),
+            ('Full Body B', ['hinge', 'horizontal_push', 'horizontal_pull', 'lunge', 'triceps', 'core']),
+            ('Full Body C', ['lunge', 'horizontal_push', 'horizontal_pull', 'posterior', 'triceps', 'core']),
         ],
         'intermediate': [
-            ('Haut du corps A', ['horizontal_push', 'triceps', 'posterior', 'core']),
-            ('Bas du corps A', ['squat', 'hinge', 'lunge', 'core']),
-            ('Haut du corps B', ['horizontal_push', 'triceps', 'posterior', 'core']),
-            ('Bas du corps B', ['hinge', 'squat', 'lunge', 'core']),
+            ('Haut du corps A', ['horizontal_push', 'horizontal_pull', 'vertical_pull', 'triceps', 'biceps', 'core']),
+            ('Bas du corps A', ['squat', 'hinge', 'lunge', 'posterior', 'squat', 'core']),
+            ('Haut du corps B', ['horizontal_push', 'vertical_pull', 'horizontal_pull', 'vertical_push', 'triceps', 'core']),
+            ('Bas du corps B', ['hinge', 'squat', 'lunge', 'posterior', 'hinge', 'core']),
         ],
         'advanced': [
-            ('Poussée', ['horizontal_push', 'vertical_push', 'horizontal_push', 'triceps', 'triceps']),
-            ('Chaîne postérieure', ['posterior', 'posterior', 'hinge', 'posterior', 'core']),
-            ('Jambes', ['squat', 'hinge', 'lunge', 'squat', 'core']),
-            ('Haut du corps', ['horizontal_push', 'triceps', 'posterior', 'core']),
-            ('Bas du corps', ['hinge', 'squat', 'lunge', 'core']),
+            ('Poussée', ['horizontal_push', 'vertical_push', 'horizontal_push', 'triceps', 'triceps', 'core']),
+            ('Tirage', ['vertical_pull', 'horizontal_pull', 'vertical_pull', 'biceps', 'posterior', 'core']),
+            ('Jambes', ['squat', 'hinge', 'lunge', 'squat', 'posterior', 'core']),
+            ('Haut du corps', ['horizontal_push', 'horizontal_pull', 'vertical_push', 'vertical_pull', 'triceps', 'core']),
+            ('Bas du corps', ['hinge', 'squat', 'lunge', 'posterior', 'squat', 'core']),
         ],
     },
 }
@@ -225,24 +238,30 @@ COMPOUND_SLOTS = {'squat', 'hinge', 'lunge', 'horizontal_push', 'incline_push',
 
 # --- Templates de splits ----------------------------------------------------
 
+# Densite : 5 exercices par seance en moyenne, c'etait trop leger (retour
+# d'Islam le 2026-08-22). Les splits passent a 6 slots pour les debutants et
+# 7 pour les niveaux intermediaire et avance, ce qui correspond a une seance
+# reelle de 45 a 75 minutes. Chaque jour garde son theme : on densifie en
+# ajoutant des slots COHERENTS avec le jour, jamais en bouchant avec ce qui
+# reste disponible.
 SPLITS = {
     'beginner': [
-        ('Full Body A', ['squat', 'horizontal_push', 'horizontal_pull', 'vertical_push', 'core']),
-        ('Full Body B', ['hinge', 'incline_push', 'vertical_pull', 'biceps', 'core']),
-        ('Full Body C', ['lunge', 'horizontal_push', 'horizontal_pull', 'triceps', 'calves']),
+        ('Full Body A', ['squat', 'horizontal_push', 'horizontal_pull', 'vertical_push', 'triceps', 'core']),
+        ('Full Body B', ['hinge', 'incline_push', 'vertical_pull', 'biceps', 'calves', 'core']),
+        ('Full Body C', ['lunge', 'horizontal_push', 'horizontal_pull', 'lateral', 'triceps', 'core']),
     ],
     'intermediate': [
-        ('Haut du corps A', ['horizontal_push', 'horizontal_pull', 'vertical_push', 'vertical_pull', 'biceps', 'triceps']),
-        ('Bas du corps A', ['squat', 'hinge', 'lunge', 'calves', 'core']),
-        ('Haut du corps B', ['incline_push', 'vertical_pull', 'horizontal_pull', 'lateral', 'triceps', 'biceps']),
-        ('Bas du corps B', ['hinge', 'squat', 'lunge', 'calves', 'core']),
+        ('Haut du corps A', ['horizontal_push', 'horizontal_pull', 'vertical_push', 'vertical_pull', 'biceps', 'triceps', 'core']),
+        ('Bas du corps A', ['squat', 'hinge', 'lunge', 'posterior', 'calves', 'core', 'finisher']),
+        ('Haut du corps B', ['incline_push', 'vertical_pull', 'horizontal_pull', 'lateral', 'triceps', 'biceps', 'core']),
+        ('Bas du corps B', ['hinge', 'squat', 'lunge', 'posterior', 'calves', 'core', 'finisher']),
     ],
     'advanced': [
-        ('Poussée', ['horizontal_push', 'incline_push', 'vertical_push', 'lateral', 'triceps']),
-        ('Tirage', ['vertical_pull', 'horizontal_pull', 'horizontal_pull', 'biceps', 'biceps']),
-        ('Jambes', ['squat', 'hinge', 'lunge', 'calves', 'core']),
-        ('Haut du corps', ['incline_push', 'vertical_pull', 'vertical_push', 'biceps', 'triceps']),
-        ('Bas du corps', ['hinge', 'squat', 'lunge', 'calves', 'core']),
+        ('Poussée', ['horizontal_push', 'incline_push', 'vertical_push', 'lateral', 'triceps', 'triceps', 'core']),
+        ('Tirage', ['vertical_pull', 'horizontal_pull', 'horizontal_pull', 'lateral', 'biceps', 'biceps', 'core']),
+        ('Jambes', ['squat', 'hinge', 'lunge', 'posterior', 'calves', 'calves', 'core']),
+        ('Haut du corps', ['incline_push', 'vertical_pull', 'vertical_push', 'horizontal_pull', 'biceps', 'triceps', 'core']),
+        ('Bas du corps', ['hinge', 'squat', 'lunge', 'posterior', 'calves', 'core', 'finisher']),
     ],
 }
 

@@ -100,7 +100,30 @@
               ]
             },
             {
-              "exerciseName": "Ab Crunch Machine",
+              "exerciseName": "Dip Machine",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Triceps Pushdown"
+              ]
+            },
+            {
+              "exerciseName": "Smith Machine Hip Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -119,7 +142,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Smith Machine Hip Raise"
+                "Ab Crunch Machine"
               ]
             },
             {
@@ -240,7 +263,7 @@
               ]
             },
             {
-              "exerciseName": "Smith Machine Hip Raise",
+              "exerciseName": "Seated Calf Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -259,7 +282,30 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Ab Crunch Machine"
+                "Standing Calf Raises"
+              ]
+            },
+            {
+              "exerciseName": "Ab Crunch Machine",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Smith Machine Hip Raise"
               ]
             },
             {
@@ -354,7 +400,27 @@
               ]
             },
             {
-              "exerciseName": "Triceps Pushdown",
+              "exerciseName": "Cable Seated Lateral Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ]
+            },
+            {
+              "exerciseName": "Machine Triceps Extension",
               "sets": [
                 {
                   "reps": 15,
@@ -377,7 +443,7 @@
               ]
             },
             {
-              "exerciseName": "Standing Calf Raises",
+              "exerciseName": "Smith Machine Hip Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -396,7 +462,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Calf Press On The Leg Press Machine"
+                "Ab Crunch Machine"
               ]
             },
             {

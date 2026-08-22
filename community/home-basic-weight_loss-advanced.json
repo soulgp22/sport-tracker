@@ -120,6 +120,52 @@
               ]
             },
             {
+              "exerciseName": "Push-Ups - Close Triceps Position",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Dips - Triceps Version"
+              ]
+            },
+            {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Mountain Climbers",
               "sets": [
                 {
@@ -208,7 +254,7 @@
               ]
             },
             {
-              "exerciseName": "Pullups",
+              "exerciseName": "Back Flyes - With Bands",
               "sets": [
                 {
                   "reps": 15,
@@ -227,7 +273,7 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Chin-Up"
+                "Lateral Raise - With Bands"
               ]
             },
             {
@@ -251,6 +297,52 @@
               ],
               "alternativeExerciseNames": [
                 "Chin-Up"
+              ]
+            },
+            {
+              "exerciseName": "Pullups",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Chin-Up"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Crunches"
               ]
             },
             {
@@ -348,6 +440,29 @@
               ]
             },
             {
+              "exerciseName": "Inchworm",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Calf Raises - With Bands",
               "sets": [
                 {
@@ -368,7 +483,27 @@
               ]
             },
             {
-              "exerciseName": "3/4 Sit-Up",
+              "exerciseName": "Calf Raises - With Bands",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ]
+            },
+            {
+              "exerciseName": "Crunches",
               "sets": [
                 {
                   "reps": 15,
@@ -482,7 +617,7 @@
               ]
             },
             {
-              "exerciseName": "Chin-Up",
+              "exerciseName": "Inverted Row",
               "sets": [
                 {
                   "reps": 15,
@@ -499,13 +634,10 @@
                   "weight": 0,
                   "restSeconds": 45
                 }
-              ],
-              "alternativeExerciseNames": [
-                "Pullups"
               ]
             },
             {
-              "exerciseName": "Push-Ups - Close Triceps Position",
+              "exerciseName": "V-Bar Pullup",
               "sets": [
                 {
                   "reps": 15,
@@ -524,7 +656,53 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Dips - Triceps Version"
+                "Chin-Up"
+              ]
+            },
+            {
+              "exerciseName": "Dips - Triceps Version",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Push-Ups - Close Triceps Position"
+              ]
+            },
+            {
+              "exerciseName": "Cross-Body Crunch",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
               ]
             },
             {
@@ -622,6 +800,29 @@
               ]
             },
             {
+              "exerciseName": "Floor Glute-Ham Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
               "exerciseName": "Calf Raises - With Bands",
               "sets": [
                 {
@@ -642,7 +843,7 @@
               ]
             },
             {
-              "exerciseName": "Crunches",
+              "exerciseName": "Cross-Body Crunch",
               "sets": [
                 {
                   "reps": 15,
@@ -666,6 +867,29 @@
             },
             {
               "exerciseName": "Fast Skipping",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
               "sets": [
                 {
                   "reps": 30,

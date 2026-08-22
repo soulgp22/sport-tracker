@@ -146,6 +146,29 @@
               ]
             },
             {
+              "exerciseName": "3/4 Sit-Up",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Mountain Climbers",
               "sets": [
                 {
@@ -240,7 +263,30 @@
               ]
             },
             {
-              "exerciseName": "Calf Raises - With Bands",
+              "exerciseName": "One Half Locust",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Standing Calf Raises",
               "sets": [
                 {
                   "reps": 15,
@@ -259,30 +305,53 @@
                 }
               ],
               "alternativeExerciseNames": [
-                "Standing Calf Raises"
+                "Standing Dumbbell Calf Raise"
               ]
             },
             {
-              "exerciseName": "Side Bridge",
+              "exerciseName": "3/4 Sit-Up",
               "sets": [
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 },
                 {
-                  "reps": 45,
+                  "reps": 15,
                   "weight": 0,
                   "restSeconds": 30
                 }
               ],
               "alternativeExerciseNames": [
                 "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Rowing, Stationary",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             },
             {
@@ -449,6 +518,29 @@
               ]
             },
             {
+              "exerciseName": "Smith Machine Hip Raise",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 30
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Plank"
+              ]
+            },
+            {
               "exerciseName": "Knee Tuck Jump",
               "sets": [
                 {
@@ -543,7 +635,30 @@
               ]
             },
             {
-              "exerciseName": "Standing Dumbbell Calf Raise",
+              "exerciseName": "Glute Kickback",
+              "sets": [
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 15,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Superman"
+              ]
+            },
+            {
+              "exerciseName": "Calf Press On The Leg Press Machine",
               "sets": [
                 {
                   "reps": 15,
@@ -566,7 +681,7 @@
               ]
             },
             {
-              "exerciseName": "Ab Crunch Machine",
+              "exerciseName": "Smith Machine Hip Raise",
               "sets": [
                 {
                   "reps": 15,
@@ -586,6 +701,29 @@
               ],
               "alternativeExerciseNames": [
                 "Plank"
+              ]
+            },
+            {
+              "exerciseName": "Plank",
+              "sets": [
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                },
+                {
+                  "reps": 45,
+                  "weight": 0,
+                  "restSeconds": 45
+                }
+              ],
+              "alternativeExerciseNames": [
+                "Mountain Climbers"
               ]
             },
             {
