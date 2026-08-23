@@ -33,6 +33,10 @@ function rebuildIndexes(exercises: CatalogExercise[]) {
   }
 }
 
+// Index des ids embarques, reutilise par mergeCatalog ET par la purge a la
+// rehydratation : les deux doivent appliquer exactement le meme critere.
+const coreById = new Map(coreCatalog.map((exercise) => [exercise.id, exercise]));
+
 function mergeCatalog(downloaded: CatalogExercise[]) {
   const merged = new Map(coreCatalog.map((exercise) => [exercise.id, exercise]));
   // Le catalogue EMBARQUÉ fait autorité : un pack téléchargé ne peut qu'AJOUTER
@@ -123,7 +127,13 @@ export const useExerciseCatalogStore = create<ExerciseCatalogState>()(
           Array.isArray(exercise.instructions) && Array.isArray(exercise.secondaryMuscles)
         );
         const current = new Map(get().downloadedExercises.map((exercise) => [exercise.id, exercise]));
-        valid.forEach((exercise) => current.set(exercise.id, exercise));
+        // Même invariant qu'à la réhydratation : on ne stocke JAMAIS un exercice
+        // déjà livré avec l'app. Sans ce filtre, re-télécharger le pack
+        // ré-empilerait 851 entrées redondantes (~1,6 Mo) qui seraient de toute
+        // façon ignorées par mergeCatalog.
+        valid.forEach((exercise) => {
+          if (!coreById.has(exercise.id)) current.set(exercise.id, exercise);
+        });
         const downloadedExercises = [...current.values()];
         const exercises = mergeCatalog(downloadedExercises);
         rebuildIndexes(exercises);
@@ -145,13 +155,30 @@ export const useExerciseCatalogStore = create<ExerciseCatalogState>()(
       }),
       merge: (persisted, current) => {
         const saved = persisted as Partial<ExerciseCatalogState>;
-        const downloadedExercises = saved.downloadedExercises ?? [];
+        // PURGE au démarrage : un exercice téléchargé dont l'id existe déjà dans
+        // le catalogue embarqué est supprimé du stockage, pas seulement ignoré.
+        //
+        // Depuis la 1.16.0 les 873 exercices sont livrés avec l'app : le pack
+        // « Plus d'exercices » (851 entrées) est devenu entièrement redondant.
+        // Le garder ne servait qu'à conserver ~1,6 Mo de données périmées — et à
+        // laisser un piège prêt à ressortir si la règle de priorité changeait.
+        // Voir known_bugs.md.
+        const savedDownloaded = saved.downloadedExercises ?? [];
+        const downloadedExercises = savedDownloaded.filter(
+          (exercise) => !coreById.has(exercise.id)
+        );
+        const purged = savedDownloaded.length - downloadedExercises.length;
         const exercises = mergeCatalog(downloadedExercises);
         rebuildIndexes(exercises);
         return {
           ...current,
           downloadedExercises,
-          installedPackIds: saved.installedPackIds ?? [],
+          // Si la purge n'a rien laissé, plus aucun pack n'apporte quoi que ce
+          // soit : l'indiquer « installé » mentirait à l'utilisateur.
+          installedPackIds:
+            downloadedExercises.length === 0 && purged > 0
+              ? []
+              : saved.installedPackIds ?? [],
           exercises,
           ...dimensions(exercises),
         };

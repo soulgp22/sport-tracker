@@ -72,3 +72,40 @@ describe('priorité du catalogue embarqué sur les packs téléchargés', () => 
     );
   });
 });
+
+/**
+ * Régression : les données périmées ne doivent pas SUBSISTER dans le stockage.
+ *
+ * Depuis la 1.16.0 les 873 exercices sont livrés avec l'app, donc le pack
+ * « Plus d'exercices » (851 entrées) est entièrement redondant. Se contenter
+ * de l'ignorer laissait ~1,6 Mo de données périmées dormir dans AsyncStorage,
+ * prêtes à ressortir si la règle de priorité changeait un jour.
+ */
+describe('purge des exercices téléchargés redondants', () => {
+  it("n'enregistre pas un exercice déjà livré avec l'app", () => {
+    const store = useExerciseCatalogStore.getState();
+    const embarque = store.all().find((e) => e.id === 'offline-110')!;
+    const avant = useExerciseCatalogStore.getState().downloadedExercises.length;
+
+    store.installPack('pack-redondant', [
+      { ...embarque, nameFr: 'Élévation latérale aux haltères' },
+    ]);
+
+    const apres = useExerciseCatalogStore.getState();
+    expect(apres.downloadedExercises).toHaveLength(avant);
+    expect(apres.downloadedExercises.some((e) => e.id === 'offline-110')).toBe(false);
+    expect(apres.getById('offline-110')?.nameFr).toBe('Sauts latéraux par-dessus cônes');
+  });
+
+  it('conserve un exercice réellement nouveau', () => {
+    const store = useExerciseCatalogStore.getState();
+    const modele = store.all()[0];
+    store.installPack('pack-utile', [
+      { ...modele, id: 'pack-inedit-001', name: 'Brand New', nameFr: 'Tout nouveau' },
+    ]);
+
+    const apres = useExerciseCatalogStore.getState();
+    expect(apres.downloadedExercises.some((e) => e.id === 'pack-inedit-001')).toBe(true);
+    expect(apres.getById('pack-inedit-001')?.nameFr).toBe('Tout nouveau');
+  });
+});

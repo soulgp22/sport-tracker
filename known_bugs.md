@@ -791,3 +791,33 @@ double) et une violation R2 (« Pompe prise serree sur haltere » sur un exercic
 il MASQUE le probleme : chaque repli est un echec du validateur ou de la
 traduction, pas un resultat acceptable par defaut. Il faut compter les replis et
 les examiner, pas seulement verifier que le validateur passe au vert.
+
+## Ignorer une donnee perimee ne suffit pas : il faut la PURGER
+
+Suite du correctif « le catalogue embarque fait autorite » (1.19.0). Ce correctif
+faisait GAGNER le catalogue livre, mais les 851 exercices telecharges restaient
+dans AsyncStorage — simplement ignores.
+
+Islam : « fait en sorte que ca reste pas ». Il a raison, et pour deux raisons :
+
+1. **~1,6 Mo de donnees perimees** conservees sans aucun usage sur l'appareil ;
+2. **un piege latent** : la donnee fautive dort, prete a ressortir si la regle de
+   priorite changeait un jour. Un correctif qui neutralise un defaut sans
+   supprimer sa cause laisse une bombe a retardement.
+
+**Correctif** — invariant applique aux DEUX endroits :
+- a la rehydratation (`merge`), tout exercice telecharge dont l'id existe dans le
+  catalogue embarque est retire de l'etat, donc du stockage a la prochaine
+  ecriture ;
+- dans `installPack`, un exercice deja livre avec l'app n'est meme plus
+  enregistre — sinon re-telecharger le pack ré-empilerait les 851 entrees.
+
+`installedPackIds` est vide si la purge n'a rien laisse : afficher « installe »
+alors qu'aucun exercice telecharge ne subsiste induirait l'utilisateur en erreur.
+
+Les deux chemins partagent le meme index `coreById` : deux criteres divergents
+auraient reintroduit le probleme par une porte differente.
+
+**A retenir** — « le bon comportement gagne » et « la mauvaise donnee n'existe
+plus » sont deux garanties differentes. La premiere depend d'une regle qu'un
+futur changement peut casser ; la seconde est definitive.
