@@ -747,3 +747,47 @@ pour les tirages) ». Mieux vaut une promesse exacte qu'un programme sans dos.
 **A eviter** — quand un slot ne peut pas etre rempli, le boucher avec ce qui reste
 disponible produit un jour qui ne correspond plus a son titre. Soit on trouve un
 exercice coherent, soit on renomme le jour honnetement.
+
+## 24 exercices affichaient encore leur nom ANGLAIS apres la retraduction
+
+**Symptome** — Islam, capture a l'appui apres la 1.19.0 : « il y a toujours un
+probleme avec le nom des exercices ». La capture montrait pourtant un nom
+CORRIGE (« Sauts lateraux par-dessus cones ») : le defaut etait ailleurs.
+
+**Constat** — 24 exercices sur 873 affichaient leur nom anglais dans une
+interface francaise : *EZ-Bar Curl*, *Spider Curl*, *Front Dumbbell Raise*,
+*Machine Shoulder (Military) Press*... Ce sont les REPLIS : le validateur avait
+rejete leur traduction 3 fois, donc le nom anglais avait ete inscrit — comme
+prevu par la regle « un nom anglais vaut mieux qu'un nom francais faux ».
+
+**Deux causes distinctes.**
+
+1. **Defaut du validateur lui-meme.** La regle R2 imposait que tout nom
+   contenant « a la barre » ait `equipment = 'barbell'`. Or le catalogue
+   distingue `e-z curl bar` (9 exercices). « Curl a la barre EZ » etait donc
+   rejete a tort, et l'exercice retombait en anglais. Corrige par une regle plus
+   specifique testee AVANT la generique (`excludePhrases`).
+
+2. **Collisions de noms (R1).** Plusieurs exercices anglais distincts visent le
+   meme nom francais naturel : *Front Dumbbell Raise* et *Front Two-Dumbbell
+   Raise*, *Leverage Shoulder Press* et *Machine Shoulder (Military) Press*. Le
+   modele ne trouvait pas de nom distinct en 3 tentatives. Corrige en demandant
+   explicitement de DISTINGUER (un bras / deux bras, machine convergente...).
+
+**Erreur de donnee trouvee au passage** : *Close-Grip EZ Bar Curl* et *Decline
+EZ Bar Triceps Extension* portaient `equipment: barbell` alors que leur nom
+anglais dit « EZ Bar ». Corrige dans le catalogue.
+
+**Resultat** : 24 -> 4 noms anglais restants (*Groiners*, *Superman*,
+*Crucifix*, *Body-Up*), qui n'ont pas d'equivalent francais courant et pour
+lesquels l'anglais est le bon choix.
+
+**Le validateur a attrape MES propres corrections manuelles** : en renommant a
+la main, j'ai cree deux collisions (« Developpe militaire a la machine » en
+double) et une violation R2 (« Pompe prise serree sur haltere » sur un exercice
+`body only`). C'est exactement ce pour quoi il existe.
+
+**A retenir** — un repli automatique vers l'anglais est un bon garde-fou, mais
+il MASQUE le probleme : chaque repli est un echec du validateur ou de la
+traduction, pas un resultat acceptable par defaut. Il faut compter les replis et
+les examiner, pas seulement verifier que le validateur passe au vert.

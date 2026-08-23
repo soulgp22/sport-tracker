@@ -240,3 +240,18 @@ rougit ; apres restauration il repasse au vert.
 **Ce que ce test aurait attrape** : le defaut vivait dans les donnees depuis des mois,
 invisible pour toute la suite existante — aucun test ne regardait la coherence entre
 `name`, `nameFr` et `equipment`.
+
+## Piege d'execution : `npx jest --ci` n'est PAS `npm test -- --ci`
+
+Le 2026-08-22, deux suites (`MealPhotoReview`, `AppDialog`) ont echoue avec
+`npx jest --ci`, chacune apres ~13 s, alors qu'elles passaient isolement. Avec
+`npm test -- --ci` — la commande du depot, qui ajoute `--runInBand` — les
+66 suites et 480 tests passent.
+
+Cause : `npx jest` lance les suites EN PARALLELE. Le catalogue d'exercices fait
+1,6 Mo et est importe par plusieurs suites ; la contention fait deborder les
+delais.
+
+**Toujours utiliser `npm test`**, pas `npx jest` directement. Un echec obtenu
+avec la mauvaise commande fait perdre du temps a chercher une regression qui
+n'existe pas.

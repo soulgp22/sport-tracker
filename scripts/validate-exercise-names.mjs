@@ -71,7 +71,19 @@ function matchesAny(text, phrases) {
  */
 const EQUIPMENT_RULES = [
   { keyword: 'halteres', phrases: ['haltere'], equipment: 'dumbbell' },
-  { keyword: 'a la barre', phrases: ['a la barre'], equipment: 'barbell' },
+  // « a la barre EZ » DOIT etre teste avant « a la barre » : le catalogue
+  // distingue l'equipement 'e-z curl bar' (9 exercices) de 'barbell'. Sans
+  // cette regle plus specifique, « Curl a la barre EZ » declenchait R2
+  // (barbell attendu, e-z curl bar recu), la traduction etait rejetee et
+  // l'exercice retombait sur son nom ANGLAIS. C'est ce qui laissait
+  // « EZ-Bar Curl », « Spider Curl » ou « EZ-Bar Skullcrusher » non traduits.
+  { keyword: 'a la barre EZ', phrases: ['a la barre ez'], equipment: 'e-z curl bar' },
+  {
+    keyword: 'a la barre',
+    phrases: ['a la barre'],
+    excludePhrases: ['a la barre ez'],
+    equipment: 'barbell',
+  },
   { keyword: 'poulie', phrases: ['poulie'], equipment: 'cable' },
   { keyword: 'machine', phrases: ['machine'], equipment: 'machine' },
   { keyword: 'kettlebell', phrases: ['kettlebell'], equipment: 'kettlebells' },
@@ -140,6 +152,9 @@ export function validateCatalog(exercises) {
     // Repli documenté : nameFr === name (non traduit) est un état accepté.
     if (typeof e.name === 'string' && e.nameFr.trim() === e.name) continue;
     for (const rule of EQUIPMENT_RULES) {
+      // Une regle generique ne s'applique pas quand une variante plus
+      // specifique correspond (« a la barre » cede a « a la barre EZ »).
+      if (rule.excludePhrases && matchesAny(e.nameFr, rule.excludePhrases)) continue;
       if (matchesAny(e.nameFr, rule.phrases) && e.equipment !== rule.equipment) {
         violations.push({
           id: e.id,

@@ -74,9 +74,10 @@ Réponds UNIQUEMENT par un objet JSON valide, sans texte autour :
 {"translations":[{"id":"<id>","nameFr":"<traduction>"}]}`;
 
 function parseArgs(argv) {
-  const opts = { limit: Infinity, dryRun: false };
+  const opts = { limit: Infinity, dryRun: false, onlyFallbacks: false };
   for (const arg of argv) {
     if (arg === '--dry-run') opts.dryRun = true;
+    else if (arg === '--only-fallbacks') opts.onlyFallbacks = true;
     else if (arg.startsWith('--limit=')) opts.limit = Number(arg.slice('--limit='.length));
   }
   if (!Number.isFinite(opts.limit) || opts.limit <= 0) opts.limit = Infinity;
@@ -190,6 +191,10 @@ async function translateOne(apiKey, item, violationMessages, usage) {
         `La traduction de cet exercice a été refusée par le validateur. Corrige-la.\n` +
         `Nom anglais : ${item.name}\nMuscle ciblé : ${item.target || item.bodyPart}\nÉquipement : ${item.equipment}\n` +
         `Violations détectées :\n${violationMessages.map((m) => `- ${m}`).join('\n')}\n` +
+        `Si ce nom est deja pris par un autre exercice, DISTINGUE-LE en precisant ce qui differe `+
+        `reellement : un bras / deux bras, assis / debout, prise serree / large, angle, machine `+
+        `convergente, banc decline... Ne renvoie JAMAIS un nom francais deja attribue.
+` +
         `Réponds uniquement par : {"nameFr":"<traduction>"}`,
     },
   ];
@@ -226,7 +231,12 @@ async function main() {
   const catalog = JSON.parse(await fs.readFile(CATALOG, 'utf8'));
   const done = await readProgress();
 
-  const todo = catalog.filter((e) => !done.has(e.id));
+  // --only-fallbacks : ne retraite que les exercices dont nameFr est reste
+  // egal au nom anglais (repli du validateur), pour rattraper ceux qu'une
+  // regle trop stricte avait rejetes sans les retraduire.
+  const todo = catalog.filter(
+    (e) => !done.has(e.id) && (!opts.onlyFallbacks || (e.nameFr ?? '').trim() === e.name.trim())
+  );
   const limited = opts.limit === Infinity ? todo : todo.slice(0, opts.limit);
 
   let translated = 0;
