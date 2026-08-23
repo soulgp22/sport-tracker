@@ -40,7 +40,7 @@ beforeEach(() => {
 
 describe('SessionScreen — boutons secondaires', () => {
   const rows: [string, string][] = [
-    ['Modifier ou ajouter des programmes', '/(tabs)/programs'],
+    ['Gérer les programmes', '/(tabs)/programs'],
     ['Exercices', '/(tabs)/exercises'],
   ];
 
@@ -48,7 +48,7 @@ describe('SessionScreen — boutons secondaires', () => {
     render(<SessionScreen />);
 
     expect(screen.getByText('Aucun programme')).toBeTruthy();
-    expect(screen.getByText('Modifier ou ajouter des programmes')).toBeTruthy();
+    expect(screen.getByText('Gérer les programmes')).toBeTruthy();
     expect(screen.getByText('Exercices')).toBeTruthy();
   });
 

@@ -1,30 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
-import { TouchableOpacity } from 'react-native';
+import { Stack } from 'expo-router';
 
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
-
-function BackToHomeButton() {
-  const c = useColors();
-  const router = useRouter();
-
-  const handlePress = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-
-    router.replace('/(tabs)' as never);
-  };
-
-  return (
-    <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-    </TouchableOpacity>
-  );
-}
 
 export default function SessionLayout() {
   const c = useColors();
@@ -45,7 +23,6 @@ export default function SessionLayout() {
         options={{
           headerShown: true,
           title: t('nav.session'),
-          headerLeft: () => <BackToHomeButton />,
         }}
       />
       <Stack.Screen name="active" options={{ headerShown: false }} />

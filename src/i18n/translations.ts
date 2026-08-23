@@ -1,4 +1,4 @@
-﻿export type LanguageId = 'fr' | 'en' | 'es' | 'de';
+export type LanguageId = 'fr' | 'en' | 'es' | 'de';
 
 export const LANGUAGE_OPTIONS: {
   id: LanguageId;
@@ -473,7 +473,7 @@ const fr: TranslationTable = {
   'session.resume': 'Reprendre',
   'session.noPrograms': 'Aucun programme',
   'session.noProgramsSubtitle': 'Créez d\'abord un programme pour démarrer une séance.',
-  'session.managePrograms': 'Modifier ou ajouter des programmes',
+  'session.managePrograms': 'Gérer les programmes',
   'session.manageProgramsHint': 'Accéder à la gestion des programmes',
   'session.dayExercises': '{{count}} exercices',
   'session.startDay': 'Démarrer — {{day}}',

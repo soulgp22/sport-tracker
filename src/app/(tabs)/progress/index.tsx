@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { WeightChart } from '../../../components/progress/WeightChart';
 import { VolumeChart } from '../../../components/progress/VolumeChart';
@@ -53,6 +53,7 @@ function toShortDateLabel(isoDate: string) {
 export default function ProgressScreen() {
   const c = useColors();
   const { t } = useTranslation();
+  const router = useRouter();
   const styles = useMemo(() => makeStyles(c), [c]);
   const exercises = useExercisesWithHistory();
   const params = useLocalSearchParams<{ tab?: string }>();
@@ -152,9 +153,19 @@ export default function ProgressScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Text style={styles.headerKicker}>{t('nav.progress')}</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.headerKicker}>{t('nav.progress')}</Text>
+          <TouchableOpacity
+            onPress={() => router.push('/(tabs)/history' as never)}
+            hitSlop={8}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+            accessibilityLabel={t('nav.history')}>
+            <Text style={styles.historyLink}>{t('nav.history')}</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.headerTitle}>{t('progress.title')}</Text>
       </View>
       <View style={styles.tabRow}>
@@ -375,6 +386,18 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     paddingBottom: 14,
     borderBottomWidth: 2,
     borderBottomColor: c.border,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  historyLink: {
+    fontSize: 13,
+    fontFamily: fonts.sansSemi,
+    color: c.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
   headerKicker: {
     fontFamily: fonts.serifBold,

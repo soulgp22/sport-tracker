@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -220,6 +221,7 @@ export default function HomeScreen() {
                 ) : null}
               </>
             ) : null}
+            <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
           </View>
         </TouchableOpacity>
 

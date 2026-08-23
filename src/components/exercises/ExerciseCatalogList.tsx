@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import {
@@ -193,25 +193,26 @@ export function ExerciseCatalogList({
   function renderFilterRow() {
     return (
       <View style={styles.filterRow}>
-        <View style={styles.filterInner}>
-          <Text style={styles.filterLabel}>{t('exercises.filterMuscle')}</Text>
-          <View style={styles.filterOptions}>
-            {['', ...bodyParts].map((item) => {
-              const selected = item === bodyPart;
-              return (
-                <TouchableOpacity
-                  key={item || 'all'}
-                  style={[styles.chip, selected && styles.chipSelected]}
-                  onPress={() => setBodyPart(item)}
-                  activeOpacity={0.75}>
-                  <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
-                    {item ? translateMuscle(item, language) : t('exercise.all')}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
+        <Text style={styles.filterLabel}>{t('exercises.filterMuscle')}</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterOptionsHorizontal}>
+          {['', ...bodyParts].map((item) => {
+            const selected = item === bodyPart;
+            return (
+              <TouchableOpacity
+                key={item || 'all'}
+                style={[styles.chip, selected && styles.chipSelected]}
+                onPress={() => setBodyPart(item)}
+                activeOpacity={0.75}>
+                <Text style={[styles.chipText, selected && styles.chipTextSelected]}>
+                  {item ? translateMuscle(item, language) : t('exercise.all')}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
     );
   }
@@ -300,14 +301,10 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   downloadMeta: { fontSize: 11, lineHeight: 15, color: c.textSecondary, marginTop: 2 },
 
   filterRow: {
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: c.border,
-    paddingVertical: 12,
-  },
-  filterInner: {
-    paddingHorizontal: 20,
-    paddingTop: 4,
-    paddingBottom: 8,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   filterLabel: {
     fontFamily: fonts.sans,
@@ -316,24 +313,27 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     textTransform: 'uppercase',
     color: c.textMuted,
     marginBottom: 6,
+    paddingHorizontal: 20,
   },
-  filterOptions: {
+  filterOptionsHorizontal: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 2,
   },
   chip: {
     minHeight: 34,
     justifyContent: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 6,
     borderWidth: 1,
     borderRadius: radius.pill,
     borderColor: c.border,
+    backgroundColor: c.surface,
   },
   chipSelected: { backgroundColor: c.primary, borderColor: c.primary },
-  chipText: { fontFamily: fonts.sans, fontSize: 12, color: c.textPrimary },
-  chipTextSelected: { color: c.bg },
+  chipText: { fontFamily: fonts.sansSemi, fontSize: 12, color: c.textPrimary },
+  chipTextSelected: { color: c.primaryText },
 
   list: { paddingBottom: 20 },
   empty: { flexGrow: 1 },

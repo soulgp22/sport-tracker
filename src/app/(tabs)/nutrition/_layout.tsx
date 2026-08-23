@@ -43,20 +43,7 @@ export default function NutritionLayout() {
         headerShadowVisible: false,
         contentStyle: { backgroundColor: c.bg },
       }}>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: true,
-          title: t('nav.nutrition'),
-          headerRight: () => (
-            <Link href={'/(tabs)/nutrition/goals' as never} asChild>
-              <TouchableOpacity style={styles.settingsButton} hitSlop={8} activeOpacity={0.7}>
-                <Ionicons name="settings-outline" size={22} color={c.primary} />
-              </TouchableOpacity>
-            </Link>
-          ),
-        }}
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="add" options={{ headerShown: false }} />
       <Stack.Screen name="photo" options={{ headerShown: false }} />
       <Stack.Screen name="diary" options={{ headerShown: false }} />

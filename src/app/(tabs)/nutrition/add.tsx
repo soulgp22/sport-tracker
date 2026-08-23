@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { appAlert } from '../../../components/ui/AppDialog';
@@ -119,7 +119,11 @@ export default function AddMealScreen() {
   const [mealType, setMealType] = useState<MealType>(() => getDefaultMealType());
   const [newGroupMode, setNewGroupMode] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
-  const [scannerVisible, setScannerVisible] = useState(false);
+  // `?scan=1` ouvre directement le lecteur de code-barres : l'ecran Nutrition
+  // propose une entree « Scanner » distincte de l'analyse photo, qui menait
+  // auparavant au meme endroit que la carte « Analyser un plat ».
+  const params = useLocalSearchParams<{ scan?: string }>();
+  const [scannerVisible, setScannerVisible] = useState(params.scan === '1');
   const [scanLoading, setScanLoading] = useState(false);
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [photoVisible, setPhotoVisible] = useState(false);

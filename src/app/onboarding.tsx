@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -43,24 +43,16 @@ export default function OnboardingScreen() {
   const addBodyWeightEntry = useBodyWeightStore((state) => state.addEntry);
   const [step, setStep] = useState(0);
   // Brouillons locaux, pré-remplis depuis les stores
-  const [ageDraft, setAgeDraft] = useState('');
-  const [heightDraft, setHeightDraft] = useState('');
-  const [weightDraft, setWeightDraft] = useState('');
-  const [firstNameDraft, setFirstNameDraft] = useState('');
-  const totalSteps = 2;
-  const [profileDraftsReady, setProfileDraftsReady] = useState(false);
-
-  // Pré-remplissage du profil énergétique à l'entrée de l'étape (une seule
-  // fois, pour ne pas écraser les saisies si l'utilisateur revient en arrière).
-  useEffect(() => {
-    if (step !== 1 || profileDraftsReady) return;
-    setAgeDraft(performanceAge ? String(performanceAge) : '');
-    setHeightDraft(performanceHeightCm ? String(performanceHeightCm) : '');
-    setFirstNameDraft(performanceFirstName ?? '');
+  const [ageDraft, setAgeDraft] = useState(() => (performanceAge ? String(performanceAge) : ''));
+  const [heightDraft, setHeightDraft] = useState(() =>
+    performanceHeightCm ? String(performanceHeightCm) : '',
+  );
+  const [weightDraft, setWeightDraft] = useState(() => {
     const latestWeight = getBodyweightForDate(bodyWeightEntries, new Date().toISOString());
-    setWeightDraft(latestWeight ? String(latestWeight).replace('.', ',') : '');
-    setProfileDraftsReady(true);
-  }, [step, profileDraftsReady, performanceAge, performanceHeightCm, performanceFirstName, bodyWeightEntries]);
+    return latestWeight ? String(latestWeight).replace('.', ',') : '';
+  });
+  const [firstNameDraft, setFirstNameDraft] = useState(() => performanceFirstName ?? '');
+  const totalSteps = 2;
 
   // Sauvegarde le profil énergétique au passage à l'étape suivante.
   const saveEnergyProfile = () => {

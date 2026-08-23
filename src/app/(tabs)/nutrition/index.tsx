@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useReducer, useState } from 'react';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -196,15 +196,26 @@ export default function NutritionScreen() {
     .join(', ');
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
-        {/* 1. En-tête : kicker + titre */}
+        {/* 1. En-tête : kicker + titre + réglages objectifs */}
         <View style={styles.header}>
-          <Text style={styles.headerKicker}>{t('nav.nutrition')}</Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.headerKicker}>{t('nav.nutrition')}</Text>
+            <TouchableOpacity
+              onPress={() => router.push('/(tabs)/nutrition/goals' as never)}
+              style={styles.headerActionBtn}
+              hitSlop={8}
+              activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={t('foods.accessibility.settings')}>
+              <Ionicons name="settings-outline" size={22} color={c.primary} />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.headerTitle}>{t('nutrition.title')}</Text>
         </View>
 
-        {/* 2. Action principale + deux sous-actions */}
+        {/* 2. Action principale photo + sous-actions */}
         <View style={styles.actionWrap}>
           <TouchableOpacity
             style={styles.actionButton}
@@ -216,13 +227,22 @@ export default function NutritionScreen() {
             <Text style={styles.actionSubtitle}>{t('nutrition.analyzeSubtitle')}</Text>
           </TouchableOpacity>
           <View style={styles.subActions}>
+            {/* Cette sous-action appelait `goPhoto`, exactement comme la carte
+                « Analyser un plat » 10 px au-dessus : deux contrôles identiques
+                côte à côte. Elle ouvre désormais le lecteur de code-barres, une
+                troisième entrée réellement distincte (photo IA / scan / saisie). */}
             <TouchableOpacity
               style={[styles.subAction, styles.subActionDivider]}
-              onPress={goPhoto}
+              onPress={() =>
+                router.push({
+                  pathname: '/(tabs)/nutrition/add' as never,
+                  params: { scan: '1' },
+                } as never)
+              }
               activeOpacity={0.78}
               accessibilityRole="button"
-              accessibilityLabel={t('nutrition.camera')}>
-              <Text style={styles.subActionLabel}>{t('nutrition.camera')}</Text>
+              accessibilityLabel={t('nutrition.scan.button')}>
+              <Text style={styles.subActionLabel}>{t('nutrition.scan.button')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.subAction}
@@ -453,6 +473,17 @@ const makeStyles = (c: ThemeColors) =>
       paddingBottom: 14,
       borderBottomWidth: 2,
       borderBottomColor: c.border,
+    },
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    headerActionBtn: {
+      width: 36,
+      height: 36,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     headerKicker: {
       fontFamily: fonts.serifBold,
