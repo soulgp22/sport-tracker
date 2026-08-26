@@ -821,3 +821,46 @@ auraient reintroduit le probleme par une porte differente.
 **A retenir** — « le bon comportement gagne » et « la mauvaise donnee n'existe
 plus » sont deux garanties differentes. La premiere depend d'une regle qu'un
 futur changement peut casser ; la seconde est definitive.
+
+## Le retour arriere ramenait a l'accueil au lieu du menu precedent
+
+Signale par Islam le 2026-08-27 : « les retours arriere ne reviennent pas a
+chaque fois au menu precedent mais a l'accueil parfois ».
+
+**Cause racine** — Programmes, Exercices, Aliments, Historique, Communaute et
+Reglages ne sont PAS des ecrans empiles : ce sont des ONGLETS masques
+(`href: null` dans `src/app/(tabs)/_layout.tsx`). Passer de Nutrition a Aliments
+est donc un changement d'onglet, pas un `push`. Or le `backBehavior` par defaut
+du `TabRouter` de React Navigation vaut `firstRoute` : tout retour arriere
+depuis un onglet non-premier renvoie sur le PREMIER onglet declare — l'accueil.
+
+Le defaut ne dependait donc pas de l'ecran mais du type de saut :
+- saut a l'interieur d'un onglet (`nutrition` -> `nutrition/add`) : retour correct ;
+- saut d'un onglet a un autre (`nutrition` -> `foods`) : retour a l'accueil.
+
+D'ou le « parfois » : c'est exactement la frontiere entre les deux.
+
+**Correctif** — une seule ligne : `backBehavior="history"` sur `<Tabs>`. Le
+routeur rejoue alors la pile de visites ; l'accueil n'est atteint que s'il etait
+reellement l'ecran precedent.
+
+Parcours mesures avant/apres (vrai `TabRouter`, vraie liste d'onglets) :
+
+| Parcours | avant (`firstRoute`) | apres (`history`) |
+|---|---|---|
+| Nutrition -> Aliments | accueil | Nutrition |
+| Programmes -> Communaute | accueil | Programmes |
+| Progression -> Historique | accueil | Progression |
+| Seance -> Exercices | accueil | Seance |
+| Profil -> Reglages | accueil | Profil |
+| Accueil -> Nutrition | accueil | accueil (correct : il EST le precedent) |
+
+**Consequence de nommage** — le composant `BackToHomeButton` present dans cinq
+`_layout.tsx` ne ramenait plus a l'accueil : renomme `BackButton`, et la cle i18n
+`common.backHome` (« Retour a l'accueil ») devient `common.back` (« Retour ») dans
+les 4 langues. Un nom qui ment sur le comportement est un piege pour la prochaine
+lecture.
+
+**A retenir** — quand une section est un onglet masque plutot qu'un ecran empile,
+le retour arriere n'obeit plus au stack mais au `TabRouter`. Le defaut n'etait
+dans aucun ecran : il etait dans le contrat du navigateur parent.

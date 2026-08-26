@@ -9,7 +9,7 @@ import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
 
-function BackToHomeButton() {
+function BackButton() {
   const c = useColors();
   const router = useRouter();
 
@@ -67,7 +67,7 @@ export default function CommunityLayout() {
         options={{
           headerShown: true,
           title: t('community.heading'),
-          headerLeft: () => <BackToHomeButton />,
+          headerLeft: () => <BackButton />,
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <RefreshButton />

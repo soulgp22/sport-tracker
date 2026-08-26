@@ -255,3 +255,27 @@ delais.
 **Toujours utiliser `npm test`**, pas `npx jest` directement. Un echec obtenu
 avec la mauvaise commande fait perdre du temps a chercher une regression qui
 n'existe pas.
+## Retour arriere : `src/app/(tabs)/__tests__/backBehavior.test.tsx`
+
+Deux niveaux, parce que la valeur seule ne prouve rien et le comportement seul
+ne prouve pas qu'il est branche :
+
+1. **Cablage** — `TabLayout` est rendu avec `<Tabs>` mocke ; le test verifie que
+   la prop `backBehavior` vaut bien `history`.
+2. **Comportement** — le VRAI `TabRouter` d'expo-router est instancie avec la
+   vraie liste des 11 onglets ; cinq parcours reels sont rejoues puis un
+   `GO_BACK` est applique. Chaque cas assert deux choses : `history` ramene au
+   menu precedent, ET le defaut de la bibliotheque (`undefined`) ramenait bien a
+   `index` — c'est l'oracle qui documente la cause.
+
+Deux gardes completent : l'accueil reste la destination quand il EST le menu
+precedent, et depuis l'accueil initial le retour laisse sortir de l'application
+(pas de piege).
+
+Sabotage verifie le 2026-08-27 : en retirant `backBehavior="history"` de
+`src/app/(tabs)/_layout.tsx`, le test de cablage rougit
+(`Expected: "history" / Received: undefined`) ; apres restauration, 8/8 au vert.
+
+Verifie aussi sur l'emulateur (APK release 1.23.0, `SportTracker_Pixel8`) :
+Profil -> Reglages -> retour = Profil (position de defilement conservee), puis
+retour = Nutrition, puis retour = Accueil. `adb logcat -b crash -d` vide.
