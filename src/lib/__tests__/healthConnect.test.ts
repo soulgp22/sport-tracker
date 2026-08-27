@@ -359,7 +359,13 @@ describe('healthConnect — poids (permission optionnelle)', () => {
     await expect(service.hasWeightPermission()).resolves.toBe(false);
   });
 
-  it('reconnait la permission poids quand elle est accordee', async () => {
+  /**
+   * `[].every(...)` vaut true. Sans garde explicite, retirer le poids du
+   * groupe optionnel ferait repondre « autorise » a `hasWeightPermission()`
+   * alors que la permission n'est meme pas declaree — et l'app tenterait une
+   * lecture vouee a l'echec a chaque affichage.
+   */
+  it('repond false tant que le poids n est pas dans le groupe optionnel', async () => {
     jest.doMock('react-native-health-connect', () => ({
       initialize: jest.fn().mockResolvedValue(true),
       getGrantedPermissions: jest
@@ -368,10 +374,16 @@ describe('healthConnect — poids (permission optionnelle)', () => {
     }));
     const service = loadService();
 
-    await expect(service.hasWeightPermission()).resolves.toBe(true);
+    await expect(service.hasWeightPermission()).resolves.toBe(false);
   });
 
-  it('demande poids et permissions requises dans la meme feuille', async () => {
+  /**
+   * Regression : demander une permission ABSENTE du manifeste peut faire
+   * rejeter la feuille Health Connect entiere, donc faire perdre les pas et
+   * les calories qui fonctionnent. Tant que READ_WEIGHT n'est pas declaree
+   * (declaration Google Play non remplie), elle ne doit pas etre demandee.
+   */
+  it('ne demande PAS le poids tant que la permission n est pas declaree', async () => {
     const requestPermission = jest.fn().mockResolvedValue([]);
     jest.doMock('react-native-health-connect', () => ({
       SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
@@ -383,10 +395,9 @@ describe('healthConnect — poids (permission optionnelle)', () => {
 
     await service.requestHealthPermissionsWithStatus();
 
-    expect(requestPermission).toHaveBeenCalledWith(
-      expect.arrayContaining([{ accessType: 'read', recordType: 'Weight' }])
-    );
-    expect(requestPermission.mock.calls[0][0]).toHaveLength(4);
+    const requested = requestPermission.mock.calls[0][0];
+    expect(requested).not.toContainEqual({ accessType: 'read', recordType: 'Weight' });
+    expect(requested).toHaveLength(3);
   });
 
   it('retient le releve le plus recent, quel que soit l ordre rendu', async () => {

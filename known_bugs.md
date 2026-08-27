@@ -864,3 +864,41 @@ lecture.
 **A retenir** — quand une section est un onglet masque plutot qu'un ecran empile,
 le retour arriere n'obeit plus au stack mais au `TabRouter`. Le defaut n'etait
 dans aucun ecran : il etait dans le contrat du navigateur parent.
+
+
+## READ_WEIGHT bloque TOUTE publication, y compris le track interne
+
+Le 2026-08-27, l'ajout de `android.permission.health.READ_WEIGHT` a fait echouer
+`eas submit` avec :
+
+> Google Api Error: Invalid request - You must let us know whether your app
+> includes any health features.
+
+**Cause racine** — les permissions pas / calories passaient sans probleme, mais
+une **mesure corporelle** fait basculer l'application dans la categorie
+« applications de sante » cote Google Play. Tant que la **Declaration relative
+aux applications de sante** n'est pas remplie dans *Contenu de l'application*,
+Play refuse tout televersement — pas seulement la production : le track interne
+aussi. Cinq tentatives automatiques, cinq refus, aucun binaire publie.
+
+**Ce qui a ete fait** — retrait de la permission aux TROIS endroits, pas deux :
+
+1. `app.json` ;
+2. `android/app/src/main/AndroidManifest.xml` (genere et gitignore : Gradle lit
+   celui-la, `app.json` seul ne suffit pas — meme piege que le `versionCode`) ;
+3. `OPTIONAL_PERMISSIONS` dans `src/lib/healthConnect.ts`.
+
+Le point 3 n'est pas cosmetique : **demander une permission absente du manifeste
+peut faire rejeter la feuille Health Connect entiere**, donc faire perdre les
+pas et les calories qui fonctionnaient. Retirer du manifeste sans retirer de la
+demande aurait transforme un blocage de publication en regression fonctionnelle.
+
+**Piege de logique introduit par le retrait** — `[].every(...)` vaut `true`.
+Sans garde explicite, `hasWeightPermission()` aurait repondu « autorise » alors
+que la permission n'est meme pas declaree, et l'app aurait tente une lecture
+vouee a l'echec a chaque affichage. Le garde `OPTIONAL_PERMISSIONS.length === 0`
+est teste, et son retrait fait rougir deux tests.
+
+**A retenir** — une permission Android ne se retire pas d'un fichier mais d'une
+chaine : manifeste genere, configuration Expo, et code qui la demande. En oublier
+un maillon donne soit un binaire refuse, soit une regression silencieuse.

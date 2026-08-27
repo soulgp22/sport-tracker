@@ -30,10 +30,29 @@ const REQUIRED_PERMISSIONS: HealthPermission[] = [
  * les permissions du groupe — et leur aurait fait perdre l'affichage des pas
  * jusqu'a une nouvelle autorisation. Un ajout de fonctionnalite ne casse pas
  * ce qui marchait : deux groupes, deux verifications.
+ *
+ * ---
+ *
+ * VIDE POUR L'INSTANT. `android.permission.health.READ_WEIGHT` fait basculer
+ * l'application dans la categorie « applications de sante » cote Google Play,
+ * qui refuse alors TOUT televersement — meme sur le track interne — tant que
+ * la « Declaration relative aux applications de sante » n'est pas remplie
+ * (« You must let us know whether your app includes any health features. »,
+ * 2026-08-27).
+ *
+ * On ne demande PAS une permission absente du manifeste : Health Connect peut
+ * rejeter la feuille entiere, ce qui ferait perdre les pas et les calories qui
+ * fonctionnent aujourd'hui. Le retrait est donc fait aux trois endroits a la
+ * fois.
+ *
+ * POUR REACTIVER LE POIDS, apres validation de la declaration :
+ *   1. remettre `{ accessType: 'read', recordType: 'Weight' }` ci-dessous ;
+ *   2. remettre `android.permission.health.READ_WEIGHT` dans `app.json` ;
+ *   3. remettre la meme ligne dans `android/app/src/main/AndroidManifest.xml`
+ *      (genere et gitignore : `app.json` seul ne suffit pas).
+ * Tout le reste de la chaine de lecture est deja en place et testee.
  */
-const OPTIONAL_PERMISSIONS: HealthPermission[] = [
-  { accessType: 'read', recordType: 'Weight' },
-];
+const OPTIONAL_PERMISSIONS: HealthPermission[] = [];
 
 /**
  * Fenetre de recherche du dernier poids connu, en jours.
@@ -275,6 +294,11 @@ export async function readStepsToday(): Promise<number | null> {
 
 /** true si la lecture du poids est autorisee (permission optionnelle). */
 export async function hasWeightPermission(): Promise<boolean> {
+  // Sans ce garde, `[].every(...)` vaut true : la fonction repondrait « oui,
+  // autorise » alors que la permission n'est meme pas declaree, et l'app
+  // tenterait une lecture vouee a l'echec a chaque affichage.
+  if (OPTIONAL_PERMISSIONS.length === 0) return false;
+
   const granted = await safeCall('getGrantedPermissions', async (hc) => {
     await ensureInitialized(hc);
     return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
