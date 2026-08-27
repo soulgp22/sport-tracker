@@ -1,73 +1,170 @@
-# Politique de confidentialité — Life Sport Tracker
-
-*Dernière mise à jour : 25 juillet 2026*
-
-## Résumé
-
-**Life Sport Tracker ne collecte, ne transmet et ne vend aucune donnée personnelle.**
-Toutes vos données (séances, programmes, préférences, historique) sont stockées
-**uniquement sur votre appareil**. Aucun compte n'est requis. Aucune donnée ne quitte
-votre téléphone.
-
-## Données stockées localement
-
-L'application enregistre sur votre appareil (stockage local Android) :
-
-- vos séances d'entraînement et votre historique d'exercices ;
-- vos programmes et personnalisations ;
-- vos préférences d'affichage et de notifications (minuteur de repos).
-
-Ces données ne sont **jamais transmises** à un serveur. Elles sont supprimées
-définitivement si vous désinstallez l'application ou effacez ses données dans les
-réglages Android.
-
-## Notifications
-
-L'application utilise des notifications **locales** (fin du minuteur de repos).
-Aucune notification n'est envoyée depuis un serveur distant. Aucun jeton
-d'identification publicitaire ou de notification push n'est collecté.
-
-## Services tiers, publicité et analyse
-
-L'application n'intègre :
-
-- **aucun** service d'analyse (pas de Google Analytics, Firebase, Sentry…) ;
-- **aucune** publicité ;
-- **aucun** achat intégré traçant votre activité ;
-- **aucune** connexion à des réseaux sociaux.
-
-## Permissions demandées
-
-- **Notifications** : uniquement pour le minuteur de repos (affichage local).
-- L'application ne demande **aucune** autre permission sensible (ni position,
-  ni contacts, ni appareil photo, ni microphone).
-
-## Enfants
-
-L'application ne s'adresse pas spécifiquement aux enfants et ne collecte
-sciemment aucune donnée, de quelque âge que ce soit.
-
-## Modifications
-
-Toute évolution de cette politique sera publiée à cette même adresse avec une
-date de mise à jour.
-
-## Contact
-
-Pour toute question : **seirais@outlook.fr**
+> ## ⚠️ À COMPLÉTER AVANT PUBLICATION
+>
+> Ce document est **exact sur tout ce qui est vérifiable depuis le dépôt**, mais
+> cinq points dépendent du serveur et ne peuvent pas être déduits du code. Ils
+> sont marqués `⟨À CONFIRMER : …⟩` dans le texte. Les renseigner AVANT
+> d'héberger cette page — une politique qui affirme quelque chose de faux sur la
+> conservation des données est pire que pas de politique du tout.
+>
+> 1. Les photos de repas sont-elles **conservées** sur le serveur après analyse,
+>    et si oui combien de temps ?
+> 2. Le serveur **journalise-t-il les adresses IP** (Caddy le fait par défaut),
+>    et avec quelle durée de rétention ?
+> 3. Dans quel **pays** se trouve le VPS Hetzner (Allemagne, Finlande, États-Unis) ?
+> 4. L'URL publique d'hébergement de cette politique.
+> 5. Identité du responsable de traitement à afficher (nom ou raison sociale).
+>
+> **Constat séparé, à traiter par un correctif et non par ce texte** : le
+> manifeste déclare `RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW`
+> (superposition d'écran), qu'aucune ligne du code applicatif n'utilise. Elles
+> proviennent de dépendances. Les déclarer sans s'en servir est un risque de
+> refus Play et alourdit inutilement cette politique : mieux vaut les retirer du
+> manifeste.
+>
+> *(Supprimer entièrement ce bloc avant de publier la page.)*
 
 ---
 
-# Privacy Policy — Life Sport Tracker (English)
+# Politique de confidentialité — Life Sport Tracker
 
-*Last updated: July 25, 2026*
+*Dernière mise à jour : 27 août 2026*
 
-**Life Sport Tracker does not collect, transmit, or sell any personal data.**
-All your data (workouts, programs, preferences, history) is stored **only on your
-device**. No account is required. No data ever leaves your phone.
+## Résumé
 
-The app uses **local notifications** only (rest timer). It includes **no** analytics,
-**no** ads, **no** third-party tracking SDKs. Uninstalling the app or clearing its
-data permanently deletes all stored information.
+Life Sport Tracker fonctionne **sans compte** et stocke l'essentiel de vos
+données **sur votre appareil**. Trois fonctionnalités font exception et
+nécessitent une connexion à un serveur : l'**analyse photo d'un repas**, le
+**scan d'un code-barres**, et le **téléchargement de catalogues**. Elles sont
+détaillées ci-dessous.
 
-Contact: **seirais@outlook.fr**
+Aucune publicité, aucun traceur, aucun service d'analyse d'audience, aucune
+revente de données.
+
+## 1. Données stockées uniquement sur votre appareil
+
+L'application enregistre dans le stockage local de votre téléphone :
+
+- vos séances d'entraînement et votre historique d'exercices ;
+- vos programmes et leurs personnalisations ;
+- votre journal alimentaire et vos objectifs nutritionnels ;
+- vos pesées et votre historique de poids ;
+- vos préférences d'affichage, de langue et de notifications.
+
+Ces données **ne sont jamais transmises**. Elles sont supprimées définitivement
+si vous désinstallez l'application ou effacez ses données dans les réglages
+Android. La fonction de sauvegarde produit un fichier que **vous** choisissez
+d'enregistrer ou de partager : son contenu ne transite par aucun serveur.
+
+## 2. Données de santé (Health Connect)
+
+Avec votre autorisation explicite, et uniquement si vous l'accordez,
+l'application lit dans Health Connect :
+
+| Donnée | Permission Android | Usage |
+|---|---|---|
+| Nombre de pas du jour | `READ_STEPS` | affichage de votre activité quotidienne |
+| Calories actives du jour | `READ_ACTIVE_CALORIES_BURNED` | estimation de la dépense énergétique |
+| Calories totales du jour | `READ_TOTAL_CALORIES_BURNED` | bilan énergétique du journal nutritionnel |
+
+Ces données sont lues **en lecture seule**, utilisées **uniquement sur
+l'appareil** pour l'affichage et le calcul du bilan énergétique, et **ne sont
+transmises à aucun serveur**, ni au nôtre ni à un tiers. L'application n'écrit
+jamais dans Health Connect.
+
+Vous pouvez retirer cette autorisation à tout moment depuis les réglages de
+Health Connect. L'application continue alors de fonctionner : seuls l'affichage
+des pas et l'estimation de dépense disparaissent.
+
+## 3. Données transmises à un serveur
+
+Le serveur d'analyse est **opéré par l'éditeur de l'application**, hébergé chez
+Hetzner ⟨À CONFIRMER : pays du centre de données⟩ et joint en HTTPS.
+
+### 3.1 Analyse photo d'un repas
+
+Quand vous demandez l'analyse d'une photo de plat, **l'image est envoyée** à ce
+serveur, qui la transmet à **Google Gemini** pour reconnaissance des aliments.
+Le résultat (noms d'aliments et quantités estimées) revient à l'application.
+
+- L'image n'est envoyée **que** lorsque vous déclenchez explicitement l'analyse.
+- Le traitement par Google est soumis aux conditions de Google.
+- ⟨À CONFIRMER : conservation de l'image sur notre serveur après analyse, et durée⟩
+
+Si vous n'utilisez pas cette fonctionnalité, aucune photo ne quitte votre
+téléphone.
+
+### 3.2 Scan d'un code-barres
+
+Le **numéro du code-barres** est envoyé à notre serveur, qui interroge la base
+publique **Open Food Facts** et met le résultat en cache. Aucune photo n'est
+transmise : la lecture du code est faite sur l'appareil, seul le numéro part.
+
+### 3.3 Valeurs nutritionnelles d'un aliment inconnu
+
+Si un aliment est absent de la base embarquée, **son nom** est envoyé au serveur
+pour obtenir ses valeurs nutritionnelles (Google Gemini, avec un cache partagé
+entre utilisateurs). Aucune donnée personnelle n'accompagne cette requête.
+
+### 3.4 Catalogues communautaires
+
+Les catalogues d'exercices et d'aliments sont téléchargés depuis **GitHub**
+(`raw.githubusercontent.com`). Comme pour tout téléchargement, GitHub reçoit
+votre adresse IP. Aucune donnée de votre part n'est envoyée.
+
+### 3.5 Amélioration du modèle — désactivé par défaut
+
+Un réglage **facultatif**, **désactivé par défaut**, permet de partager vos
+corrections d'estimation photo pour améliorer le modèle. S'il est activé, seul
+le **texte** de la correction est transmis — **jamais la photo**. Vous pouvez le
+réactiver ou le désactiver à tout moment dans les réglages.
+
+### 3.6 Journalisation technique
+
+⟨À CONFIRMER : journalisation des adresses IP par le serveur, et durée de
+rétention⟩
+
+## 4. Permissions Android
+
+| Permission | Utilisation |
+|---|---|
+| Appareil photo | photographier un plat, scanner un code-barres |
+| Internet | analyse photo, code-barres, catalogues |
+| Vibreur | fin du minuteur de repos |
+| Notifications | minuteur de repos, notifications **locales** uniquement |
+| Health Connect (3 lectures) | voir section 2 |
+| Stockage (Android 12 et antérieurs) | enregistrer un fichier de sauvegarde |
+
+L'application déclare également, **du fait de bibliothèques tierces**, les
+permissions microphone et superposition d'écran : elle ne s'en sert pas, ne
+demande jamais leur activation, et n'enregistre aucun son.
+
+## 5. Ce que l'application ne fait pas
+
+- aucun compte, aucune inscription, aucune identification ;
+- aucune publicité, aucun identifiant publicitaire ;
+- aucun service d'analyse d'audience (ni Google Analytics, ni Firebase, ni Sentry) ;
+- aucune revente ni partage commercial de données ;
+- aucune collecte de localisation, de contacts ou de microphone.
+
+## 6. Enfants
+
+L'application ne s'adresse pas spécifiquement aux enfants et ne collecte
+sciemment aucune donnée les concernant.
+
+## 7. Vos droits
+
+Vos données étant stockées sur votre appareil, vous en gardez le contrôle
+direct : les effacer depuis les réglages Android ou désinstaller l'application
+les supprime définitivement. Pour toute demande concernant les données
+transmises au serveur (sections 3.1 à 3.5), écrivez à l'adresse ci-dessous.
+
+## 8. Modifications
+
+Toute évolution de cette politique sera publiée à cette même adresse, avec une
+date de mise à jour.
+
+## 9. Contact
+
+**seirais@outlook.fr**
+
+⟨À CONFIRMER : responsable de traitement à afficher⟩
