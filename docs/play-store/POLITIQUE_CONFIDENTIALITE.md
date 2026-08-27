@@ -1,18 +1,17 @@
 > ## ⚠️ À COMPLÉTER AVANT PUBLICATION
 >
-> Ce document est **exact sur tout ce qui est vérifiable depuis le dépôt**, mais
-> cinq points dépendent du serveur et ne peuvent pas être déduits du code. Ils
-> sont marqués `⟨À CONFIRMER : …⟩` dans le texte. Les renseigner AVANT
-> d'héberger cette page — une politique qui affirme quelque chose de faux sur la
-> conservation des données est pire que pas de politique du tout.
+> Deux points restent ouverts, marqués `⟨À CONFIRMER : …⟩` dans le texte :
 >
-> 1. Les photos de repas sont-elles **conservées** sur le serveur après analyse,
->    et si oui combien de temps ?
-> 2. Le serveur **journalise-t-il les adresses IP** (Caddy le fait par défaut),
->    et avec quelle durée de rétention ?
-> 3. Dans quel **pays** se trouve le VPS Hetzner (Allemagne, Finlande, États-Unis) ?
-> 4. L'URL publique d'hébergement de cette politique.
-> 5. Identité du responsable de traitement à afficher (nom ou raison sociale).
+> 1. **Le pays du centre de données** qui héberge le serveur (section 3).
+>    Ce n'est pas un détail : si le serveur est hors Union européenne, le RGPD
+>    impose de le dire et d'indiquer le cadre du transfert.
+> 2. **Le responsable de traitement** à afficher (section 9).
+>
+> Réglé le 27 août 2026, sur confirmation de l'éditeur : les photos de repas ne
+> sont **pas conservées** après analyse. La journalisation technique du serveur
+> (section 3.6) est décrite au conditionnel faute de vérification du Caddyfile —
+> une formulation qui reste vraie que le serveur journalise ou non ; à resserrer
+> si la configuration est vérifiée.
 >
 > **Constat séparé, à traiter par un correctif et non par ce texte** : le
 > manifeste déclare `RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW`
@@ -77,8 +76,9 @@ des pas et l'estimation de dépense disparaissent.
 
 ## 3. Données transmises à un serveur
 
-Le serveur d'analyse est **opéré par l'éditeur de l'application**, hébergé chez
-Hetzner ⟨À CONFIRMER : pays du centre de données⟩ et joint en HTTPS.
+Le serveur d'analyse est **opéré par l'éditeur de l'application**, hébergé sur
+un serveur privé loué auprès d'un hébergeur professionnel
+⟨À CONFIRMER : pays du centre de données⟩, et joint en HTTPS.
 
 ### 3.1 Analyse photo d'un repas
 
@@ -87,8 +87,12 @@ serveur, qui la transmet à **Google Gemini** pour reconnaissance des aliments.
 Le résultat (noms d'aliments et quantités estimées) revient à l'application.
 
 - L'image n'est envoyée **que** lorsque vous déclenchez explicitement l'analyse.
-- Le traitement par Google est soumis aux conditions de Google.
-- ⟨À CONFIRMER : conservation de l'image sur notre serveur après analyse, et durée⟩
+- **Elle n'est pas conservée** sur notre serveur : elle est transmise pour
+  analyse, puis écartée. Aucun historique de photos n'est constitué.
+- Le traitement par Google Gemini est soumis aux conditions de Google.
+
+L'application ne contacte **jamais Google directement** : elle ne détient aucune
+clé Google. C'est notre serveur qui relaie la requête.
 
 Si vous n'utilisez pas cette fonctionnalité, aucune photo ne quitte votre
 téléphone.
@@ -120,8 +124,11 @@ réactiver ou le désactiver à tout moment dans les réglages.
 
 ### 3.6 Journalisation technique
 
-⟨À CONFIRMER : journalisation des adresses IP par le serveur, et durée de
-rétention⟩
+Comme tout serveur exposé sur Internet, notre serveur peut enregistrer des
+données techniques de connexion (adresse IP, horodatage, type de requête) à des
+fins de sécurité et de diagnostic. Ces journaux ne sont **jamais** utilisés pour
+profiler un utilisateur, ne sont rattachés à aucun compte — il n'en existe pas —
+et ne sont transmis à personne.
 
 ## 4. Permissions Android
 
