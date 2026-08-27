@@ -1,29 +1,3 @@
-> ## ⚠️ À COMPLÉTER AVANT PUBLICATION
->
-> Deux points restent ouverts, marqués `⟨À CONFIRMER : …⟩` dans le texte :
->
-> 1. **Le pays du centre de données** qui héberge le serveur (section 3).
->    Ce n'est pas un détail : si le serveur est hors Union européenne, le RGPD
->    impose de le dire et d'indiquer le cadre du transfert.
-> 2. **Le responsable de traitement** à afficher (section 9).
->
-> Réglé le 27 août 2026, sur confirmation de l'éditeur : les photos de repas ne
-> sont **pas conservées** après analyse. La journalisation technique du serveur
-> (section 3.6) est décrite au conditionnel faute de vérification du Caddyfile —
-> une formulation qui reste vraie que le serveur journalise ou non ; à resserrer
-> si la configuration est vérifiée.
->
-> **Constat séparé, à traiter par un correctif et non par ce texte** : le
-> manifeste déclare `RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW`
-> (superposition d'écran), qu'aucune ligne du code applicatif n'utilise. Elles
-> proviennent de dépendances. Les déclarer sans s'en servir est un risque de
-> refus Play et alourdit inutilement cette politique : mieux vaut les retirer du
-> manifeste.
->
-> *(Supprimer entièrement ce bloc avant de publier la page.)*
-
----
-
 # Politique de confidentialité — Life Sport Tracker
 
 *Dernière mise à jour : 27 août 2026*
@@ -76,9 +50,13 @@ des pas et l'estimation de dépense disparaissent.
 
 ## 3. Données transmises à un serveur
 
-Le serveur d'analyse est **opéré par l'éditeur de l'application**, hébergé sur
-un serveur privé loué auprès d'un hébergeur professionnel
-⟨À CONFIRMER : pays du centre de données⟩, et joint en HTTPS.
+Le serveur d'analyse est **opéré par Rais&Co**, hébergé sur un serveur privé
+loué chez Hetzner, **en Allemagne** — donc au sein de l'Union européenne : vos
+données ne font l'objet d'aucun transfert hors UE de notre fait. Toutes les
+communications se font en HTTPS.
+
+Seule exception, explicitement signalée en 3.1 et 3.3 : les requêtes relayées à
+Google Gemini sont traitées selon les conditions et la localisation de Google.
 
 ### 3.1 Analyse photo d'un repas
 
@@ -170,8 +148,9 @@ transmises au serveur (sections 3.1 à 3.5), écrivez à l'adresse ci-dessous.
 Toute évolution de cette politique sera publiée à cette même adresse, avec une
 date de mise à jour.
 
-## 9. Contact
+## 9. Responsable de traitement et contact
 
+Responsable de traitement : **Rais&Co**, éditeur de Life Sport Tracker.
+
+Pour toute question ou demande relative à vos données :
 **seirais@outlook.fr**
-
-⟨À CONFIRMER : responsable de traitement à afficher⟩
