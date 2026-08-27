@@ -7,6 +7,10 @@
  * sans jamais faire planter l'import.
  */
 
+import type { HealthWeightSample } from './healthWeightMerge';
+
+export type { HealthWeightSample };
+
 type HealthConnectModule = typeof import('react-native-health-connect');
 type HealthPermission = import('react-native-health-connect').Permission;
 
@@ -15,6 +19,31 @@ const REQUIRED_PERMISSIONS: HealthPermission[] = [
   { accessType: 'read', recordType: 'TotalCaloriesBurned' },
   { accessType: 'read', recordType: 'Steps' },
 ];
+
+/**
+ * Permissions demandees EN PLUS des requises, mais dont l'absence ne doit
+ * JAMAIS degrader l'app.
+ *
+ * Le poids est arrive apres les pas et les calories. L'ajouter a
+ * `REQUIRED_PERMISSIONS` aurait fait basculer tous les utilisateurs deja
+ * autorises en « permission requise » — `hasAllReadPermissions` exige TOUTES
+ * les permissions du groupe — et leur aurait fait perdre l'affichage des pas
+ * jusqu'a une nouvelle autorisation. Un ajout de fonctionnalite ne casse pas
+ * ce qui marchait : deux groupes, deux verifications.
+ */
+const OPTIONAL_PERMISSIONS: HealthPermission[] = [
+  { accessType: 'read', recordType: 'Weight' },
+];
+
+/**
+ * Fenetre de recherche du dernier poids connu, en jours.
+ *
+ * Les pas et les calories se lisent « aujourd'hui » ; le poids non — on ne se
+ * pese pas tous les jours. On remonte donc sur 90 jours et on garde le releve
+ * le plus recent. Au-dela, une valeur serait trop vieille pour representer le
+ * poids actuel.
+ */
+const WEIGHT_LOOKBACK_DAYS = 90;
 
 export interface CaloriesBurnedToday {
   /** Calories actives (Activité) brûlées aujourd'hui, en kcal. */
@@ -142,7 +171,12 @@ export async function requestHealthPermissionsWithStatus(): Promise<HealthPermis
     // Obligatoire avant requestPermission : sinon « client is not initialized ».
     await ensureInitialized(hc);
     const startedAt = Date.now();
-    const granted = (await hc.requestPermission([...REQUIRED_PERMISSIONS])) as HealthPermission[];
+    // Les deux groupes sont demandes ensemble : une seule feuille pour
+    // l'utilisateur. Seules les requises conditionnent `granted`.
+    const granted = (await hc.requestPermission([
+      ...REQUIRED_PERMISSIONS,
+      ...OPTIONAL_PERMISSIONS,
+    ])) as HealthPermission[];
     // Refus résolu quasi instantanément = la feuille de permission ne s'est
     // JAMAIS affichée : signature du blocage des applis installées hors Play
     // Store (Health Connect les ignore, elles n'apparaissent pas dans sa liste).
@@ -236,5 +270,48 @@ export async function readStepsToday(): Promise<number | null> {
     await ensureInitialized(hc);
     const result = await hc.readRecords('Steps', todayTimeRange());
     return result.records.reduce((sum, record) => sum + record.count, 0);
+  });
+}
+
+/** true si la lecture du poids est autorisee (permission optionnelle). */
+export async function hasWeightPermission(): Promise<boolean> {
+  const granted = await safeCall('getGrantedPermissions', async (hc) => {
+    await ensureInitialized(hc);
+    return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
+  });
+  if (!granted) return false;
+  return OPTIONAL_PERMISSIONS.every((required) =>
+    granted.some(
+      (permission) =>
+        permission.accessType === required.accessType &&
+        permission.recordType === required.recordType
+    )
+  );
+}
+
+/**
+ * Dernier poids enregistre dans Health Connect sur les 90 derniers jours.
+ * null si indisponible, non autorise, ou si aucun releve n'existe.
+ */
+export async function readLatestWeight(): Promise<HealthWeightSample | null> {
+  return safeCall('readLatestWeight', async (hc) => {
+    await ensureInitialized(hc);
+    const start = new Date();
+    start.setDate(start.getDate() - WEIGHT_LOOKBACK_DAYS);
+    const result = await hc.readRecords('Weight', {
+      timeRangeFilter: {
+        operator: 'between',
+        startTime: start.toISOString(),
+        endTime: new Date().toISOString(),
+      },
+    });
+    if (result.records.length === 0) return null;
+    // Health Connect ne garantit pas l'ordre : on prend le plus recent.
+    const latest = result.records.reduce((newest, record) =>
+      record.time > newest.time ? record : newest
+    );
+    const weightKg = Math.round(latest.weight.inKilograms * 10) / 10;
+    if (!Number.isFinite(weightKg) || weightKg <= 0) return null;
+    return { weightKg, time: latest.time };
   });
 }

@@ -279,3 +279,36 @@ Sabotage verifie le 2026-08-27 : en retirant `backBehavior="history"` de
 Verifie aussi sur l'emulateur (APK release 1.23.0, `SportTracker_Pixel8`) :
 Profil -> Reglages -> retour = Profil (position de defilement conservee), puis
 retour = Nutrition, puis retour = Accueil. `adb logcat -b crash -d` vide.
+
+## Poids Health Connect : `healthWeightMerge` + `healthConnect` + HomeScreen
+
+Trois niveaux, chacun avec son sabotage verifie le 2026-08-27 :
+
+1. **Regle pure** — `src/lib/__tests__/healthWeightMerge.test.ts` couvre les six
+   cas de `resolveHealthWeightMerge` : ajout, saisie manuelle plus recente
+   preservee, remplacement d'une pesee plus ancienne (id conserve), idempotence,
+   relevé ancien versé à l'historique sans voler la premiere place, et entree
+   heritee sans champ `source` traitee comme une saisie.
+   *Sabotage* : `sameDay.date >= sample.time` inverse en `<` -> 5 tests rouges.
+
+2. **Contrat des permissions** — `src/lib/__tests__/healthConnect.test.ts`
+   verifie que `hasHealthPermissions()` reste **true** quand le poids est
+   refuse. C'est la regression qui compte : le poids dans le groupe requis
+   ferait perdre l'affichage des pas a tous les utilisateurs deja autorises.
+   *Sabotage* : `Weight` deplace dans `REQUIRED_PERMISSIONS` -> 5 tests rouges,
+   dont trois qui n'ont rien a voir avec le poids — preuve que le defaut se
+   propage.
+
+3. **Cablage** — `src/app/(tabs)/__tests__/index.test.tsx` verifie que l'ecran
+   d'accueil verse bien le releve dans `bodyWeightStore` avec
+   `source: 'healthConnect'`, et qu'avec la permission refusee il ne lit meme
+   pas le poids et ne touche pas aux pesees existantes.
+   *Sabotage* : appel a `syncHealthWeight` retire -> 1 test rouge.
+
+**Ce que ces tests NE prouvent PAS** : aucune lecture reelle de Health Connect
+n'a ete faite. L'emulateur `SportTracker_Pixel8` n'a pas l'application Health
+Connect, donc ni la feuille de permission ni un vrai enregistrement de poids
+n'ont ete exerces. Seuls le build, la declaration de la permission dans l'APK
+installe et l'absence de crash au demarrage ont ete verifies sur appareil.
+La chaine complete reste a valider sur un telephone reel avec Health Connect
+et au moins une pesee enregistree.

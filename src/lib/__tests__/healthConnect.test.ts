@@ -324,3 +324,113 @@ describe('healthConnect', () => {
     });
   });
 });
+
+describe('healthConnect — poids (permission optionnelle)', () => {
+  let warnSpy: jest.SpiedFunction<typeof console.warn>;
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
+    jest.resetModules();
+    jest.dontMock('react-native-health-connect');
+  });
+
+  /**
+   * Regression : le poids est arrive apres les pas et les calories. S'il
+   * rejoignait le groupe des permissions REQUISES, tous les utilisateurs deja
+   * autorises basculeraient en « permission requise » et perdraient
+   * l'affichage des pas jusqu'a une nouvelle autorisation.
+   */
+  it('ne degrade PAS les permissions requises quand le poids est refuse', async () => {
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      getGrantedPermissions: jest.fn().mockResolvedValue([
+        { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
+        { accessType: 'read', recordType: 'TotalCaloriesBurned' },
+        { accessType: 'read', recordType: 'Steps' },
+      ]),
+    }));
+    const service = loadService();
+
+    await expect(service.hasHealthPermissions()).resolves.toBe(true);
+    await expect(service.hasWeightPermission()).resolves.toBe(false);
+  });
+
+  it('reconnait la permission poids quand elle est accordee', async () => {
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      getGrantedPermissions: jest
+        .fn()
+        .mockResolvedValue([{ accessType: 'read', recordType: 'Weight' }]),
+    }));
+    const service = loadService();
+
+    await expect(service.hasWeightPermission()).resolves.toBe(true);
+  });
+
+  it('demande poids et permissions requises dans la meme feuille', async () => {
+    const requestPermission = jest.fn().mockResolvedValue([]);
+    jest.doMock('react-native-health-connect', () => ({
+      SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
+      getSdkStatus: jest.fn().mockResolvedValue(3),
+      initialize: jest.fn().mockResolvedValue(true),
+      requestPermission,
+    }));
+    const service = loadService();
+
+    await service.requestHealthPermissionsWithStatus();
+
+    expect(requestPermission).toHaveBeenCalledWith(
+      expect.arrayContaining([{ accessType: 'read', recordType: 'Weight' }])
+    );
+    expect(requestPermission.mock.calls[0][0]).toHaveLength(4);
+  });
+
+  it('retient le releve le plus recent, quel que soit l ordre rendu', async () => {
+    const readRecords = jest.fn().mockResolvedValue({
+      records: [
+        { time: '2026-08-20T09:00:00.000Z', weight: { inKilograms: 80.2 } },
+        { time: '2026-08-27T07:12:00.000Z', weight: { inKilograms: 78.44 } },
+        { time: '2026-08-25T08:00:00.000Z', weight: { inKilograms: 79.1 } },
+      ],
+    });
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      readRecords,
+    }));
+    const service = loadService();
+
+    await expect(service.readLatestWeight()).resolves.toEqual({
+      weightKg: 78.4,
+      time: '2026-08-27T07:12:00.000Z',
+    });
+
+    // La fenetre de lecture n'est PAS celle du jour : on ne se pese pas
+    // tous les jours, il faut remonter 90 jours en arriere.
+    const [recordType, options] = readRecords.mock.calls[0];
+    expect(recordType).toBe('Weight');
+    const start = new Date(options.timeRangeFilter.startTime);
+    const end = new Date(options.timeRangeFilter.endTime);
+    const days = Math.round((end.getTime() - start.getTime()) / 86_400_000);
+    expect(days).toBe(90);
+  });
+
+  it('retourne null quand aucun poids n a ete enregistre', async () => {
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      readRecords: jest.fn().mockResolvedValue({ records: [] }),
+    }));
+    const service = loadService();
+
+    await expect(service.readLatestWeight()).resolves.toBeNull();
+  });
+
+  it('degrade proprement quand le module natif est absent', async () => {
+    const service = loadService();
+    await expect(service.hasWeightPermission()).resolves.toBe(false);
+    await expect(service.readLatestWeight()).resolves.toBeNull();
+  });
+});
