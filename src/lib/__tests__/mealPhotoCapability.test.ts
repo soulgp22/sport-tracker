@@ -46,7 +46,6 @@ describe('mealPhotoCapability (mode serveur)', () => {
       ok: false,
       reason: 'android-version',
     });
-    await expect(service.initMealPhotoRuntime()).resolves.toBeUndefined();
   });
 
   it('active la feature sur Android récent avec serveur configuré', async () => {
@@ -74,10 +73,5 @@ describe('mealPhotoCapability (mode serveur)', () => {
       ok: false,
       reason: 'android-version',
     });
-  });
-
-  it('initMealPhotoRuntime reste un no-op', async () => {
-    const service = loadService();
-    await expect(service.initMealPhotoRuntime()).resolves.toBeUndefined();
   });
 });

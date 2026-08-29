@@ -17,7 +17,6 @@ import {
 } from '@expo-google-fonts/archivo';
 
 import { configureNotifications } from '../lib/restTimerNotifications';
-import { initMealPhotoRuntime } from '../lib/mealPhotoCapability';
 import { RestTimerBanner } from '../components/session/RestTimerBanner';
 import { useColors, useThemeMode } from '../theme/useColors';
 import { AppDialog } from '../components/ui/AppDialog';
@@ -56,9 +55,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     void configureNotifications();
-    // Compatibilité historique : le runtime photo est désormais un no-op, car
-    // le serveur d'analyse est sondé à la demande par MealPhotoReview.
-    void initMealPhotoRuntime();
   }, []);
 
   useEffect(() => {

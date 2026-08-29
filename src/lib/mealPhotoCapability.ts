@@ -40,11 +40,3 @@ export async function canUseMealPhoto(): Promise<MealPhotoCapability> {
   }
   return { ok: true };
 }
-
-/**
- * Compat : plus rien à initialiser globalement (llama.rn retiré).
- * No-op conservé pour ne pas toucher _layout.tsx.
- */
-export async function initMealPhotoRuntime(): Promise<void> {
-  // Rien à faire : le serveur est sondé à la demande par MealPhotoReview.
-}
