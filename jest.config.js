@@ -8,7 +8,5 @@ module.exports = {
     'react-native-gifted-charts': '<rootDir>/__mocks__/react-native-gifted-charts.js',
     '^expo-font$': '<rootDir>/__mocks__/expo-font.js',
     '^expo-haptics$': '<rootDir>/__mocks__/expo-haptics.js',
-    '^@expo-google-fonts/fraunces$': '<rootDir>/__mocks__/expo-google-fonts-fraunces.js',
-    '^@expo-google-fonts/hanken-grotesk$': '<rootDir>/__mocks__/expo-google-fonts-hanken-grotesk.js',
   },
 };
