@@ -255,3 +255,81 @@ delais.
 **Toujours utiliser `npm test`**, pas `npx jest` directement. Un echec obtenu
 avec la mauvaise commande fait perdre du temps a chercher une regression qui
 n'existe pas.
+## Retour arriere : `src/app/(tabs)/__tests__/backBehavior.test.tsx`
+
+Deux niveaux, parce que la valeur seule ne prouve rien et le comportement seul
+ne prouve pas qu'il est branche :
+
+1. **Cablage** — `TabLayout` est rendu avec `<Tabs>` mocke ; le test verifie que
+   la prop `backBehavior` vaut bien `history`.
+2. **Comportement** — le VRAI `TabRouter` d'expo-router est instancie avec la
+   vraie liste des 11 onglets ; cinq parcours reels sont rejoues puis un
+   `GO_BACK` est applique. Chaque cas assert deux choses : `history` ramene au
+   menu precedent, ET le defaut de la bibliotheque (`undefined`) ramenait bien a
+   `index` — c'est l'oracle qui documente la cause.
+
+Deux gardes completent : l'accueil reste la destination quand il EST le menu
+precedent, et depuis l'accueil initial le retour laisse sortir de l'application
+(pas de piege).
+
+Sabotage verifie le 2026-08-27 : en retirant `backBehavior="history"` de
+`src/app/(tabs)/_layout.tsx`, le test de cablage rougit
+(`Expected: "history" / Received: undefined`) ; apres restauration, 8/8 au vert.
+
+Verifie aussi sur l'emulateur (APK release 1.23.0, `SportTracker_Pixel8`) :
+Profil -> Reglages -> retour = Profil (position de defilement conservee), puis
+retour = Nutrition, puis retour = Accueil. `adb logcat -b crash -d` vide.
+
+## Poids Health Connect : `healthWeightMerge` + `healthConnect` + HomeScreen
+
+Trois niveaux, chacun avec son sabotage verifie le 2026-08-27 :
+
+1. **Regle pure** — `src/lib/__tests__/healthWeightMerge.test.ts` couvre les six
+   cas de `resolveHealthWeightMerge` : ajout, saisie manuelle plus recente
+   preservee, remplacement d'une pesee plus ancienne (id conserve), idempotence,
+   relevé ancien versé à l'historique sans voler la premiere place, et entree
+   heritee sans champ `source` traitee comme une saisie.
+   *Sabotage* : `sameDay.date >= sample.time` inverse en `<` -> 5 tests rouges.
+
+2. **Contrat des permissions** — `src/lib/__tests__/healthConnect.test.ts`
+   verifie que `hasHealthPermissions()` reste **true** quand le poids est
+   refuse. C'est la regression qui compte : le poids dans le groupe requis
+   ferait perdre l'affichage des pas a tous les utilisateurs deja autorises.
+   *Sabotage* : `Weight` deplace dans `REQUIRED_PERMISSIONS` -> 5 tests rouges,
+   dont trois qui n'ont rien a voir avec le poids — preuve que le defaut se
+   propage.
+
+3. **Cablage** — `src/app/(tabs)/__tests__/index.test.tsx` verifie que l'ecran
+   d'accueil verse bien le releve dans `bodyWeightStore` avec
+   `source: 'healthConnect'`, et qu'avec la permission refusee il ne lit meme
+   pas le poids et ne touche pas aux pesees existantes.
+   *Sabotage* : appel a `syncHealthWeight` retire -> 1 test rouge.
+
+**Ce que ces tests NE prouvent PAS** : aucune lecture reelle de Health Connect
+n'a ete faite. L'emulateur `SportTracker_Pixel8` n'a pas l'application Health
+Connect, donc ni la feuille de permission ni un vrai enregistrement de poids
+n'ont ete exerces. Seuls le build, la declaration de la permission dans l'APK
+installe et l'absence de crash au demarrage ont ete verifies sur appareil.
+La chaine complete reste a valider sur un telephone reel avec Health Connect
+et au moins une pesee enregistree.
+
+## Instructions francaises : `src/data/__tests__/instructionsFr.test.ts`
+
+Quatre garanties sur les donnees, pas sur le code :
+
+1. les 873 fiches ont bien des `instructionsFr` ;
+2. aucune occurrence de `banque` / `banques` / `banquette` / `banctte` — les
+   quatre formes, parce que la troisieme est le meme defaut et la quatrieme est
+   ce qu'une correction naive sans `\b` produisait ;
+3. aucune phrase restee en anglais (marqueurs sans ambiguite : « this will be
+   your », « starting position », « kneel in front »…) ;
+4. aucun adjectif feminin apres « banc » (`banc plate`, `banc inclinée`…) : le
+   genre change en corrigeant, les accords doivent suivre.
+
+Sabotage verifie le 2026-08-29 : en remettant « une banquette plate » sur
+`offline-180` et la phrase anglaise sur `offline-419`, deux tests rougissent ;
+apres restauration, 7/7 au vert et 516 tests sur 69 suites.
+
+**Ce que ce test aurait attrape** : un defaut present dans les donnees depuis
+des mois, invisible pour les 509 tests existants — aucun ne lisait le contenu
+des instructions.

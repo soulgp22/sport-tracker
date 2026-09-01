@@ -43,6 +43,14 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      // Retour = écran précédent, jamais un raccourci vers l'accueil.
+      // Le défaut de React Navigation (`firstRoute`) renvoyait sur l'accueil
+      // dès qu'on quittait un onglet pour un autre (Nutrition → Aliments,
+      // Programmes → Communauté, Profil → Réglages…), car ces sections sont
+      // des onglets masqués et non des écrans empilés. `history` rejoue la
+      // pile de visites : l'accueil n'est atteint que s'il était l'écran
+      // précédent. Voir known_bugs.md.
+      backBehavior="history"
       screenOptions={{
         headerShown: false,
         animation: 'shift',

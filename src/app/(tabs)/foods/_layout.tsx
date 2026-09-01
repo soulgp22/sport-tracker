@@ -8,7 +8,7 @@ import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
 
-function BackToHomeButton() {
+function BackButton() {
   const c = useColors();
   const router = useRouter();
 
@@ -48,7 +48,7 @@ export default function FoodsLayout() {
         options={{
           headerShown: true,
           title: t('nav.foods'),
-          headerLeft: () => <BackToHomeButton />,
+          headerLeft: () => <BackButton />,
           headerRight: () => (
             <View style={styles.headerActions}>
               <Link

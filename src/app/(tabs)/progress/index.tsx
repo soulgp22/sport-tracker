@@ -140,6 +140,13 @@ export default function ProgressScreen() {
 
   const currentWeight = bodyWeightPoints.at(-1)?.value ?? null;
 
+  /** Derniere pesee au sens chronologique : c'est elle qui s'affiche. */
+  const latestWeightEntry = useMemo(
+    () =>
+      [...bodyWeightEntries].sort((a, b) => a.date.localeCompare(b.date)).at(-1) ?? null,
+    [bodyWeightEntries]
+  );
+
   const handleSaveWeight = () => {
     if (!canSaveWeight) return;
     addBodyWeightEntry(parsedWeight);
@@ -276,6 +283,11 @@ export default function ProgressScreen() {
                 </>
               )}
             </Text>
+            {latestWeightEntry?.source === 'healthConnect' ? (
+              <Text style={styles.currentWeightSource} testID="weight-source-health">
+                {t('progress.weightFromHealthConnect')}
+              </Text>
+            ) : null}
           </View>
           <View style={styles.formRow}>
             <View style={styles.weightInput}>
@@ -468,6 +480,14 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   currentWeightUnit: {
     fontSize: 20,
     color: c.textPrimary,
+  },
+  // Mention discrete : la provenance se lit sans jamais concurrencer la valeur.
+  currentWeightSource: {
+    fontFamily: fonts.sans,
+    fontSize: 11,
+    lineHeight: 15,
+    marginTop: 6,
+    color: c.textMuted,
   },
   content: { paddingHorizontal: spacing.md, gap: spacing.md, paddingBottom: 32 },
   exerciseSelector: {
