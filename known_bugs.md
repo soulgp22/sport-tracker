@@ -902,3 +902,42 @@ est teste, et son retrait fait rougir deux tests.
 **A retenir** — une permission Android ne se retire pas d'un fichier mais d'une
 chaine : manifeste genere, configuration Expo, et code qui la demande. En oublier
 un maillon donne soit un binaire refuse, soit une regression silencieuse.
+
+
+## « banque plate » : un defaut lexical invisible pour toute la suite de tests
+
+Les 873 fiches d'exercices ont ete traduites automatiquement. Le francais
+produit est globalement fluide — ce qui a masque un defaut systematique pendant
+des mois : **« banque » pour *bench***, 204 occurrences sur 109 exercices,
+visible des l'ouverture de n'importe quelle fiche.
+
+Aucun test ne regardait le contenu de `instructionsFr`. Le prestataire de test
+ferme ne l'a pas signale non plus (voir le rapport du 2026-08-29).
+
+**Pourquoi PAS une retraduction.** Repasser 873 fiches dans un modele aurait
+coute cher, pris des heures, et risque de degrader du texte deja correct — pour
+un probleme purement lexical. Des regles deterministes sont plus sures,
+verifiables et rejouables : `scripts/fix-instructions-fr.mjs`.
+
+**Trois pieges rencontres en ecrivant la correction :**
+
+1. **Faux positifs.** « rangee » (a row of cones) et « boucle » (the loop of a
+   band) ont ete verifies contre l'anglais : ce sont des traductions CORRECTES.
+   Les « corriger » aurait introduit des fautes. Un audit qui ne verifie pas ses
+   propres signalements fabrique des regressions.
+2. **Frontieres de mot.** Un premier jet remplacait `/banque/` sans `\b` : le
+   motif mordait a l'interieur de « banquette » et produisait « banctte » —
+   9 occurrences d'un mot inexistant. Le garde-fou ne le voyait pas puisqu'il ne
+   cherchait que « banque ». Il surveille desormais les trois formes.
+3. **Le genre change.** `la banque` -> `le banc` fait passer le nom au masculin :
+   tous les accords suivants doivent suivre (`banque plate` -> `banc plat`,
+   `banque inclinee reglee` -> `banc incline regle`, `equipee` -> `equipe`).
+   Un balayage des accords feminins restants a montre 5 cas — tous CORRECTS,
+   car ils s'accordaient avec un autre nom (main, jambes, barre, prise).
+
+Un exercice avait par ailleurs une phrase entiere restee en anglais
+(`offline-419`), et un accord faux (« un seul poignee »).
+
+**A retenir** — un texte fluide n'est pas un texte juste. Une traduction
+automatique se relit sur son VOCABULAIRE metier, pas sur sa syntaxe, et la
+verification doit porter sur les donnees, pas seulement sur le code.

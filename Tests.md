@@ -312,3 +312,24 @@ n'ont ete exerces. Seuls le build, la declaration de la permission dans l'APK
 installe et l'absence de crash au demarrage ont ete verifies sur appareil.
 La chaine complete reste a valider sur un telephone reel avec Health Connect
 et au moins une pesee enregistree.
+
+## Instructions francaises : `src/data/__tests__/instructionsFr.test.ts`
+
+Quatre garanties sur les donnees, pas sur le code :
+
+1. les 873 fiches ont bien des `instructionsFr` ;
+2. aucune occurrence de `banque` / `banques` / `banquette` / `banctte` — les
+   quatre formes, parce que la troisieme est le meme defaut et la quatrieme est
+   ce qu'une correction naive sans `\b` produisait ;
+3. aucune phrase restee en anglais (marqueurs sans ambiguite : « this will be
+   your », « starting position », « kneel in front »…) ;
+4. aucun adjectif feminin apres « banc » (`banc plate`, `banc inclinée`…) : le
+   genre change en corrigeant, les accords doivent suivre.
+
+Sabotage verifie le 2026-08-29 : en remettant « une banquette plate » sur
+`offline-180` et la phrase anglaise sur `offline-419`, deux tests rougissent ;
+apres restauration, 7/7 au vert et 516 tests sur 69 suites.
+
+**Ce que ce test aurait attrape** : un defaut present dans les donnees depuis
+des mois, invisible pour les 509 tests existants — aucun ne lisait le contenu
+des instructions.
