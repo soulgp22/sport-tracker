@@ -154,13 +154,10 @@ export default function AddMealScreen() {
   const quantityInGrams = selectedFood
     ? resolveQuantityInGrams(selectedFood, quantityNumber, byUnit)
     : 0;
-  const calculatedNutrition = useMemo(() => {
-    if (!selectedFood || quantityInGrams <= 0) {
-      return { calories: 0, protein: 0, carbs: 0, fat: 0 };
-    }
-
-    return calculateNutritionForQuantity(selectedFood, quantityInGrams);
-  }, [quantityInGrams, selectedFood]);
+  const calculatedNutrition =
+    !selectedFood || quantityInGrams <= 0
+      ? { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      : calculateNutritionForQuantity(selectedFood, quantityInGrams);
 
   const diaryEntries = useFoodDiaryStore((s) => s.entries);
   // Groupes proposés : ceux déjà utilisés (toutes dates) ; à défaut, les 4

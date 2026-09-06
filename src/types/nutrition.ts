@@ -42,7 +42,15 @@ export interface WeightEntry {
   id: string;
   date: string; // ISO date, comme FoodEntry.date
   weight: number; // kg
+  /**
+   * Origine de la pesee. Absent sur les entrees creees avant l'integration
+   * Health Connect : elles sont toutes des saisies manuelles, et le code doit
+   * traiter `undefined` comme 'manual' plutot que d'exiger une migration.
+   */
+  source?: WeightEntrySource;
 }
+
+export type WeightEntrySource = 'manual' | 'healthConnect';
 
 /**
  * Groupe de repas. Les 4 valeurs classiques ('breakfast' | 'lunch' | 'dinner' |

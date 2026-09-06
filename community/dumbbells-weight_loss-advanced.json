@@ -492,26 +492,6 @@
               ]
             },
             {
-              "exerciseName": "Standing Dumbbell Calf Raise",
-              "sets": [
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 30
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 30
-                },
-                {
-                  "reps": 15,
-                  "weight": 0,
-                  "restSeconds": 30
-                }
-              ]
-            },
-            {
               "exerciseName": "Crunches",
               "sets": [
                 {

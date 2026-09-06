@@ -3,10 +3,13 @@ import { useFocusEffect } from 'expo-router';
 
 import {
   hasHealthPermissions,
+  hasWeightPermission,
   isHealthConnectAvailable,
   readCaloriesBurnedToday,
+  readLatestWeight,
   readStepsToday,
 } from '../lib/healthConnect';
+import { useBodyWeightStore } from '../store/bodyWeightStore';
 
 export type HealthTodayData =
   | { status: 'unavailable' }
@@ -22,6 +25,13 @@ export type HealthTodayData =
  * rafraîchit à chaque fois que l'écran qui le consomme retrouve le focus.
  *
  * L'état exposé suit le cycle : indisponible → permission requise → données.
+ *
+ * Le poids suit un chemin différent des pas et des calories : il n'est pas
+ * exposé par ce hook mais versé dans `bodyWeightStore`, qui est déjà la source
+ * unique de l'accueil, de la progression et du bilan énergétique. Un seul
+ * point d'écriture, aucune règle de priorité à dupliquer à l'affichage.
+ * Sa permission est optionnelle : son refus ne bloque ni les pas ni les
+ * calories.
  */
 export function useHealthToday() {
   const [healthData, setHealthData] = useState<HealthTodayData>({
@@ -48,6 +58,11 @@ export function useHealthToday() {
       readStepsToday(),
     ]);
     setHealthData({ status: 'granted', calories, steps });
+
+    if (await hasWeightPermission()) {
+      const sample = await readLatestWeight();
+      if (sample) useBodyWeightStore.getState().syncHealthWeight(sample);
+    }
   }, []);
 
   useFocusEffect(
