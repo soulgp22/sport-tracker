@@ -333,3 +333,26 @@ apres restauration, 7/7 au vert et 516 tests sur 69 suites.
 **Ce que ce test aurait attrape** : un defaut present dans les donnees depuis
 des mois, invisible pour les 509 tests existants — aucun ne lisait le contenu
 des instructions.
+
+
+## Quota photo : règle pure + garde d'écran
+
+Deux niveaux, deux sabotages vérifiés le 2026-09-16 :
+
+1. **La règle** — `src/lib/__tests__/mealPhotoQuota.test.ts` : limite à 2, décompte,
+   blocage au 2e repas, remise à zéro le lendemain, état corrompu (négatif ou
+   aberrant), et date **locale** et non UTC.
+   *Sabotages* : limite portée à 3 → 5 tests rouges ; suppression du test de date
+   dans `resolveQuota` → le test de remise à zéro rougit seul.
+
+2. **Le garde** — `src/app/(tabs)/nutrition/__tests__/photoQuota.test.tsx` : l'écran
+   laisse passer à 1 repas, bloque à 2 en annonçant le compte payant, rouvre
+   l'accès le lendemain, et surtout **ne sollicite pas `canUseMealPhoto()`** quand
+   le quota est atteint — sinon la caméra s'ouvrirait avant le blocage.
+   *Sabotage* : `if (quota.reached)` remplacé par `if (false)` → 1 test rouge.
+
+**Non vérifié à l'écran** : l'écran « limite atteinte » n'a pas été photographié
+sur l'émulateur. Amener le compteur à 2 exigerait deux analyses réelles (serveur
++ caméra), et l'APK release n'est pas débogable, donc le compteur AsyncStorage
+n'est pas amorçable par `adb`. Le test de composant couvre le rendu et le
+contenu de cet écran.

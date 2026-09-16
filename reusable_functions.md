@@ -187,6 +187,38 @@ adb shell dumpsys package com.sportracker.app | grep READ_WEIGHT
 
 ---
 
+## Quota journalier de l'analyse photo
+
+`src/lib/mealPhotoQuota.ts` — module **pur**, sans dépendance au stockage ni à
+l'UI : `resolveQuota(state, today)` et `consumeQuota(state, today)`.
+`DAILY_MEAL_PHOTO_LIMIT = 2`.
+
+**La règle produit compte les REPAS, pas les détections.** Le compteur est
+incrémenté quand une analyse est **enregistrée au journal**, pas quand elle est
+lancée. Conséquence voulue : une photo ratée, une analyse relancée ou un plat
+finalement abandonné ne consomment rien. L'utilisateur n'est jamais puni d'avoir
+retenté.
+
+| Élément | Rôle |
+|---|---|
+| `lib/mealPhotoQuota` | la règle, pure et testable sans appareil |
+| `store/mealPhotoQuotaStore` | persistance seule (`{ date, mealsAnalyzed }`) |
+| `MealPhotoReview` | appelle `recordAnalyzedMeal()` après l'enregistrement |
+| `nutrition/photo.tsx` | le garde, **avant** le chargement du module d'analyse |
+
+**Un seul garde suffit** : l'accueil et l'écran Nutrition poussent tous deux vers
+`/(tabs)/nutrition/photo`. Ajouter un garde par bouton aurait été redondant et
+aurait divergé à la première évolution.
+
+**Remise à zéro sans tâche planifiée** : un état portant sur un autre jour est
+traité comme vide. La date est **locale** (`quotaDayKey`), pas UTC, pour que le
+quota suive la journée de l'utilisateur.
+
+Au-delà de la limite, l'écran annonce qu'un compte payant lèvera la restriction,
+**sans promettre de date** — il n'existe pas encore.
+
+---
+
 ## Outillage de vérification
 
 ```bash

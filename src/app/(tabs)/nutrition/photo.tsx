@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { canUseMealPhoto } from '../../../lib/mealPhotoCapability';
+import { DAILY_MEAL_PHOTO_LIMIT, resolveQuota } from '../../../lib/mealPhotoQuota';
+import { useMealPhotoQuotaStore } from '../../../store/mealPhotoQuotaStore';
 import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
@@ -50,7 +52,18 @@ export default function MealPhotoScreen() {
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [blocked, setBlocked] = useState(false);
 
+  // Quota lu a l'ouverture : c'est le seul point d'entree vers l'analyse
+  // (accueil et ecran Nutrition poussent tous deux vers cette route), donc un
+  // seul garde suffit.
+  const quotaDate = useMealPhotoQuotaStore((s) => s.date);
+  const quotaCount = useMealPhotoQuotaStore((s) => s.mealsAnalyzed);
+  const quota = useMemo(
+    () => resolveQuota({ date: quotaDate, mealsAnalyzed: quotaCount }),
+    [quotaDate, quotaCount]
+  );
+
   useEffect(() => {
+    if (quota.reached) return;
     let mounted = true;
     void canUseMealPhoto().then((capability) => {
       if (!mounted) return;
@@ -68,7 +81,7 @@ export default function MealPhotoScreen() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [quota.reached]);
 
   const goBack = () => {
     if (router.canGoBack()) {
@@ -81,6 +94,26 @@ export default function MealPhotoScreen() {
   // Après « Tout ajouter » : atterrir sur le journal du jour pour que
   // l'utilisateur VOIE immédiatement ce qui a été enregistré.
   const goDiary = () => router.replace('/(tabs)/nutrition/diary' as never);
+
+  // Quota atteint : on l'annonce AVANT de charger le module d'analyse, pour ne
+  // pas laisser croire que la camera va s'ouvrir.
+  if (quota.reached) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        <View style={styles.blocked}>
+          <Ionicons name="lock-closed-outline" size={40} color={c.textMuted} />
+          <Text style={styles.quotaTitle}>{t('mealPhoto.quotaTitle')}</Text>
+          <Text style={styles.blockedText}>
+            {t('mealPhoto.quotaMessage', { limit: DAILY_MEAL_PHOTO_LIMIT })}
+          </Text>
+          <Text style={styles.quotaHint}>{t('mealPhoto.quotaUpgrade')}</Text>
+          <TouchableOpacity onPress={goBack} hitSlop={8} activeOpacity={0.7}>
+            <Text style={styles.blockedLink}>← {t('nav.nutrition')}</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (blocked) {
     return (
@@ -118,5 +151,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   host: { flex: 1, backgroundColor: c.bg },
   blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, padding: spacing.lg },
   blockedText: { fontSize: 14, fontFamily: fonts.sans, color: c.textSecondary, textAlign: 'center' },
+  quotaTitle: { fontSize: 20, fontFamily: fonts.serifBold, color: c.textPrimary, textAlign: 'center' },
+  quotaHint: { fontSize: 13, fontFamily: fonts.sans, color: c.textMuted, textAlign: 'center' },
   blockedLink: { fontSize: 14, fontFamily: fonts.sansBold, color: c.primary },
 });
