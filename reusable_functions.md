@@ -141,6 +141,84 @@ travail.
 
 ---
 
+## Poids Health Connect — permission optionnelle et règle de fusion
+
+`src/lib/healthConnect.ts` distingue désormais **deux groupes de permissions** :
+
+| Groupe | Contenu | Vérifié par | Effet d'un refus |
+|---|---|---|---|
+| `REQUIRED_PERMISSIONS` | calories actives, calories totales, pas | `hasHealthPermissions()` | l'écran bascule en « permission requise » |
+| `OPTIONAL_PERMISSIONS` | poids | `hasWeightPermission()` | **aucun** — le reste continue de fonctionner |
+
+Les deux sont demandés dans la **même feuille** (`requestPermission`), mais
+seul le premier groupe conditionne `granted`. Motif : le poids est arrivé après
+les pas ; l'ajouter au groupe requis aurait fait basculer tous les utilisateurs
+déjà autorisés en « permission requise ». **Toute nouvelle permission Health
+Connect doit rejoindre le groupe optionnel, jamais le groupe requis.**
+
+`readLatestWeight()` n'utilise PAS `todayTimeRange()` : on ne se pèse pas tous
+les jours, la fenêtre est de 90 jours et le relevé le plus récent est retenu
+(Health Connect ne garantit pas l'ordre des enregistrements).
+
+`src/lib/healthWeightMerge.ts` — `resolveHealthWeightMerge(entries, sample)` est
+une **fonction pure**, sans dépendance à Health Connect ni à l'UI : elle décide
+`add` / `replace` / `skip` pour un relevé face aux pesées existantes. Règle :
+le plus récent gagne, jour par jour. Testable sans appareil, sans permission et
+sans module natif — c'est ce qui rend la règle vérifiable.
+
+`bodyWeightStore.syncHealthWeight(sample)` applique cette décision et renvoie
+`true` seulement si l'état a changé, pour ne pas réécrire le stockage à chaque
+retour sur l'écran.
+
+**Point d'écriture unique.** Le poids Health Connect n'est pas exposé par
+`useHealthToday` : il est versé dans `bodyWeightStore`, déjà source unique de
+l'accueil, de la progression et du bilan énergétique. Aucune règle de priorité
+n'est dupliquée à l'affichage — la plus récente des pesées est la dernière du
+tableau trié, quelle que soit son origine.
+
+**Piège d'infrastructure.** `app.json` ne suffit pas : `android/` est généré et
+gitignoré, Gradle lit `android/app/src/main/AndroidManifest.xml`. Une permission
+ajoutée dans `app.json` seulement n'existe PAS dans l'APK — même piège que le
+`versionCode`. Vérifier après installation :
+
+```bash
+adb shell dumpsys package com.sportracker.app | grep READ_WEIGHT
+```
+
+---
+
+## Quota journalier de l'analyse photo
+
+`src/lib/mealPhotoQuota.ts` — module **pur**, sans dépendance au stockage ni à
+l'UI : `resolveQuota(state, today)` et `consumeQuota(state, today)`.
+`DAILY_MEAL_PHOTO_LIMIT = 2`.
+
+**La règle produit compte les REPAS, pas les détections.** Le compteur est
+incrémenté quand une analyse est **enregistrée au journal**, pas quand elle est
+lancée. Conséquence voulue : une photo ratée, une analyse relancée ou un plat
+finalement abandonné ne consomment rien. L'utilisateur n'est jamais puni d'avoir
+retenté.
+
+| Élément | Rôle |
+|---|---|
+| `lib/mealPhotoQuota` | la règle, pure et testable sans appareil |
+| `store/mealPhotoQuotaStore` | persistance seule (`{ date, mealsAnalyzed }`) |
+| `MealPhotoReview` | appelle `recordAnalyzedMeal()` après l'enregistrement |
+| `nutrition/photo.tsx` | le garde, **avant** le chargement du module d'analyse |
+
+**Un seul garde suffit** : l'accueil et l'écran Nutrition poussent tous deux vers
+`/(tabs)/nutrition/photo`. Ajouter un garde par bouton aurait été redondant et
+aurait divergé à la première évolution.
+
+**Remise à zéro sans tâche planifiée** : un état portant sur un autre jour est
+traité comme vide. La date est **locale** (`quotaDayKey`), pas UTC, pour que le
+quota suive la journée de l'utilisateur.
+
+Au-delà de la limite, l'écran annonce qu'un compte payant lèvera la restriction,
+**sans promettre de date** — il n'existe pas encore.
+
+---
+
 ## Outillage de vérification
 
 ```bash

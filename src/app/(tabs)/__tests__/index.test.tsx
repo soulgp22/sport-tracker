@@ -12,8 +12,10 @@ import { useSessionStore } from '../../../store/sessionStore';
 import { estimateActiveCaloriesFromSteps } from '../../../lib/energyBalance';
 import {
   hasHealthPermissions,
+  hasWeightPermission,
   isHealthConnectAvailable,
   readCaloriesBurnedToday,
+  readLatestWeight,
   readStepsToday,
 } from '../../../lib/healthConnect';
 
@@ -37,6 +39,10 @@ jest.mock('../../../lib/healthConnect', () => ({
   hasHealthPermissions: jest.fn(),
   readCaloriesBurnedToday: jest.fn(),
   readStepsToday: jest.fn(),
+  // Permission optionnelle : par defaut refusee, l'ecran doit fonctionner
+  // exactement pareil sans elle.
+  hasWeightPermission: jest.fn().mockResolvedValue(false),
+  readLatestWeight: jest.fn().mockResolvedValue(null),
 }));
 
 jest.mock('react-native-safe-area-context', () => {
@@ -73,6 +79,8 @@ beforeEach(() => {
   (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
   (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
   (readStepsToday as jest.Mock).mockResolvedValue(null);
+  (hasWeightPermission as jest.Mock).mockReset().mockResolvedValue(false);
+  (readLatestWeight as jest.Mock).mockReset().mockResolvedValue(null);
   resetStores();
 });
 
@@ -201,6 +209,46 @@ describe('HomeScreen', () => {
 
     expect(screen.getByText('8000 pas')).toBeTruthy();
     expect(screen.getByText(`${expectedCalories} kcal`)).toBeTruthy();
+  });
+
+  it('verse le poids Health Connect dans l’historique des pesées', async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(null);
+    (hasWeightPermission as jest.Mock).mockResolvedValue(true);
+    (readLatestWeight as jest.Mock).mockResolvedValue({
+      weightKg: 78.4,
+      time: '2026-08-27T07:12:00.000Z',
+    });
+
+    useBodyWeightStore.setState({ entries: [] });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    expect(useBodyWeightStore.getState().entries).toHaveLength(1);
+    expect(useBodyWeightStore.getState().entries[0]).toMatchObject({
+      weight: 78.4,
+      source: 'healthConnect',
+    });
+  });
+
+  it('ne touche pas aux pesées quand la permission poids est refusée', async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(8000);
+    (hasWeightPermission as jest.Mock).mockResolvedValue(false);
+
+    const manual = { id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 };
+    useBodyWeightStore.setState({ entries: [manual] });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    expect(readLatestWeight).not.toHaveBeenCalled();
+    expect(useBodyWeightStore.getState().entries).toEqual([manual]);
   });
 
   it("sans donnée de pas, n'affiche aucun « 0 » ni valeur trompeuse à la place des pas et calories", async () => {

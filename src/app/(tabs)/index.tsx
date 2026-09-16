@@ -248,18 +248,18 @@ export default function HomeScreen() {
         {/* 4. Deux raccourcis */}
         <View style={styles.shortcuts}>
           <TouchableOpacity
-            style={[styles.shortcut, styles.shortcutDivider]}
+            style={[styles.shortcut, styles.shortcutPhoto]}
             onPress={() => router.push('/(tabs)/nutrition/photo' as never)}
-            activeOpacity={0.78}
+            activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={t('home.analyzeMeal')}>
             <Text style={styles.shortcutTitle}>{t('home.analyzeMeal')}</Text>
             <Text style={styles.shortcutSubtitle}>{t('home.analyzeMealSubtitle')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.shortcut}
+            style={[styles.shortcut, styles.shortcutCalories]}
             onPress={() => router.push('/(tabs)/nutrition' as never)}
-            activeOpacity={0.78}
+            activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={t('home.calorieTracking')}>
             <Text style={styles.shortcutTitle}>{t('home.calorieTracking')}</Text>
@@ -473,32 +473,44 @@ const makeStyles = (c: ThemeColors) =>
       opacity: 0.85,
     },
 
+    // Les deux raccourcis etaient de simples zones de texte separees par un
+    // filet : rien n'indiquait qu'on pouvait appuyer dessus, alors que
+    // « Analyser un plat » est la fonctionnalite differenciante de l'app. Ils
+    // reprennent desormais la forme du bouton d'action principal (meme rayon,
+    // meme rythme interne), en gardant le filet haut/bas qui structure la page.
     shortcuts: {
       flexDirection: 'row',
+      gap: 12,
+      padding: 20,
       borderTopWidth: 2,
       borderBottomWidth: 2,
       borderColor: c.border,
     },
     shortcut: {
       flex: 1,
-      minHeight: 88,
-      paddingHorizontal: 20,
-      paddingVertical: 18,
+      minHeight: 96,
+      paddingHorizontal: 18,
+      paddingVertical: 16,
       justifyContent: 'center',
+      gap: 6,
+      borderRadius: radius.lg,
     },
-    shortcutDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    // Vert : c'est la couleur que la section Nutrition emploie deja pour ce
+    // meme geste (bouton « Analyser un plat » de l'ecran Nutrition).
+    shortcutPhoto: { backgroundColor: c.tertiary },
+    shortcutCalories: { backgroundColor: c.primary },
     shortcutTitle: {
       fontFamily: fonts.serifBold,
-      fontSize: 16,
-      lineHeight: 20,
-      color: c.textPrimary,
+      fontSize: 18,
+      lineHeight: 22,
+      color: c.primaryText,
     },
     shortcutSubtitle: {
       fontFamily: fonts.sans,
       fontSize: 12,
       lineHeight: 16,
-      marginTop: 4,
-      color: c.textSecondary,
+      color: c.primaryText,
+      opacity: 0.85,
     },
 
     activitySection: { flex: 1 },

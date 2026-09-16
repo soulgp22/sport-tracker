@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -60,18 +60,15 @@ export function QuickCaloriesModal({ visible, onClose, onSubmit }: QuickCalories
   const [mealType, setMealType] = useState<MealType>(MEAL_ORDER[0]);
   const [label, setLabel] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (visible) {
-      setCalories('');
-      setMealType(MEAL_ORDER[0]);
-      setLabel('');
-      setError(undefined);
-    }
-  }, [visible]);
+  const resetForm = () => {
+    setCalories('');
+    setMealType(MEAL_ORDER[0]);
+    setLabel('');
+    setError(undefined);
+  };
 
   const close = () => {
-    setError(undefined);
+    resetForm();
     onClose();
   };
 
@@ -82,6 +79,7 @@ export function QuickCaloriesModal({ visible, onClose, onSubmit }: QuickCalories
       return;
     }
     onSubmit({ calories: parsed, mealType, label: label.trim() });
+    resetForm();
   };
 
   return (
