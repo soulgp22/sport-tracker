@@ -119,9 +119,8 @@ et ne sont transmis à personne.
 | Health Connect (3 lectures) | voir section 2 |
 | Stockage (Android 12 et antérieurs) | enregistrer un fichier de sauvegarde |
 
-L'application déclare également, **du fait de bibliothèques tierces**, les
-permissions microphone et superposition d'écran : elle ne s'en sert pas, ne
-demande jamais leur activation, et n'enregistre aucun son.
+L'application ne déclare **aucune autre permission sensible** : ni microphone,
+ni localisation, ni contacts, ni superposition d'écran.
 
 ## 5. Ce que l'application ne fait pas
 

@@ -941,3 +941,37 @@ Un exercice avait par ailleurs une phrase entiere restee en anglais
 **A retenir** — un texte fluide n'est pas un texte juste. Une traduction
 automatique se relit sur son VOCABULAIRE metier, pas sur sa syntaxe, et la
 verification doit porter sur les donnees, pas seulement sur le code.
+
+
+## Deux permissions declarees sans jamais servir
+
+`RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW` (superposition d'ecran)
+figuraient dans le manifeste genere alors qu'aucune ligne du code applicatif ne
+les utilise. Declarer le micro sans s'en servir est un motif de signalement chez
+Play, et obligeait la politique de confidentialite a s'en expliquer.
+
+**Origine, tracee :**
+- `SYSTEM_ALERT_WINDOW` vient du manifeste **debug** de React Native
+  (`node_modules/react-native/ReactAndroid/src/debug/AndroidManifest.xml`), pour
+  l'overlay de developpement. Elle n'avait rien a faire dans un build release.
+- `RECORD_AUDIO` n'est declaree par AUCUNE dependance : c'est un residu d'une
+  ancienne configuration d'`expo-camera`. Le plugin porte pourtant deja
+  `recordAudioAndroid: false` — un `prebuild` neuf ne l'aurait pas ajoutee.
+
+**Pourquoi elles survivaient** : `android/` est genere UNE FOIS puis gitignore.
+Corriger la configuration Expo ne nettoie pas un manifeste deja ecrit. C'est le
+meme piege que le `versionCode` et que `READ_WEIGHT`.
+
+**Correctif aux deux endroits :**
+1. `android.blockedPermissions` dans `app.json` — durable, Expo injecte
+   `tools:node="remove"` a chaque futur prebuild ;
+2. suppression des deux lignes du manifeste genere — sans quoi le build courant
+   les aurait conservees.
+
+Verifie sur appareil apres desinstallation et reinstallation propre :
+`adb shell dumpsys package com.sportracker.app` ne mentionne plus ni
+`RECORD_AUDIO` ni `SYSTEM_ALERT_WINDOW`.
+
+**A retenir** — corriger la configuration Expo ne suffit jamais tant que
+`android/` existe deja. Toute permission se verifie sur l'APK INSTALLE, pas dans
+`app.json`.
