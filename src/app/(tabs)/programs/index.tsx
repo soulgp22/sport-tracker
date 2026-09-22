@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as DocumentPicker from 'expo-document-picker';
@@ -10,12 +10,13 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 import { useProgramStore } from '../../../store/programStore';
 import { ProgramCard } from '../../../components/programs/ProgramCard';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { Button } from '../../../components/ui/Button';
+import { ScreenHeader } from '../../../components/ui/ScreenHeader';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { spacing } from '../../../theme/tokens';
+import { fonts } from '../../../theme/fonts';
+import { radius, spacing } from '../../../theme/tokens';
 import {
   assertImportFileSize,
   assertImportTextSize,
@@ -174,41 +175,64 @@ export default function ProgramsScreen() {
     }
   };
 
+  const headerActions = (
+    <View style={styles.headerActionsRow}>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={handleImport}
+        disabled={importing}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={t('settings.importProgram')}>
+        <Ionicons name="code-slash-outline" size={22} color={c.primary} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={handleExport}
+        disabled={programs.length === 0 || exporting}
+        activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={t('settings.exportPrograms')}>
+        <Ionicons name="share-outline" size={22} color={c.primary} />
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.wrapper}>
-        <View style={styles.headerActionsRow}>
+        {/* Programmes appartient à la section Séance, d'où le kicker. Import
+            JSON et export restent des icônes, à droite du kicker comme le
+            réglage des objectifs dans Nutrition. */}
+        <ScreenHeader
+          kicker={t('nav.session')}
+          title={t('nav.programs')}
+          right={headerActions}
+        />
+        {/* Les deux actions fréquentes restent grosses (voir f99d476) : même
+            forme que les raccourcis de l'accueil — rayon lg, titre Oswald —
+            au lieu du bouton générique en Archivo coupé sur deux lignes. */}
+        <View style={styles.shortcuts}>
           <TouchableOpacity
-            style={styles.iconButton}
-            onPress={handleImport}
-            disabled={importing}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel={t('settings.importProgram')}>
-            <Ionicons name="code-slash-outline" size={22} color={c.primary} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={handleExport}
-            disabled={programs.length === 0 || exporting}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel={t('settings.exportPrograms')}>
-            <Ionicons name="share-outline" size={22} color={c.primary} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.importExportRow}>
-          <Button
-            title={t('program.downloadProgram')}
+            style={[styles.shortcut, styles.shortcutFilled]}
             onPress={() => router.push({ pathname: '/(tabs)/community' as never, params: { tab: 'programs' } })}
-            style={styles.halfBtn}
-          />
-          <Button
-            title={t('program.createProgram')}
-            variant="secondary"
+            activeOpacity={0.86}
+            accessibilityRole="button"
+            accessibilityLabel={t('program.downloadProgram')}>
+            <Text style={[styles.shortcutTitle, styles.shortcutTitleFilled]}>
+              {t('program.downloadProgram')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.shortcut, styles.shortcutOutline]}
             onPress={() => router.push('/(tabs)/programs/new')}
-            style={styles.halfBtn}
-          />
+            activeOpacity={0.86}
+            accessibilityRole="button"
+            accessibilityLabel={t('program.createProgram')}>
+            <Text style={[styles.shortcutTitle, styles.shortcutTitleOutline]}>
+              {t('program.createProgram')}
+            </Text>
+          </TouchableOpacity>
         </View>
         <FlatList
         data={programs}
@@ -237,10 +261,23 @@ export default function ProgramsScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   wrapper: { flex: 1 },
-  headerActionsRow: { flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm },
+  headerActionsRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   iconButton: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
-  importExportRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: 4 },
-  halfBtn: { flex: 1 },
+  shortcuts: { flexDirection: 'row', gap: spacing.sm, paddingHorizontal: spacing.md, paddingTop: spacing.md, paddingBottom: spacing.xxs },
+  shortcut: {
+    flex: 1,
+    minHeight: 80,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    justifyContent: 'center',
+    borderRadius: radius.lg,
+  },
+  shortcutFilled: { backgroundColor: c.primary },
+  // Contour 1,5 px : même contour que la variante « secondary » de Button.
+  shortcutOutline: { borderWidth: 1.5, borderColor: c.primary },
+  shortcutTitle: { fontFamily: fonts.serifBold, fontSize: 18, lineHeight: 22 },
+  shortcutTitleFilled: { color: c.primaryText },
+  shortcutTitleOutline: { color: c.primary },
   list: { paddingBottom: 20 },
   emptyContainer: { flex: 1 },
 });

@@ -401,3 +401,21 @@ affiché à raison (ni pas, ni séance, ni Health Connect sur l'émulateur).
 
 **Non vérifié à l'écran** : les lignes avec pas et calories mesurées réelles —
 l'émulateur n'a pas Health Connect. Couvert par les tests de composant.
+
+
+## Harmonisation Séance et Programmes (B01)
+
+`app/(tabs)/__tests__/sessionProgramsHeader.test.tsx` (7) : les deux piles
+masquent leur en-tête natif ; les deux écrans dessinent `ScreenHeader` en Oswald ;
+pas de titre « Séance en cours » en double ; les grandes actions de Programmes
+gardent leur destination et leur police Oswald.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- en-tête natif réactivé (`headerShown: true`) → 1 test ;
+- titre de `ScreenHeader` en Archivo → 2 tests ;
+- « Séance en cours » répété sous l'icône → 1 test ;
+- grandes actions en Archivo → 1 test.
+
+Vérifié sur l'émulateur (APK release) : Séance vide, avec programme déplié et
+jour choisi, séance en cours ; Programmes vide et avec un programme ; logcat
+crash vide.

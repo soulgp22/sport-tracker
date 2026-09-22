@@ -1005,3 +1005,26 @@ considèrent qu'on est encore la veille. À traiter séparément.
 
 **À retenir** — un test de fuseau horaire doit être raisonné sur le signe du
 décalage, pas sur l'intuition « tard le soir = lendemain ».
+
+
+## Un écran « d'une autre app » : en-tête natif et texte sans police
+
+Signalé par Islam (B01, 2026-09-22) sur Séance et Programmes. Deux causes
+distinctes, qui se voient ensemble.
+
+1. **L'en-tête natif de la pile** (`headerShown: true`) affiche le titre en
+   Archivo, alors que les écrans principaux dessinent leur propre en-tête
+   éditorial en Oswald. Même contenu, deux typographies.
+2. **Un `<Text>` sans `fontFamily` retombe sur la police SYSTÈME** d'Android
+   (Roboto, SamsungOne sur Samsung), pas sur Archivo : il n'y a pas de police
+   par défaut dans l'app. C'était « 4 jours · 28 exercices » dans ProgramCard
+   et le nombre d'exercices des jours dans Séance.
+
+**Correctif** : `ScreenHeader` + `headerShown: false` ; `fontFamily` explicite
+sur les textes concernés.
+
+**Non corrigé, hors portée** : Communauté et Aliments gardent l'en-tête natif ;
+d'autres `<Text>` sans `fontFamily` existent sans doute ailleurs.
+
+**À retenir** — tout style de texte porte une `fontFamily` ; un nouvel écran
+principal part de `ScreenHeader`, pas de l'en-tête de la pile.

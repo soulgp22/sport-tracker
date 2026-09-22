@@ -290,6 +290,26 @@ migrés (hors portée) ; ils peuvent l'adopter sans changement visuel.
 
 ---
 
+## En-tête éditorial des écrans (B01)
+
+`components/ui/ScreenHeader` — kicker bleu en capitales, grand titre Oswald
+(`fonts.serifBold` 34), filet de 2 px, et un emplacement `right` aligné sur le
+kicker (icônes, lien). Extrait **à l'identique** de Nutrition, Progression et
+Historique, qui recopient ces styles ; ces écrans ne sont pas migrés (hors
+portée) et peuvent l'adopter sans changement visuel.
+
+**Règle** : un écran qui l'emploie masque l'en-tête natif de sa pile
+(`headerShown: false` dans le `_layout`). L'en-tête natif est en Archivo : c'est
+lui qui faisait paraître Séance et Programmes « d'une autre app ».
+
+Actions associées, déjà présentes dans le dépôt :
+- deux actions fréquentes → forme des raccourcis de l'accueil (rayon `lg`,
+  titre Oswald 18) ;
+- deux raccourcis de navigation → rangée à cases des sous-actions de Nutrition
+  (bordure 1 px, libellés Oswald 12 en capitales).
+
+---
+
 ## Outillage de vérification
 
 ```bash

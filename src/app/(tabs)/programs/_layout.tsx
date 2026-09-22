@@ -52,7 +52,9 @@ export default function ProgramsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          // L'écran dessine son propre en-tête (ScreenHeader), comme
+          // Nutrition et Progression : l'en-tête natif était en Archivo.
+          headerShown: false,
           title: t('nav.programs'),
         }}
       />
