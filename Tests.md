@@ -376,3 +376,28 @@ Sabotages vérifiés le 2026-09-22, chacun rougit :
 Piège rencontré en écrivant les tests : une fixture à **une seule série** sur
 60 min déclenchait le plafond (1 × 4 min), et le test attendait 210 kcal pour en
 recevoir 15. Le code était juste, la fixture ignorait sa propre règle.
+
+
+## Historique dépense et pas (A01 / A02)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/energyBreakdown.test.ts` (7) | les deux modes exclusifs, séances « dont », pas de devinette pour un jour passé |
+| `lib/__tests__/energyHistory.test.ts` (11) | jour local aux deux bords, poids à la date, invariant historique = bilan du jour, agrégats mois/année, début d'historique |
+| `lib/__tests__/healthConnect.test.ts` (+4) | agrégation par jour, zéro traité comme absence, découpage `DAYS`, dégradation sans module |
+| `app/(tabs)/history/__tests__/energyHistoryScreen.test.tsx` (7) | onglets, lignes, états vides, rappel de profondeur |
+
+**Rétrocompatibilité** : les 33 tests existants de `energyBalance` passent sans
+modification — sans séance, le calcul est strictement l'ancien.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- clé de jour UTC au lieu de locale → 1 test ;
+- l'historique devine une activité (`allowHabitualEstimate: true`) → 2 tests ;
+- double comptage : séances ajoutées à l'activité mesurée → 2 tests.
+
+Vérifié sur l'émulateur : homme, 80 kg, 180 cm, 32 ans → « Corps 1 770 »,
+exactement Mifflin-St Jeor (800 + 1 125 − 160 + 5). « Activité inconnue sur 1 j »
+affiché à raison (ni pas, ni séance, ni Health Connect sur l'émulateur).
+
+**Non vérifié à l'écran** : les lignes avec pas et calories mesurées réelles —
+l'émulateur n'a pas Health Connect. Couvert par les tests de composant.

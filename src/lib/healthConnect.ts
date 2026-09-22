@@ -8,6 +8,8 @@
  */
 
 import type { HealthWeightSample } from './healthWeightMerge';
+import type { DailyHealthData } from './energyHistory';
+import { endOfLocalDay, localDayKey, startOfLocalDay } from './dateKeys';
 
 export type { HealthWeightSample };
 
@@ -337,5 +339,80 @@ export async function readLatestWeight(): Promise<HealthWeightSample | null> {
     const weightKg = Math.round(latest.weight.inKilograms * 10) / 10;
     if (!Number.isFinite(weightKg) || weightKg <= 0) return null;
     return { weightKg, time: latest.time };
+  });
+}
+
+/**
+ * Cle de jour d'un compartiment agrege par periode.
+ *
+ * Le module natif renvoie `LocalDateTime.toString()` (« 2026-09-20T00:00 »,
+ * sans fuseau) : les 10 premiers caracteres SONT le jour local. Si un jour la
+ * bibliotheque renvoyait un instant avec fuseau, on le reconvertit en heure
+ * locale plutot que de tronquer une date UTC.
+ */
+function dayKeyFromBucketTime(time: string): string {
+  return /(?:[zZ]|[+-]\d{2}:?\d{2})$/.test(time) ? localDayKey(new Date(time)) : time.slice(0, 10);
+}
+
+/** Zero -> null : Health Connect renvoie 0 pour un jour sans aucune donnee. */
+const positiveOrNull = (value: number | undefined | null) =>
+  typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : null;
+
+/**
+ * Pas et calories par jour LOCAL, de `fromDay` a `toDay` inclus.
+ *
+ * Utilise `aggregateGroupByPeriod` : Health Connect somme lui-meme par jour et
+ * deduplique les sources (montre + telephone), la ou une somme manuelle des
+ * enregistrements bruts compterait deux fois les pas vus par deux appareils.
+ *
+ * Profondeur : Health Connect ne renvoie que les donnees posterieures a
+ * ~30 jours avant la PREMIERE autorisation de l'app, sauf permission
+ * READ_HEALTH_DATA_HISTORY — ecartee le 2026-09-22 pour ne pas rouvrir la
+ * declaration sante. Les jours plus anciens sont simplement absents.
+ *
+ * Retourne null si Health Connect est indisponible ou non autorise.
+ */
+export async function readDailyHealthHistory(
+  fromDay: string,
+  toDay: string
+): Promise<Map<string, DailyHealthData> | null> {
+  return safeCall('readDailyHealthHistory', async (hc) => {
+    await ensureInitialized(hc);
+    const timeRangeFilter = {
+      operator: 'between' as const,
+      startTime: startOfLocalDay(fromDay).toISOString(),
+      endTime: endOfLocalDay(toDay).toISOString(),
+    };
+    const timeRangeSlicer = { period: 'DAYS' as const, length: 1 };
+
+    const [steps, active, total] = await Promise.all([
+      hc.aggregateGroupByPeriod({ recordType: 'Steps', timeRangeFilter, timeRangeSlicer }),
+      hc.aggregateGroupByPeriod({ recordType: 'ActiveCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
+      hc.aggregateGroupByPeriod({ recordType: 'TotalCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
+    ]);
+
+    const byDay = new Map<string, DailyHealthData>();
+    const entry = (day: string): DailyHealthData => {
+      const existing = byDay.get(day);
+      if (existing) return existing;
+      const created: DailyHealthData = { steps: null, activeKcal: null, totalKcal: null };
+      byDay.set(day, created);
+      return created;
+    };
+
+    for (const group of steps) {
+      const value = positiveOrNull(group.result.COUNT_TOTAL);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).steps = value;
+    }
+    for (const group of active) {
+      const value = positiveOrNull(group.result.ACTIVE_CALORIES_TOTAL?.inKilocalories);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).activeKcal = Math.round(value);
+    }
+    for (const group of total) {
+      const value = positiveOrNull(group.result.ENERGY_TOTAL?.inKilocalories);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).totalKcal = Math.round(value);
+    }
+
+    return byDay;
   });
 }

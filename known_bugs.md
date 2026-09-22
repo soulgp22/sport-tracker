@@ -975,3 +975,33 @@ Verifie sur appareil apres desinstallation et reinstallation propre :
 **A retenir** — corriger la configuration Expo ne suffit jamais tant que
 `android/` existe deja. Toute permission se verifie sur l'APK INSTALLE, pas dans
 `app.json`.
+
+
+## Une date UTC range mal une activité, aux DEUX bords de la journée
+
+Piège identifié en écrivant l'historique (A01/A02), et d'abord mal compris.
+
+`new Date().toISOString().slice(0, 10)` renvoie la date **UTC**, pas la date de
+l'utilisateur. Mon premier test affirmait qu'une séance à 23 h 30 « basculerait
+au lendemain à l'est de Greenwich ». C'est **faux** : à l'est, l'heure locale est
+en avance sur l'UTC, donc 23 h 30 à Paris = 21 h 30 UTC, même jour. Le test
+n'aurait rien attrapé en France.
+
+Le vrai comportement :
+- à l'**est** (France) : une séance juste **après minuit** glisse au jour UTC
+  **précédent** ;
+- à l'**ouest** (Amériques) : une séance **tardive** glisse au jour UTC
+  **suivant**.
+
+**Correctif** : `lib/dateKeys` (`localDayKey`, `startOfLocalDay`…) pour tout le
+code nouveau. Le test couvre les deux bords, ce qui le rend utile dans tout
+fuseau non UTC. En fuseau UTC strict, aucun cas ne peut le faire échouer —
+limite documentée.
+
+**Non corrigé, hors portée** : plusieurs écrans existants (accueil, photo,
+journal alimentaire) calculent encore « aujourd'hui » avec
+`toISOString().slice(0, 10)`. Entre minuit et 2 h du matin en France, ils
+considèrent qu'on est encore la veille. À traiter séparément.
+
+**À retenir** — un test de fuseau horaire doit être raisonné sur le signe du
+décalage, pas sur l'intuition « tard le soir = lendemain ».

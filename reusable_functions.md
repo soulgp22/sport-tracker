@@ -246,6 +246,50 @@ plage mesurée par la littérature (200–400 kcal/h).
 
 ---
 
+## Historique de dépense et de pas (A01 / A02)
+
+**Aucun stockage nouveau : tout est reconstruit à la demande.**
+
+| Composante | Source |
+|---|---|
+| Dépense du corps | `calculateBmr` (profil) + poids **en vigueur ce jour-là** (`getBodyweightForDate`) |
+| Séances | `sessionCaloriesByDay` — `estimateSessionCalories` sur le journal des séances |
+| Pas, calories mesurées | `readDailyHealthHistory` — `aggregateGroupByPeriod` de Health Connect, découpé par jour |
+
+Un historique stocké finirait par diverger de ses sources ; celui-ci ne peut pas.
+
+**Une seule fonction pour tout.** Chaque jour passe par
+`resolveDailyEnergyExpenditure` — la même que le bilan de Nutrition et de
+l'accueil. Un même jour affiche donc le même chiffre partout, et un test le
+vérifie.
+
+**Deux modes exclusifs** (choix d'Islam, 2026-09-22), portés par
+`breakdown.mode` :
+- `measured` — Health Connect mesure l'activité. Elle inclut déjà la marche et
+  les séances : celles-ci sont affichées « dont ≈ X kcal », **jamais ajoutées** ;
+- `estimated` — rien de mesuré : activité = pas **+** séances, chacun estimé.
+
+`allowHabitualEstimate: false` pour l'historique : un jour passé sans donnée
+reste `unknown` au lieu de recevoir une activité devinée qui ressemblerait à une
+mesure. Le bilan du jour, lui, garde son estimation habituelle.
+
+**Dates LOCALES** (`lib/dateKeys`) : `toISOString().slice(0, 10)` donne la date
+UTC et se trompe aux deux bords de la journée — voir `known_bugs.md`.
+
+**Profondeur** : Health Connect ne rend que ~30 jours avant la première
+autorisation. `READ_HEALTH_DATA_HISTORY` a été écartée pour ne pas rouvrir la
+déclaration santé ; l'historique se remplit avec le temps, et l'écran le dit.
+
+**Début d'historique** (`historyStartDay`) : la plus ancienne donnée réelle
+(séance, pesée, jour Health Connect). Avant, afficher une dépense du corps
+reviendrait à inventer un historique antérieur à l'installation.
+
+`components/ui/SegmentedTabs` : motif d'onglets extrait **à l'identique** de
+Progression et Communauté, qui le dupliquaient. Ces deux écrans ne sont pas
+migrés (hors portée) ; ils peuvent l'adopter sans changement visuel.
+
+---
+
 ## Outillage de vérification
 
 ```bash

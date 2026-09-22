@@ -445,3 +445,70 @@ describe('healthConnect — poids (permission optionnelle)', () => {
     await expect(service.readLatestWeight()).resolves.toBeNull();
   });
 });
+
+describe('healthConnect — historique quotidien (A01/A02)', () => {
+  afterEach(() => {
+    jest.resetModules();
+    jest.dontMock('react-native-health-connect');
+  });
+
+  function mockAggregates(byType: Record<string, unknown[]>) {
+    const aggregateGroupByPeriod = jest.fn(
+      ({ recordType }: { recordType: string; timeRangeSlicer?: unknown }) =>
+        Promise.resolve(byType[recordType] ?? [])
+    );
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      aggregateGroupByPeriod,
+    }));
+    return aggregateGroupByPeriod;
+  }
+
+  it('regroupe pas et calories par jour LOCAL', async () => {
+    mockAggregates({
+      Steps: [{ startTime: '2026-09-20T00:00', endTime: '2026-09-21T00:00', result: { COUNT_TOTAL: 8421 } }],
+      ActiveCaloriesBurned: [
+        { startTime: '2026-09-20T00:00', endTime: '2026-09-21T00:00', result: { ACTIVE_CALORIES_TOTAL: { inKilocalories: 412.6 } } },
+      ],
+      TotalCaloriesBurned: [],
+    });
+    const service = loadService();
+
+    const history = await service.readDailyHealthHistory('2026-09-20', '2026-09-20');
+
+    expect(history?.get('2026-09-20')).toEqual({ steps: 8421, activeKcal: 413, totalKcal: null });
+  });
+
+  /**
+   * Health Connect renvoie un compartiment a 0 pour un jour sans donnee. Le
+   * traiter comme « 0 pas » compterait ce jour comme mesure dans les moyennes.
+   */
+  it('traite un zero comme une absence de donnee', async () => {
+    mockAggregates({
+      Steps: [{ startTime: '2026-09-19T00:00', endTime: '2026-09-20T00:00', result: { COUNT_TOTAL: 0 } }],
+      ActiveCaloriesBurned: [],
+      TotalCaloriesBurned: [],
+    });
+    const service = loadService();
+
+    const history = await service.readDailyHealthHistory('2026-09-19', '2026-09-19');
+
+    expect(history?.has('2026-09-19')).toBe(false);
+  });
+
+  it('demande un decoupage par jour', async () => {
+    const aggregate = mockAggregates({ Steps: [], ActiveCaloriesBurned: [], TotalCaloriesBurned: [] });
+    const service = loadService();
+
+    await service.readDailyHealthHistory('2026-09-01', '2026-09-20');
+
+    expect(aggregate).toHaveBeenCalledTimes(3);
+    expect(aggregate.mock.calls[0][0].timeRangeSlicer).toEqual({ period: 'DAYS', length: 1 });
+  });
+
+  it('degrade proprement sans module natif', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const service = loadService();
+    await expect(service.readDailyHealthHistory('2026-09-01', '2026-09-20')).resolves.toBeNull();
+  });
+});

@@ -21,7 +21,7 @@ import type { ThemeColors } from '../../theme/palettes';
 import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 import { useHealthToday } from '../../hooks/useHealthToday';
-
+import { useTodaySessionKcal } from '../../hooks/useEnergyHistory';
 
 /** Durée de montée des compteurs de l'accueil, en millisecondes. */
 const ANIMATION_DURATION_MS = 900;
@@ -101,10 +101,14 @@ export default function HomeScreen() {
       ? estimateActiveCaloriesFromSteps(steps, weightKg).activeCaloriesKcal
       : null;
 
+  // Le bilan du jour compte aussi les seances : meme fonction et memes
+  // entrees que l'historique, donc le meme chiffre aux deux endroits.
+  const todaySessionKcal = useTodaySessionKcal();
   const expenditure = resolveDailyEnergyExpenditure({
     healthCalories: null,
     healthSteps,
     profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
+    sessionKcal: todaySessionKcal,
   });
 
   const consumed = totals.calories;
