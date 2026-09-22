@@ -5,6 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useSessionStore } from '../../../store/sessionStore';
+import { useBodyWeightStore } from '../../../store/bodyWeightStore';
+import { estimateSessionCalories } from '../../../lib/sessionCalories';
+import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { appAlert } from '../../../components/ui/AppDialog';
 import { ExerciseThumbnail } from '../../../components/exercises/ExerciseThumbnail';
@@ -30,6 +33,7 @@ export default function SessionDetailScreen() {
   const router = useRouter();
   const session = useSessionStore((s) => s.sessions.find((x) => x.id === id));
   const deleteSession = useSessionStore((s) => s.deleteSession);
+  const weightEntries = useBodyWeightStore((s) => s.entries);
 
   if (!session) {
     return (
@@ -38,6 +42,13 @@ export default function SessionDetailScreen() {
       </SafeAreaView>
     );
   }
+
+  // Poids a la date de la seance, pas le poids actuel : une seance d'il y a
+  // six mois se calcule sur le poids d'alors.
+  const calories = estimateSessionCalories(
+    session,
+    getBodyweightForDate(weightEntries, session.date)
+  );
 
   const date = new Date(session.date);
   const dateStr = date.toLocaleDateString(locale, {
@@ -75,6 +86,18 @@ export default function SessionDetailScreen() {
           <Text style={styles.metaDate}>{dateStr}</Text>
           {session.dayName ? <Text style={styles.metaDay}>{session.dayName}</Text> : null}
           <Text style={styles.metaDuration}>{t('history.duration', { duration: fmt(session.durationSeconds) })}</Text>
+          {calories ? (
+            <Text style={styles.metaCalories} testID="session-calories">
+              {t('history.caloriesEstimate', {
+                kcal: calories.kcal,
+                min: calories.minKcal,
+                max: calories.maxKcal,
+              })}
+            </Text>
+          ) : null}
+          {calories?.usedDefaultWeight ? (
+            <Text style={styles.metaHint}>{t('history.caloriesDefaultWeight')}</Text>
+          ) : null}
         </View>
 
         {/* Exercises */}
@@ -132,6 +155,8 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   metaDate: { fontSize: 15, fontFamily: fonts.sansSemi, color: c.primary, textTransform: 'capitalize' },
   metaDay: { fontSize: 14, color: c.primary },
   metaDuration: { fontSize: 13, color: c.textSecondary, marginTop: 4 },
+  metaCalories: { fontSize: 13, fontFamily: fonts.sansSemi, color: c.textPrimary, marginTop: 4 },
+  metaHint: { fontSize: 11, color: c.textMuted, marginTop: 2 },
   exCard: {
     backgroundColor: c.surface,
     borderRadius: radius.lg,

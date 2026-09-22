@@ -40,6 +40,7 @@ import { useFoodDiaryStore } from '../../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
 import type { MealType } from '../../../types';
+import { useTodaySessionKcal } from '../../../hooks/useEnergyHistory';
 
 const HC_PACKAGE = 'com.google.android.apps.healthdata';
 
@@ -183,10 +184,14 @@ export default function NutritionScreen() {
 
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
   const missingFields = missingEnergyProfileFields({ sex, heightCm, ageYears: age }, weightKg);
+  // Le bilan du jour compte aussi les seances : meme fonction et memes
+  // entrees que l'historique, donc le meme chiffre aux deux endroits.
+  const todaySessionKcal = useTodaySessionKcal();
   const expenditure = resolveDailyEnergyExpenditure({
     healthCalories: healthData.status === 'granted' ? healthData.calories : null,
     healthSteps: healthData.status === 'granted' ? healthData.steps : null,
     profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
+    sessionKcal: todaySessionKcal,
   });
   const burned = expenditure.totalKcal;
   const balance = resolveDailyEnergyBalance(burned, totals.calories);

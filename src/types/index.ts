@@ -113,6 +113,7 @@ export type {
   MealType,
   NutritionGoals,
   WeightEntry,
+  WeightEntrySource,
 } from './nutrition';
 
 export type { EquipmentProfileId } from './equipment';

@@ -141,6 +141,175 @@ travail.
 
 ---
 
+## Poids Health Connect — permission optionnelle et règle de fusion
+
+`src/lib/healthConnect.ts` distingue désormais **deux groupes de permissions** :
+
+| Groupe | Contenu | Vérifié par | Effet d'un refus |
+|---|---|---|---|
+| `REQUIRED_PERMISSIONS` | calories actives, calories totales, pas | `hasHealthPermissions()` | l'écran bascule en « permission requise » |
+| `OPTIONAL_PERMISSIONS` | poids | `hasWeightPermission()` | **aucun** — le reste continue de fonctionner |
+
+Les deux sont demandés dans la **même feuille** (`requestPermission`), mais
+seul le premier groupe conditionne `granted`. Motif : le poids est arrivé après
+les pas ; l'ajouter au groupe requis aurait fait basculer tous les utilisateurs
+déjà autorisés en « permission requise ». **Toute nouvelle permission Health
+Connect doit rejoindre le groupe optionnel, jamais le groupe requis.**
+
+`readLatestWeight()` n'utilise PAS `todayTimeRange()` : on ne se pèse pas tous
+les jours, la fenêtre est de 90 jours et le relevé le plus récent est retenu
+(Health Connect ne garantit pas l'ordre des enregistrements).
+
+`src/lib/healthWeightMerge.ts` — `resolveHealthWeightMerge(entries, sample)` est
+une **fonction pure**, sans dépendance à Health Connect ni à l'UI : elle décide
+`add` / `replace` / `skip` pour un relevé face aux pesées existantes. Règle :
+le plus récent gagne, jour par jour. Testable sans appareil, sans permission et
+sans module natif — c'est ce qui rend la règle vérifiable.
+
+`bodyWeightStore.syncHealthWeight(sample)` applique cette décision et renvoie
+`true` seulement si l'état a changé, pour ne pas réécrire le stockage à chaque
+retour sur l'écran.
+
+**Point d'écriture unique.** Le poids Health Connect n'est pas exposé par
+`useHealthToday` : il est versé dans `bodyWeightStore`, déjà source unique de
+l'accueil, de la progression et du bilan énergétique. Aucune règle de priorité
+n'est dupliquée à l'affichage — la plus récente des pesées est la dernière du
+tableau trié, quelle que soit son origine.
+
+**Piège d'infrastructure.** `app.json` ne suffit pas : `android/` est généré et
+gitignoré, Gradle lit `android/app/src/main/AndroidManifest.xml`. Une permission
+ajoutée dans `app.json` seulement n'existe PAS dans l'APK — même piège que le
+`versionCode`. Vérifier après installation :
+
+```bash
+adb shell dumpsys package com.sportracker.app | grep READ_WEIGHT
+```
+
+---
+
+## Quota journalier de l'analyse photo
+
+`src/lib/mealPhotoQuota.ts` — module **pur**, sans dépendance au stockage ni à
+l'UI : `resolveQuota(state, today)` et `consumeQuota(state, today)`.
+`DAILY_MEAL_PHOTO_LIMIT = 2`.
+
+**La règle produit compte les REPAS, pas les détections.** Le compteur est
+incrémenté quand une analyse est **enregistrée au journal**, pas quand elle est
+lancée. Conséquence voulue : une photo ratée, une analyse relancée ou un plat
+finalement abandonné ne consomment rien. L'utilisateur n'est jamais puni d'avoir
+retenté.
+
+| Élément | Rôle |
+|---|---|
+| `lib/mealPhotoQuota` | la règle, pure et testable sans appareil |
+| `store/mealPhotoQuotaStore` | persistance seule (`{ date, mealsAnalyzed }`) |
+| `MealPhotoReview` | appelle `recordAnalyzedMeal()` après l'enregistrement |
+| `nutrition/photo.tsx` | le garde, **avant** le chargement du module d'analyse |
+
+**Un seul garde suffit** : l'accueil et l'écran Nutrition poussent tous deux vers
+`/(tabs)/nutrition/photo`. Ajouter un garde par bouton aurait été redondant et
+aurait divergé à la première évolution.
+
+**Remise à zéro sans tâche planifiée** : un état portant sur un autre jour est
+traité comme vide. La date est **locale** (`quotaDayKey`), pas UTC, pour que le
+quota suive la journée de l'utilisateur.
+
+Au-delà de la limite, l'écran annonce qu'un compte payant lèvera la restriction,
+**sans promettre de date** — il n'existe pas encore.
+
+---
+
+## Dépense calorique d'une séance (C01)
+
+`src/lib/sessionCalories.ts` — `estimateSessionCalories(session, bodyweightKg?)`,
+module **pur**.
+
+**Méthode** : METs du Compendium of Physical Activities (base 3,5, plafond 6,0),
+modulés par la **densité de travail** = charge totale / (poids de corps × minutes).
+Dépense **nette** : `(MET − 1) × 3,5 × poids / 200 × minutes`.
+
+| Choix | Pourquoi |
+|---|---|
+| `MET − 1` (net, pas brut) | le métabolisme de repos est déjà compté dans la dépense du corps ; sans ce retrait il serait compté deux fois dès qu'on additionne corps + séance |
+| Pas d'âge ni de sexe | le MET est déjà normalisé par kilo ; aucune formule validée en musculation ne les exploite sans fréquence cardiaque |
+| Pas de Keytel | exige la FC, et surestime en musculation (réponse presseur) |
+| Travail mécanique en **modulateur** seulement | seul, il sous-estime d'un facteur ~3 |
+| Arrondi à 5 kcal + fourchette ±25 % | les estimations grand public se trompent de 25 à 50 % |
+| Plafond de 4 min par série | une séance oubliée ouverte ne doit pas afficher 2 000 kcal |
+| 50 % du poids de corps pour une charge nulle | exercices au poids du corps ; hypothèse prudente |
+| Poids **à la date de la séance** | une séance d'il y a six mois se calcule sur le poids d'alors |
+
+`DENSITY_AT_VIGOROUS = 3` est une **hypothèse de calibration**, pas une constante
+publiée : elle place une séance lourde et une séance légère typiques aux deux
+extrémités de l'échelle MET. Les tests vérifient que le résultat reste dans la
+plage mesurée par la littérature (200–400 kcal/h).
+
+---
+
+## Historique de dépense et de pas (A01 / A02)
+
+**Aucun stockage nouveau : tout est reconstruit à la demande.**
+
+| Composante | Source |
+|---|---|
+| Dépense du corps | `calculateBmr` (profil) + poids **en vigueur ce jour-là** (`getBodyweightForDate`) |
+| Séances | `sessionCaloriesByDay` — `estimateSessionCalories` sur le journal des séances |
+| Pas, calories mesurées | `readDailyHealthHistory` — `aggregateGroupByPeriod` de Health Connect, découpé par jour |
+
+Un historique stocké finirait par diverger de ses sources ; celui-ci ne peut pas.
+
+**Une seule fonction pour tout.** Chaque jour passe par
+`resolveDailyEnergyExpenditure` — la même que le bilan de Nutrition et de
+l'accueil. Un même jour affiche donc le même chiffre partout, et un test le
+vérifie.
+
+**Deux modes exclusifs** (choix d'Islam, 2026-09-22), portés par
+`breakdown.mode` :
+- `measured` — Health Connect mesure l'activité. Elle inclut déjà la marche et
+  les séances : celles-ci sont affichées « dont ≈ X kcal », **jamais ajoutées** ;
+- `estimated` — rien de mesuré : activité = pas **+** séances, chacun estimé.
+
+`allowHabitualEstimate: false` pour l'historique : un jour passé sans donnée
+reste `unknown` au lieu de recevoir une activité devinée qui ressemblerait à une
+mesure. Le bilan du jour, lui, garde son estimation habituelle.
+
+**Dates LOCALES** (`lib/dateKeys`) : `toISOString().slice(0, 10)` donne la date
+UTC et se trompe aux deux bords de la journée — voir `known_bugs.md`.
+
+**Profondeur** : Health Connect ne rend que ~30 jours avant la première
+autorisation. `READ_HEALTH_DATA_HISTORY` a été écartée pour ne pas rouvrir la
+déclaration santé ; l'historique se remplit avec le temps, et l'écran le dit.
+
+**Début d'historique** (`historyStartDay`) : la plus ancienne donnée réelle
+(séance, pesée, jour Health Connect). Avant, afficher une dépense du corps
+reviendrait à inventer un historique antérieur à l'installation.
+
+`components/ui/SegmentedTabs` : motif d'onglets extrait **à l'identique** de
+Progression et Communauté, qui le dupliquaient. Ces deux écrans ne sont pas
+migrés (hors portée) ; ils peuvent l'adopter sans changement visuel.
+
+---
+
+## En-tête éditorial des écrans (B01)
+
+`components/ui/ScreenHeader` — kicker bleu en capitales, grand titre Oswald
+(`fonts.serifBold` 34), filet de 2 px, et un emplacement `right` aligné sur le
+kicker (icônes, lien). Extrait **à l'identique** de Nutrition, Progression et
+Historique, qui recopient ces styles ; ces écrans ne sont pas migrés (hors
+portée) et peuvent l'adopter sans changement visuel.
+
+**Règle** : un écran qui l'emploie masque l'en-tête natif de sa pile
+(`headerShown: false` dans le `_layout`). L'en-tête natif est en Archivo : c'est
+lui qui faisait paraître Séance et Programmes « d'une autre app ».
+
+Actions associées, déjà présentes dans le dépôt :
+- deux actions fréquentes → forme des raccourcis de l'accueil (rayon `lg`,
+  titre Oswald 18) ;
+- deux raccourcis de navigation → rangée à cases des sous-actions de Nutrition
+  (bordure 1 px, libellés Oswald 12 en capitales).
+
+---
+
 ## Outillage de vérification
 
 ```bash

@@ -821,3 +821,210 @@ auraient reintroduit le probleme par une porte differente.
 **A retenir** — « le bon comportement gagne » et « la mauvaise donnee n'existe
 plus » sont deux garanties differentes. La premiere depend d'une regle qu'un
 futur changement peut casser ; la seconde est definitive.
+
+## Le retour arriere ramenait a l'accueil au lieu du menu precedent
+
+Signale par Islam le 2026-08-27 : « les retours arriere ne reviennent pas a
+chaque fois au menu precedent mais a l'accueil parfois ».
+
+**Cause racine** — Programmes, Exercices, Aliments, Historique, Communaute et
+Reglages ne sont PAS des ecrans empiles : ce sont des ONGLETS masques
+(`href: null` dans `src/app/(tabs)/_layout.tsx`). Passer de Nutrition a Aliments
+est donc un changement d'onglet, pas un `push`. Or le `backBehavior` par defaut
+du `TabRouter` de React Navigation vaut `firstRoute` : tout retour arriere
+depuis un onglet non-premier renvoie sur le PREMIER onglet declare — l'accueil.
+
+Le defaut ne dependait donc pas de l'ecran mais du type de saut :
+- saut a l'interieur d'un onglet (`nutrition` -> `nutrition/add`) : retour correct ;
+- saut d'un onglet a un autre (`nutrition` -> `foods`) : retour a l'accueil.
+
+D'ou le « parfois » : c'est exactement la frontiere entre les deux.
+
+**Correctif** — une seule ligne : `backBehavior="history"` sur `<Tabs>`. Le
+routeur rejoue alors la pile de visites ; l'accueil n'est atteint que s'il etait
+reellement l'ecran precedent.
+
+Parcours mesures avant/apres (vrai `TabRouter`, vraie liste d'onglets) :
+
+| Parcours | avant (`firstRoute`) | apres (`history`) |
+|---|---|---|
+| Nutrition -> Aliments | accueil | Nutrition |
+| Programmes -> Communaute | accueil | Programmes |
+| Progression -> Historique | accueil | Progression |
+| Seance -> Exercices | accueil | Seance |
+| Profil -> Reglages | accueil | Profil |
+| Accueil -> Nutrition | accueil | accueil (correct : il EST le precedent) |
+
+**Consequence de nommage** — le composant `BackToHomeButton` present dans cinq
+`_layout.tsx` ne ramenait plus a l'accueil : renomme `BackButton`, et la cle i18n
+`common.backHome` (« Retour a l'accueil ») devient `common.back` (« Retour ») dans
+les 4 langues. Un nom qui ment sur le comportement est un piege pour la prochaine
+lecture.
+
+**A retenir** — quand une section est un onglet masque plutot qu'un ecran empile,
+le retour arriere n'obeit plus au stack mais au `TabRouter`. Le defaut n'etait
+dans aucun ecran : il etait dans le contrat du navigateur parent.
+
+
+## READ_WEIGHT bloque TOUTE publication, y compris le track interne
+
+Le 2026-08-27, l'ajout de `android.permission.health.READ_WEIGHT` a fait echouer
+`eas submit` avec :
+
+> Google Api Error: Invalid request - You must let us know whether your app
+> includes any health features.
+
+**Cause racine** — les permissions pas / calories passaient sans probleme, mais
+une **mesure corporelle** fait basculer l'application dans la categorie
+« applications de sante » cote Google Play. Tant que la **Declaration relative
+aux applications de sante** n'est pas remplie dans *Contenu de l'application*,
+Play refuse tout televersement — pas seulement la production : le track interne
+aussi. Cinq tentatives automatiques, cinq refus, aucun binaire publie.
+
+**Ce qui a ete fait** — retrait de la permission aux TROIS endroits, pas deux :
+
+1. `app.json` ;
+2. `android/app/src/main/AndroidManifest.xml` (genere et gitignore : Gradle lit
+   celui-la, `app.json` seul ne suffit pas — meme piege que le `versionCode`) ;
+3. `OPTIONAL_PERMISSIONS` dans `src/lib/healthConnect.ts`.
+
+Le point 3 n'est pas cosmetique : **demander une permission absente du manifeste
+peut faire rejeter la feuille Health Connect entiere**, donc faire perdre les
+pas et les calories qui fonctionnaient. Retirer du manifeste sans retirer de la
+demande aurait transforme un blocage de publication en regression fonctionnelle.
+
+**Piege de logique introduit par le retrait** — `[].every(...)` vaut `true`.
+Sans garde explicite, `hasWeightPermission()` aurait repondu « autorise » alors
+que la permission n'est meme pas declaree, et l'app aurait tente une lecture
+vouee a l'echec a chaque affichage. Le garde `OPTIONAL_PERMISSIONS.length === 0`
+est teste, et son retrait fait rougir deux tests.
+
+**A retenir** — une permission Android ne se retire pas d'un fichier mais d'une
+chaine : manifeste genere, configuration Expo, et code qui la demande. En oublier
+un maillon donne soit un binaire refuse, soit une regression silencieuse.
+
+
+## « banque plate » : un defaut lexical invisible pour toute la suite de tests
+
+Les 873 fiches d'exercices ont ete traduites automatiquement. Le francais
+produit est globalement fluide — ce qui a masque un defaut systematique pendant
+des mois : **« banque » pour *bench***, 204 occurrences sur 109 exercices,
+visible des l'ouverture de n'importe quelle fiche.
+
+Aucun test ne regardait le contenu de `instructionsFr`. Le prestataire de test
+ferme ne l'a pas signale non plus (voir le rapport du 2026-08-29).
+
+**Pourquoi PAS une retraduction.** Repasser 873 fiches dans un modele aurait
+coute cher, pris des heures, et risque de degrader du texte deja correct — pour
+un probleme purement lexical. Des regles deterministes sont plus sures,
+verifiables et rejouables : `scripts/fix-instructions-fr.mjs`.
+
+**Trois pieges rencontres en ecrivant la correction :**
+
+1. **Faux positifs.** « rangee » (a row of cones) et « boucle » (the loop of a
+   band) ont ete verifies contre l'anglais : ce sont des traductions CORRECTES.
+   Les « corriger » aurait introduit des fautes. Un audit qui ne verifie pas ses
+   propres signalements fabrique des regressions.
+2. **Frontieres de mot.** Un premier jet remplacait `/banque/` sans `\b` : le
+   motif mordait a l'interieur de « banquette » et produisait « banctte » —
+   9 occurrences d'un mot inexistant. Le garde-fou ne le voyait pas puisqu'il ne
+   cherchait que « banque ». Il surveille desormais les trois formes.
+3. **Le genre change.** `la banque` -> `le banc` fait passer le nom au masculin :
+   tous les accords suivants doivent suivre (`banque plate` -> `banc plat`,
+   `banque inclinee reglee` -> `banc incline regle`, `equipee` -> `equipe`).
+   Un balayage des accords feminins restants a montre 5 cas — tous CORRECTS,
+   car ils s'accordaient avec un autre nom (main, jambes, barre, prise).
+
+Un exercice avait par ailleurs une phrase entiere restee en anglais
+(`offline-419`), et un accord faux (« un seul poignee »).
+
+**A retenir** — un texte fluide n'est pas un texte juste. Une traduction
+automatique se relit sur son VOCABULAIRE metier, pas sur sa syntaxe, et la
+verification doit porter sur les donnees, pas seulement sur le code.
+
+
+## Deux permissions declarees sans jamais servir
+
+`RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW` (superposition d'ecran)
+figuraient dans le manifeste genere alors qu'aucune ligne du code applicatif ne
+les utilise. Declarer le micro sans s'en servir est un motif de signalement chez
+Play, et obligeait la politique de confidentialite a s'en expliquer.
+
+**Origine, tracee :**
+- `SYSTEM_ALERT_WINDOW` vient du manifeste **debug** de React Native
+  (`node_modules/react-native/ReactAndroid/src/debug/AndroidManifest.xml`), pour
+  l'overlay de developpement. Elle n'avait rien a faire dans un build release.
+- `RECORD_AUDIO` n'est declaree par AUCUNE dependance : c'est un residu d'une
+  ancienne configuration d'`expo-camera`. Le plugin porte pourtant deja
+  `recordAudioAndroid: false` — un `prebuild` neuf ne l'aurait pas ajoutee.
+
+**Pourquoi elles survivaient** : `android/` est genere UNE FOIS puis gitignore.
+Corriger la configuration Expo ne nettoie pas un manifeste deja ecrit. C'est le
+meme piege que le `versionCode` et que `READ_WEIGHT`.
+
+**Correctif aux deux endroits :**
+1. `android.blockedPermissions` dans `app.json` — durable, Expo injecte
+   `tools:node="remove"` a chaque futur prebuild ;
+2. suppression des deux lignes du manifeste genere — sans quoi le build courant
+   les aurait conservees.
+
+Verifie sur appareil apres desinstallation et reinstallation propre :
+`adb shell dumpsys package com.sportracker.app` ne mentionne plus ni
+`RECORD_AUDIO` ni `SYSTEM_ALERT_WINDOW`.
+
+**A retenir** — corriger la configuration Expo ne suffit jamais tant que
+`android/` existe deja. Toute permission se verifie sur l'APK INSTALLE, pas dans
+`app.json`.
+
+
+## Une date UTC range mal une activité, aux DEUX bords de la journée
+
+Piège identifié en écrivant l'historique (A01/A02), et d'abord mal compris.
+
+`new Date().toISOString().slice(0, 10)` renvoie la date **UTC**, pas la date de
+l'utilisateur. Mon premier test affirmait qu'une séance à 23 h 30 « basculerait
+au lendemain à l'est de Greenwich ». C'est **faux** : à l'est, l'heure locale est
+en avance sur l'UTC, donc 23 h 30 à Paris = 21 h 30 UTC, même jour. Le test
+n'aurait rien attrapé en France.
+
+Le vrai comportement :
+- à l'**est** (France) : une séance juste **après minuit** glisse au jour UTC
+  **précédent** ;
+- à l'**ouest** (Amériques) : une séance **tardive** glisse au jour UTC
+  **suivant**.
+
+**Correctif** : `lib/dateKeys` (`localDayKey`, `startOfLocalDay`…) pour tout le
+code nouveau. Le test couvre les deux bords, ce qui le rend utile dans tout
+fuseau non UTC. En fuseau UTC strict, aucun cas ne peut le faire échouer —
+limite documentée.
+
+**Non corrigé, hors portée** : plusieurs écrans existants (accueil, photo,
+journal alimentaire) calculent encore « aujourd'hui » avec
+`toISOString().slice(0, 10)`. Entre minuit et 2 h du matin en France, ils
+considèrent qu'on est encore la veille. À traiter séparément.
+
+**À retenir** — un test de fuseau horaire doit être raisonné sur le signe du
+décalage, pas sur l'intuition « tard le soir = lendemain ».
+
+
+## Un écran « d'une autre app » : en-tête natif et texte sans police
+
+Signalé par Islam (B01, 2026-09-22) sur Séance et Programmes. Deux causes
+distinctes, qui se voient ensemble.
+
+1. **L'en-tête natif de la pile** (`headerShown: true`) affiche le titre en
+   Archivo, alors que les écrans principaux dessinent leur propre en-tête
+   éditorial en Oswald. Même contenu, deux typographies.
+2. **Un `<Text>` sans `fontFamily` retombe sur la police SYSTÈME** d'Android
+   (Roboto, SamsungOne sur Samsung), pas sur Archivo : il n'y a pas de police
+   par défaut dans l'app. C'était « 4 jours · 28 exercices » dans ProgramCard
+   et le nombre d'exercices des jours dans Séance.
+
+**Correctif** : `ScreenHeader` + `headerShown: false` ; `fontFamily` explicite
+sur les textes concernés.
+
+**Non corrigé, hors portée** : Communauté et Aliments gardent l'en-tête natif ;
+d'autres `<Text>` sans `fontFamily` existent sans doute ailleurs.
+
+**À retenir** — tout style de texte porte une `fontFamily` ; un nouvel écran
+principal part de `ScreenHeader`, pas de l'en-tête de la pile.

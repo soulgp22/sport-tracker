@@ -95,7 +95,8 @@ const makeStyles = (c: ThemeColors) =>
       fontFamily: fonts.sansBold,
       color: c.textPrimary,
     },
-    meta: { fontSize: 13, color: c.textSecondary },
+    // Sans fontFamily, Android retombe sur la police système.
+    meta: { fontSize: 13, fontFamily: fonts.sans, color: c.textSecondary },
     profileName: { fontSize: 11, fontFamily: fonts.sansBold, color: c.primary },
     actions: {
       flexDirection: 'row',

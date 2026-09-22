@@ -41,6 +41,7 @@ import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit'
 import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainingLog';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
+import { useMealPhotoQuotaStore } from '../../store/mealPhotoQuotaStore';
 import { useFoodStore } from '../../store/foodStore';
 import { useLanguageStore } from '../../store/languageStore';
 import type { Food, MealType } from '../../types';
@@ -151,6 +152,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
+  const recordAnalyzedMeal = useMealPhotoQuotaStore((s) => s.recordAnalyzedMeal);
   const language = useLanguageStore((s) => s.language);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -520,6 +522,10 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         mt(t, 'mealPhoto.skippedMessage', { names: skipped.join(', ') })
       );
     }
+
+    // Le quota compte les REPAS enregistres, pas les analyses lancees : une
+    // photo relancee ou corrigee ne consomme rien (voir lib/mealPhotoQuota).
+    recordAnalyzedMeal();
 
     onAdded();
   };

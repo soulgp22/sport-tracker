@@ -7,6 +7,12 @@
  * sans jamais faire planter l'import.
  */
 
+import type { HealthWeightSample } from './healthWeightMerge';
+import type { DailyHealthData } from './energyHistory';
+import { endOfLocalDay, localDayKey, startOfLocalDay } from './dateKeys';
+
+export type { HealthWeightSample };
+
 type HealthConnectModule = typeof import('react-native-health-connect');
 type HealthPermission = import('react-native-health-connect').Permission;
 
@@ -15,6 +21,50 @@ const REQUIRED_PERMISSIONS: HealthPermission[] = [
   { accessType: 'read', recordType: 'TotalCaloriesBurned' },
   { accessType: 'read', recordType: 'Steps' },
 ];
+
+/**
+ * Permissions demandees EN PLUS des requises, mais dont l'absence ne doit
+ * JAMAIS degrader l'app.
+ *
+ * Le poids est arrive apres les pas et les calories. L'ajouter a
+ * `REQUIRED_PERMISSIONS` aurait fait basculer tous les utilisateurs deja
+ * autorises en « permission requise » — `hasAllReadPermissions` exige TOUTES
+ * les permissions du groupe — et leur aurait fait perdre l'affichage des pas
+ * jusqu'a une nouvelle autorisation. Un ajout de fonctionnalite ne casse pas
+ * ce qui marchait : deux groupes, deux verifications.
+ *
+ * ---
+ *
+ * VIDE POUR L'INSTANT. `android.permission.health.READ_WEIGHT` fait basculer
+ * l'application dans la categorie « applications de sante » cote Google Play,
+ * qui refuse alors TOUT televersement — meme sur le track interne — tant que
+ * la « Declaration relative aux applications de sante » n'est pas remplie
+ * (« You must let us know whether your app includes any health features. »,
+ * 2026-08-27).
+ *
+ * On ne demande PAS une permission absente du manifeste : Health Connect peut
+ * rejeter la feuille entiere, ce qui ferait perdre les pas et les calories qui
+ * fonctionnent aujourd'hui. Le retrait est donc fait aux trois endroits a la
+ * fois.
+ *
+ * POUR REACTIVER LE POIDS, apres validation de la declaration :
+ *   1. remettre `{ accessType: 'read', recordType: 'Weight' }` ci-dessous ;
+ *   2. remettre `android.permission.health.READ_WEIGHT` dans `app.json` ;
+ *   3. remettre la meme ligne dans `android/app/src/main/AndroidManifest.xml`
+ *      (genere et gitignore : `app.json` seul ne suffit pas).
+ * Tout le reste de la chaine de lecture est deja en place et testee.
+ */
+const OPTIONAL_PERMISSIONS: HealthPermission[] = [];
+
+/**
+ * Fenetre de recherche du dernier poids connu, en jours.
+ *
+ * Les pas et les calories se lisent « aujourd'hui » ; le poids non — on ne se
+ * pese pas tous les jours. On remonte donc sur 90 jours et on garde le releve
+ * le plus recent. Au-dela, une valeur serait trop vieille pour representer le
+ * poids actuel.
+ */
+const WEIGHT_LOOKBACK_DAYS = 90;
 
 export interface CaloriesBurnedToday {
   /** Calories actives (Activité) brûlées aujourd'hui, en kcal. */
@@ -142,7 +192,12 @@ export async function requestHealthPermissionsWithStatus(): Promise<HealthPermis
     // Obligatoire avant requestPermission : sinon « client is not initialized ».
     await ensureInitialized(hc);
     const startedAt = Date.now();
-    const granted = (await hc.requestPermission([...REQUIRED_PERMISSIONS])) as HealthPermission[];
+    // Les deux groupes sont demandes ensemble : une seule feuille pour
+    // l'utilisateur. Seules les requises conditionnent `granted`.
+    const granted = (await hc.requestPermission([
+      ...REQUIRED_PERMISSIONS,
+      ...OPTIONAL_PERMISSIONS,
+    ])) as HealthPermission[];
     // Refus résolu quasi instantanément = la feuille de permission ne s'est
     // JAMAIS affichée : signature du blocage des applis installées hors Play
     // Store (Health Connect les ignore, elles n'apparaissent pas dans sa liste).
@@ -236,5 +291,128 @@ export async function readStepsToday(): Promise<number | null> {
     await ensureInitialized(hc);
     const result = await hc.readRecords('Steps', todayTimeRange());
     return result.records.reduce((sum, record) => sum + record.count, 0);
+  });
+}
+
+/** true si la lecture du poids est autorisee (permission optionnelle). */
+export async function hasWeightPermission(): Promise<boolean> {
+  // Sans ce garde, `[].every(...)` vaut true : la fonction repondrait « oui,
+  // autorise » alors que la permission n'est meme pas declaree, et l'app
+  // tenterait une lecture vouee a l'echec a chaque affichage.
+  if (OPTIONAL_PERMISSIONS.length === 0) return false;
+
+  const granted = await safeCall('getGrantedPermissions', async (hc) => {
+    await ensureInitialized(hc);
+    return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
+  });
+  if (!granted) return false;
+  return OPTIONAL_PERMISSIONS.every((required) =>
+    granted.some(
+      (permission) =>
+        permission.accessType === required.accessType &&
+        permission.recordType === required.recordType
+    )
+  );
+}
+
+/**
+ * Dernier poids enregistre dans Health Connect sur les 90 derniers jours.
+ * null si indisponible, non autorise, ou si aucun releve n'existe.
+ */
+export async function readLatestWeight(): Promise<HealthWeightSample | null> {
+  return safeCall('readLatestWeight', async (hc) => {
+    await ensureInitialized(hc);
+    const start = new Date();
+    start.setDate(start.getDate() - WEIGHT_LOOKBACK_DAYS);
+    const result = await hc.readRecords('Weight', {
+      timeRangeFilter: {
+        operator: 'between',
+        startTime: start.toISOString(),
+        endTime: new Date().toISOString(),
+      },
+    });
+    if (result.records.length === 0) return null;
+    // Health Connect ne garantit pas l'ordre : on prend le plus recent.
+    const latest = result.records.reduce((newest, record) =>
+      record.time > newest.time ? record : newest
+    );
+    const weightKg = Math.round(latest.weight.inKilograms * 10) / 10;
+    if (!Number.isFinite(weightKg) || weightKg <= 0) return null;
+    return { weightKg, time: latest.time };
+  });
+}
+
+/**
+ * Cle de jour d'un compartiment agrege par periode.
+ *
+ * Le module natif renvoie `LocalDateTime.toString()` (« 2026-09-20T00:00 »,
+ * sans fuseau) : les 10 premiers caracteres SONT le jour local. Si un jour la
+ * bibliotheque renvoyait un instant avec fuseau, on le reconvertit en heure
+ * locale plutot que de tronquer une date UTC.
+ */
+function dayKeyFromBucketTime(time: string): string {
+  return /(?:[zZ]|[+-]\d{2}:?\d{2})$/.test(time) ? localDayKey(new Date(time)) : time.slice(0, 10);
+}
+
+/** Zero -> null : Health Connect renvoie 0 pour un jour sans aucune donnee. */
+const positiveOrNull = (value: number | undefined | null) =>
+  typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : null;
+
+/**
+ * Pas et calories par jour LOCAL, de `fromDay` a `toDay` inclus.
+ *
+ * Utilise `aggregateGroupByPeriod` : Health Connect somme lui-meme par jour et
+ * deduplique les sources (montre + telephone), la ou une somme manuelle des
+ * enregistrements bruts compterait deux fois les pas vus par deux appareils.
+ *
+ * Profondeur : Health Connect ne renvoie que les donnees posterieures a
+ * ~30 jours avant la PREMIERE autorisation de l'app, sauf permission
+ * READ_HEALTH_DATA_HISTORY — ecartee le 2026-09-22 pour ne pas rouvrir la
+ * declaration sante. Les jours plus anciens sont simplement absents.
+ *
+ * Retourne null si Health Connect est indisponible ou non autorise.
+ */
+export async function readDailyHealthHistory(
+  fromDay: string,
+  toDay: string
+): Promise<Map<string, DailyHealthData> | null> {
+  return safeCall('readDailyHealthHistory', async (hc) => {
+    await ensureInitialized(hc);
+    const timeRangeFilter = {
+      operator: 'between' as const,
+      startTime: startOfLocalDay(fromDay).toISOString(),
+      endTime: endOfLocalDay(toDay).toISOString(),
+    };
+    const timeRangeSlicer = { period: 'DAYS' as const, length: 1 };
+
+    const [steps, active, total] = await Promise.all([
+      hc.aggregateGroupByPeriod({ recordType: 'Steps', timeRangeFilter, timeRangeSlicer }),
+      hc.aggregateGroupByPeriod({ recordType: 'ActiveCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
+      hc.aggregateGroupByPeriod({ recordType: 'TotalCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
+    ]);
+
+    const byDay = new Map<string, DailyHealthData>();
+    const entry = (day: string): DailyHealthData => {
+      const existing = byDay.get(day);
+      if (existing) return existing;
+      const created: DailyHealthData = { steps: null, activeKcal: null, totalKcal: null };
+      byDay.set(day, created);
+      return created;
+    };
+
+    for (const group of steps) {
+      const value = positiveOrNull(group.result.COUNT_TOTAL);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).steps = value;
+    }
+    for (const group of active) {
+      const value = positiveOrNull(group.result.ACTIVE_CALORIES_TOTAL?.inKilocalories);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).activeKcal = Math.round(value);
+    }
+    for (const group of total) {
+      const value = positiveOrNull(group.result.ENERGY_TOTAL?.inKilocalories);
+      if (value !== null) entry(dayKeyFromBucketTime(group.startTime)).totalKcal = Math.round(value);
+    }
+
+    return byDay;
   });
 }

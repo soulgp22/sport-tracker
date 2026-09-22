@@ -8,7 +8,7 @@ import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
 import { useTranslation } from '../../../i18n/useTranslation';
 
-function BackToHomeButton() {
+function BackButton() {
   const c = useColors();
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -29,7 +29,7 @@ function BackToHomeButton() {
       onPress={handlePress}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel={t('common.backHome')}>
+      accessibilityLabel={t('common.back')}>
       <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
     </TouchableOpacity>
   );
@@ -52,7 +52,9 @@ export default function ProgramsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          // L'écran dessine son propre en-tête (ScreenHeader), comme
+          // Nutrition et Progression : l'en-tête natif était en Archivo.
+          headerShown: false,
           title: t('nav.programs'),
         }}
       />

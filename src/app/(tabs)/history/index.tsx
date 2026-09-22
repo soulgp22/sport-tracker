@@ -1,10 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useSessionStore } from '../../../store/sessionStore';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { SegmentedTabs } from '../../../components/ui/SegmentedTabs';
+import {
+  EnergyHistoryList,
+  type HistoryMetric,
+} from '../../../components/history/EnergyHistoryList';
+import { useEnergyHistory } from '../../../hooks/useEnergyHistory';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 
@@ -19,6 +25,7 @@ function fmt(secs: number) {
 }
 
 type DaySection = { key: string; title: string; data: Session[] };
+type HistoryView = 'sessions' | HistoryMetric;
 
 export default function HistoryScreen() {
   const c = useColors();
@@ -26,6 +33,8 @@ export default function HistoryScreen() {
   const { t, locale } = useTranslation();
   const router = useRouter();
   const sessions = useSessionStore((s) => s.sessions);
+  const [view, setView] = useState<HistoryView>('sessions');
+  const { daily, healthStatus } = useEnergyHistory();
 
   const sections = useMemo<DaySection[]>(() => {
     const groups = new Map<string, Session[]>();
@@ -56,49 +65,63 @@ export default function HistoryScreen() {
         <Text style={styles.headerKicker}>{t('nav.history')}</Text>
         <Text style={styles.headerTitle}>{t('history.title')}</Text>
       </View>
-      <SectionList
-        sections={sections}
-        keyExtractor={(s) => s.id}
-        stickySectionHeadersEnabled={false}
-        renderSectionHeader={({ section }) => (
-          <View style={styles.dayHeader}>
-            <Text style={styles.dayHeaderText}>{section.title}</Text>
-          </View>
-        )}
-        renderItem={({ item }) => {
-          const totalSets = item.exercises.reduce(
-            (sum, ex) => sum + ex.sets.filter((s) => s.completed).length,
-            0
-          );
-          const meta = t('history.cardMetaShort', {
-            exercises: item.exercises.length,
-            sets: totalSets,
-          });
-          const detail = item.dayName ? `${item.dayName} · ${meta}` : meta;
-          return (
-            <TouchableOpacity
-              style={styles.row}
-              onPress={() => router.push(`/(tabs)/history/${item.id}`)}
-              activeOpacity={0.75}
-              accessibilityRole="button">
-              <View style={styles.dot} />
-              <View style={styles.rowCopy}>
-                <Text style={styles.rowTitle}>{item.programName ?? t('history.freeSession')}</Text>
-                <Text style={styles.rowDetail}>{detail}</Text>
-              </View>
-              <Text style={styles.rowValue}>{fmt(item.durationSeconds)}</Text>
-            </TouchableOpacity>
-          );
-        }}
-        ListEmptyComponent={
-          <EmptyState
-            icon="time-outline"
-            title={t('history.emptyTitle')}
-            subtitle={t('history.emptySubtitle')}
-          />
+      <SegmentedTabs
+        testID="history-tabs"
+        value={view}
+        onChange={setView}
+        options={[
+          { value: 'sessions', label: t('history.tab.sessions') },
+          { value: 'energy', label: t('history.tab.energy') },
+          { value: 'steps', label: t('history.tab.steps') },
+        ]}
+      />
+      {view !== 'sessions' ? (
+        <EnergyHistoryList metric={view} daily={daily} healthStatus={healthStatus} />
+      ) : (
+        <SectionList
+          sections={sections}
+          keyExtractor={(s) => s.id}
+          stickySectionHeadersEnabled={false}
+          renderSectionHeader={({ section }) => (
+            <View style={styles.dayHeader}>
+              <Text style={styles.dayHeaderText}>{section.title}</Text>
+            </View>
+          )}
+          renderItem={({ item }) => {
+            const totalSets = item.exercises.reduce(
+              (sum, ex) => sum + ex.sets.filter((s) => s.completed).length,
+              0
+            );
+            const meta = t('history.cardMetaShort', {
+              exercises: item.exercises.length,
+              sets: totalSets,
+            });
+            const detail = item.dayName ? `${item.dayName} · ${meta}` : meta;
+            return (
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() => router.push(`/(tabs)/history/${item.id}`)}
+                activeOpacity={0.75}
+                accessibilityRole="button">
+                <View style={styles.dot} />
+                <View style={styles.rowCopy}>
+                  <Text style={styles.rowTitle}>{item.programName ?? t('history.freeSession')}</Text>
+                  <Text style={styles.rowDetail}>{detail}</Text>
+                </View>
+                <Text style={styles.rowValue}>{fmt(item.durationSeconds)}</Text>
+              </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={
+            <EmptyState
+              icon="time-outline"
+              title={t('history.emptyTitle')}
+              subtitle={t('history.emptySubtitle')}
+            />
         }
         contentContainerStyle={sessions.length === 0 ? styles.emptyContainer : styles.list}
       />
+      )}
     </SafeAreaView>
   );
 }

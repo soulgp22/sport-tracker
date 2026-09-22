@@ -224,26 +224,6 @@
               ]
             },
             {
-              "exerciseName": "Inverted Row",
-              "sets": [
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                },
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                },
-                {
-                  "reps": 6,
-                  "weight": 0,
-                  "restSeconds": 120
-                }
-              ]
-            },
-            {
               "exerciseName": "Back Flyes - With Bands",
               "sets": [
                 {
@@ -435,31 +415,6 @@
               ],
               "alternativeExerciseNames": [
                 "Superman"
-              ]
-            },
-            {
-              "exerciseName": "Calf Raises - With Bands",
-              "sets": [
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 60
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 60
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 60
-                },
-                {
-                  "reps": 8,
-                  "weight": 0,
-                  "restSeconds": 60
-                }
               ]
             },
             {
