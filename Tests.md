@@ -356,3 +356,23 @@ sur l'émulateur. Amener le compteur à 2 exigerait deux analyses réelles (serv
 + caméra), et l'APK release n'est pas débogable, donc le compteur AsyncStorage
 n'est pas amorçable par `adb`. Le test de composant couvre le rendu et le
 contenu de cet écran.
+
+
+## Dépense d'une séance (C01)
+
+`src/lib/__tests__/sessionCalories.test.ts` (10 tests) et
+`src/app/(tabs)/history/__tests__/sessionDetailCalories.test.tsx` (3 tests).
+
+Le test clé n'est pas mathématique mais empirique : **une séance typique d'une
+heure doit rester dans 200–400 kcal**, la plage mesurée par la littérature. Une
+formule élégante qui sort de cette plage est fausse.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- dépense **brute** au lieu de nette → « retire le métabolisme de repos » ;
+- suppression du plafond de durée → « plafonne la durée d'une séance oubliée » ;
+- la charge n'influence plus le MET → 2 tests (lourde > légère, bornes du MET) ;
+- **poids actuel** au lieu du poids à la date de la séance → test de câblage.
+
+Piège rencontré en écrivant les tests : une fixture à **une seule série** sur
+60 min déclenchait le plafond (1 × 4 min), et le test attendait 210 kcal pour en
+recevoir 15. Le code était juste, la fixture ignorait sa propre règle.

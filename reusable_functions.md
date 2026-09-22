@@ -219,6 +219,33 @@ Au-delà de la limite, l'écran annonce qu'un compte payant lèvera la restricti
 
 ---
 
+## Dépense calorique d'une séance (C01)
+
+`src/lib/sessionCalories.ts` — `estimateSessionCalories(session, bodyweightKg?)`,
+module **pur**.
+
+**Méthode** : METs du Compendium of Physical Activities (base 3,5, plafond 6,0),
+modulés par la **densité de travail** = charge totale / (poids de corps × minutes).
+Dépense **nette** : `(MET − 1) × 3,5 × poids / 200 × minutes`.
+
+| Choix | Pourquoi |
+|---|---|
+| `MET − 1` (net, pas brut) | le métabolisme de repos est déjà compté dans la dépense du corps ; sans ce retrait il serait compté deux fois dès qu'on additionne corps + séance |
+| Pas d'âge ni de sexe | le MET est déjà normalisé par kilo ; aucune formule validée en musculation ne les exploite sans fréquence cardiaque |
+| Pas de Keytel | exige la FC, et surestime en musculation (réponse presseur) |
+| Travail mécanique en **modulateur** seulement | seul, il sous-estime d'un facteur ~3 |
+| Arrondi à 5 kcal + fourchette ±25 % | les estimations grand public se trompent de 25 à 50 % |
+| Plafond de 4 min par série | une séance oubliée ouverte ne doit pas afficher 2 000 kcal |
+| 50 % du poids de corps pour une charge nulle | exercices au poids du corps ; hypothèse prudente |
+| Poids **à la date de la séance** | une séance d'il y a six mois se calcule sur le poids d'alors |
+
+`DENSITY_AT_VIGOROUS = 3` est une **hypothèse de calibration**, pas une constante
+publiée : elle place une séance lourde et une séance légère typiques aux deux
+extrémités de l'échelle MET. Les tests vérifient que le résultat reste dans la
+plage mesurée par la littérature (200–400 kcal/h).
+
+---
+
 ## Outillage de vérification
 
 ```bash
