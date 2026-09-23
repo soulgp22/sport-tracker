@@ -1079,3 +1079,14 @@ d'Islam « à faire ensuite ».
 **À retenir** — tout nouveau flux de données sortant de l'appareil (identifiant,
 SDK tiers, nouvel appel réseau) bloque la soumission tant que le formulaire
 Data Safety n'est pas à jour. Point ajouté au portail `docs/tests-avant-prod.md`.
+
+## La politique disait « jamais la photo » alors que l'option d'entraînement l'envoie
+
+Constaté le 2026-09-23 en remplissant la Data Safety. `mealPhotoTrainingLog`
+envoie la **photo + les corrections** au serveur quand l'option « améliorer le
+modèle » est activée ; la politique (3.5) affirmait l'inverse. Corrigé dans le
+texte (3.1 et 3.5). La Data Safety déclare donc les **Photos** comme
+collectées, non éphémères, facultatives.
+
+**À retenir** — relire le code qui envoie avant d'écrire une phrase de
+politique ; un commentaire ou une intention (« seul le texte ») ne fait pas foi.

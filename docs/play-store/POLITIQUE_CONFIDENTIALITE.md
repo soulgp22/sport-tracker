@@ -66,7 +66,8 @@ Le résultat (noms d'aliments et quantités estimées) revient à l'application.
 
 - L'image n'est envoyée **que** lorsque vous déclenchez explicitement l'analyse.
 - **Elle n'est pas conservée** sur notre serveur : elle est transmise pour
-  analyse, puis écartée. Aucun historique de photos n'est constitué.
+  analyse, puis écartée. Aucun historique de photos n'est constitué — sauf si
+  vous activez le réglage facultatif décrit en 3.5.
 - Le traitement par Google Gemini est soumis aux conditions de Google.
 
 L'application ne contacte **jamais Google directement** : elle ne détient aucune
@@ -96,9 +97,13 @@ votre adresse IP. Aucune donnée de votre part n'est envoyée.
 ### 3.5 Amélioration du modèle — désactivé par défaut
 
 Un réglage **facultatif**, **désactivé par défaut**, permet de partager vos
-corrections d'estimation photo pour améliorer le modèle. S'il est activé, seul
-le **texte** de la correction est transmis — **jamais la photo**. Vous pouvez le
-réactiver ou le désactiver à tout moment dans les réglages.
+corrections d'estimation photo pour améliorer le modèle. S'il est activé, la
+**photo du plat** et vos **corrections** (aliments et quantités validés) sont
+envoyées à notre serveur et **conservées** pour entraîner le modèle. Aucun
+identifiant ne les accompagne. Sans ce réglage, rien de tout cela n'est envoyé,
+et la photo analysée n'est pas conservée (section 3.1). Vous pouvez activer ou
+désactiver ce réglage à tout moment, et demander la suppression de vos
+contributions à l'adresse ci-dessous.
 
 ### 3.6 Limite quotidienne d'analyses photo
 
