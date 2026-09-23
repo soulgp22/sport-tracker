@@ -1063,3 +1063,19 @@ dépôt était à jour, la page publiée par Google Play non.
 **À retenir** — un document publié hors du dépôt ne suit pas le dépôt. Toute
 modification de `docs/play-store/*.md` publié en ligne s'accompagne de sa
 régénération sur le VPS (voir `server/lst-quota/README.md` et `connexions.md`).
+
+## 1.30.0 rejetée : Data Safety non mise à jour avant l'envoi
+
+2026-09-23. Google a refusé la version 47 : « Invalid Data safety form —
+Device Or Other IDs ». L'app envoie désormais l'ANDROID_ID au serveur de quota
+(et comme identifiant client à RevenueCat) ; le formulaire ne le déclarait pas.
+Google le détecte automatiquement dans le trafic de l'app.
+
+**Cause racine** : la build a été soumise AVANT la mise à jour du formulaire,
+alors que le nouveau flux de données était connu et documenté
+(`FICHE_PLAY_STORE.md`). La déclaration était traitée comme une tâche
+d'Islam « à faire ensuite ».
+
+**À retenir** — tout nouveau flux de données sortant de l'appareil (identifiant,
+SDK tiers, nouvel appel réseau) bloque la soumission tant que le formulaire
+Data Safety n'est pas à jour. Point ajouté au portail `docs/tests-avant-prod.md`.
