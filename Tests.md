@@ -419,3 +419,27 @@ Sabotages vérifiés le 2026-09-22, chacun rougit :
 Vérifié sur l'émulateur (APK release) : Séance vide, avec programme déplié et
 jour choisi, séance en cours ; Programmes vide et avec un programme ; logcat
 crash vide.
+
+
+## Abonnement et quota serveur (F01)
+
+| Fichier | Couvre |
+|---|---|
+| `server/lst-quota/test_lst_quota.py` (16, `python -m unittest`) | jour local, droit RevenueCat (grâce, sans fin), cache et `refresh`, panne RevenueCat, idempotence, 402 au 3e repas, anciennes versions admises puis coupées, rétention 30 jours |
+| `lib/__tests__/mealPhotoQuota.test.ts` (+6) | paliers 2/100, fusion serveur/téléphone (maximum des compteurs, palier, autre jour) |
+| `lib/__tests__/mealQuotaApi.test.ts` (7) | signe du décalage, en-têtes, requêtes, lecture des réponses, identifiants d'analyse, identifiant d'appareil |
+| `lib/billing/__tests__/billing.test.ts` (11) | économie de l'annuel calculée, présélection, traduction RevenueCat, annulation vs erreur, pas de succès sans droit |
+| `store/__tests__/mealPhotoQuotaStore.test.ts` (4) | déclarations hors ligne conservées puis renvoyées dans l'ordre, `refresh` après achat |
+| `components/subscription/__tests__/Paywall.test.tsx` (11) | contexte, gain 2→100, annuel présélectionné, prix répété, erreurs, conditions, abonné, succès |
+| `components/nutrition/__tests__/MealPhotoReviewQuota.test.tsx` (3) | 402 sans alerte d'erreur, état rangé, en-têtes envoyés |
+| `nutrition/__tests__/photoQuota.test.tsx` (7) | offre au 2e repas gratuit, verrou serveur après réinstallation, abonné au-delà de 2, limite à 100 sans vente |
+| `nutrition/__tests__/addPhotoQuota.test.tsx` (2) | **régression** : le bouton photo d'« Ajouter un repas » respecte la limite |
+
+Sabotages vérifiés le 2026-09-22, chacun rougit : bouton photo sans garde ;
+402 traité comme une panne ; fusion au minimum ; économie arrondie vers le
+haut ; pas de `refresh` après l'achat ; succès sans droit actif ; déclaration
+retirée avant confirmation du serveur ; serveur `>` au lieu de `>=` ; jour UTC ;
+`consume` non idempotent.
+
+**Non vérifiable sans configuration d'Islam** : un achat réel (compte
+RevenueCat, profil marchand, produits Play).

@@ -76,6 +76,26 @@ le routeur repas, qui répondrait 404.
 Commandes utiles : `journalctl -u meal-server -f`,
 `systemctl restart meal-router`, `systemctl status lst-catalog`.
 
+### Service `lst-quota` (quota photo, abonnement)
+
+| | |
+|---|---|
+| Code | `/opt/lst-quota/lst_quota.py` (copie de `server/lst-quota/`) |
+| Port | 127.0.0.1:8354 |
+| Configuration | `/etc/lst-quota.env` (chmod 600) — modèle `server/lst-quota/lst-quota.env.example` |
+| Base | `/opt/lst-quota/data/quota.db` (SQLite, rétention 30 jours) |
+| Caddy | `handle /v1/quota*` + `forward_auth` sur `/v1/chat/completions*` — voir `Caddyfile.snippet` |
+
+Déploiement et retour arrière : `server/lst-quota/README.md`.
+
+**Clés RevenueCat — deux, à ne pas confondre :**
+
+| Clé | Où | Nature |
+|---|---|---|
+| SDK Android `goog_…` | `.env` de l'app : `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | publique, inlinée dans l'APK |
+| Secrète `sk_…` | `/etc/lst-quota.env` sur le VPS | **secrète**, jamais dans l'app ni le dépôt |
+| Test Store `test_…` | `.env` local, pour l'émulateur | **interdite en release** : RevenueCat le proscrit |
+
 ### Vérifier que le serveur est vivant, depuis l'extérieur
 
 ```bash
@@ -143,3 +163,17 @@ Builder l'AAB avec `-PuseEasSigning=true`. Un AAB signé avec l'autre clé est
 
 Health Connect **est** présent sur l'émulateur (intégré via APEX en Android 15) :
 `adb shell am start -a android.health.connect.action.HEALTH_HOME_SETTINGS`.
+
+---
+
+## Abonnement (F01)
+
+- **RevenueCat** : projet à créer par Islam (compte, app Android
+  `com.sportracker.app`, droit `premium`, offre par défaut avec les paquets
+  mensuel et annuel). RevenueCat a besoin d'un **compte de service Google** avec
+  les droits financiers pour valider les achats.
+- **Google Play Console** : profil de paiement (marchand) Rais&Co, puis
+  abonnement `premium` avec deux formules de base : `monthly` (9,99 €, P1M) et
+  `annual` (79,99 €, P1Y). Google convertit le prix pour les autres pays.
+- **Pages légales** : `/privacy` et `/terms` servies par Caddy depuis
+  `/opt/meal-training/www/`, générées depuis `docs/play-store/`.

@@ -81,6 +81,51 @@ if (!useAiTrainingOptInStore.getState().aiTrainingOptIn) return;
 
 ---
 
+## 1 ter. Quota de l'analyse photo et abonnement — service `lst-quota`
+
+**Code :** `server/lst-quota/` (versionné, sans secret). **Client :**
+`src/lib/mealQuotaApi.ts` (pur) et `src/lib/mealQuotaClient.ts` (transport).
+**Authentification :** même Bearer que les autres services.
+
+Règle : on compte les **repas enregistrés**, par appareil et par **jour local**.
+Gratuit : 2 par jour. Abonné (RevenueCat, droit `premium`) : 100 par jour.
+
+En-têtes envoyés par l'app **avec l'analyse et les appels ci-dessous** :
+
+| En-tête | Valeur |
+|---|---|
+| `X-Device-Id` | `and-<ANDROID_ID>` (`lib/deviceIdentity`), aussi identifiant client RevenueCat |
+| `X-Utc-Offset` | minutes à ajouter à l'UTC (Paris été : `120`), borné à ±840 |
+| `X-Analysis-Id` | analyse seulement : clé d'idempotence, redéclarée à l'enregistrement |
+
+```
+GET  /v1/quota[?refresh=1]   -> 200 {"quota": {day, tier, limit, used, remaining}}
+POST /v1/quota/consume       {"analysisId": "..."} -> 200 {"quota": {...}}  (idempotent)
+```
+
+`refresh=1` contourne le cache d'abonnement (10 min), au plus toutes les 3 s :
+l'app l'envoie juste après un achat ou une restauration.
+
+**Garde de l'analyse** — Caddy appelle `GET /internal/quota/check` (directive
+`forward_auth`) avant chaque `POST /v1/chat/completions` :
+
+| Réponse | Sens | Côté app |
+|---|---|---|
+| 2xx | sous la limite, ou ancienne version sans `X-Device-Id` (transition) | l'analyse part au routeur |
+| **402** `quota_exceeded` + `quota` | limite atteinte | offre d'abonnement, pas d'alerte d'erreur |
+| 400 `invalid_device` | identifiant hors format | erreur générique |
+| 426 `upgrade_required` | ancienne version, une fois la transition close | — |
+
+Avant un 402 au palier gratuit, le serveur revérifie l'abonnement (achat qui
+vient d'avoir lieu). RevenueCat injoignable : dernier état connu gardé 24 h.
+
+**Fournisseur de paiement :** RevenueCat, `GET https://api.revenuecat.com/v1/subscribers/<X-Device-Id>`
+avec la clé secrète (VPS uniquement). Côté app, `react-native-purchases`
+derrière le contrat `lib/billing/types.ts` : revenir à Google Play Billing en
+direct (décision d'Islam au-delà de 2 500 $/mois) = un nouvel adaptateur.
+
+---
+
 ## 2. Scan de code-barres — passerelle serveur (proxy OpenFoodFacts)
 
 **Client :** `src/lib/openFoodFacts.ts`

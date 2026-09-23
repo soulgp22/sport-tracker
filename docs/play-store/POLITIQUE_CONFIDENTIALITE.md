@@ -1,14 +1,14 @@
 # Politique de confidentialité — Life Sport Tracker
 
-*Dernière mise à jour : 27 août 2026*
+*Dernière mise à jour : 23 septembre 2026*
 
 ## Résumé
 
 Life Sport Tracker fonctionne **sans compte** et stocke l'essentiel de vos
-données **sur votre appareil**. Trois fonctionnalités font exception et
-nécessitent une connexion à un serveur : l'**analyse photo d'un repas**, le
-**scan d'un code-barres**, et le **téléchargement de catalogues**. Elles sont
-détaillées ci-dessous.
+données **sur votre appareil**. Quelques fonctionnalités font exception et
+nécessitent une connexion à un serveur : l'**analyse photo d'un repas** (et sa
+limite quotidienne), le **scan d'un code-barres**, le **téléchargement de
+catalogues** et l'**abonnement** facultatif. Elles sont détaillées ci-dessous.
 
 Aucune publicité, aucun traceur, aucun service d'analyse d'audience, aucune
 revente de données.
@@ -100,7 +100,40 @@ corrections d'estimation photo pour améliorer le modèle. S'il est activé, seu
 le **texte** de la correction est transmis — **jamais la photo**. Vous pouvez le
 réactiver ou le désactiver à tout moment dans les réglages.
 
-### 3.6 Journalisation technique
+### 3.6 Limite quotidienne d'analyses photo
+
+L'analyse photo est limitée à 2 repas par jour sans abonnement, et à 100 avec
+l'abonnement. Pour tenir ce décompte, l'application envoie à notre serveur, avec
+chaque analyse et chaque repas enregistré :
+
+- un **identifiant technique de l'appareil** : l'identifiant Android propre à
+  cette application (il ne permet pas de vous suivre d'une application à
+  l'autre et n'est pas un identifiant publicitaire) ;
+- votre **décalage horaire**, pour compter les repas de votre journée locale ;
+- un identifiant aléatoire d'analyse, pour ne jamais compter deux fois le même
+  repas.
+
+Le serveur conserve ces décomptes **30 jours**, puis les efface. Ils ne
+contiennent ni photo, ni nom d'aliment, ni aucune donnée de votre journal.
+
+### 3.7 Abonnement
+
+L'abonnement est **facultatif** et se souscrit dans **Google Play**. Vos
+informations de paiement sont saisies chez Google : ni l'application ni nous
+n'y avons accès.
+
+Pour vérifier qu'un abonnement est actif, nous faisons appel à
+**RevenueCat, Inc.** (États-Unis), sous-traitant qui reçoit de Google Play les
+informations de l'achat (produit, dates, pays, statut, jeton d'achat) associées
+à l'identifiant technique décrit en 3.6. RevenueCat agit pour notre compte et
+n'utilise pas ces données à ses propres fins. Ce transfert hors de l'Union
+européenne est encadré par les clauses contractuelles types de la Commission
+européenne prévues dans l'accord de traitement de données de RevenueCat.
+
+Si vous ne souscrivez pas, RevenueCat ne reçoit que l'identifiant technique, au
+moment où l'application vérifie votre statut.
+
+### 3.8 Journalisation technique
 
 Comme tout serveur exposé sur Internet, notre serveur peut enregistrer des
 données techniques de connexion (adresse IP, horodatage, type de requête) à des
@@ -116,6 +149,7 @@ et ne sont transmis à personne.
 | Internet | analyse photo, code-barres, catalogues |
 | Vibreur | fin du minuteur de repos |
 | Notifications | minuteur de repos, notifications **locales** uniquement |
+| Facturation Google Play | souscrire l'abonnement facultatif (section 3.7) |
 | Health Connect (3 lectures) | voir section 2 |
 | Stockage (Android 12 et antérieurs) | enregistrer un fichier de sauvegarde |
 
@@ -124,7 +158,8 @@ ni localisation, ni contacts, ni superposition d'écran.
 
 ## 5. Ce que l'application ne fait pas
 
-- aucun compte, aucune inscription, aucune identification ;
+- aucun compte, aucune inscription : seul un identifiant technique d'appareil
+  sert au décompte des analyses (section 3.6) ;
 - aucune publicité, aucun identifiant publicitaire ;
 - aucun service d'analyse d'audience (ni Google Analytics, ni Firebase, ni Sentry) ;
 - aucune revente ni partage commercial de données ;
@@ -140,7 +175,7 @@ sciemment aucune donnée les concernant.
 Vos données étant stockées sur votre appareil, vous en gardez le contrôle
 direct : les effacer depuis les réglages Android ou désinstaller l'application
 les supprime définitivement. Pour toute demande concernant les données
-transmises au serveur (sections 3.1 à 3.5), écrivez à l'adresse ci-dessous.
+transmises au serveur (sections 3.1 à 3.7), écrivez à l'adresse ci-dessous.
 
 ## 8. Modifications
 

@@ -310,6 +310,36 @@ Actions associées, déjà présentes dans le dépôt :
 
 ---
 
+## Abonnement et quota serveur (F01)
+
+**Facturation derrière un contrat** : `lib/billing/types.ts` (`BillingProvider`),
+un seul point d'accès `lib/billing/index.ts`. L'adaptateur actuel est RevenueCat
+(`lib/billing/revenueCat.ts`). Revenir à Google Play Billing en direct =
+écrire un adaptateur, rien d'autre ne change (écran, store, tests).
+
+**Prix jamais en dur** : `lib/billing/plans.ts` calcule l'économie de l'annuel
+sur les prix de la boutique, arrondie vers le bas.
+
+**Quota** : la règle pure dans `lib/mealPhotoQuota` (`limitForTier`,
+`mergeServerQuota`), le contrat réseau dans `lib/mealQuotaApi`, le transport
+dans `lib/mealQuotaClient`, l'état dans `store/mealPhotoQuotaStore`, et **un
+hook** `hooks/useMealPhotoQuota` pour tout écran qui ouvre l'analyse. Le
+serveur `lst-quota` est le vrai verrou.
+
+**Identifiant d'appareil** : `lib/deviceIdentity` (`and-<ANDROID_ID>`), stable à
+la réinstallation, propre à l'app. Réutilisable pour tout décompte par appareil.
+
+**Service stdlib + SQLite** : `server/lst-quota/` reprend le motif de
+`lst-catalog` avec en plus la configuration par fichier d'environnement (aucun
+secret dans le code) et des tests `unittest` qui démarrent le vrai serveur HTTP
+sur un port libre.
+
+**Garde d'une route par Caddy** : `forward_auth` (natif) fait valider chaque
+requête par un petit service avant de la transmettre, sans toucher au service
+protégé — ici le routeur d'analyse.
+
+---
+
 ## Outillage de vérification
 
 ```bash

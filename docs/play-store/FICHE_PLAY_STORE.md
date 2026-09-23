@@ -113,6 +113,9 @@ Au sens de Google, « collecté » signifie **transmis hors de l'appareil**. Or 
 | Corrections d'estimation (texte) | **oui, si opt-in** | désactivé par défaut, jamais d'image |
 | Données Health Connect (pas, calories) | **non** | lues et utilisées uniquement sur l'appareil |
 | Séances, journal, poids, préférences | **non** | stockage local |
+| **Identifiant d'appareil** (ANDROID_ID propre à l'app) | **oui** (F01) | envoyé avec chaque analyse photo et déclaration de repas, pour le quota ; aussi identifiant client chez RevenueCat. Catégorie « Identifiants de l'appareil ou autres », finalité « Fonctionnalités de l'appli » (+ « Prévention de la fraude »). Conservé 30 jours côté serveur |
+| **Historique des achats** (abonnement) | **oui** (F01) | via RevenueCat, **sous-traitant** agissant pour Rais&Co : au sens de Google ce n'est pas un « partage ». Finalité « Fonctionnalités de l'appli » |
+| Moyen de paiement | **non** | saisi dans Google Play, jamais vu par l'app ni par RevenueCat |
 
 Le mapping exact vers les catégories Google reste à faire dans le formulaire :
 les libellés de Play évoluent, mieux vaut les lire au moment de remplir que se

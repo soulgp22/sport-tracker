@@ -1028,3 +1028,38 @@ d'autres `<Text>` sans `fontFamily` existent sans doute ailleurs.
 
 **À retenir** — tout style de texte porte une `fontFamily` ; un nouvel écran
 principal part de `ScreenHeader`, pas de l'en-tête de la pile.
+
+
+## La limite gratuite de l'analyse photo se contournait par « Ajouter un repas »
+
+Trouvé en préparant l'abonnement (F01, 2026-09-22), jamais signalé.
+
+La limite de 2 repas par jour n'était vérifiée que par l'écran
+`nutrition/photo`, dont le commentaire affirmait qu'il était « le seul point
+d'entrée vers l'analyse ». C'était faux : l'écran **Ajouter un repas** a son
+propre bouton appareil photo, qui ouvrait `MealPhotoReview` directement. Le
+compteur était incrémenté, mais jamais consulté sur ce chemin.
+
+**Cause racine** : un garde placé sur un écran, pas sur la capacité. Une
+seconde entrée suffit à le contourner, et un commentaire qui affirme
+l'unicité empêche de la chercher.
+
+**Correctif** : un seul calcul (`hooks/useMealPhotoQuota`) utilisé par les deux
+entrées, et surtout un verrou **serveur** (`lst-quota`, HTTP 402 sur l'analyse
+elle-même) : quelle que soit l'entrée, l'analyse est refusée.
+
+**Test** : `nutrition/__tests__/addPhotoQuota.test.tsx`, vérifié par sabotage.
+
+**À retenir** — une règle d'accès se vérifie là où la ressource est consommée
+(ici le serveur), pas sur un écran parmi d'autres. Chercher toutes les
+entrées avec `grep` avant d'écrire « seul point d'entrée ».
+
+## La politique de confidentialité en ligne n'était pas celle du dépôt
+
+Constaté le 2026-09-22 : `/privacy` sur le VPS sert un `privacy.html` du
+2 août, antérieur à la réécriture du 27 août (Rais&Co, Hetzner Allemagne). Le
+dépôt était à jour, la page publiée par Google Play non.
+
+**À retenir** — un document publié hors du dépôt ne suit pas le dépôt. Toute
+modification de `docs/play-store/*.md` publié en ligne s'accompagne de sa
+régénération sur le VPS (voir `server/lst-quota/README.md` et `connexions.md`).

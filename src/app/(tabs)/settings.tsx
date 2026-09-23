@@ -47,6 +47,8 @@ import { useLanguageStore } from '../../store/languageStore';
 import { usePerformanceStore } from '../../store/performanceStore';
 import { useOnboardingStore } from '../../store/onboardingStore';
 import { useAiTrainingOptInStore } from '../../store/aiTrainingOptInStore';
+import { localTier, useSubscriptionStore } from '../../store/subscriptionStore';
+import { limitForTier } from '../../lib/mealPhotoQuota';
 import {
   clearRecords,
   exportRecordsJson,
@@ -163,6 +165,7 @@ export default function SettingsScreen() {
   const { language, t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
   const programsCount = useProgramStore((s) => s.programs.length);
+  const subscriptionTier = localTier(useSubscriptionStore((s) => s.entitlement));
   const sessionsCount = useSessionStore((s) => s.sessions.length);
   const customFoodsCount = useFoodStore((s) => s.customFoods.length);
   const foodDiaryEntriesCount = useFoodDiaryStore((s) => s.entries.length);
@@ -472,6 +475,23 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['bottom', 'top']}>
       <ScrollView contentContainerStyle={styles.content}>
+        {/* Abonnement : l'offre et sa gestion sont dans le meme ecran
+            (nutrition/premium), qui montre l'un ou l'autre selon l'etat. */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{t('premium.settingsTitle')}</Text>
+          <Text style={styles.helpText}>
+            {t(subscriptionTier === 'premium' ? 'premium.settingsPremium' : 'premium.settingsFree', {
+              count: limitForTier(subscriptionTier),
+            })}
+          </Text>
+          <Button
+            title={t(subscriptionTier === 'premium' ? 'premium.manage' : 'premium.settingsCta')}
+            variant={subscriptionTier === 'premium' ? 'secondary' : 'primary'}
+            onPress={() => router.push('/(tabs)/nutrition/premium' as never)}
+            style={styles.actionBtn}
+          />
+        </View>
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.appearance')}</Text>
           <Text style={styles.helpText}>

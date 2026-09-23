@@ -19,6 +19,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
 import { BarcodeScannerModal } from '../../../components/nutrition/BarcodeScannerModal';
 import { canUseMealPhoto } from '../../../lib/mealPhotoCapability';
+import { useMealPhotoQuota } from '../../../hooks/useMealPhotoQuota';
 import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
@@ -127,6 +128,22 @@ export default function AddMealScreen() {
   const [scanLoading, setScanLoading] = useState(false);
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [photoVisible, setPhotoVisible] = useState(false);
+  // Ce bouton photo ouvrait l'analyse SANS passer par le garde de l'ecran
+  // photo : la limite gratuite se contournait ici. Meme hook, meme regle.
+  const photoQuota = useMealPhotoQuota();
+  const openPaywall = () =>
+    router.push({ pathname: '/(tabs)/nutrition/premium' as never, params: { reason: 'quota' } } as never);
+  const openPhoto = () => {
+    if (photoQuota.reached && photoQuota.tier === 'free') {
+      openPaywall();
+      return;
+    }
+    if (photoQuota.reached) {
+      appAlert(t('mealPhoto.quotaTitle'), t('mealPhoto.quotaMessage', { limit: photoQuota.limit }));
+      return;
+    }
+    setPhotoVisible(true);
+  };
 
   // Gating photo : feature visible uniquement sur Android compatible quand la
   // configuration du serveur d'analyse est complète.
@@ -284,7 +301,7 @@ export default function AddMealScreen() {
               {mealPhotoReview ? (
                 <TouchableOpacity
                   style={styles.scanButton}
-                  onPress={() => setPhotoVisible(true)}
+                  onPress={openPhoto}
                   hitSlop={8}
                   activeOpacity={0.75}
                   accessibilityRole="button"
@@ -486,6 +503,10 @@ export default function AddMealScreen() {
                 onAdded={() => {
                   setPhotoVisible(false);
                   router.back();
+                }}
+                onQuotaExceeded={() => {
+                  setPhotoVisible(false);
+                  if (photoQuota.tier === 'free') openPaywall();
                 }}
               />
             );

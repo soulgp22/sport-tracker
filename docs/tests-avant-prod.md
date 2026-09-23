@@ -184,6 +184,8 @@ juillet** parce que le checkout ne récupérait pas Git LFS, et personne ne l'a 
 - [ ] les URLs média distantes répondent **200** avec un type MIME correct, sur la
       branche `main` (pas seulement en local) ;
 - [ ] l'APK/AAB s'installe sur un appareil vierge et **démarre** ;
+- [ ] `node scripts/check-release-env.mjs` sort en 0 : pas de clé RevenueCat
+      Test Store (`test_…`) ni de configuration serveur vide dans le build ;
 - [ ] taille du bundle sous surveillance (alerte si +10 % d'un coup) ;
 - [ ] `versionCode` incrémenté, `versionName` cohérent.
 

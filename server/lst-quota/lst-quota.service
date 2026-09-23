@@ -1,0 +1,13 @@
+[Unit]
+Description=Quota journalier de l'analyse photo Life Sport Tracker (repas enregistres, abonnement)
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/lst-quota.env
+ExecStart=/usr/bin/python3 /opt/lst-quota/lst_quota.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

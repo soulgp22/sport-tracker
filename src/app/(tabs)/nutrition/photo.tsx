@@ -5,8 +5,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { canUseMealPhoto } from '../../../lib/mealPhotoCapability';
-import { DAILY_MEAL_PHOTO_LIMIT, resolveQuota } from '../../../lib/mealPhotoQuota';
-import { useMealPhotoQuotaStore } from '../../../store/mealPhotoQuotaStore';
+import { useMealPhotoQuota } from '../../../hooks/useMealPhotoQuota';
+import { Paywall } from '../../../components/subscription/Paywall';
 import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
 import { useColors } from '../../../theme/useColors';
 import type { ThemeColors } from '../../../theme/palettes';
@@ -52,15 +52,10 @@ export default function MealPhotoScreen() {
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [blocked, setBlocked] = useState(false);
 
-  // Quota lu a l'ouverture : c'est le seul point d'entree vers l'analyse
-  // (accueil et ecran Nutrition poussent tous deux vers cette route), donc un
-  // seul garde suffit.
-  const quotaDate = useMealPhotoQuotaStore((s) => s.date);
-  const quotaCount = useMealPhotoQuotaStore((s) => s.mealsAnalyzed);
-  const quota = useMemo(
-    () => resolveQuota({ date: quotaDate, mealsAnalyzed: quotaCount }),
-    [quotaDate, quotaCount]
-  );
+  // Quota lu a l'ouverture, puis tenu a jour par le serveur. « Ajouter un
+  // repas » ouvre aussi l'analyse et applique le meme garde (meme hook). Le
+  // serveur reste le vrai verrou : il refuse l'analyse elle-meme (HTTP 402).
+  const quota = useMealPhotoQuota();
 
   useEffect(() => {
     if (quota.reached) return;
@@ -96,7 +91,14 @@ export default function MealPhotoScreen() {
   const goDiary = () => router.replace('/(tabs)/nutrition/diary' as never);
 
   // Quota atteint : on l'annonce AVANT de charger le module d'analyse, pour ne
-  // pas laisser croire que la camera va s'ouvrir.
+  // pas laisser croire que la camera va s'ouvrir. Palier gratuit : l'offre
+  // d'abonnement, avec son contexte. Apres l'achat, le palier passe a
+  // « premium » et l'analyse s'ouvre d'elle-meme.
+  if (quota.reached && quota.tier === 'free') {
+    return <Paywall reason="quota" onClose={goBack} />;
+  }
+
+  // Abonne a 100 repas : rien a vendre, la limite revient demain.
   if (quota.reached) {
     return (
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
@@ -104,9 +106,8 @@ export default function MealPhotoScreen() {
           <Ionicons name="lock-closed-outline" size={40} color={c.textMuted} />
           <Text style={styles.quotaTitle}>{t('mealPhoto.quotaTitle')}</Text>
           <Text style={styles.blockedText}>
-            {t('mealPhoto.quotaMessage', { limit: DAILY_MEAL_PHOTO_LIMIT })}
+            {t('mealPhoto.quotaMessage', { limit: quota.limit })}
           </Text>
-          <Text style={styles.quotaHint}>{t('mealPhoto.quotaUpgrade')}</Text>
           <TouchableOpacity onPress={goBack} hitSlop={8} activeOpacity={0.7}>
             <Text style={styles.blockedLink}>← {t('nav.nutrition')}</Text>
           </TouchableOpacity>
@@ -141,6 +142,9 @@ export default function MealPhotoScreen() {
         date={todayKey()}
         onClose={goBack}
         onAdded={goDiary}
+        // Le store vient de recevoir l'etat du serveur : `quota.reached`
+        // bascule et l'offre remplace l'analyse, sans action ici.
+        onQuotaExceeded={() => undefined}
       />
     </View>
   );
@@ -152,6 +156,5 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   blocked: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, padding: spacing.lg },
   blockedText: { fontSize: 14, fontFamily: fonts.sans, color: c.textSecondary, textAlign: 'center' },
   quotaTitle: { fontSize: 20, fontFamily: fonts.serifBold, color: c.textPrimary, textAlign: 'center' },
-  quotaHint: { fontSize: 13, fontFamily: fonts.sans, color: c.textMuted, textAlign: 'center' },
   blockedLink: { fontSize: 14, fontFamily: fonts.sansBold, color: c.primary },
 });

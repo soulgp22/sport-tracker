@@ -38,6 +38,13 @@ import {
   extractCompletionText,
 } from '../../lib/mealPhotoApi';
 import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit';
+import {
+  QUOTA_EXCEEDED_STATUS,
+  createAnalysisId,
+  parseQuotaStatus,
+  quotaHeaders,
+} from '../../lib/mealQuotaApi';
+import { currentQuotaIdentity } from '../../lib/mealQuotaClient';
 import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainingLog';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
@@ -68,6 +75,11 @@ interface MealPhotoReviewProps {
   onClose: () => void;
   /** Appelé après enregistrement effectif des entrées. */
   onAdded: () => void;
+  /**
+   * Le serveur a refusé l'analyse : limite journalière atteinte (HTTP 402).
+   * Le quota du store est déjà à jour quand ce rappel arrive.
+   */
+  onQuotaExceeded?: () => void;
 }
 
 let nextItemId = 1;
@@ -140,7 +152,13 @@ function IndeterminateBar({ trackColor, fillColor }: { trackColor: string; fillC
  * L'IA ne calcule jamais les macros : elle propose des aliments + grammes,
  * la base locale calcule, l'utilisateur corrige et valide.
  */
-export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoReviewProps) {
+export function MealPhotoReview({
+  mealType,
+  date,
+  onClose,
+  onAdded,
+  onQuotaExceeded,
+}: MealPhotoReviewProps) {
   const c = useColors();
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -153,6 +171,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
   const recordAnalyzedMeal = useMealPhotoQuotaStore((s) => s.recordAnalyzedMeal);
+  const applyServerStatus = useMealPhotoQuotaStore((s) => s.applyServerStatus);
   const language = useLanguageStore((s) => s.language);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -205,6 +224,9 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const [isAdding, setIsAdding] = useState(false);
   // Photo JPEG (512 px) envoyée au serveur d'entraînement avec les corrections.
   const analysisPhotoB64Ref = useRef<string | null>(null);
+  // Clé d'idempotence du quota serveur : la même pour l'analyse et pour la
+  // déclaration du repas enregistré (lib/mealQuotaApi).
+  const analysisIdRef = useRef<string | null>(null);
 
   // Ne JAMAIS démonter pendant une requête en cours : le flux « demande de
   // retour → interrupt (abort) → attente → fermeture » est factorisé et
@@ -301,13 +323,26 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       const jpegBase64 = saved.base64;
       if (!jpegBase64) throw new Error('Compression de la photo impossible');
       analysisPhotoB64Ref.current = jpegBase64;
-      const request = buildAnalysisRequest(buildPrompt(), jpegBase64, language);
+      const analysisId = createAnalysisId();
+      analysisIdRef.current = analysisId;
+      const request = buildAnalysisRequest(buildPrompt(), jpegBase64, language, {
+        ...quotaHeaders(currentQuotaIdentity()),
+        'X-Analysis-Id': analysisId,
+      });
       const response = await fetch(request.url, {
         method: 'POST',
         headers: request.headers,
         body: request.body,
         signal: controller.signal,
       });
+      // Limite atteinte cote serveur : ce n'est pas une panne, pas d'alerte
+      // d'erreur. Le store recoit l'etat du serveur, l'appelant affiche l'offre.
+      if (response.status === QUOTA_EXCEEDED_STATUS) {
+        const status = parseQuotaStatus(await response.json().catch(() => null));
+        if (status) applyServerStatus(status);
+        onQuotaExceeded?.();
+        return;
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = extractCompletionText(await response.json());
       if (text === null) throw new Error('Réponse du serveur inattendue');
@@ -525,7 +560,8 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
     // Le quota compte les REPAS enregistres, pas les analyses lancees : une
     // photo relancee ou corrigee ne consomme rien (voir lib/mealPhotoQuota).
-    recordAnalyzedMeal();
+    // L'identifiant de l'analyse rend la declaration idempotente cote serveur.
+    recordAnalyzedMeal(analysisIdRef.current ?? undefined);
 
     onAdded();
   };
