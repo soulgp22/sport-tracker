@@ -16,6 +16,15 @@ python -m unittest server/lst-quota/test_lst_quota.py
 
 ## Déploiement
 
+**Automatisé**, depuis la racine du dépôt (tests, pages légales, service,
+Caddy avec retour arrière si invalide, puis vérifications de l'extérieur) :
+
+```bash
+LST_VPS=root@<ip> bash server/lst-quota/deploy-from-pc.sh
+```
+
+Le détail, pour le faire à la main :
+
 1. Copier `lst_quota.py` dans `/opt/lst-quota/` et `lst-quota.service` dans
    `/etc/systemd/system/`.
 2. Créer `/etc/lst-quota.env` (chmod 600) à partir du modèle, avec la même
