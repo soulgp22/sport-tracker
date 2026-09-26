@@ -116,7 +116,7 @@ describe('MealPhotoReview — capture intégrée (CameraView)', () => {
   });
 });
 
-describe('MealPhotoReview — régressions UI (abandon + erreur moteur)', () => {
+describe('MealPhotoReview — régressions UI (caméra immédiate + erreur serveur)', () => {
   beforeEach(() => {
     useLanguageStore.setState({ language: 'fr' });
     expoCameraMock.useCameraPermissions.mockReturnValue([null, jest.fn()]);
@@ -130,13 +130,8 @@ describe('MealPhotoReview — régressions UI (abandon + erreur moteur)', () => 
     jest.restoreAllMocks();
   });
 
-  it("affiche un bouton d'abandon dans l'écran de chargement et ferme à l'appui", async () => {
-    global.fetch = jest.fn().mockRejectedValue(
-      new Error('fetch failed: Fetch request has been canceled')
-    ) as unknown as typeof fetch;
-
-    const onClose = jest.fn();
-    render(
+  function renderReview(onClose = jest.fn()) {
+    return render(
       <MealPhotoReview
         mealType="lunch"
         date="2026-08-16"
@@ -144,6 +139,36 @@ describe('MealPhotoReview — régressions UI (abandon + erreur moteur)', () => 
         onAdded={jest.fn()}
       />
     );
+  }
+
+  it("affiche l'écran de capture immédiatement quand la sonde /health est encore en attente (régression 1)", async () => {
+    // Sonde qui ne se résout jamais : isReady reste faux. L'écran ne doit PAS
+    // rester bloqué en 'loading' — la caméra s'ouvre tout de suite.
+    jest.useFakeTimers();
+    global.fetch = jest.fn().mockImplementation(
+      () => new Promise(() => {})
+    ) as unknown as typeof fetch;
+
+    renderReview();
+
+    // Le bouton de capture est présent dès le premier render, sans attendre la
+    // sonde. getByText est synchrone : pas de waitFor qui avancerait les timers.
+    expect(screen.getByText('Photographier')).toBeTruthy();
+    // Le texte trompeur « Chargement du modèle IA… » a disparu.
+    expect(screen.queryByText('Chargement du modèle IA…')).toBeNull();
+
+    // Libère le timer de la sonde (5 s) pour ne laisser aucun handle ouvert.
+    jest.clearAllTimers();
+    jest.useRealTimers();
+  });
+
+  it("affiche un bouton d'abandon dans l'écran de capture et ferme à l'appui", async () => {
+    global.fetch = jest.fn().mockRejectedValue(
+      new Error('fetch failed: Fetch request has been canceled')
+    ) as unknown as typeof fetch;
+
+    const onClose = jest.fn();
+    renderReview(onClose);
 
     const cancel = await screen.findByText('Annuler');
     fireEvent.press(cancel);
@@ -151,25 +176,54 @@ describe('MealPhotoReview — régressions UI (abandon + erreur moteur)', () => 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("n'affiche pas le détail technique brut dans l'alerte d'erreur moteur", async () => {
+  it("alerte « Analyse indisponible » quand la sonde /health échoue, pas le message d'échec d'analyse (régression 2)", async () => {
+    global.fetch = jest.fn().mockRejectedValue(
+      new Error('fetch failed: Fetch request has been canceled')
+    ) as unknown as typeof fetch;
+
+    renderReview();
+
+    await waitFor(() => expect(appAlertMock).toHaveBeenCalled());
+
+    const [title, message] = appAlertMock.mock.calls[0] as [string, string];
+    expect(title).toBe('Analyse indisponible');
+    expect(message).toBe(
+      "Le serveur d'analyse ne répond pas pour le moment. Réessaie dans quelques minutes."
+    );
+    expect(message).not.toContain("Le modèle n'a pas pu analyser la photo.");
+  });
+
+  it('alerte « Analyse indisponible » quand la sonde /health renvoie un HTTP non-ok (503)', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 503,
+    }) as unknown as typeof fetch;
+
+    renderReview();
+
+    await waitFor(() => expect(appAlertMock).toHaveBeenCalled());
+
+    const [title, message] = appAlertMock.mock.calls[0] as [string, string];
+    expect(title).toBe('Analyse indisponible');
+    expect(message).toBe(
+      "Le serveur d'analyse ne répond pas pour le moment. Réessaie dans quelques minutes."
+    );
+  });
+
+  it("n'affiche pas le détail technique brut dans l'alerte serveur", async () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     global.fetch = jest.fn().mockRejectedValue(
       new Error('fetch failed: Fetch request has been canceled')
     ) as unknown as typeof fetch;
 
-    render(
-      <MealPhotoReview
-        mealType="lunch"
-        date="2026-08-16"
-        onClose={jest.fn()}
-        onAdded={jest.fn()}
-      />
-    );
+    renderReview();
 
     await waitFor(() => expect(appAlertMock).toHaveBeenCalled());
 
-    const message = appAlertMock.mock.calls[0][1] as string | undefined;
-    expect(message).toBe("Le modèle n'a pas pu analyser la photo. Réessaie plus tard.");
+    const message = appAlertMock.mock.calls[0][1] as string;
+    expect(message).toBe(
+      "Le serveur d'analyse ne répond pas pour le moment. Réessaie dans quelques minutes."
+    );
     expect(message).not.toContain('fetch failed');
     expect(warnSpy).toHaveBeenCalledWith('fetch failed: Fetch request has been canceled');
   });

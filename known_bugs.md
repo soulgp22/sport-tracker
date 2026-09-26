@@ -1135,5 +1135,16 @@ n'était pas un bug de l'app** : le VPS Hetzner ne répondait plus (ni ping, ni
 SSH, ni HTTPS), alors que le reste d'internet répondait. La sonde `/health`
 expire après 5 s, puis l'app affiche une alerte d'erreur.
 
+**Mais l'app le cachait** : la caméra n'apparaissait qu'après une sonde
+réussie, sous un texte « Chargement du modèle IA… » hérité du modèle embarqué,
+puis l'échec affichait « Le modèle n'a pas pu analyser la photo » alors
+qu'aucune photo n'était partie. Pour l'utilisateur : « la caméra ne marche pas ».
+
+**Correctif (1.32)** : caméra ouverte tout de suite, sonde en arrière-plan,
+alerte dédiée « Analyse indisponible – le serveur ne répond pas ».
+**Test** : `MealPhotoReview.test.tsx`, deux régressions vérifiées par sabotage.
+
 **À retenir** : devant « l'analyse ne marche plus », tester d'abord le serveur
-depuis le PC (`curl …/health`, `ssh`) avant de lire le code.
+depuis le PC (`curl …/health`, `ssh`) avant de lire le code. Et un message
+d'erreur doit nommer la vraie cause : une panne réseau n'est pas un échec
+d'analyse.

@@ -286,17 +286,20 @@ export function MealPhotoReview({
 
   const requestClose = () => exitFlow.requestClose(isGenerating);
 
-  // Serveur injoignable : alerte + retour. Seul le message générique est montré
-  // à l'utilisateur ; le détail technique (réseau, mauvaise IP…) est conservé
-  // pour le diagnostic via console.warn, jamais affiché en production.
+  // Serveur injoignable (sonde /health) : alerte dédiée + retour. Il ne s'agit
+  // pas d'un échec d'analyse (aucune photo n'a été envoyée). Le détail
+  // technique (réseau, mauvaise IP…) est conservé pour le diagnostic via
+  // console.warn, jamais affiché en production.
   useEffect(() => {
     if (!engineError) return;
     const detail =
       engineError instanceof Error ? engineError.message : String(engineError);
     console.warn(detail);
-    appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
-      { text: 'OK', onPress: onClose },
-    ]);
+    appAlert(
+      mt(t, 'mealPhoto.serverUnavailableTitle'),
+      mt(t, 'mealPhoto.serverUnavailableMessage'),
+      [{ text: 'OK', onPress: onClose }]
+    );
   }, [engineError, onClose, t]);
 
   const analyze = async (uri: string) => {
@@ -607,13 +610,11 @@ export function MealPhotoReview({
   }, [items]);
 
   const showAnalyzing = isGenerating || closePending || (photoUri !== null && !items);
-  const screen: 'loading' | 'capture' | 'analyzing' | 'result' = showAnalyzing
+  const screen: 'capture' | 'analyzing' | 'result' = showAnalyzing
     ? 'analyzing'
     : items
       ? 'result'
-      : !isReady
-        ? 'loading'
-        : 'capture';
+      : 'capture';
 
   // Demande la permission caméra à l'entrée de l'écran de capture (et non au
   // montage du composant), sur le même modèle que BarcodeScannerModal.
@@ -633,18 +634,7 @@ export function MealPhotoReview({
       <SafeAreaView
         style={[styles.safe, screen === 'capture' && styles.safeCapture]}
         edges={['top', 'bottom']}>
-        {screen === 'loading' ? (
-          <View style={styles.centerScreen}>
-            <ActivityIndicator color={c.primary} />
-            <Text style={styles.loadingText}>{mt(t, 'mealPhoto.modelLoading')}</Text>
-            {/* Sans bouton d'abandon, cet écran est un cul-de-sac quand le serveur
-                est injoignable. captureCancel est conçu pour le fond sombre de la
-                caméra : on réutilise son habillage en assombrissant la couleur. */}
-            <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7} style={{ marginTop: 20 }}>
-              <Text style={[styles.captureCancel, { color: c.textPrimary }]}>{t('common.cancel')}</Text>
-            </TouchableOpacity>
-          </View>
-        ) : screen === 'capture' ? (
+        {screen === 'capture' ? (
           <View style={styles.captureScreen}>
             <View style={styles.captureHeader}>
               <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7}>
@@ -1021,7 +1011,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     color: c.bg,
   },
 
-  // Écrans centrés (chargement du moteur / analyse)
+  // Écran centré (analyse)
   centerScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
   kicker: {
     fontFamily: fonts.serifBold,
@@ -1048,13 +1038,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginTop: 16,
     color: c.textSecondary,
     textAlign: 'center',
-  },
-  loadingText: {
-    fontFamily: fonts.sans,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 12,
-    color: c.textSecondary,
   },
   // Résultat
   resultHeader: {

@@ -459,3 +459,11 @@ RevenueCat, profil marchand, produits Play).
 Sabotages vérifiés le 2026-09-26, chacun rougit : `useState` initialisé par le
 paramètre ; un seul bouton pour la bande ; onglet calé à gauche au lieu
 d'être centré ; suppression de `scrollTo` ; chevron sorti du groupe du poids.
+
+## Serveur d'analyse injoignable (1.32)
+
+`components/nutrition/__tests__/MealPhotoReview.test.tsx` (+3) : caméra
+affichée pendant que la sonde `/health` est en attente ; sonde rejetée ou
+HTTP 503 → « Analyse indisponible », jamais le message d'échec d'analyse.
+Sabotages vérifiés le 2026-09-26 : écran d'attente remis, anciennes clés
+d'erreur remises ; chacun rougit.
