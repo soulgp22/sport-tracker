@@ -1,0 +1,41 @@
+# Serveur Life Sport Tracker sur le ThinkCentre (Windows).
+#
+# Caddy n'ecoute qu'en local, en HTTP : c'est Tailscale Funnel qui expose
+# https://thinkcentre-srv.<tailnet>.ts.net sur internet et porte le TLS.
+# `:8080` + `bind` et non `http://127.0.0.1:8080` : via Funnel, l'en-tete
+# Host vaut le nom ts.net, qu'une adresse de site nominative rejetterait.
+#
+# Memes routes que le bloc lifesporttracker.duckdns.org du VPS, sans
+# /cardsight (autre projet, reste sur le VPS).
+{
+	auto_https off
+	admin 127.0.0.1:2019
+}
+
+:8080 {
+	bind 127.0.0.1
+
+	handle /privacy* {
+		root * C:/opt/meal-training/www
+		rewrite /privacy /privacy.html
+		file_server
+	}
+	handle /terms* {
+		root * C:/opt/meal-training/www
+		rewrite /terms /terms.html
+		file_server
+	}
+	handle_path /training/* {
+		reverse_proxy 127.0.0.1:8351
+	}
+	handle /v1/exercises* {
+		reverse_proxy 127.0.0.1:8353
+	}
+	handle /v1/foods* {
+		reverse_proxy 127.0.0.1:8353
+	}
+	handle /v1/products/* {
+		reverse_proxy 127.0.0.1:8353
+	}
+	reverse_proxy 127.0.0.1:8352
+}

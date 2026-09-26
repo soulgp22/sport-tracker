@@ -42,7 +42,16 @@ EXPO_PUBLIC_MEAL_SERVER_API_KEY=…
 
 ---
 
-## Serveur repas (VPS)
+## Serveur de l'app sur le ThinkCentre (depuis la 1.32)
+
+Mêmes services que le VPS, sur le ThinkCentre d'Islam (Windows), exposés par
+**Tailscale Funnel** : `https://thinkcentre-srv.tail18230b.ts.net`.
+Installation, tâches planifiées, vérification et limites :
+[`server/thinkcentre/README.md`](server/thinkcentre/README.md). Les accès
+d'administration ne sont pas consignés ici (dépôt public). Ne jamais toucher
+`C:\CIR` ni les tâches `GPORais-*` de cette machine.
+
+## Serveur repas (VPS) — versions ≤ 1.31
 
 Hébergé chez Hetzner, exposé en HTTPS via un domaine DuckDNS, reverse proxy Caddy
 avec certificat Let's Encrypt.
