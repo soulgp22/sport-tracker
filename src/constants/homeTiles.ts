@@ -12,13 +12,13 @@ export interface HomeTile {
   href:
     | '/(tabs)/exercises'
     | '/(tabs)/nutrition'
-    | '/(tabs)/history'
-    | '/(tabs)/progress';
+    | '/(tabs)/progress'
+    | '/(tabs)/progress?tab=sessions';
 }
 
 export const HOME_TILES: HomeTile[] = [
   { key: 'nutrition', labelKey: 'home.nutrition', descriptionKey: 'home.nutritionDescription', icon: 'nutrition', accent: 'success', href: '/(tabs)/nutrition' },
   { key: 'exercises', labelKey: 'home.exercises', descriptionKey: 'home.exercisesDescription', icon: 'accessibility', accent: 'secondary', href: '/(tabs)/exercises' },
   { key: 'progress', labelKey: 'home.progress', descriptionKey: 'home.progressDescription', icon: 'analytics', accent: 'danger', href: '/(tabs)/progress' },
-  { key: 'history', labelKey: 'home.history', descriptionKey: 'home.historyDescription', icon: 'pulse', accent: 'secondary', href: '/(tabs)/history' },
+  { key: 'history', labelKey: 'home.history', descriptionKey: 'home.historyDescription', icon: 'pulse', accent: 'secondary', href: '/(tabs)/progress?tab=sessions' },
 ];

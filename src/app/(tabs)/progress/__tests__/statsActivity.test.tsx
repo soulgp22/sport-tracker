@@ -1,5 +1,8 @@
 /**
- * Onglets « Dépense » (A01) et « Pas » (A02) de l'ecran Historique.
+ * Onglets « Dépense » (A01) et « Pas » (A02) désormais portés par l'écran
+ * unique « Stats » (ex-Évolution, route `/(tabs)/progress`), réglés via le
+ * paramètre d'URL `tab`. Les assertions métier sont inchangées : seuls le
+ * montage (rendu direct avec `tab`) et le mock expo-router ont évolué.
  *
  * Verifie la PRESENTATION : les calculs sont couverts par
  * `lib/__tests__/energyHistory.test.ts` et `energyBreakdown.test.ts`.
@@ -7,7 +10,7 @@
 import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 
-import HistoryScreen from '../index';
+import ProgressScreen from '../index';
 import { useSessionStore } from '../../../../store/sessionStore';
 import { useBodyWeightStore } from '../../../../store/bodyWeightStore';
 import { usePerformanceStore } from '../../../../store/performanceStore';
@@ -19,10 +22,20 @@ import {
 } from '../../../../lib/healthConnect';
 import { localDayKey } from '../../../../lib/dateKeys';
 
+const mockParams: { tab?: string } = {};
+const mockSetParams = jest.fn();
+
 jest.mock('expo-router', () => {
   const ReactLocal = jest.requireActual<typeof React>('react');
   return {
-    useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: () => true }),
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      back: jest.fn(),
+      canGoBack: () => true,
+      setParams: mockSetParams,
+    }),
+    useLocalSearchParams: () => mockParams,
     useFocusEffect: (effect: () => void) => ReactLocal.useEffect(effect, [effect]),
   };
 });
@@ -54,6 +67,7 @@ function completeProfile() {
 beforeEach(() => {
   useLanguageStore.setState({ language: 'fr' });
   useSessionStore.setState({ sessions: [] });
+  mockParams.tab = undefined;
   (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
   (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
   (readDailyHealthHistory as jest.Mock).mockResolvedValue(
@@ -62,12 +76,14 @@ beforeEach(() => {
 });
 
 async function openTab(value: 'energy' | 'steps') {
-  render(<HistoryScreen />);
+  mockParams.tab = value;
+  render(<ProgressScreen />);
+  // La vue monte `EnergyHistoryView` qui relit Health Connect via une promesse
+  // mockée : laisser la micro-tâche se résoudre avant toute assertion.
   await act(async () => {});
-  fireEvent.press(screen.getByTestId(`history-tabs-${value}`));
 }
 
-describe('Historique — onglet Dépense', () => {
+describe('Stats — vue Dépense', () => {
   it('affiche la depense du jour repartie par source', async () => {
     completeProfile();
     await openTab('energy');
@@ -96,7 +112,7 @@ describe('Historique — onglet Dépense', () => {
   });
 });
 
-describe('Historique — onglet Pas', () => {
+describe('Stats — vue Pas', () => {
   it('affiche les pas et les calories liees', async () => {
     completeProfile();
     await openTab('steps');
@@ -120,14 +136,5 @@ describe('Historique — onglet Pas', () => {
 
     expect(screen.getByText('Aucun pas enregistré')).toBeTruthy();
     expect(screen.getByText('Aller à Nutrition')).toBeTruthy();
-  });
-});
-
-describe('Historique — onglet Séances', () => {
-  it('reste l’onglet par defaut, inchange', async () => {
-    render(<HistoryScreen />);
-    await act(async () => {});
-    expect(screen.queryByTestId('energy-row')).toBeNull();
-    expect(screen.queryByTestId('steps-row')).toBeNull();
   });
 });

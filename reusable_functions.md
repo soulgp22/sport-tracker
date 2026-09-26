@@ -285,8 +285,25 @@ déclaration santé ; l'historique se remplit avec le temps, et l'écran le dit.
 reviendrait à inventer un historique antérieur à l'installation.
 
 `components/ui/SegmentedTabs` : motif d'onglets extrait **à l'identique** de
-Progression et Communauté, qui le dupliquaient. Ces deux écrans ne sont pas
-migrés (hors portée) ; ils peuvent l'adopter sans changement visuel.
+Progression et Communauté, qui le dupliquaient. Communauté n'est pas migrée
+(hors portée) ; elle peut l'adopter sans changement visuel. Prop
+`scrollable` : même habillage, mais rangée défilante à largeur naturelle,
+avec défilement automatique qui centre l'onglet actif (sans animation
+au premier affichage). À utiliser au-delà de 3-4 onglets : c'est la rangée de
+l'écran Stats (6 vues).
+
+`components/history/SessionHistoryList` (séances groupées par jour, aucune
+prop) et `components/history/EnergyHistoryView` (`metric` : dépense ou pas) :
+les vues de l'ancien écran Historique, réutilisables n'importe où.
+`EnergyHistoryView` porte `useEnergyHistory` : Health Connect n'est relu que
+quand la vue est affichée, pas à chaque ouverture de l'écran qui l'héberge.
+
+**Écran Stats et paramètre `tab`** : `/(tabs)/progress?tab=<vue>` avec
+`exercises | bodyWeight | performance | sessions | energy | steps`. La vue est
+**dérivée** du paramètre, jamais copiée dans un `useState` (voir
+`known_bugs.md`) ; changer d'onglet passe par `router.setParams`.
+`/(tabs)/history` redirige vers `?tab=sessions` ; le détail d'une séance reste
+`/(tabs)/history/<id>`.
 
 ---
 

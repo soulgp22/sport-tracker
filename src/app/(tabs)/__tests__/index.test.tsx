@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, within } from '@testing-library/react-native';
 
 import HomeScreen from '../index';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
@@ -19,11 +19,13 @@ import {
   readStepsToday,
 } from '../../../lib/healthConnect';
 
+const mockPush = jest.fn();
+
 jest.mock('expo-router', () => {
   const React = jest.requireActual<any>('react');
   return {
     useRouter: () => ({
-      push: jest.fn(),
+      push: mockPush,
       replace: jest.fn(),
       back: jest.fn(),
       canGoBack: jest.fn(),
@@ -75,6 +77,7 @@ function resetStores() {
 
 beforeEach(() => {
   jest.useFakeTimers({ now: NOW });
+  mockPush.mockClear();
   (isHealthConnectAvailable as jest.Mock).mockResolvedValue(false);
   (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
   (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
@@ -209,6 +212,49 @@ describe('HomeScreen', () => {
 
     expect(screen.getByText('8000 pas')).toBeTruthy();
     expect(screen.getByText(`${expectedCalories} kcal`)).toBeTruthy();
+  });
+
+  it("appui sur la bande poids → ouvre la vue « Poids » des stats", () => {
+    render(<HomeScreen />);
+
+    fireEvent.press(screen.getByTestId('home-weight-band'));
+
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=bodyWeight');
+  });
+
+  it("appui sur les pas → ouvre la vue « Pas » des stats", async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(8000);
+
+    useBodyWeightStore.setState({
+      entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 }],
+    });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    fireEvent.press(screen.getByTestId('home-steps-band'));
+
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=steps');
+  });
+
+  it("sans pas, la bande « Pas » n'existe pas", () => {
+    render(<HomeScreen />);
+
+    expect(screen.queryByTestId('home-steps-band')).toBeNull();
+  });
+
+  it("sans pas, le chevron est un descendant du groupe du poids", () => {
+    render(<HomeScreen />);
+
+    const weightGroup = screen.getByTestId('home-weight-group');
+    expect(within(weightGroup).getByTestId('home-weight-chevron')).toBeTruthy();
   });
 
   it('verse le poids Health Connect dans l’historique des pesées', async () => {

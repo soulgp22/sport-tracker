@@ -443,3 +443,19 @@ retirée avant confirmation du serveur ; serveur `>` au lieu de `>=` ; jour UTC 
 
 **Non vérifiable sans configuration d'Islam** : un achat réel (compte
 RevenueCat, profil marchand, produits Play).
+
+
+## Écran Stats (fusion Progression + Historique)
+
+| Fichier | Couvre |
+|---|---|
+| `components/ui/__tests__/SegmentedTabs.test.tsx` | variante par défaut ; variante défilante : l'onglet actif est **centré**, borné au défilement possible, quel que soit l'ordre des mesures |
+| `components/history/__tests__/SessionHistoryList.test.tsx` | regroupement par jour, séance libre, lien vers le détail, état vide |
+| `progress/__tests__/index.test.tsx` | **régression** : changement de `tab` sur un écran déjà monté ; `setParams` à l'appui ; Séances ; `tab` inconnu ; en-tête Stats |
+| `progress/__tests__/statsActivity.test.tsx` | vues Dépense et Pas (tests déplacés de l'ancien écran Historique) |
+| `history/__tests__/historyRedirect.test.tsx` | `/history` redirige vers `?tab=sessions` |
+| `__tests__/index.test.tsx` (+4) | **régression** : les pas mènent aux pas, le poids au poids ; sans pas, chevron collé au poids |
+
+Sabotages vérifiés le 2026-09-26, chacun rougit : `useState` initialisé par le
+paramètre ; un seul bouton pour la bande ; onglet calé à gauche au lieu
+d'être centré ; suppression de `scrollTo` ; chevron sorti du groupe du poids.

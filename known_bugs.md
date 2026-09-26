@@ -1090,3 +1090,50 @@ collectées, non éphémères, facultatives.
 
 **À retenir** — relire le code qui envoie avant d'écrire une phrase de
 politique ; un commentaire ou une intention (« seul le texte ») ne fait pas foi.
+
+## Un appui sur les pas de l'accueil ouvrait le poids
+
+Signalé par Islam le 2026-09-26. La bande « POIDS ACTUEL 93 kg | 116 pas
+5 kcal » de l'accueil était **un seul** bouton, qui poussait toujours
+`progress?tab=bodyWeight`. Les pas vivaient dans un autre écran (Historique),
+atteignable seulement par un lien d'en-tête.
+
+**Cause racine** : quand les pas ont été ajoutés à la bande (A02), on les a mis
+dans le bouton existant sans lui donner une seconde destination.
+
+**Correctif** : deux zones appuyables (`home-weight-band` → poids,
+`home-steps-band` → pas), et Historique fusionné dans l'écran **Stats**.
+
+**Test** : `__tests__/index.test.tsx`, vérifié par sabotage (un seul bouton →
+rouge).
+
+**À retenir** : une valeur affichée qui a sa propre page doit mener à cette
+page. Ajouter une valeur dans un bouton existant, c'est lui donner la
+destination de ce bouton.
+
+## Le paramètre `tab` n'était lu qu'au premier montage
+
+Trouvé le 2026-09-26 en préparant le lien vers les pas. `progress/index.tsx`
+copiait `params.tab` dans `useState(() => …)`. Les onglets restent montés :
+une fois l'écran ouvert, `router.push('/(tabs)/progress?tab=steps')` changeait
+l'URL, **pas** la vue.
+
+**Correctif** : la vue est dérivée du paramètre à chaque rendu, et un appui
+sur un onglet appelle `router.setParams({ tab })`.
+
+**Test** : `progress/__tests__/index.test.tsx`, « RÉGRESSION » : `rerender`
+avec un autre `tab` ; rougit avec l'ancien `useState`.
+
+**À retenir** : ne jamais initialiser un état avec un paramètre de navigation
+dans un écran d'onglet. Il ne sera relu que si l'écran est détruit, ce qui
+n'arrive presque jamais.
+
+## « Chargement du modèle IA… » sans fin : le serveur était éteint
+
+Signalé par Islam le 2026-09-26 (capture de l'analyse photo bloquée). **Ce
+n'était pas un bug de l'app** : le VPS Hetzner ne répondait plus (ni ping, ni
+SSH, ni HTTPS), alors que le reste d'internet répondait. La sonde `/health`
+expire après 5 s, puis l'app affiche une alerte d'erreur.
+
+**À retenir** : devant « l'analyse ne marche plus », tester d'abord le serveur
+depuis le PC (`curl …/health`, `ssh`) avant de lire le code.

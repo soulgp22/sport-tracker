@@ -179,55 +179,72 @@ export default function HomeScreen() {
         </View>
 
         {/* Poids actuel */}
-        <TouchableOpacity
-          style={styles.weightBand}
-          onPress={() => router.push('/(tabs)/progress?tab=bodyWeight' as never)}
-          activeOpacity={0.78}
-          accessibilityRole="button"
-          accessibilityLabel={t('progress.currentWeight')}>
-          <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
-          <View style={styles.weightBandGroup}>
-            <WeightTrend entries={weightEntries} />
-            {weightKg === undefined ? (
-              <Text style={styles.weightBandValue} testID="home-weight-value">—</Text>
-            ) : (
-              <AnimatedNumber
-                value={weightKg}
-                duration={ANIMATION_DURATION_MS}
-                format={(v) => String(Math.round(v * 10) / 10)}
-                style={styles.weightBandValue}
-                testID="home-weight-value">
-                <Text style={styles.weightBandUnit}> kg</Text>
-              </AnimatedNumber>
-            )}
-            {steps !== null ? (
-              <>
-                {/* Filet vertical : sans lui, « 78 kg 8000 pas 240 kcal » se lit
-                    comme une seule suite de chiffres. */}
-                <View style={styles.weightBandDivider} />
+        <View style={styles.weightBand}>
+          <TouchableOpacity
+            style={styles.weightBandMain}
+            onPress={() => router.push('/(tabs)/progress?tab=bodyWeight' as never)}
+            activeOpacity={0.78}
+            accessibilityRole="button"
+            accessibilityLabel={t('progress.currentWeight')}
+            testID="home-weight-band">
+            <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
+            <View style={styles.weightBandGroup} testID="home-weight-group">
+              <WeightTrend entries={weightEntries} />
+              {weightKg === undefined ? (
+                <Text style={styles.weightBandValue} testID="home-weight-value">—</Text>
+              ) : (
                 <AnimatedNumber
-                  value={steps}
+                  value={weightKg}
+                  duration={ANIMATION_DURATION_MS}
+                  format={(v) => String(Math.round(v * 10) / 10)}
+                  style={styles.weightBandValue}
+                  testID="home-weight-value">
+                  <Text style={styles.weightBandUnit}> kg</Text>
+                </AnimatedNumber>
+              )}
+              {steps === null ? (
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={c.textMuted}
+                  testID="home-weight-chevron"
+                />
+              ) : null}
+            </View>
+          </TouchableOpacity>
+          {steps !== null ? (
+            <TouchableOpacity
+              style={[styles.weightBandGroup, { marginLeft: spacing.xs }]}
+              onPress={() => router.push('/(tabs)/progress?tab=steps' as never)}
+              activeOpacity={0.78}
+              accessibilityRole="button"
+              accessibilityLabel={t('history.tab.steps')}
+              testID="home-steps-band">
+              {/* Filet vertical : sans lui, « 78 kg 8000 pas 240 kcal » se lit
+                  comme une seule suite de chiffres. */}
+              <View style={styles.weightBandDivider} />
+              <AnimatedNumber
+                value={steps}
+                duration={ANIMATION_DURATION_MS}
+                format={(v) => String(Math.round(v))}
+                style={styles.weightBandMetaValue}
+                testID="home-steps-value">
+                <Text style={styles.weightBandMetaUnit}> {t('home.steps')}</Text>
+              </AnimatedNumber>
+              {stepsCalories !== null ? (
+                <AnimatedNumber
+                  value={stepsCalories}
                   duration={ANIMATION_DURATION_MS}
                   format={(v) => String(Math.round(v))}
                   style={styles.weightBandMetaValue}
-                  testID="home-steps-value">
-                  <Text style={styles.weightBandMetaUnit}> {t('home.steps')}</Text>
+                  testID="home-steps-calories-value">
+                  <Text style={styles.weightBandMetaUnit}> kcal</Text>
                 </AnimatedNumber>
-                {stepsCalories !== null ? (
-                  <AnimatedNumber
-                    value={stepsCalories}
-                    duration={ANIMATION_DURATION_MS}
-                    format={(v) => String(Math.round(v))}
-                    style={styles.weightBandMetaValue}
-                    testID="home-steps-calories-value">
-                    <Text style={styles.weightBandMetaUnit}> kcal</Text>
-                  </AnimatedNumber>
-                ) : null}
-              </>
-            ) : null}
-            <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
-          </View>
-        </TouchableOpacity>
+              ) : null}
+              <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
 
         {/* 3. Action principale */}
         <View style={styles.actionWrap}>
@@ -276,7 +293,7 @@ export default function HomeScreen() {
           <View style={styles.activityHeader}>
             <Text style={styles.activityTitle}>{t('home.lastActivity')}</Text>
             <TouchableOpacity
-              onPress={() => router.push('/(tabs)/history' as never)}
+              onPress={() => router.push('/(tabs)/progress?tab=sessions' as never)}
               activeOpacity={0.7}
               accessibilityRole="button"
               accessibilityLabel={t('nav.history')}>
@@ -404,6 +421,12 @@ const makeStyles = (c: ThemeColors) =>
       borderBottomWidth: 2,
       borderBottomColor: c.border,
       minHeight: 48,
+    },
+    weightBandMain: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
     },
     weightBandLabel: {
       fontFamily: fonts.sans,

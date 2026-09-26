@@ -60,7 +60,7 @@ describe('ProfileScreen — navigation des réglages', () => {
     ['Objectifs et macros', '/(tabs)/nutrition/goals'],
     ['Apparence et langue', '/(tabs)/settings'],
     ['Programmes', '/(tabs)/programs'],
-    ['Historique', '/(tabs)/history'],
+    ['Historique', '/(tabs)/progress?tab=sessions'],
     ['Sauvegarde et restauration', '/(tabs)/settings'],
   ];
 

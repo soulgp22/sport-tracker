@@ -267,7 +267,7 @@ export default function ActiveSessionScreen() {
               });
               if (insight) void schedulePerformanceNotification(insight);
             }
-            router.replace('/(tabs)/history');
+            router.replace('/(tabs)/progress?tab=sessions' as never);
           }
         },
       },

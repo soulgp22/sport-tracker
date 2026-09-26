@@ -192,7 +192,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingRow}
-            onPress={() => router.push('/(tabs)/history' as never)}
+            onPress={() => router.push('/(tabs)/progress?tab=sessions' as never)}
             activeOpacity={0.7}
             accessibilityRole="button">
             <Text style={styles.settingLabel}>{t('nav.history')}</Text>

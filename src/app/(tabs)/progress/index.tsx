@@ -15,6 +15,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { WeightChart } from '../../../components/progress/WeightChart';
 import { VolumeChart } from '../../../components/progress/VolumeChart';
 import { PerformanceDashboard } from '../../../components/progress/PerformanceDashboard';
+import { SessionHistoryList } from '../../../components/history/SessionHistoryList';
+import { EnergyHistoryView } from '../../../components/history/EnergyHistoryView';
+import { SegmentedTabs } from '../../../components/ui/SegmentedTabs';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { TextInput } from '../../../components/ui/TextInput';
@@ -36,9 +39,9 @@ import {
   evaluateBadgeUnlocks,
 } from '../../../lib/performanceEngine';
 
-type ProgressMode = 'exercises' | 'bodyWeight' | 'performance';
+type StatsView = 'exercises' | 'bodyWeight' | 'performance' | 'sessions' | 'energy' | 'steps';
 
-const MODES = ['exercises', 'bodyWeight', 'performance'] as const;
+const VIEWS: StatsView[] = ['exercises', 'bodyWeight', 'performance', 'sessions', 'energy', 'steps'];
 
 function parseNumberInput(value: string) {
   return Number(value.trim().replace(',', '.'));
@@ -57,10 +60,10 @@ export default function ProgressScreen() {
   const styles = useMemo(() => makeStyles(c), [c]);
   const exercises = useExercisesWithHistory();
   const params = useLocalSearchParams<{ tab?: string }>();
-  const [mode, setMode] = useState<ProgressMode>(() => {
-    const knownMode = MODES.find((candidate) => candidate === params.tab);
-    return knownMode ?? 'exercises';
-  });
+  // La vue est DÉRIVÉE du paramètre d'URL (source unique de vérité) : un
+  // lien profond ou un appui sur un onglet (via router.setParams) change
+  // immédiatement la vue, même si l'écran est déjà monté.
+  const mode = VIEWS.find((v) => v === params.tab) ?? 'exercises';
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -162,60 +165,23 @@ export default function ProgressScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <Text style={styles.headerKicker}>{t('nav.progress')}</Text>
-          <TouchableOpacity
-            onPress={() => router.push('/(tabs)/history' as never)}
-            hitSlop={8}
-            activeOpacity={0.75}
-            accessibilityRole="button"
-            accessibilityLabel={t('nav.history')}>
-            <Text style={styles.historyLink}>{t('nav.history')}</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.headerKicker}>{t('stats.kicker')}</Text>
         <Text style={styles.headerTitle}>{t('progress.title')}</Text>
       </View>
-      <View style={styles.tabRow}>
-        <TouchableOpacity
-          style={[styles.tab, mode === 'exercises' && styles.tabSelected]}
-          onPress={() => setMode('exercises')}
-          activeOpacity={0.75}
-          accessibilityRole="button">
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            minimumFontScale={0.55}
-            style={[styles.tabText, mode === 'exercises' && styles.tabTextSelected]}>
-            {t('progress.exercises')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, mode === 'bodyWeight' && styles.tabSelected]}
-          onPress={() => setMode('bodyWeight')}
-          activeOpacity={0.75}
-          accessibilityRole="button">
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            minimumFontScale={0.55}
-            style={[styles.tabText, mode === 'bodyWeight' && styles.tabTextSelected]}>
-            {t('progress.bodyWeight')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, mode === 'performance' && styles.tabSelected]}
-          onPress={() => setMode('performance')}
-          activeOpacity={0.75}
-          accessibilityRole="button">
-          <Text
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            minimumFontScale={0.55}
-            style={[styles.tabText, mode === 'performance' && styles.tabTextSelected]}>
-            {t('progress.performance')}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <SegmentedTabs
+        scrollable
+        testID="stats-tabs"
+        value={mode}
+        onChange={(next) => router.setParams({ tab: next })}
+        options={[
+          { value: 'exercises', label: t('progress.exercises') },
+          { value: 'bodyWeight', label: t('progress.bodyWeight') },
+          { value: 'performance', label: t('progress.performance') },
+          { value: 'sessions', label: t('history.tab.sessions') },
+          { value: 'energy', label: t('history.tab.energy') },
+          { value: 'steps', label: t('history.tab.steps') },
+        ]}
+      />
 
       {mode === 'exercises' ? (
         exercises.length === 0 ? (
@@ -323,7 +289,7 @@ export default function ProgressScreen() {
             </>
           )}
         </ScrollView>
-      ) : (
+      ) : mode === 'performance' ? (
         <ScrollView contentContainerStyle={styles.content}>
           <PerformanceDashboard
             analysis={selectedPerformance}
@@ -332,6 +298,10 @@ export default function ProgressScreen() {
             onChooseExercise={() => setSelectorOpen(true)}
           />
         </ScrollView>
+      ) : mode === 'sessions' ? (
+        <SessionHistoryList />
+      ) : (
+        <EnergyHistoryView metric={mode} />
       )}
 
       <Modal
@@ -399,18 +369,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: c.border,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  historyLink: {
-    fontSize: 13,
-    fontFamily: fonts.sansSemi,
-    color: c.primary,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
   headerKicker: {
     fontFamily: fonts.serifBold,
     fontSize: 11,
@@ -426,38 +384,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginTop: 6,
     color: c.textPrimary,
   },
-  // Aligné sur la rangée d'onglets de l'écran Communauté : conteneur teinté,
-  // pastilles arrondies individuelles, texte centré. Voir community/index.tsx.
-  tabRow: {
-    flexDirection: 'row',
-    gap: spacing.xxs,
-    marginHorizontal: spacing.md,
-    marginTop: spacing.sm,
-    marginBottom: spacing.xs,
-    padding: spacing.xxs,
-    borderRadius: radius.md,
-    backgroundColor: c.surfaceAlt,
-  },
-  tab: {
-    flex: 1,
-    minWidth: 70,
-    minHeight: 42,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-    borderRadius: radius.sm,
-  },
-  tabSelected: { backgroundColor: c.primary },
-  tabText: {
-    flexShrink: 1,
-    fontSize: 12,
-    fontFamily: fonts.sansBold,
-    textAlign: 'center',
-    color: c.textSecondary,
-  },
-  tabTextSelected: { color: c.primaryText },
   currentWeightBlock: {
     paddingTop: 18,
     paddingHorizontal: 20,

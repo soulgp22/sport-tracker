@@ -117,7 +117,7 @@ beforeEach(() => {
 });
 
 describe('ActiveSessionScreen — fin de séance', () => {
-  it('remplace vers history et ne redirige jamais vers session', () => {
+  it('remplace vers l’écran Stats (onglet Séances) et ne redirige jamais vers session', () => {
     useActiveSessionStore.setState({ active: makeActiveSession() });
 
     render(<ActiveSessionScreen />);
@@ -138,7 +138,7 @@ describe('ActiveSessionScreen — fin de séance', () => {
       confirm?.onPress?.();
     });
 
-    expect(mockReplace).toHaveBeenCalledWith('/(tabs)/history');
+    expect(mockReplace).toHaveBeenCalledWith('/(tabs)/progress?tab=sessions');
     expect(mockReplace).not.toHaveBeenCalledWith('/(tabs)/session');
   });
 });
