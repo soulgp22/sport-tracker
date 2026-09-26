@@ -16,11 +16,13 @@ let capturedProps: Record<string, unknown> = {};
 
 jest.mock('expo-router', () => {
   const ReactLocal = jest.requireActual<typeof React>('react');
-  const Tabs = (props: Record<string, unknown>) => {
+  const Tabs = function MockTabs(props: Record<string, unknown>) {
     capturedProps = props;
     return ReactLocal.createElement(ReactLocal.Fragment, null);
   };
-  Tabs.Screen = () => null;
+  Tabs.Screen = function MockTabsScreen() {
+    return null;
+  };
   return { Tabs };
 });
 
