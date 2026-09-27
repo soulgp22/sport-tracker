@@ -222,6 +222,14 @@ describe('HomeScreen', () => {
     expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=bodyWeight');
   });
 
+  it("le bouton « Analyser un plat » pousse l’écran d’analyse photo à la racine", () => {
+    render(<HomeScreen />);
+
+    fireEvent.press(screen.getByLabelText('Analyser un plat'));
+
+    expect(mockPush).toHaveBeenCalledWith('/meal-photo');
+  });
+
   it("appui sur les pas → ouvre la vue « Pas » des stats", async () => {
     (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
     (hasHealthPermissions as jest.Mock).mockResolvedValue(true);

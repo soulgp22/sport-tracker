@@ -270,7 +270,7 @@ export default function HomeScreen() {
         <View style={styles.shortcuts}>
           <TouchableOpacity
             style={[styles.shortcut, styles.shortcutPhoto]}
-            onPress={() => router.push('/(tabs)/nutrition/photo' as never)}
+            onPress={() => router.push('/meal-photo' as never)}
             activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={t('home.analyzeMeal')}>

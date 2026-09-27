@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import { MealPhotoReview } from '../MealPhotoReview';
@@ -226,5 +226,188 @@ describe('MealPhotoReview — régressions UI (caméra immédiate + erreur serve
     );
     expect(message).not.toContain('fetch failed');
     expect(warnSpy).toHaveBeenCalledWith('fetch failed: Fetch request has been canceled');
+  });
+
+  it("écran 'analyzing' : le bouton Annuler interrompt l'analyse et ferme (régression 3)", async () => {
+    jest.useFakeTimers();
+
+    // Manipulate chainable : l'analyse doit franchir la compression JPEG avant
+    // d'envoyer la photo au serveur (le fetch d'analyse ne se résout jamais ici).
+    const manipulator = jest.requireMock('expo-image-manipulator');
+    (manipulator.ImageManipulator.manipulate as jest.Mock).mockReturnValue({
+      resize: () => ({
+        renderAsync: async () => ({ saveAsync: async () => ({ base64: 'QUJD' }) }),
+      }),
+    });
+
+    (ImagePicker.launchImageLibraryAsync as jest.Mock).mockResolvedValue({
+      canceled: false,
+      assets: [{ uri: 'file:///repas.jpg' }],
+    });
+
+    // La sonde /health répond ok ; le fetch d'analyse ne se résout jamais tant
+    // que son signal n'est pas aborté (il rejette alors, comme le fetch natif).
+    let analysisSignal: AbortSignal | undefined;
+    global.fetch = jest.fn((url: string, init?: { signal?: AbortSignal }) => {
+      if (String(url).endsWith('/health')) {
+        return Promise.resolve({ ok: true, status: 200 });
+      }
+      analysisSignal = init?.signal;
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => reject(new Error('Aborted')));
+      });
+    }) as unknown as typeof fetch;
+
+    const onClose = jest.fn();
+    renderReview(onClose);
+
+    fireEvent.press(await screen.findByText('Importer'));
+
+    // Le bouton d'annulation apparaît pendant l'analyse.
+    const cancel = await screen.findByTestId('meal-analyzing-cancel');
+
+    // Attend que le fetch d'analyse ait effectivement démarré avant d'annuler.
+    await waitFor(() => expect(analysisSignal).toBeDefined());
+
+    fireEvent.press(cancel);
+
+    // L'appui interrompt la requête (signal aborté) et l'écran se ferme.
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(analysisSignal?.aborted).toBe(true);
+
+    jest.clearAllTimers();
+    jest.useRealTimers();
+  });
+
+  it("ferme l'alerte « aucun aliment reconnu » sans bouton → retour à l'écran de capture", async () => {
+    // JPEG compressé : l'analyse franchit la compression avant d'envoyer la photo.
+    const manipulator = jest.requireMock('expo-image-manipulator');
+    (manipulator.ImageManipulator.manipulate as jest.Mock).mockReturnValue({
+      resize: () => ({
+        renderAsync: async () => ({ saveAsync: async () => ({ base64: 'QUJD' }) }),
+      }),
+    });
+
+    (ImagePicker.launchImageLibraryAsync as jest.Mock).mockResolvedValue({
+      canceled: false,
+      assets: [{ uri: 'file:///repas-vide.jpg' }],
+    });
+
+    // Sonde /health ok ; l'analyse renvoie une liste d'aliments vide.
+    global.fetch = jest.fn((url: string) => {
+      if (String(url).endsWith('/health')) {
+        return Promise.resolve({ ok: true, status: 200 });
+      }
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: async () => ({ choices: [{ message: { content: '{"items":[]}' } }] }),
+      });
+    }) as unknown as typeof fetch;
+
+    const onClose = jest.fn();
+    renderReview(onClose);
+
+    fireEvent.press(await screen.findByText('Importer'));
+
+    // L'alerte « aucun aliment reconnu » apparaît.
+    await waitFor(() =>
+      expect(appAlertMock.mock.calls.some((call) => (call[0] as string) === 'Aucun aliment reconnu')).toBe(true)
+    );
+
+    const emptyCall = appAlertMock.mock.calls.find(
+      (call) => (call[0] as string) === 'Aucun aliment reconnu'
+    ) as unknown as [string, string, unknown[], { onDismiss: () => void }];
+
+    // Fermeture SANS bouton : seul onDismiss est exécuté.
+    const options = emptyCall[3];
+    expect(options.onDismiss).toBeDefined();
+
+    // L'écran d'analyse est encore affiché avant la fermeture.
+    expect(screen.queryByText("Lecture de l'assiette\u2026")).toBeTruthy();
+
+    act(() => {
+      options.onDismiss();
+    });
+
+    // Retour à l'écran de capture : plus d'écran d'analyse, boutons visibles.
+    await waitFor(() => expect(screen.queryByText("Lecture de l'assiette\u2026")).toBeNull());
+    expect(screen.getByText('Photographier')).toBeTruthy();
+    expect(screen.getByText('Importer')).toBeTruthy();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("ferme l'alerte « serveur indisponible » sans bouton → onClose est appelé", async () => {
+    global.fetch = jest.fn().mockRejectedValue(
+      new Error('fetch failed: Fetch request has been canceled')
+    ) as unknown as typeof fetch;
+
+    const onClose = jest.fn();
+    renderReview(onClose);
+
+    await waitFor(() =>
+      expect(appAlertMock.mock.calls.some((call) => (call[0] as string) === 'Analyse indisponible')).toBe(true)
+    );
+
+    const call = appAlertMock.mock.calls.find(
+      (c: unknown[]) => (c[0] as string) === 'Analyse indisponible'
+    ) as unknown as [string, string, unknown[], { onDismiss: () => void }];
+
+    const options = call[3];
+    expect(options.onDismiss).toBeDefined();
+
+    act(() => {
+      options.onDismiss();
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("ferme l'alerte « échec d'analyse » sans bouton → onClose est appelé", async () => {
+    // JPEG compressé : l'analyse franchit la compression avant d'échouer.
+    const manipulator = jest.requireMock('expo-image-manipulator');
+    (manipulator.ImageManipulator.manipulate as jest.Mock).mockReturnValue({
+      resize: () => ({
+        renderAsync: async () => ({ saveAsync: async () => ({ base64: 'QUJD' }) }),
+      }),
+    });
+
+    (ImagePicker.launchImageLibraryAsync as jest.Mock).mockResolvedValue({
+      canceled: false,
+      assets: [{ uri: 'file:///repas.jpg' }],
+    });
+
+    // Sonde /health ok ; l'analyse échoue (HTTP 500).
+    global.fetch = jest.fn((url: string) => {
+      if (String(url).endsWith('/health')) {
+        return Promise.resolve({ ok: true, status: 200 });
+      }
+      return Promise.resolve({ ok: false, status: 500 });
+    }) as unknown as typeof fetch;
+
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const onClose = jest.fn();
+    renderReview(onClose);
+
+    fireEvent.press(await screen.findByText('Importer'));
+
+    // L'analyse échoue : alerte « Analyse impossible ».
+    await waitFor(() =>
+      expect(appAlertMock.mock.calls.some((call) => (call[0] as string) === 'Analyse impossible')).toBe(true)
+    );
+
+    const call = appAlertMock.mock.calls.find(
+      (c: unknown[]) => (c[0] as string) === 'Analyse impossible'
+    ) as unknown as [string, string, unknown[], { onDismiss: () => void }];
+
+    const options = call[3];
+    expect(options.onDismiss).toBeDefined();
+
+    act(() => {
+      options.onDismiss();
+    });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
   });
 });

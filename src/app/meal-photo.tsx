@@ -4,23 +4,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { canUseMealPhoto } from '../../../lib/mealPhotoCapability';
-import { useMealPhotoQuota } from '../../../hooks/useMealPhotoQuota';
-import { Paywall } from '../../../components/subscription/Paywall';
-import { mealPhotoT as mt } from '../../../i18n/mealPhotoFallback';
-import { useColors } from '../../../theme/useColors';
-import type { ThemeColors } from '../../../theme/palettes';
-import { fonts } from '../../../theme/fonts';
-import { spacing } from '../../../theme/tokens';
-import { useTranslation } from '../../../i18n/useTranslation';
-import type { MealType } from '../../../types';
+import { canUseMealPhoto } from '../lib/mealPhotoCapability';
+import { useMealPhotoQuota } from '../hooks/useMealPhotoQuota';
+import { Paywall } from '../components/subscription/Paywall';
+import { mealPhotoT as mt } from '../i18n/mealPhotoFallback';
+import { useColors } from '../theme/useColors';
+import type { ThemeColors } from '../theme/palettes';
+import { fonts } from '../theme/fonts';
+import { spacing } from '../theme/tokens';
+import { useTranslation } from '../i18n/useTranslation';
+import type { MealType } from '../types';
 
-type MealPhotoReviewComponent = typeof import('../../../components/nutrition/MealPhotoReview').MealPhotoReview;
+type MealPhotoReviewComponent = typeof import('../components/nutrition/MealPhotoReview').MealPhotoReview;
 
 function loadMealPhotoReview(): MealPhotoReviewComponent | null {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const mod = require('../../../components/nutrition/MealPhotoReview') as typeof import('../../../components/nutrition/MealPhotoReview');
+    const mod = require('../components/nutrition/MealPhotoReview') as typeof import('../components/nutrition/MealPhotoReview');
     return mod.MealPhotoReview;
   } catch {
     return null;
@@ -88,7 +88,14 @@ export default function MealPhotoScreen() {
 
   // Après « Tout ajouter » : atterrir sur le journal du jour pour que
   // l'utilisateur VOIE immédiatement ce qui a été enregistré.
-  const goDiary = () => router.replace('/(tabs)/nutrition/diary' as never);
+  // Depuis une route racine, `dismissTo` ne retrouverait pas le journal dans la
+  // pile (aucun écran (tabs) n'est monté) et remplacerait l'écran courant par
+  // un second groupe (tabs) ; on dépile donc vers l'écran d'origine, puis on
+  // navigue vers le journal.
+  const goDiary = () => {
+    router.back();
+    router.navigate('/(tabs)/nutrition/diary' as never);
+  };
 
   // Quota atteint : on l'annonce AVANT de charger le module d'analyse, pour ne
   // pas laisser croire que la camera va s'ouvrir. Palier gratuit : l'offre

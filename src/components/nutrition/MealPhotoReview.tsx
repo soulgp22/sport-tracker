@@ -298,7 +298,8 @@ export function MealPhotoReview({
     appAlert(
       mt(t, 'mealPhoto.serverUnavailableTitle'),
       mt(t, 'mealPhoto.serverUnavailableMessage'),
-      [{ text: 'OK', onPress: onClose }]
+      [{ text: 'OK', onPress: onClose }],
+      { onDismiss: onClose }
     );
   }, [engineError, onClose, t]);
 
@@ -355,7 +356,7 @@ export function MealPhotoReview({
         appAlert(mt(t, 'mealPhoto.emptyTitle'), mt(t, 'mealPhoto.emptyMessage'), [
           { text: mt(t, 'mealPhoto.retry'), onPress: resetFlow },
           { text: mt(t, 'mealPhoto.manualEntry'), style: 'cancel', onPress: onClose },
-        ]);
+        ], { onDismiss: resetFlow });
         return;
       }
 
@@ -398,7 +399,7 @@ export function MealPhotoReview({
       if (exitFlow.isPending()) return;
       appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
         { text: 'OK', onPress: onClose },
-      ]);
+      ], { onDismiss: onClose });
     } finally {
       clearTimeout(timer);
       abortRef.current = null;
@@ -706,6 +707,19 @@ export function MealPhotoReview({
             <Text style={styles.analyzingSubtitle}>
               {mt(t, closePending ? 'mealPhoto.closing' : 'mealPhoto.analyzingSubtitle')}
             </Text>
+            {!closePending && (
+              <TouchableOpacity
+                onPress={requestClose}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                testID="meal-analyzing-cancel"
+                style={{ marginTop: 24 }}>
+                <Text style={[styles.captureCancel, { color: c.textPrimary }]}>
+                  {t('common.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
           <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">

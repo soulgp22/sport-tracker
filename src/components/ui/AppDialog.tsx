@@ -51,6 +51,26 @@ function showNextDialog() {
   emitChange();
 }
 
+// Cette fonction est volontairement HORS du composant : le React Compiler part
+// du principe qu'une variable de module ne change pas pendant le rendu et
+// fusionne les alias locaux avec elle. En production (bundle minifié), il
+// remplaçait `dismissedDialog` par `currentDialog` déjà remis à null, si bien
+// que `onDismiss` n'était jamais appelé. En restant hors du composant, elle
+// n'est pas compilée et capture `onDismiss` avant la remise à null.
+function dismissDialog(button?: AlertButton) {
+  const onDismiss = button ? undefined : currentDialog?.options?.onDismiss;
+  currentDialog = null;
+  emitChange();
+
+  setTimeout(() => {
+    button?.onPress?.();
+    onDismiss?.();
+    // A callback may synchronously open another dialog. Keep it visible and
+    // only advance the queue when no replacement was created.
+    if (!currentDialog) showNextDialog();
+  }, 0);
+}
+
 export function appAlert(
   title: string,
   message?: string,
@@ -90,17 +110,7 @@ export function AppDialog() {
   const isDestructive = dialog?.buttons.some((button) => button.style === 'destructive') ?? false;
 
   const dismiss = (button?: AlertButton) => {
-    const dismissedDialog = currentDialog;
-    currentDialog = null;
-    emitChange();
-
-    setTimeout(() => {
-      button?.onPress?.();
-      if (!button) dismissedDialog?.options?.onDismiss?.();
-      // A callback may synchronously open another dialog. Keep it visible and
-      // only advance the queue when no replacement was created.
-      if (!currentDialog) showNextDialog();
-    }, 0);
+    dismissDialog(button);
   };
 
   const requestClose = () => {
@@ -117,7 +127,7 @@ export function AppDialog() {
       navigationBarTranslucent
       onRequestClose={requestClose}>
       <View style={styles.root}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={requestClose} />
+        <Pressable style={StyleSheet.absoluteFill} onPress={requestClose} testID="app-dialog-backdrop" />
         <View style={[styles.safe, { paddingBottom: bottomInset }]} pointerEvents="box-none">
           <View style={styles.card} accessibilityRole="alert" testID="app-dialog-card">
             <View style={styles.grabber} />

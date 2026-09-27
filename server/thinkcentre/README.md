@@ -21,7 +21,13 @@ Chaque tâche lance `C:\LST\run.ps1 -Name <service>`, qui relance le service
 5 s après un arrêt et journalise dans `C:\LST\logs\<service>.log`. Déclencheur :
 démarrage de la machine, sans session ouverte (S4U).
 
-**Les scripts Python sont ceux du VPS, sans modification.** Ils utilisent des
+**Les scripts Python sont ceux du VPS, à une ligne près** : dans
+`meal_router.py`, la sonde du modèle v9 dans `/health` attend 0,5 s au lieu de
+5 s (sauvegarde : `meal_router.py.bak-avant-timeout`). Sous Windows, une
+connexion vers un port fermé (v9 n'est pas migré) met ~2 s à échouer, contre
+un refus immédiat sous Linux : `/health` répondait en 2,2 s, et l'app, qui
+attend 5 s, affichait à tort « Analyse indisponible » sur un réseau lent.
+Ils utilisent des
 chemins `/opt/...` : sous Windows, ces chemins se résolvent sur le lecteur
 courant, d'où `C:\opt` et le `Set-Location C:\` de `run.ps1`. Ils contiennent
 les clés (Bearer de l'app, Gemini) : ils ne vont **jamais** dans le dépôt, qui

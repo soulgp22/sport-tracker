@@ -167,7 +167,7 @@ export default function NutritionScreen() {
     [mealGroups, entries, t]
   );
 
-  const goPhoto = () => router.push('/(tabs)/nutrition/photo' as never);
+  const goPhoto = () => router.push('/meal-photo' as never);
 
   const handleQuickAdd = (payload: { calories: number; mealType: MealType; label: string }) => {
     addFoodEntry({

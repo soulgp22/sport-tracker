@@ -1148,3 +1148,61 @@ alerte dédiée « Analyse indisponible – le serveur ne répond pas ».
 depuis le PC (`curl …/health`, `ssh`) avant de lire le code. Et un message
 d'erreur doit nommer la vraie cause : une panne réseau n'est pas un échec
 d'analyse.
+
+## La caméra « fantôme » : l'écran photo survivait à « Annuler »
+
+Signalé par Islam le 2026-09-27 (1.31/1.32) : « Analyser un plat » → « Annuler »
+→ un appui sur les pas rouvrait la caméra, sans moyen d'en sortir.
+
+**Cause racine** : l'écran hôte était `/(tabs)/nutrition/photo`, dans la pile
+de l'ONGLET Nutrition. Poussé depuis l'accueil, `router.back()` changeait
+d'onglet sans retirer `photo` de cette pile : l'écran restait monté en
+arrière-plan, avec sa `Modal` toujours `visible`, et captait le retour et les
+alertes (une « Analyse indisponible » s'affichait sur l'accueil).
+
+**Correctif** : l'écran vit à la racine (`src/app/meal-photo.tsx`) ;
+`back()` le dépile et le démonte.
+
+**Test** : `src/app/__tests__/mealPhotoNavigation.test.tsx` (renderRouter,
+arborescence réduite) ; rougit avec l'ancienne structure. Sa première version
+cherchait un nom de route qui n'existait pas dans l'ancienne structure et
+passait au vert sur le bug : vérifié par sabotage avant d'être accepté.
+
+**À retenir** : un écran plein écran (caméra, modale) ne se range pas dans la
+pile d'un onglet s'il peut être ouvert depuis un autre onglet.
+
+## Fermer une alerte sans bouton n'appelait jamais `onDismiss` (release)
+
+Trouvé le 2026-09-27 en reproduisant « bloqué sur Lecture de l'assiette… » :
+après « Aucun aliment reconnu », fermer l'alerte par le fond, la croix ou le
+retour Android laissait l'écran d'analyse sans issue.
+
+**Cause racine** : le **React Compiler** (activé dans `app.json`) suppose que
+les variables de module ne changent pas pendant un rendu. Dans `AppDialog`,
+`const dismissedDialog = currentDialog; currentDialog = null;` a été compilé
+en lecture directe de la variable de module, déjà remise à `null` dans le
+`setTimeout`. Bundle minifié :
+`b=null,T(),setTimeout(()=>{…t||b?.options?.onDismiss?.()…})`. **Invisible en
+Jest** (pas de compilateur ni de minification) : 650 tests verts.
+
+**Correctif** : logique de fermeture sortie du composant, dans une fonction de
+module qui capture `onDismiss` avant la remise à zéro ; `onDismiss` ajouté aux
+trois alertes de l'analyse photo.
+
+**Preuve** : traces sur l'APK release, puis extrait du bundle minifié
+(`npx expo export:embed --dev false --minify true`).
+
+**À retenir** : avec le React Compiler, ne jamais muter un état de module
+depuis le corps d'un composant. Un défaut qui dépend de la compilation se
+vérifie sur l'APK release ou le bundle minifié, pas en Jest.
+
+## `/health` en 2,2 s sur le ThinkCentre
+
+Trouvé le 2026-09-27 : le routeur sonde le modèle v9 (non migré) avant de
+répondre ; sous Windows, un port fermé met ~2 s à refuser la connexion (Linux :
+immédiat). Avec un réseau mobile lent, la sonde de l'app (5 s) échouait et
+affichait « Analyse indisponible ». Délai de la sonde v9 ramené à 0,5 s
+(`server/thinkcentre/README.md`).
+
+**À retenir** : mesurer par le chemin PUBLIC (relais Funnel), pas depuis le
+PC, qui passe par le réseau Tailscale privé.

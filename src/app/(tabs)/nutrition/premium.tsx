@@ -19,7 +19,13 @@ export default function PremiumScreen() {
     <Paywall
       reason={reason === 'quota' ? 'quota' : 'settings'}
       onClose={close}
-      onSubscribed={() => router.replace('/(tabs)/nutrition/photo' as never)}
+      onSubscribed={() => {
+        // Après l'achat, la limite gratuite tombe : on quitte l'écran premium
+        // (dépile vers l'écran d'origine) puis on ouvre l'analyse à la racine,
+        // sans laisser l'écran premium monté en dessous.
+        router.back();
+        router.push('/meal-photo' as never);
+      }}
     />
   );
 }

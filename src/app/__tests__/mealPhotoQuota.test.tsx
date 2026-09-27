@@ -8,13 +8,13 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react-native';
 
-import MealPhotoScreen from '../photo';
-import { useMealPhotoQuotaStore } from '../../../../store/mealPhotoQuotaStore';
-import { useSubscriptionStore } from '../../../../store/subscriptionStore';
-import { canUseMealPhoto } from '../../../../lib/mealPhotoCapability';
-import { quotaDayKey } from '../../../../lib/mealPhotoQuota';
-import { INACTIVE_ENTITLEMENT } from '../../../../lib/billing';
-import { useLanguageStore } from '../../../../store/languageStore';
+import MealPhotoScreen from '../meal-photo';
+import { useMealPhotoQuotaStore } from '../../store/mealPhotoQuotaStore';
+import { useSubscriptionStore } from '../../store/subscriptionStore';
+import { canUseMealPhoto } from '../../lib/mealPhotoCapability';
+import { quotaDayKey } from '../../lib/mealPhotoQuota';
+import { INACTIVE_ENTITLEMENT } from '../../lib/billing';
+import { useLanguageStore } from '../../store/languageStore';
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: () => true }),
@@ -29,11 +29,11 @@ jest.mock('react-native-safe-area-context', () => {
   };
 });
 
-jest.mock('../../../../lib/mealPhotoCapability', () => ({
+jest.mock('../../lib/mealPhotoCapability', () => ({
   canUseMealPhoto: jest.fn().mockResolvedValue({ ok: true }),
 }));
 
-jest.mock('../../../../lib/mealQuotaClient', () => ({
+jest.mock('../../lib/mealQuotaClient', () => ({
   currentQuotaIdentity: () => null,
   fetchServerQuota: jest.fn().mockResolvedValue(null),
   postConsume: jest.fn().mockResolvedValue(null),

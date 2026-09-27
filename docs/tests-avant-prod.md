@@ -230,6 +230,12 @@ Aucune publication si une case reste vide.
 
 **Manuel (une fois par version)**
 - [ ] installation par-dessus la version précédente : **aucune perte de données**
+- [ ] **parcours d'abandon de l'analyse photo** (manqués en 1.32, voir
+  `known_bugs.md`) : ouvrir puis « Annuler », puis aller ailleurs (pas,
+  Stats, onglet Nutrition) → la caméra ne doit jamais revenir ; annuler
+  PENDANT l'analyse ; photo sans aucun plat → message et sortie ; serveur
+  coupé → alerte et sortie. Un parcours heureux réussi ne prouve rien sur
+  ces chemins-là.
 - [ ] mode avion : chaque écran dégrade proprement
 - [ ] une langue autre que le français, de bout en bout
 - [ ] thème clair **et** sombre
