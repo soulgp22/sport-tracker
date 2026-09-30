@@ -1,6 +1,8 @@
 # Fiche Play Store — Life Sport Tracker
 
-> Tous les textes prêts à copier-coller dans la Play Console.
+> **Textes à jour (2026-10-01, app 1.33.0, 4 langues) : [FICHE_TEXTES.md](FICHE_TEXTES.md).**
+> Captures : `screenshots/fr/`. Les descriptions ci-dessous datent de la v1.2
+> (app 100 % hors ligne, sans nutrition) et sont obsolètes.
 
 ## Titre de l'application (30 car. max)
 
