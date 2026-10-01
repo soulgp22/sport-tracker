@@ -8,7 +8,7 @@
 > est absente du `.env` de build, l'achat n'est donc pas opérationnel dans la 1.33.0.
 > Ajouter la ligne Premium quand l'abonnement sera réellement achetable.
 >
-> Captures (1080×2160, ratio 2:1 max exigé par Play) : `screenshots/fr/`.
+> Captures (1080×2160, ratio 2:1 max exigé par Play) : `screenshots/fr/` — 8 captures, la 02 (analyse photo) est à mettre en tête si Play n en garde que quelques-unes.
 
 ---
 
