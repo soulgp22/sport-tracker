@@ -1206,3 +1206,24 @@ affichait « Analyse indisponible ». Délai de la sonde v9 ramené à 0,5 s
 
 **À retenir** : mesurer par le chemin PUBLIC (relais Funnel), pas depuis le
 PC, qui passe par le réseau Tailscale privé.
+
+## Abonnement Play : offre « annuelle » facturée chaque mois, prix majorés de la TVA
+
+Trouvé le 2026-10-15 en relisant l'abonnement par l'API Play avant de brancher
+RevenueCat (aucun achat possible jusque-là : l'app n'avait pas la clé).
+
+- L'offre de base `annuel` avait une période **P1M** : un abonné aurait payé
+  94,99 € **chaque mois**. Google n'autorise pas à changer la période d'une
+  offre active : nouvelle offre `annuel-1an` (P1Y), ancienne désactivée.
+- Les prix affichés étaient 11,99 € / 94,99 € au lieu de 9,99 € / 79,99 € :
+  le prix saisi dans la Play Console est **hors taxe**, Google ajoute la TVA
+  locale. Corrigé en fixant 9,99 / 79,99 € TTC dans les pays en euros, les
+  autres pays suivant la conversion officielle (`pricing:convertRegionPrices`
+  sur une base HT de 8,33 / 66,66 €).
+- Piège d'API : `subscriptions.patch` exige le `regionsVersion` renvoyé par
+  `convertRegionPrices` (2026/01) ; avec 2022/02, refus « Expected USD but got
+  ARS » (requête atomique : rien n'est écrit).
+
+**À retenir** : relire un produit payant par l'API (période, prix par pays)
+avant d'activer la vente ; la console n'affiche pas clairement la période
+d'une offre déjà créée.

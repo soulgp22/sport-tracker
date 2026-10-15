@@ -105,6 +105,22 @@ Déploiement et retour arrière : `server/lst-quota/README.md`.
 | Secrète `sk_…` | `/etc/lst-quota.env` sur le VPS | **secrète**, jamais dans l'app ni le dépôt |
 | Test Store `test_…` | `.env` local, pour l'émulateur | **interdite en release** : RevenueCat le proscrit |
 
+**Configuration de l'abonnement (2026-10-15)** — à garder alignée sur le code
+(`src/lib/billing/revenueCat.ts`) :
+
+| Où | Élément | Valeur |
+|---|---|---|
+| Play Console | abonnement | `lst_premium` |
+| Play Console | offre de base mensuelle | `mensuel` (P1M, 9,99 € TTC dans les 33 pays en euros) |
+| Play Console | offre de base annuelle | `annuel-1an` (P1Y, 79,99 € TTC) — `annuel` est **désactivée** (créée en P1M par erreur) |
+| RevenueCat | projet | Life Sport Tracker, app Play `com.sportracker.app` |
+| RevenueCat | droit d'accès | **`premium`** (l'app et `lst-quota` cherchent ce nom ; `life_sport_tracker_pro`, créé par défaut, n'est pas utilisé) |
+| RevenueCat | offre courante | `default` : `$rc_monthly` → `lst_premium:mensuel`, `$rc_annual` → `lst_premium:annuel-1an` (+ produits Test Store pour l'émulateur) |
+
+Les prix Play se saisissent **hors taxe** : Google ajoute la TVA de chaque
+pays (9,99 saisi = 11,99 € payé en France). Script de correction et de
+relecture par l'API : voir `known_bugs.md`.
+
 ### Vérifier que le serveur est vivant, depuis l'extérieur
 
 ```bash

@@ -15,6 +15,16 @@
 :8080 {
 	bind 127.0.0.1
 
+	# Journal d'acces (diagnostic des pannes cote telephone). Caddy masque
+	# Authorization et Cookie par defaut ; rotation a 5 Mo, 2 fichiers gardes.
+	log {
+		output file C:/LST/logs/caddy-access.log {
+			roll_size 5MiB
+			roll_keep 2
+		}
+		format json
+	}
+
 	handle /privacy* {
 		root * C:/opt/meal-training/www
 		rewrite /privacy /privacy.html
