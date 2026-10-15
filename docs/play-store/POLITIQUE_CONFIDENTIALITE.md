@@ -1,6 +1,6 @@
 # Politique de confidentialité — Life Sport Tracker
 
-*Dernière mise à jour : 27 septembre 2026*
+*Dernière mise à jour : 15 octobre 2026*
 
 ## Résumé
 
@@ -50,15 +50,18 @@ des pas et l'estimation de dépense disparaissent.
 
 ## 3. Données transmises à un serveur
 
-Le serveur d'analyse est **opéré par Rais&Co**, sur une machine qui lui
-appartient, située **en France** — donc au sein de l'Union européenne : vos
+Le serveur d'analyse est **opéré par Rais&Co**, sur un serveur privé loué
+chez Hetzner, **en Allemagne** — donc au sein de l'Union européenne : vos
 données ne font l'objet d'aucun transfert hors UE de notre fait. Toutes les
 communications se font en HTTPS.
 
-La connexion transite par le service de relais réseau **Tailscale**
-(Tailscale Inc., États-Unis). Le chiffrement HTTPS s'arrête sur notre serveur :
-Tailscale achemine le trafic chiffré **sans pouvoir en lire le contenu**. Comme
-tout opérateur réseau, il voit l'adresse IP d'origine et l'heure de connexion.
+Les versions 1.32 et 1.33 de l'application utilisent temporairement une
+machine appartenant à Rais&Co, située **en France**, jointe par le service de
+relais réseau **Tailscale** (Tailscale Inc., États-Unis). Le chiffrement HTTPS
+s'arrête sur notre machine : Tailscale achemine le trafic chiffré **sans
+pouvoir en lire le contenu**. Comme tout opérateur réseau, il voit l'adresse
+IP d'origine et l'heure de connexion. Les versions suivantes reviennent au
+serveur Hetzner.
 
 Seule exception, explicitement signalée en 3.1 et 3.3 : les requêtes relayées à
 Google Gemini sont traitées selon les conditions et la localisation de Google.
