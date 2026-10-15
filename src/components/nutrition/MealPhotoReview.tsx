@@ -49,6 +49,7 @@ import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainin
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useMealPhotoQuotaStore } from '../../store/mealPhotoQuotaStore';
+import { useMealPhotoQuota } from '../../hooks/useMealPhotoQuota';
 import { useFoodStore } from '../../store/foodStore';
 import { useLanguageStore } from '../../store/languageStore';
 import type { Food, MealType } from '../../types';
@@ -170,7 +171,10 @@ export function MealPhotoReview({
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
-  const recordAnalyzedMeal = useMealPhotoQuotaStore((s) => s.recordAnalyzedMeal);
+  const recordSuccessfulAnalysis = useMealPhotoQuotaStore((s) => s.recordSuccessfulAnalysis);
+  // Garde du quota AVANT chaque analyse (y compris apres « Reessayer ») : les
+  // ecrans d'entree ne verifient qu'a l'ouverture.
+  const quota = useMealPhotoQuota();
   const applyServerStatus = useMealPhotoQuotaStore((s) => s.applyServerStatus);
   const language = useLanguageStore((s) => s.language);
 
@@ -224,8 +228,8 @@ export function MealPhotoReview({
   const [isAdding, setIsAdding] = useState(false);
   // Photo JPEG (512 px) envoyée au serveur d'entraînement avec les corrections.
   const analysisPhotoB64Ref = useRef<string | null>(null);
-  // Clé d'idempotence du quota serveur : la même pour l'analyse et pour la
-  // déclaration du repas enregistré (lib/mealQuotaApi).
+  // Clé d'idempotence du quota serveur : la même pour l'analyse et pour sa
+  // déclaration une fois réussie (lib/mealQuotaApi).
   const analysisIdRef = useRef<string | null>(null);
 
   // Ne JAMAIS démonter pendant une requête en cours : le flux « demande de
@@ -360,6 +364,11 @@ export function MealPhotoReview({
         return;
       }
 
+      // Analyse réussie (au moins un aliment) : elle compte dans le quota,
+      // qu'elle soit enregistrée au journal ou non. Les échecs ci-dessus
+      // (aucun aliment, erreur, 402) ne consomment rien.
+      recordSuccessfulAnalysis(analysisId);
+
       const foods = getAllFoods();
       const reviewItems = recognized.map((item) => {
         const food = mapItemToFood(item, foods);
@@ -425,10 +434,30 @@ export function MealPhotoReview({
     setItems(null);
   }
 
+  // Garde du quota au moment où la photo est choisie (prise ou importée) : une
+  // photo refusée n'est jamais envoyée, et l'écran ne passe pas par l'analyse.
+  // Couvre aussi « Réessayer », qui ramène ici après un résultat.
+  const acceptPhoto = (uri: string) => {
+    if (!quota.reached) {
+      setPhotoUri(uri);
+      return;
+    }
+    if (quota.tier === 'free' && onQuotaExceeded) {
+      onQuotaExceeded();
+      return;
+    }
+    appAlert(
+      mt(t, 'mealPhoto.quotaTitle'),
+      mt(t, 'mealPhoto.quotaMessage', { limit: quota.limit }),
+      [{ text: 'OK', onPress: onClose }],
+      { onDismiss: onClose }
+    );
+  };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
     const uri = result.canceled ? null : result.assets[0]?.uri;
-    if (uri) setPhotoUri(uri);
+    if (uri) acceptPhoto(uri);
   };
 
   const capturePhoto = async () => {
@@ -436,7 +465,7 @@ export function MealPhotoReview({
     if (!camera) return;
     try {
       const photo = await camera.takePictureAsync({ quality: 0.7 });
-      if (photo?.uri) setPhotoUri(photo.uri);
+      if (photo?.uri) acceptPhoto(photo.uri);
     } catch {
       appAlert(mt(t, 'mealPhoto.title'), mt(t, 'mealPhoto.captureFailed'));
     }
@@ -561,11 +590,6 @@ export function MealPhotoReview({
         mt(t, 'mealPhoto.skippedMessage', { names: skipped.join(', ') })
       );
     }
-
-    // Le quota compte les REPAS enregistres, pas les analyses lancees : une
-    // photo relancee ou corrigee ne consomme rien (voir lib/mealPhotoQuota).
-    // L'identifiant de l'analyse rend la declaration idempotente cote serveur.
-    recordAnalyzedMeal(analysisIdRef.current ?? undefined);
 
     onAdded();
   };

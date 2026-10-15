@@ -13,7 +13,7 @@ import {
 import { fetchServerQuota, postConsume } from '../lib/mealQuotaClient';
 import { asyncStorageAdapter } from '../storage/storageAdapter';
 
-/** Repas declares localement mais pas encore acceptes par le serveur. */
+/** Analyses declarees localement mais pas encore acceptees par le serveur. */
 const MAX_PENDING = 50;
 
 interface MealPhotoQuotaStore extends MealPhotoQuotaState {
@@ -21,12 +21,12 @@ interface MealPhotoQuotaStore extends MealPhotoQuotaState {
   server: ServerQuotaStatus | null;
   pending: string[];
   /**
-   * A appeler quand un repas analyse est ENREGISTRE au journal, une seule fois
-   * par repas. `analysisId` = celui envoye avec l'analyse : il rend la
-   * declaration idempotente cote serveur.
+   * A appeler une fois par ANALYSE REUSSIE (au moins un aliment reconnu),
+   * enregistree au journal ou non. `analysisId` = celui envoye avec l'analyse :
+   * il rend la declaration idempotente cote serveur.
    */
-  recordAnalyzedMeal: (analysisId?: string) => void;
-  /** Interroge le serveur et renvoie ses repas en attente. */
+  recordSuccessfulAnalysis: (analysisId?: string) => void;
+  /** Interroge le serveur et renvoie les analyses en attente. */
   syncServer: (options?: { refresh?: boolean }) => Promise<void>;
   /** Etat recu d'ailleurs (refus 402 d'une analyse). */
   applyServerStatus: (status: ServerQuotaStatus) => void;
@@ -47,7 +47,7 @@ export const useMealPhotoQuotaStore = create<MealPhotoQuotaStore>()(
       server: null,
       pending: [],
 
-      recordAnalyzedMeal: (analysisId) => {
+      recordSuccessfulAnalysis: (analysisId) => {
         const { date, mealsAnalyzed } = get();
         set(consumeQuota({ date, mealsAnalyzed }));
         if (!analysisId) return;

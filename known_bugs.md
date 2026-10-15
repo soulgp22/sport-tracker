@@ -1227,3 +1227,27 @@ RevenueCat (aucun achat possible jusque-là : l'app n'avait pas la clé).
 **À retenir** : relire un produit payant par l'API (période, prix par pays)
 avant d'activer la vente ; la console n'affiche pas clairement la période
 d'une offre déjà créée.
+
+## Analyses photo illimitées tant qu'on n'enregistrait pas le repas
+
+Signalé par Islam le 2026-10-15 (1.34 en test interne) : on pouvait relancer
+l'analyse (« Réessayer », « Annuler ») autant de fois que voulu ; seul
+« Ajouter à ma journée » décomptait le quota. Chaque analyse est un appel
+Gemini payé.
+
+**Cause racine** : la règle choisie en septembre comptait les **repas
+enregistrés** (pour ne pas punir une photo ratée). Elle laissait la dépense
+réelle (l'analyse) hors du compteur. Et aucune garde ne s'appliquait entre deux
+analyses : seuls les écrans d'entrée vérifiaient le quota, à l'ouverture.
+
+**Correctif (1.35)** : chaque analyse **réussie** compte (au moins un aliment
+reconnu) ; une analyse ratée ne compte pas. Garde au moment où la photo est
+choisie, donc aussi après « Réessayer ». L'écran photo ne remplace plus le
+résultat de la dernière analyse autorisée par l'offre : celle-ci apparaît à la
+tentative suivante.
+
+**Tests** : `MealPhotoReviewQuotaCount.test.tsx` (5) et
+`mealPhotoQuotaSession.test.tsx` (2), vérifiés par 7 sabotages.
+
+**À retenir** : un quota doit compter ce qui coûte (ici l'appel au modèle), pas
+une action facultative de l'utilisateur qui vient après.

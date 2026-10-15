@@ -1,14 +1,19 @@
 /**
  * Quota journalier de l'analyse photo de repas.
  *
- * Regle produit : on compte des REPAS, pas des detections. Un repas est compte
- * quand son analyse est ENREGISTREE au journal — une analyse relancee, une
- * correction, ou un plat finalement abandonne ne consomment rien. L'utilisateur
- * n'est donc jamais puni d'avoir retente une photo ratee.
+ * Regle produit (decision d'Islam, 2026-10-15) : on compte chaque ANALYSE
+ * REUSSIE, c'est-a-dire chaque photo pour laquelle au moins un aliment a ete
+ * reconnu, qu'elle soit ensuite enregistree au journal ou non. « Reessayer »
+ * consomme donc une analyse s'il reussit. Une analyse ratee (aucun aliment,
+ * erreur, serveur indisponible, abandon) ne consomme rien : on ne fait pas
+ * payer ce qui n'a pas ete livre.
+ *
+ * L'ancienne regle (compter au moment de l'enregistrement) laissait relancer
+ * des analyses a l'infini tant qu'on n'enregistrait pas (voir known_bugs.md).
  *
  * Deux paliers (decision d'Islam, 2026-09-22) :
- * - gratuit : 2 repas par jour ;
- * - abonnement (9,99 €/mois ou 79,99 €/an) : 100 repas par jour.
+ * - gratuit : 2 analyses par jour ;
+ * - abonnement (9,99 €/mois ou 79,99 €/an) : 100 analyses par jour.
  *
  * Le SERVEUR fait foi (service lst-quota) : ce module ne sert qu'a afficher
  * l'etat sans attendre le reseau, et a garder la regle hors ligne. Voir
@@ -20,9 +25,9 @@
 
 export type QuotaTier = 'free' | 'premium';
 
-/** Repas analysables par photo et par jour sans abonnement. */
+/** Analyses photo reussies par jour sans abonnement. */
 export const FREE_DAILY_MEAL_PHOTO_LIMIT = 2;
-/** Repas analysables par photo et par jour avec l'abonnement. */
+/** Analyses photo reussies par jour avec l'abonnement. */
 export const PREMIUM_DAILY_MEAL_PHOTO_LIMIT = 100;
 
 /** @deprecated alias historique de la limite gratuite. */
@@ -35,7 +40,10 @@ export function limitForTier(tier: QuotaTier): number {
 export interface MealPhotoQuotaState {
   /** Jour observe, au format AAAA-MM-JJ. */
   date: string;
-  /** Repas deja enregistres depuis une analyse photo ce jour-la. */
+  /**
+   * Analyses photo reussies ce jour-la. Le nom historique (« repas ») est
+   * garde : c'est la cle persistee sur les telephones.
+   */
   mealsAnalyzed: number;
 }
 
@@ -98,9 +106,9 @@ export function resolveQuota(
  *   Juste apres un achat, le cache du serveur peut encore dire « gratuit » ;
  *   bloquer l'ecran a ce moment serait absurde. Ce n'est pas une faille : le
  *   serveur reste seul juge au moment de l'analyse (HTTP 402).
- * - Le compteur retenu est le plus grand des deux : un repas enregistre hors
- *   ligne n'est pas encore connu du serveur, et l'inverse arrive apres une
- *   reinstallation. Prendre le minimum rendrait des repas gratuits.
+ * - Le compteur retenu est le plus grand des deux : une analyse declaree hors
+ *   ligne n'est pas encore connue du serveur, et l'inverse arrive apres une
+ *   reinstallation. Prendre le minimum rendrait des analyses gratuites.
  * - Une reponse portant sur un autre jour (fuseau, minuit passe entre-temps)
  *   est ignoree : le compteur local seul s'applique.
  */
@@ -119,7 +127,7 @@ export function mergeServerQuota(
   return statusFor(used, limitForTier(tier), tier);
 }
 
-/** Etat apres enregistrement d'un repas analyse. Repart de zero si le jour a change. */
+/** Etat apres une analyse reussie. Repart de zero si le jour a change. */
 export function consumeQuota(
   state: MealPhotoQuotaState | null | undefined,
   today: string = quotaDayKey()

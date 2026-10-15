@@ -87,8 +87,12 @@ if (!useAiTrainingOptInStore.getState().aiTrainingOptIn) return;
 `src/lib/mealQuotaApi.ts` (pur) et `src/lib/mealQuotaClient.ts` (transport).
 **Authentification :** même Bearer que les autres services.
 
-Règle : on compte les **repas enregistrés**, par appareil et par **jour local**.
+Règle (depuis la 1.35) : on compte chaque **analyse réussie** (au moins un
+aliment reconnu), enregistrée au journal ou non, par appareil et par **jour
+local**. Une analyse ratée (aucun aliment, erreur, 402) ne compte pas.
 Gratuit : 2 par jour. Abonné (RevenueCat, droit `premium`) : 100 par jour.
+L'app déclare l'analyse (`consume`) dès sa réussite ; jusqu'à la 1.34 elle ne
+le faisait qu'à l'enregistrement, ce qui laissait relancer à l'infini.
 
 En-têtes envoyés par l'app **avec l'analyse et les appels ci-dessous** :
 
@@ -96,7 +100,7 @@ En-têtes envoyés par l'app **avec l'analyse et les appels ci-dessous** :
 |---|---|
 | `X-Device-Id` | `and-<ANDROID_ID>` (`lib/deviceIdentity`), aussi identifiant client RevenueCat |
 | `X-Utc-Offset` | minutes à ajouter à l'UTC (Paris été : `120`), borné à ±840 |
-| `X-Analysis-Id` | analyse seulement : clé d'idempotence, redéclarée à l'enregistrement |
+| `X-Analysis-Id` | analyse seulement : clé d'idempotence, redéclarée via `consume` quand l'analyse réussit |
 
 ```
 GET  /v1/quota[?refresh=1]   -> 200 {"quota": {day, tier, limit, used, remaining}}

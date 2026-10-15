@@ -51,6 +51,9 @@ export default function MealPhotoScreen() {
   const router = useRouter();
   const [mealPhotoReview, setMealPhotoReview] = useState<MealPhotoReviewComponent | null>(null);
   const [blocked, setBlocked] = useState(false);
+  // Quota atteint signale par l'analyse elle-meme, au moment d'en lancer une
+  // nouvelle (apres « Reessayer » ou une nouvelle photo).
+  const [quotaHit, setQuotaHit] = useState(false);
 
   // Quota lu a l'ouverture, puis tenu a jour par le serveur. « Ajouter un
   // repas » ouvre aussi l'analyse et applique le meme garde (meme hook). Le
@@ -97,16 +100,22 @@ export default function MealPhotoScreen() {
     router.navigate('/(tabs)/nutrition/diary' as never);
   };
 
-  // Quota atteint : on l'annonce AVANT de charger le module d'analyse, pour ne
-  // pas laisser croire que la camera va s'ouvrir. Palier gratuit : l'offre
-  // d'abonnement, avec son contexte. Apres l'achat, le palier passe a
-  // « premium » et l'analyse s'ouvre d'elle-meme.
-  if (quota.reached && quota.tier === 'free') {
+  // Une fois l'analyse ouverte, le quota qui bascule ne doit pas la remplacer :
+  // chaque analyse reussie compte, et c'est justement la derniere autorisee qui
+  // le fait basculer. Son resultat reste a l'ecran ; l'offre n'apparait qu'a la
+  // tentative suivante, quand l'analyse la signale (onQuotaExceeded).
+  const sessionStarted = mealPhotoReview !== null;
+
+  // Quota atteint a l'ouverture : on l'annonce AVANT de charger le module
+  // d'analyse, pour ne pas laisser croire que la camera va s'ouvrir. Palier
+  // gratuit : l'offre d'abonnement, avec son contexte. Apres l'achat, le palier
+  // passe a « premium » et l'analyse s'ouvre d'elle-meme.
+  if (quota.reached && quota.tier === 'free' && (!sessionStarted || quotaHit)) {
     return <Paywall reason="quota" onClose={goBack} />;
   }
 
-  // Abonne a 100 repas : rien a vendre, la limite revient demain.
-  if (quota.reached) {
+  // Abonne a 100 analyses : rien a vendre, la limite revient demain.
+  if (quota.reached && !sessionStarted) {
     return (
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         <View style={styles.blocked}>
@@ -149,9 +158,9 @@ export default function MealPhotoScreen() {
         date={todayKey()}
         onClose={goBack}
         onAdded={goDiary}
-        // Le store vient de recevoir l'etat du serveur : `quota.reached`
-        // bascule et l'offre remplace l'analyse, sans action ici.
-        onQuotaExceeded={() => undefined}
+        // Garde de l'analyse (quota atteint avant une nouvelle analyse, ou
+        // refus 402 du serveur) : l'offre remplace alors l'ecran.
+        onQuotaExceeded={() => setQuotaHit(true)}
       />
     </View>
   );

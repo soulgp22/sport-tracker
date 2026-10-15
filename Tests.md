@@ -467,3 +467,15 @@ affichée pendant que la sonde `/health` est en attente ; sonde rejetée ou
 HTTP 503 → « Analyse indisponible », jamais le message d'échec d'analyse.
 Sabotages vérifiés le 2026-09-26 : écran d'attente remis, anciennes clés
 d'erreur remises ; chacun rougit.
+
+## Quota photo par analyse réussie (1.35)
+
+| Fichier | Couvre |
+|---|---|
+| `components/nutrition/__tests__/MealPhotoReviewQuotaCount.test.tsx` | **régression** : 2 analyses sans enregistrer, la 3e refusée sans appel serveur ; échec (aucun aliment, HTTP 500) sans décompte ; pas de double décompte à l'ajout au journal ; abonné à 100/100 |
+| `app/__tests__/mealPhotoQuotaSession.test.tsx` | **régression** : le résultat de la dernière analyse autorisée reste affiché ; l'offre apparaît à la tentative suivante |
+
+Sabotages vérifiés le 2026-10-15, chacun rougit : garde retirée (2 tests),
+ancien décompte à l'enregistrement (3), double décompte (1), décompte des
+analyses ratées (1), garde d'entrée réactive de l'écran (2), signal
+`onQuotaExceeded` ignoré (1).

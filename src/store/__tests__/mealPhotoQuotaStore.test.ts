@@ -23,7 +23,7 @@ describe('mealPhotoQuotaStore — synchro serveur', () => {
     (postConsume as jest.Mock).mockResolvedValue(null);
     (fetchServerQuota as jest.Mock).mockResolvedValue(null);
 
-    useMealPhotoQuotaStore.getState().recordAnalyzedMeal('a-1');
+    useMealPhotoQuotaStore.getState().recordSuccessfulAnalysis('a-1');
     await useMealPhotoQuotaStore.getState().syncServer();
 
     expect(useMealPhotoQuotaStore.getState().mealsAnalyzed).toBe(1);
