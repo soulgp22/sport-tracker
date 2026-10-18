@@ -7,3 +7,5 @@ media/** -text
 # Executes sur le VPS Linux : fins de ligne LF obligatoires (bash -s, systemd).
 *.sh text eol=lf
 server/** text eol=lf
+# Patchs patch-package : appliques octet par octet sur node_modules (LF).
+patches/*.patch text eol=lf
