@@ -116,7 +116,7 @@ Déploiement et retour arrière : `server/lst-quota/README.md`.
 | RevenueCat | projet | Life Sport Tracker, app Play `com.sportracker.app` |
 | RevenueCat | droit d'accès | **`premium`** (l'app et `lst-quota` cherchent ce nom ; `life_sport_tracker_pro`, créé par défaut, n'est pas utilisé) |
 | RevenueCat | offre courante | `default` : `$rc_monthly` → `lst_premium:mensuel`, `$rc_annual` → `lst_premium:annuel-1an` (+ produits Test Store pour l'émulateur) |
-| Play Console | offre d'essai (sur `annuel-1an`) | `essai-7j` : 7 jours gratuits (P7D ×1), puis le prix de l'annuel ; nouveaux clients de `lst_premium` seulement ; tag `essai-7j`. **Créée en brouillon le 2026-10-18, pas encore activée.** Date d'activation à noter ici : c'est le point de bascule de la comparaison avec / sans essai. |
+| Play Console | offre d'essai (sur `annuel-1an`) | `essai-7j` : 7 jours gratuits (P7D ×1), puis le prix de l'annuel ; nouveaux clients de `lst_premium` seulement ; tag `essai-7j`. Créée le 2026-10-18, **activée le 2026-10-18 à la demande d'Islam**, avant toute production avec paiement (la production est en 1.33, sans achat) : la comparaison avec / sans essai n'a donc pas de mois de référence sans essai. |
 
 L'offre d'essai ne demande **aucun réglage RevenueCat** : `purchasePackage`
 achète l'option par défaut que RevenueCat choisit parmi les offres Google
