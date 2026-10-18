@@ -355,6 +355,18 @@ sur un port libre.
 requête par un petit service avant de la transmettre, sans toucher au service
 protégé — ici le routeur d'analyse.
 
+## Demande d'avis Google Play (1.37)
+
+**Règle pure** `lib/reviewPrompt` (`shouldRequestReview`) : 1re demande à la
+3e séance terminée, puis au plus une fois tous les 120 jours. **Enveloppe**
+`lib/storeReview` (`maybeRequestStoreReview`) : fenêtre officielle par
+`expo-store-review`, ne lève jamais, n'enregistre la demande que si Google l'a
+reçue, et attend l'hydratation du store `store/reviewPromptStore` pour ne pas
+redemander trop tôt. À appeler **après** un moment positif, une fois l'écran
+suivant affiché (`REVIEW_PROMPT_DELAY_MS`), jamais depuis un bouton « Noter » :
+Google ne dit pas si la fenêtre s'est affichée. Réutilisable pour tout autre
+moment positif (objectif atteint, badge) : même appel, autre déclencheur.
+
 ---
 
 ## Outillage de vérification

@@ -42,6 +42,7 @@ import {
   buildPerformanceSnapshot,
   evaluateBadgeUnlocks,
 } from '../../../lib/performanceEngine';
+import { maybeRequestStoreReview, REVIEW_PROMPT_DELAY_MS } from '../../../lib/storeReview';
 import { useBodyWeightStore } from '../../../store/bodyWeightStore';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useLanguageStore } from '../../../store/languageStore';
@@ -268,6 +269,11 @@ export default function ActiveSessionScreen() {
               if (insight) void schedulePerformanceNotification(insight);
             }
             router.replace('/(tabs)/progress?tab=sessions' as never);
+            // Moment positif : demande d'avis Google, une fois l'écran Stats affiché.
+            const completedSessions = useSessionStore.getState().sessions.length;
+            setTimeout(() => {
+              void maybeRequestStoreReview(completedSessions);
+            }, REVIEW_PROMPT_DELAY_MS);
           }
         },
       },

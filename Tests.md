@@ -486,3 +486,17 @@ analyses ratées (1), garde d'entrée réactive de l'écran (2), signal
 quand les calories sont refusées (rouge avec l'ancien `Promise.all`) ; `null`
 quand les trois lectures sont refusées. Le correctif natif (patch de la
 bibliothèque) se vérifie sur appareil réel : Stats → Pas, puis Dépense.
+
+## Demande d'avis Google Play (1.37)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/reviewPrompt.test.ts` | règle : rien avant 3 séances, demande à 3, pas de redemande avant 120 jours, date illisible non bloquante ; enveloppe : demande mémorisée, fenêtre indisponible ou échec Google sans mémorisation ni exception, stockage non lu → rien |
+| `app/(tabs)/session/__tests__/active.test.tsx` (+2) | fin de séance : appel avec le nombre de séances, **après** 1,5 s (rien à 1 499 ms) ; rien si on continue la séance |
+
+Sabotages vérifiés le 2026-10-18, chacun rougit : seuil à 2 (2 tests), délai de
+120 jours retiré (2), mémorisation retirée (2), garde d'hydratation retirée
+(1), appel immédiat pendant la navigation (1), appel retiré (1). L'affichage
+réel ne se teste que sur une version installée depuis le Play Store (piste de
+test interne) : Google n'affiche rien pour un APK installé à la main.
+
