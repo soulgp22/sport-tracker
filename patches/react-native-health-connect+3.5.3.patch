@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactActiveCaloriesBurnedRecord.kt b/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactActiveCaloriesBurnedRecord.kt
+--- a/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactActiveCaloriesBurnedRecord.kt
++++ b/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactActiveCaloriesBurnedRecord.kt
+@@ -71,7 +71,7 @@
+   override fun getAggregateGroupByPeriodRequest(record: ReadableMap): AggregateGroupByPeriodRequest {
+     return AggregateGroupByPeriodRequest(
+       metrics = aggregateMetrics,
+-      timeRangeFilter = record.getTimeRangeFilter("timeRangeFilter"),
++      timeRangeFilter = record.getTimeRangeFilterLocal("timeRangeFilter"),
+       timeRangeSlicer = mapJsPeriodToPeriod(record.getMap("timeRangeSlicer")),
+       dataOriginFilter = convertJsToDataOriginSet(record.getArray("dataOriginFilter"))
+     )
+diff --git a/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactTotalCaloriesBurnedRecord.kt b/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactTotalCaloriesBurnedRecord.kt
+--- a/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactTotalCaloriesBurnedRecord.kt
++++ b/node_modules/react-native-health-connect/android/src/main/java/dev/matinzd/healthconnect/records/ReactTotalCaloriesBurnedRecord.kt
+@@ -61,7 +61,7 @@
+   override fun getAggregateGroupByPeriodRequest(record: ReadableMap): AggregateGroupByPeriodRequest {
+     return AggregateGroupByPeriodRequest(
+       metrics = aggregateMetrics,
+-      timeRangeFilter = record.getTimeRangeFilter("timeRangeFilter"),
++      timeRangeFilter = record.getTimeRangeFilterLocal("timeRangeFilter"),
+       timeRangeSlicer = mapJsPeriodToPeriod(record.getMap("timeRangeSlicer")),
+       dataOriginFilter = convertJsToDataOriginSet(record.getArray("dataOriginFilter"))
+     )

@@ -479,3 +479,10 @@ Sabotages vérifiés le 2026-10-15, chacun rougit : garde retirée (2 tests),
 ancien décompte à l'enregistrement (3), double décompte (1), décompte des
 analyses ratées (1), garde d'entrée réactive de l'écran (2), signal
 `onQuotaExceeded` ignoré (1).
+
+## Historique Health Connect (1.36)
+
+`lib/__tests__/healthConnect.test.ts` (+2) : **régression**, les pas restent
+quand les calories sont refusées (rouge avec l'ancien `Promise.all`) ; `null`
+quand les trois lectures sont refusées. Le correctif natif (patch de la
+bibliothèque) se vérifie sur appareil réel : Stats → Pas, puis Dépense.

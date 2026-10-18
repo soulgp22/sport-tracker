@@ -385,11 +385,27 @@ export async function readDailyHealthHistory(
     };
     const timeRangeSlicer = { period: 'DAYS' as const, length: 1 };
 
-    const [steps, active, total] = await Promise.all([
+    // Trois lectures INDEPENDANTES : le refus d'une source ne doit pas effacer
+    // les autres. La bibliotheque 3.5.3 envoyait les calories avec une plage en
+    // instants, que Health Connect refuse pour un regroupement par periode :
+    // avec Promise.all, ce refus vidait aussi l'historique des pas (corrige
+    // en amont en 4.1.3, repris par patches/ ; voir known_bugs.md).
+    const settled = await Promise.allSettled([
       hc.aggregateGroupByPeriod({ recordType: 'Steps', timeRangeFilter, timeRangeSlicer }),
       hc.aggregateGroupByPeriod({ recordType: 'ActiveCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
       hc.aggregateGroupByPeriod({ recordType: 'TotalCaloriesBurned', timeRangeFilter, timeRangeSlicer }),
     ]);
+    if (settled.every((result) => result.status === 'rejected')) {
+      throw (settled[0] as PromiseRejectedResult).reason;
+    }
+    const orEmpty = <T,>(result: PromiseSettledResult<T[]>, recordType: string): T[] => {
+      if (result.status === 'fulfilled') return result.value;
+      warnInDev(`readDailyHealthHistory ${recordType}`, result.reason);
+      return [];
+    };
+    const steps = orEmpty(settled[0], 'Steps');
+    const active = orEmpty(settled[1], 'ActiveCaloriesBurned');
+    const total = orEmpty(settled[2], 'TotalCaloriesBurned');
 
     const byDay = new Map<string, DailyHealthData>();
     const entry = (day: string): DailyHealthData => {

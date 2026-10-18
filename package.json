@@ -59,6 +59,7 @@
     "jest": "^29.7.0",
     "jest-expo": "^56.0.5",
     "marked": "^18.0.14",
+    "patch-package": "8.0.1",
     "react-test-renderer": "^19.2.3",
     "typescript": "~6.0.3"
   },
@@ -72,7 +73,8 @@
     "test": "jest --runInBand",
     "validate:community": "node scripts/validate-community.mjs",
     "typecheck": "tsc --noEmit",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "postinstall": "patch-package"
   },
   "private": true
 }

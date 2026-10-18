@@ -511,4 +511,41 @@ describe('healthConnect — historique quotidien (A01/A02)', () => {
     const service = loadService();
     await expect(service.readDailyHealthHistory('2026-09-01', '2026-09-20')).resolves.toBeNull();
   });
+
+  /**
+   * RÉGRESSION (signalée sur la 1.35, présente depuis la 1.30) : la
+   * bibliothèque 3.5.3 envoie les calories avec une plage en instants, que
+   * Health Connect refuse pour un regroupement par période. Le rejet des
+   * calories faisait échouer les TROIS lectures : historique des pas vide
+   * alors que l'accueil affichait les pas du jour.
+   */
+  it('garde les pas quand la lecture des calories est refusée', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const refused = new Error('IllegalArgumentException: period aggregation requires a local time range');
+    const aggregateGroupByPeriod = jest.fn(({ recordType }: { recordType: string }) =>
+      recordType === 'Steps'
+        ? Promise.resolve([{ startTime: '2026-10-17T00:00', endTime: '2026-10-18T00:00', result: { COUNT_TOTAL: 6120 } }])
+        : Promise.reject(refused)
+    );
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      aggregateGroupByPeriod,
+    }));
+    const service = loadService();
+
+    const history = await service.readDailyHealthHistory('2026-10-17', '2026-10-17');
+
+    expect(history?.get('2026-10-17')).toEqual({ steps: 6120, activeKcal: null, totalKcal: null });
+  });
+
+  it('reste null quand les trois lectures sont refusées', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      aggregateGroupByPeriod: jest.fn(() => Promise.reject(new Error('refus'))),
+    }));
+    const service = loadService();
+
+    await expect(service.readDailyHealthHistory('2026-10-17', '2026-10-17')).resolves.toBeNull();
+  });
 });

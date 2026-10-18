@@ -1251,3 +1251,33 @@ tentative suivante.
 
 **À retenir** : un quota doit compter ce qui coûte (ici l'appel au modèle), pas
 une action facultative de l'utilisateur qui vient après.
+
+## Historique des pas vide alors que l'accueil affichait les pas
+
+Signalé par Islam le 2026-10-18 (1.35) ; visible dès la capture du 26/09
+(accueil « 116 pas », historique « Aucun pas enregistré »).
+
+**Cause racine** : `react-native-health-connect` 3.5.3 convertit la plage de
+temps en heure locale pour le regroupement par période des **pas**, mais pas
+pour les **calories** (actives et totales). Health Connect refuse un
+regroupement par période sur une plage en instants. Nos trois lectures
+partaient dans un `Promise.all` : le refus des calories faisait échouer le
+tout, et `safeCall` renvoyait `null`. L'accueil, lui, lit les pas du jour avec
+`readRecords`, qui accepte les instants : d'où l'écart.
+
+**Correctif** :
+1. `readDailyHealthHistory` : `Promise.allSettled`, une source refusée
+   n'efface plus les autres.
+2. `patches/react-native-health-connect+3.5.3.patch` (appliqué par
+   `patch-package` au `postinstall`) : reprise du correctif amont de la
+   **4.1.3** (`getTimeRangeFilterLocal` pour les calories). Montée en 4.x
+   écartée pour l'instant : la v4 devient un module Expo (intégration native
+   différente), trop de risque pour 2 lignes.
+
+**Test** : `healthConnect.test.ts`, « garde les pas quand la lecture des
+calories est refusée », rouge avant le correctif.
+
+**À retenir** : ne jamais regrouper des lectures indépendantes dans un
+`Promise.all` qu'un `catch` global transforme en « pas de données » ; et un
+écart entre deux écrans qui lisent la même donnée se cherche dans la
+différence entre les deux appels.
