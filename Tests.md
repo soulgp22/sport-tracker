@@ -500,3 +500,16 @@ Sabotages vérifiés le 2026-10-18, chacun rougit : seuil à 2 (2 tests), délai
 réel ne se teste que sur une version installée depuis le Play Store (piste de
 test interne) : Google n'affiche rien pour un APK installé à la main.
 
+## Essai gratuit Play (1.38)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/billing/__tests__/billing.test.ts` (+4) | essai lu sur l'option **achetée** (`defaultOption`), semaine convertie en 7 jours, durée en mois sans conversion, aucun essai sur le plan de base ; **prix récurrent du plan de base, jamais « 0 € »** même si le produit porte le prix de la phase gratuite |
+| `components/subscription/__tests__/Paywall.test.tsx` (+3) | sans essai, rien ne parle d'essai ; avec essai : durée sur la carte annuelle, bouton « Essayer gratuitement », « 7 jours gratuits, puis 79,99 € / an », mention de résiliation ; l'essai suit l'offre sélectionnée (mensuel = abonnement normal) |
+
+Sabotages vérifiés le 2026-10-18, chacun rougit : prix lu sur le produit (0 €),
+semaine non convertie, essai lu sur le plan de base, bouton toujours
+« S'abonner », mention légale retirée, essai de l'annuel affiché sur le
+mensuel. L'affichage réel ne se voit qu'avec l'offre `essai-7j` **active** et
+un compte Google jamais abonné à `lst_premium`, sur une version installée
+depuis le Play Store.

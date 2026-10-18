@@ -337,6 +337,13 @@ un seul point d'accès `lib/billing/index.ts`. L'adaptateur actuel est RevenueCa
 **Prix jamais en dur** : `lib/billing/plans.ts` calcule l'économie de l'annuel
 sur les prix de la boutique, arrondie vers le bas.
 
+**Afficher ce qui sera acheté** : les offres Play (essai, prix de lancement) se
+lisent sur `defaultOption`, l'option que `purchasePackage` achète
+(`toFreeTrial` dans `lib/billing/revenueCat.ts`) ; le prix récurrent se lit sur
+le plan de base, jamais sur le produit (qui suit l'option par défaut). Ainsi
+une offre créée ou retirée dans la Play Console change l'écran sans nouvelle
+version de l'app.
+
 **Quota** : la règle pure dans `lib/mealPhotoQuota` (`limitForTier`,
 `mergeServerQuota`), le contrat réseau dans `lib/mealQuotaApi`, le transport
 dans `lib/mealQuotaClient`, l'état dans `store/mealPhotoQuotaStore`, et **un

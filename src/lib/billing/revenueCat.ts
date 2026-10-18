@@ -18,12 +18,14 @@ import {
   type BillingPlan,
   type BillingProvider,
   type EntitlementState,
+  type FreeTrial,
   type PurchaseResult,
 } from './types';
 
 type PurchasesModule = typeof import('react-native-purchases').default;
 type CustomerInfo = import('react-native-purchases').CustomerInfo;
 type PurchasesPackage = import('react-native-purchases').PurchasesPackage;
+type SubscriptionOption = import('react-native-purchases').SubscriptionOption;
 
 /** Droit d'acces configure dans RevenueCat. Le serveur interroge le meme. */
 export const PREMIUM_ENTITLEMENT_ID = 'premium';
@@ -58,17 +60,43 @@ export function toEntitlement(info: CustomerInfo | null | undefined): Entitlemen
   };
 }
 
+/**
+ * Essai gratuit de l'option que `purchasePackage` achetera : `defaultOption`,
+ * que RevenueCat choisit parmi les offres Google auxquelles l'utilisateur a
+ * droit (essai le plus long d'abord). Afficher autre chose que ce qui sera
+ * achete tromperait l'utilisateur.
+ */
+export function toFreeTrial(option: SubscriptionOption | null | undefined): FreeTrial | null {
+  const period = option?.freePhase?.billingPeriod;
+  if (!period) return null;
+  const value = Number(period.value);
+  if (!(value > 0)) return { days: null };
+  switch (String(period.unit)) {
+    case 'DAY':
+      return { days: value };
+    case 'WEEK':
+      return { days: value * 7 };
+    default:
+      return { days: null };
+  }
+}
+
 export function toPlan(pkg: PurchasesPackage): BillingPlan | null {
   const period =
     pkg.packageType === 'MONTHLY' ? 'monthly' : pkg.packageType === 'ANNUAL' ? 'annual' : null;
   if (!period) return null;
+  // Prix recurrent : celui du plan de base. Sous Google, le prix du produit
+  // suit `defaultOption` ; avec un essai, il ne doit jamais devenir « 0 € ».
+  const basePlan = pkg.product.subscriptionOptions?.find((option) => option.isBasePlan) ?? null;
+  const fullPrice = basePlan?.fullPricePhase?.price ?? pkg.product.defaultOption?.fullPricePhase?.price ?? null;
   return {
     id: pkg.identifier,
     period,
-    priceString: pkg.product.priceString,
-    price: pkg.product.price,
-    currencyCode: pkg.product.currencyCode,
+    priceString: fullPrice?.formatted ?? pkg.product.priceString,
+    price: fullPrice ? fullPrice.amountMicros / 1_000_000 : pkg.product.price,
+    currencyCode: fullPrice?.currencyCode ?? pkg.product.currencyCode,
     pricePerMonthString: pkg.product.pricePerMonthString ?? null,
+    freeTrial: toFreeTrial(pkg.product.defaultOption),
   };
 }
 

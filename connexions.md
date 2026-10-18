@@ -116,6 +116,16 @@ Déploiement et retour arrière : `server/lst-quota/README.md`.
 | RevenueCat | projet | Life Sport Tracker, app Play `com.sportracker.app` |
 | RevenueCat | droit d'accès | **`premium`** (l'app et `lst-quota` cherchent ce nom ; `life_sport_tracker_pro`, créé par défaut, n'est pas utilisé) |
 | RevenueCat | offre courante | `default` : `$rc_monthly` → `lst_premium:mensuel`, `$rc_annual` → `lst_premium:annuel-1an` (+ produits Test Store pour l'émulateur) |
+| Play Console | offre d'essai (sur `annuel-1an`) | `essai-7j` : 7 jours gratuits (P7D ×1), puis le prix de l'annuel ; nouveaux clients de `lst_premium` seulement ; tag `essai-7j`. **Créée en brouillon le 2026-10-18, pas encore activée.** Date d'activation à noter ici : c'est le point de bascule de la comparaison avec / sans essai. |
+
+L'offre d'essai ne demande **aucun réglage RevenueCat** : `purchasePackage`
+achète l'option par défaut que RevenueCat choisit parmi les offres Google
+auxquelles l'utilisateur a droit (essai le plus long d'abord), et l'écran
+d'abonnement n'annonce l'essai que si cette option en contient un (≥ 1.38).
+Pendant l'essai, le droit `premium` est actif : `lst-quota` accorde les 100
+analyses. Activer, désactiver ou relire : `scratchpad/play-trial-offer.mjs`
+(`status`, `activate`, `deactivate`) ou Play Console → Monétiser → Abonnements
+→ `lst_premium` → `annuel-1an` → `essai-7j`.
 
 Les prix Play se saisissent **hors taxe** : Google ajoute la TVA de chaque
 pays (9,99 saisi = 11,99 € payé en France). Script de correction et de

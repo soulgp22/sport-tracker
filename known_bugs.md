@@ -1281,3 +1281,21 @@ calories est refusée », rouge avant le correctif.
 `Promise.all` qu'un `catch` global transforme en « pas de données » ; et un
 écart entre deux écrans qui lisent la même donnée se cherche dans la
 différence entre les deux appels.
+
+## Conditions d'abonnement restées sur l'ancienne règle du quota
+
+Constaté le 2026-10-18 en ajoutant l'essai gratuit. La 1.35 compte chaque
+analyse réussie, mais les conditions publiées (`/terms`) disaient encore
+« une photo relancée ou abandonnée ne compte pas », et la politique de
+confidentialité parlait de « repas enregistrés ».
+
+**Cause** : la règle métier a changé dans le code, les tests et `api.md`, mais
+les textes juridiques de `docs/play-store/` ne sont reliés à aucun test.
+
+**Correctif** : `CONDITIONS_ABONNEMENT.md` (section 2) et
+`POLITIQUE_CONFIDENTIALITE.md` (section 3.6) réécrits, pages à régénérer avec
+`scripts/build-legal-pages.mjs` et à republier sur le VPS.
+
+**À retenir** : toute modification d'une règle visible par l'utilisateur
+(quota, prix, essai, données envoyées) se relit dans `CONDITIONS_ABONNEMENT.md`,
+`POLITIQUE_CONFIDENTIALITE.md` et `FICHE_TEXTES.md` avant le commit.

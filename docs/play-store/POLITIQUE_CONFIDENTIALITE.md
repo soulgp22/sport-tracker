@@ -1,6 +1,6 @@
 # Politique de confidentialité — Life Sport Tracker
 
-*Dernière mise à jour : 15 octobre 2026*
+*Dernière mise à jour : 18 octobre 2026*
 
 ## Résumé
 
@@ -115,9 +115,9 @@ contributions à l'adresse ci-dessous.
 
 ### 3.6 Limite quotidienne d'analyses photo
 
-L'analyse photo est limitée à 2 repas par jour sans abonnement, et à 100 avec
-l'abonnement. Pour tenir ce décompte, l'application envoie à notre serveur, avec
-chaque analyse et chaque repas enregistré :
+L'analyse photo est limitée à 2 analyses réussies par jour sans abonnement, et
+à 100 avec l'abonnement. Pour tenir ce décompte, l'application envoie à notre
+serveur, avec chaque analyse :
 
 - un **identifiant technique de l'appareil** : l'identifiant Android propre à
   cette application (il ne permet pas de vous suivre d'une application à

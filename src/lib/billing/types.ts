@@ -9,6 +9,16 @@
 
 export type PlanPeriod = 'monthly' | 'annual';
 
+/**
+ * Essai gratuit inclus dans l'achat d'une offre. La boutique ne le propose
+ * qu'aux utilisateurs qui y ont droit (Google ne renvoie que les offres
+ * eligibles) : present ici = l'utilisateur l'obtiendra en achetant.
+ */
+export interface FreeTrial {
+  /** Duree en jours ; null si la boutique l'exprime en mois ou en annees. */
+  days: number | null;
+}
+
 export interface BillingPlan {
   /** Identifiant opaque, propre au fournisseur, a repasser a `purchase`. */
   id: string;
@@ -19,6 +29,8 @@ export interface BillingPlan {
   currencyCode: string;
   /** Equivalent mensuel formate par la boutique (annuel / 12), si disponible. */
   pricePerMonthString: string | null;
+  /** Essai gratuit applique a l'achat de cette offre, null s'il n'y en a pas. */
+  freeTrial: FreeTrial | null;
 }
 
 export interface EntitlementState {

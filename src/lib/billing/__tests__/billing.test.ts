@@ -5,6 +5,7 @@ import {
   createRevenueCatProvider,
   toBillingErrorCode,
   toEntitlement,
+  toFreeTrial,
   toPlan,
 } from '../revenueCat';
 import type { BillingPlan } from '../types';
@@ -16,6 +17,7 @@ const plan = (period: 'monthly' | 'annual', price: number, currencyCode = 'EUR')
   priceString: `${price} €`,
   currencyCode,
   pricePerMonthString: null,
+  freeTrial: null,
 });
 
 describe('plans — economie de l’annuel', () => {
@@ -77,6 +79,65 @@ describe('revenueCat — traduction vers le contrat neutre', () => {
     expect(toPlan(pkg('MONTHLY'))?.period).toBe('monthly');
     expect(toPlan(pkg('ANNUAL'))?.period).toBe('annual');
     expect(toPlan(pkg('LIFETIME'))).toBeNull();
+    expect(toPlan(pkg('ANNUAL'))?.freeTrial).toBeNull();
+  });
+
+  describe('essai gratuit (offre Google Play)', () => {
+    const price = (amount: number) => ({
+      formatted: `${amount.toFixed(2).replace('.', ',')} €`,
+      amountMicros: Math.round(amount * 1_000_000),
+      currencyCode: 'EUR',
+    });
+    const phase = (unit: string, value: number, amount: number) => ({
+      billingPeriod: { unit, value, iso8601: `P${value}${unit[0]}` },
+      price: price(amount),
+    });
+    const basePlan = {
+      id: 'annuel-1an',
+      isBasePlan: true,
+      freePhase: null,
+      fullPricePhase: phase('YEAR', 1, 79.99),
+    };
+    const trialOffer = (unit: string, value: number) => ({
+      id: 'annuel-1an:essai-7j',
+      isBasePlan: false,
+      freePhase: phase(unit, value, 0),
+      fullPricePhase: phase('YEAR', 1, 79.99),
+    });
+    /** Produit tel que RevenueCat le rend quand l'offre d'essai est l'option par defaut. */
+    const annualWithTrial = (unit = 'DAY', value = 7) =>
+      ({
+        identifier: '$rc_annual',
+        packageType: 'ANNUAL',
+        product: {
+          // Prix de l'option par defaut : la phase gratuite. Ne doit jamais s'afficher.
+          priceString: '0,00 €',
+          price: 0,
+          currencyCode: 'EUR',
+          pricePerMonthString: '6,67 €',
+          defaultOption: trialOffer(unit, value),
+          subscriptionOptions: [basePlan, trialOffer(unit, value)],
+        },
+      }) as never;
+
+    it('expose l’essai de l’option qui sera achetee', () => {
+      expect(toPlan(annualWithTrial())?.freeTrial).toEqual({ days: 7 });
+      expect(toPlan(annualWithTrial('WEEK', 1))?.freeTrial).toEqual({ days: 7 });
+    });
+
+    it('garde le prix recurrent du plan de base, jamais « 0 € »', () => {
+      const plan = toPlan(annualWithTrial());
+      expect(plan).toMatchObject({ price: 79.99, priceString: '79,99 €', currencyCode: 'EUR' });
+    });
+
+    it('une duree en mois reste un essai, de duree non convertie en jours', () => {
+      expect(toFreeTrial(trialOffer('MONTH', 1) as never)).toEqual({ days: null });
+    });
+
+    it('pas d’essai quand l’option par defaut est le plan de base (offre inactive ou deja utilisee)', () => {
+      expect(toFreeTrial(basePlan as never)).toBeNull();
+      expect(toFreeTrial(null)).toBeNull();
+    });
   });
 
   it('traduit les codes d’erreur utiles', () => {

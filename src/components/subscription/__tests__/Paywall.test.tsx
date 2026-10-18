@@ -32,9 +32,11 @@ jest.mock('../../../lib/mealQuotaClient', () => ({
 }));
 
 const PLANS: BillingPlan[] = [
-  { id: '$rc_monthly', period: 'monthly', price: 9.99, priceString: '9,99 €', currencyCode: 'EUR', pricePerMonthString: '9,99 €' },
-  { id: '$rc_annual', period: 'annual', price: 79.99, priceString: '79,99 €', currencyCode: 'EUR', pricePerMonthString: '6,67 €' },
+  { id: '$rc_monthly', period: 'monthly', price: 9.99, priceString: '9,99 €', currencyCode: 'EUR', pricePerMonthString: '9,99 €', freeTrial: null },
+  { id: '$rc_annual', period: 'annual', price: 79.99, priceString: '79,99 €', currencyCode: 'EUR', pricePerMonthString: '6,67 €', freeTrial: null },
 ];
+/** Offre Play « essai 7 jours » active sur l'annuel, utilisateur eligible. */
+const PLANS_WITH_TRIAL: BillingPlan[] = [PLANS[0], { ...PLANS[1], freeTrial: { days: 7 } }];
 
 function fakeProvider(overrides: Partial<BillingProvider> = {}): BillingProvider & { purchase: jest.Mock } {
   return {
@@ -125,6 +127,40 @@ describe('Paywall — offre', () => {
     await renderPaywall(fakeProvider({ isAvailable: () => false }));
     expect(screen.getByTestId('paywall-unavailable')).toBeTruthy();
     expect(screen.queryByTestId('paywall-subscribe')).toBeNull();
+  });
+});
+
+describe('Paywall — essai gratuit', () => {
+  it('sans essai propose par la boutique, rien ne parle d’essai', async () => {
+    await renderPaywall(fakeProvider());
+    expect(screen.queryByText('Essayer gratuitement')).toBeNull();
+    expect(screen.queryByTestId('paywall-trial-annual')).toBeNull();
+    expect(screen.queryByTestId('paywall-trial-legal')).toBeNull();
+    expect(screen.getByText('S’abonner')).toBeTruthy();
+  });
+
+  it('annonce la duree, le prix qui suit et comment ne rien payer', async () => {
+    await renderPaywall(fakeProvider({ getPlans: jest.fn().mockResolvedValue(PLANS_WITH_TRIAL) }));
+    expect(screen.getByTestId('paywall-trial-annual').props.children).toBe('7 jours gratuits');
+    expect(screen.getByText('Essayer gratuitement')).toBeTruthy();
+    expect(screen.getByText('7 jours gratuits, puis 79,99 € / an')).toBeTruthy();
+    expect(screen.getByTestId('paywall-trial-legal').props.children).toMatch(
+      /Sans résiliation avant la fin de l’essai, l’abonnement démarre au prix de 79,99 € \/ an/
+    );
+  });
+
+  it('l’essai suit l’offre choisie : le mensuel sans essai redevient un abonnement', async () => {
+    const provider = fakeProvider({ getPlans: jest.fn().mockResolvedValue(PLANS_WITH_TRIAL) });
+    await renderPaywall(provider);
+    fireEvent.press(screen.getByTestId('paywall-plan-monthly'));
+    expect(screen.getByText('S’abonner')).toBeTruthy();
+    expect(screen.getByText('9,99 € par mois, sans engagement')).toBeTruthy();
+    expect(screen.queryByTestId('paywall-trial-legal')).toBeNull();
+    fireEvent.press(screen.getByTestId('paywall-plan-annual'));
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('paywall-subscribe'));
+    });
+    expect(provider.purchase).toHaveBeenCalledWith('$rc_annual');
   });
 });
 

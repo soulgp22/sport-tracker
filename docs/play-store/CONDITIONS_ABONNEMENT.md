@@ -1,6 +1,6 @@
 # Conditions de l'abonnement — Life Sport Tracker Premium
 
-*Dernière mise à jour : 23 septembre 2026*
+*Dernière mise à jour : 18 octobre 2026*
 
 > Projet rédigé par l'agent de développement à partir du fonctionnement réel de
 > l'application. **À faire relire** avant publication : ce texte n'est pas un
@@ -12,11 +12,11 @@ Life Sport Tracker est édité par **Rais&Co**. Contact : **seirais@outlook.fr**
 
 ## 2. Ce que comprend l'abonnement
 
-L'abonnement **Premium** porte l'analyse photo des repas à **100 repas
-enregistrés par jour**, au lieu de 2 sans abonnement. Un repas est compté quand
-son analyse est enregistrée dans le journal ; une photo relancée ou abandonnée
-ne compte pas. Le compteur repart à zéro chaque jour, selon l'heure de votre
-téléphone.
+L'abonnement **Premium** porte l'analyse photo des repas à **100 analyses
+par jour**, au lieu de 2 sans abonnement. Chaque analyse réussie est comptée
+(au moins un aliment reconnu), qu'elle soit ensuite ajoutée au journal ou non ;
+une analyse qui échoue ou ne reconnaît aucun aliment ne compte pas. Le compteur
+repart à zéro chaque jour, selon l'heure de votre téléphone.
 
 Toutes les autres fonctionnalités de l'application restent gratuites.
 
@@ -30,6 +30,14 @@ Toutes les autres fonctionnalités de l'application restent gratuites.
 Dans les autres pays, le prix est fixé et affiché par Google Play dans la
 devise locale, taxes comprises. **Le prix qui fait foi est celui affiché par
 Google Play au moment de l'achat.**
+
+**Essai gratuit.** Un essai gratuit de 7 jours peut être proposé sur la formule
+annuelle, uniquement aux comptes Google qui n'ont jamais souscrit Premium.
+Quand il est proposé, l'application et Google Play l'indiquent avant l'achat,
+avec la date de fin de l'essai. Sans résiliation avant cette date, l'abonnement
+annuel démarre et son prix est débité ce jour-là. En cas de résiliation pendant
+l'essai, rien n'est débité et l'accès Premium reste actif jusqu'à la fin de
+l'essai.
 
 ## 4. Paiement et renouvellement
 

@@ -13,7 +13,10 @@
  *   sur la feuille de paiement Google ;
  * - la reassurance a cote du bouton : sans engagement, resiliable dans
  *   Google Play. Les conditions de renouvellement sont affichees en clair,
- *   comme l'exige la politique Google Play sur les abonnements.
+ *   comme l'exige la politique Google Play sur les abonnements ;
+ * - l'ESSAI GRATUIT n'apparait que si la boutique le propose a cet
+ *   utilisateur (offre Play active et utilisateur eligible). Il est alors
+ *   annonce avec sa duree, le prix qui suit et le moyen de ne rien payer.
  *
  * Aucune logique de facturation ici : tout passe par subscriptionStore.
  */
@@ -35,6 +38,7 @@ import {
   pickPlans,
   type BillingErrorCode,
   type BillingPlan,
+  type FreeTrial,
   type PlanPeriod,
 } from '../../lib/billing';
 import {
@@ -94,7 +98,13 @@ export function Paywall({ reason, onClose, onSubscribed }: PaywallProps) {
 
   const selectedPeriod = period ?? defaultPlanPeriod(pair);
   const selected: BillingPlan | null = selectedPeriod ? pair[selectedPeriod] : null;
+  const selectedTrial = selected?.freeTrial ?? null;
   const isPremium = localTier(entitlement) === 'premium';
+
+  const trialLength = (trial: FreeTrial) =>
+    trial.days !== null ? t('premium.trialDays', { days: trial.days }) : t('premium.trialGeneric');
+  const recurringPrice = (plan: BillingPlan) =>
+    t(plan.period === 'annual' ? 'premium.perYear' : 'premium.perMonth', { price: plan.priceString });
 
   const openUrl = (url: string) => {
     if (url) void Linking.openURL(url);
@@ -212,6 +222,11 @@ export function Paywall({ reason, onClose, onSubscribed }: PaywallProps) {
               {t('premium.annualMonthly', { price: plan.pricePerMonthString })}
             </Text>
           ) : null}
+          {plan.freeTrial ? (
+            <Text style={styles.planTrial} testID={`paywall-trial-${plan.period}`}>
+              {trialLength(plan.freeTrial)}
+            </Text>
+          ) : null}
         </View>
         <Text style={styles.planPrice}>
           {t(annual ? 'premium.perYear' : 'premium.perMonth', { price: plan.priceString })}
@@ -280,19 +295,24 @@ export function Paywall({ reason, onClose, onSubscribed }: PaywallProps) {
               disabled={busy || !selected}
               activeOpacity={0.86}
               accessibilityRole="button"
-              accessibilityLabel={t('premium.subscribe')}
+              accessibilityLabel={t(selectedTrial ? 'premium.trialCta' : 'premium.subscribe')}
               testID="paywall-subscribe">
               {busy ? (
                 <ActivityIndicator color={c.primaryText} />
               ) : (
                 <>
-                  <Text style={styles.ctaTitle}>{t('premium.subscribe')}</Text>
+                  <Text style={styles.ctaTitle}>{t(selectedTrial ? 'premium.trialCta' : 'premium.subscribe')}</Text>
                   {selected ? (
                     <Text style={styles.ctaSubtitle}>
-                      {t(
-                        selected.period === 'annual' ? 'premium.subscribeAnnual' : 'premium.subscribeMonthly',
-                        { price: selected.priceString }
-                      )}
+                      {selectedTrial
+                        ? t('premium.trialThen', {
+                            trial: trialLength(selectedTrial),
+                            price: recurringPrice(selected),
+                          })
+                        : t(
+                            selected.period === 'annual' ? 'premium.subscribeAnnual' : 'premium.subscribeMonthly',
+                            { price: selected.priceString }
+                          )}
                     </Text>
                   ) : null}
                 </>
@@ -308,6 +328,11 @@ export function Paywall({ reason, onClose, onSubscribed }: PaywallProps) {
           </Text>
         ) : null}
 
+        {selected && selectedTrial ? (
+          <Text style={styles.legal} testID="paywall-trial-legal">
+            {t('premium.trialLegal', { price: recurringPrice(selected) })}
+          </Text>
+        ) : null}
         <Text style={styles.legal}>{t('premium.legal')}</Text>
 
         <View style={styles.links}>
@@ -391,6 +416,8 @@ const makeStyles = (c: ThemeColors) =>
     planName: { fontFamily: fonts.serifBold, fontSize: 18, lineHeight: 22, color: c.textPrimary },
     planHint: { fontFamily: fonts.sans, fontSize: 13, color: c.textSecondary },
     planPrice: { fontFamily: fonts.sansBold, fontSize: 15, color: c.textPrimary },
+    // Vert de l'analyse photo, comme le bouton d'achat.
+    planTrial: { fontFamily: fonts.sansSemi, fontSize: 13, color: c.tertiary },
     badge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.pill, backgroundColor: c.tertiary },
     badgeText: { fontFamily: fonts.sansBold, fontSize: 11, color: c.primaryText },
 
