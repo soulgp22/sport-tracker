@@ -161,6 +161,8 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
+- **Dernière soumission :** 1.39.0 (versionCode 56), piste interne, 2026-10-20
+  (objectifs du jour + widget Android). Téléversement 3 min 35 s, statut COMPLETED.
 
 **Deux clés de signature coexistent — ne pas les confondre :**
 
