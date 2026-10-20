@@ -1299,3 +1299,43 @@ les textes juridiques de `docs/play-store/` ne sont reliés à aucun test.
 **À retenir** : toute modification d'une règle visible par l'utilisateur
 (quota, prix, essai, données envoyées) se relit dans `CONDITIONS_ABONNEMENT.md`,
 `POLITIQUE_CONFIDENTIALITE.md` et `FICHE_TEXTES.md` avant le commit.
+
+## Widget Android vide : le React Compiler injecte des hooks dans le composant
+
+**Symptôme** (2026-10-20, 1.39.0 en préparation) : le widget « Objectifs du
+jour » se pose sur le launcher mais reste un rectangle vide. Aucun crash,
+rien dans `logcat -b crash`. Dans le logcat normal :
+
+```
+ReactNativeJS: Widget Error: Invalid Hook Call detected in DailyGoalsWidget.
+  2. The React Compiler (React 19) is transforming this component, but this
+     library requires raw functions.
+```
+
+**Cause racine.** `experiments.reactCompiler: true` (app.json) réécrit chaque
+composant avec un cache mémoïsé fondé sur des hooks. `react-native-android-widget`
+ne rend pas ces composants dans React : il les **appelle comme des fonctions
+brutes** pour construire l'arbre natif (`buildWidgetTree`). Le premier hook
+injecté lève. Même famille que le dialogue cassé en release par le compilateur
+(voir « React Compiler et état de module » plus haut) : le compilateur change
+le contrat d'exécution d'une fonction qui n'est pas une vraie fonction
+composant React.
+
+**Correctif.** `"use no memo";` en **première ligne** de
+`src/widgets/DailyGoalsWidget.tsx` (avant les imports), qui exclut tout le
+fichier du compilateur. Test de régression :
+`src/widgets/__tests__/DailyGoalsWidget.directive.test.ts`.
+
+**Deuxième cause, même mécanisme** (vue juste après) : un fragment `<>…</>`
+dans l'anneau. Le constructeur fait `jsxTree.type(props)` tant que le type
+n'est pas une primitive widget ; `Symbol(react.fragment)` n'est pas une
+fonction → `TypeError`, widget vide, sans crash. Remplacé par un `FlexWidget`.
+
+**À retenir** : tout fichier dont les composants sont consommés par une
+bibliothèque **hors React** (widgets, rendu vers image, arbre natif) porte
+`"use no memo"` et n'utilise **ni fragment ni hook**. Le mock Jest par défaut
+(composants qui rendent `null`) ne voit rien de tout cela : le test
+`src/widgets/__tests__/DailyGoalsWidget.tree.test.tsx` construit l'arbre avec
+le **vrai** `buildWidgetTree` de la bibliothèque (JS pur), ce qui attrape le
+fragment ; le compilateur, lui, ne tourne pas sous Jest, d'où le test de
+directive.

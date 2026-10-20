@@ -513,3 +513,21 @@ semaine non convertie, essai lu sur le plan de base, bouton toujours
 mensuel. L'affichage réel ne se voit qu'avec l'offre `essai-7j` **active** et
 un compte Google jamais abonné à `lst_premium`, sur une version installée
 depuis le Play Store.
+
+## Objectifs du jour et widget Android (1.39)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/dailyGoals.test.ts` | ratio borné à 1, `reached`, donnée absente → `unavailable` (jamais 0), zéro pas = progression à 0, arrondi, négatif refusé, objectif à zéro sans division ; `clampGoal` bornes et valeurs invalides |
+| `store/__tests__/dailyGoalsStore.test.ts` | setters bornés ; `merge` restaure les deux champs ; stockage absent, corrompu ou hors bornes → défaut |
+| `lib/__tests__/dailyGoalsWidgetSnapshot.test.ts` | aller-retour AsyncStorage le même jour ; **le lendemain, pas et dépense redeviennent inconnus, pas les séances** ; JSON corrompu ou incomplet refusé |
+| `lib/__tests__/dailyGoalsWidget.test.tsx` | Android : instantané écrit puis `requestWidgetUpdate` ; iOS : rien ; échec natif avalé ; gestionnaire : état vide sans instantané, anneaux tels quels, pas rafraîchis depuis Health Connect sans toucher aux autres anneaux, clics et autres widgets ignorés ; `ringSvg` piste seule à 0, arc borné |
+| `widgets/__tests__/DailyGoalsWidget.directive.test.ts` | **régression** : `"use no memo"` reste en première ligne du fichier widget (sans elle, widget vide sur le launcher — voir `known_bugs.md`) |
+| `widgets/__tests__/DailyGoalsWidget.tree.test.tsx` | **régression** : arbre construit par le vrai `buildWidgetTree` de la bibliothèque (3 anneaux, textes, tirets sans donnée, état vide) — rouge avec un fragment `<>` dans le widget |
+| `app/(tabs)/__tests__/index.test.tsx` (+5) | sans Health Connect ni profil : « Connecter » / « Profil », séances 0 / 3 ; pas 6 240 face à 8 000 et 2 séances de la semaine (dimanche exclu) ; **la dépense « habituelle » du profil ne compte pas** ; anneaux et « Régler » → bons écrans ; même instantané publié vers le widget |
+
+Sabotages vérifiés le 2026-10-20, chacun rougit : expiration retirée (1),
+dépense habituelle comptée (1), ratio non borné (1), pas Health Connect
+ignorés dans le gestionnaire (1), fragment `<>` réintroduit dans l'anneau (2). Le rendu du widget (image RemoteViews,
+polices copiées par le plugin) ne se voit que sur appareil : voir la
+vérification à l'écran ci-dessous.

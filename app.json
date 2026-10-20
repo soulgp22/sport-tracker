@@ -2,7 +2,7 @@
   "expo": {
     "name": "Life Sport Tracker",
     "slug": "sport-tracker",
-    "version": "1.38.0",
+    "version": "1.39.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sport-tracker",
@@ -22,7 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "versionCode": 55,
+      "versionCode": 56,
       "permissions": [
         "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
         "android.permission.health.READ_TOTAL_CALORIES_BURNED",
@@ -88,6 +88,30 @@
         {
           "photosPermission": "Autorise l'accès à ta galerie pour analyser la photo de ton repas.",
           "cameraPermission": "Autorise l'accès à l'appareil photo pour photographier ton repas."
+        }
+      ],
+      [
+        "react-native-android-widget",
+        {
+          "fonts": [
+            "./assets/fonts/OstrichSans-Heavy.otf",
+            "./node_modules/@expo-google-fonts/archivo/400Regular/Archivo_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/archivo/700Bold/Archivo_700Bold.ttf"
+          ],
+          "widgets": [
+            {
+              "name": "DailyGoals",
+              "label": "Objectifs du jour",
+              "description": "Pas, séances de la semaine et dépense active du jour.",
+              "minWidth": "320dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal",
+              "updatePeriodMillis": 1800000,
+              "previewImage": "./assets/widget-preview/daily-goals.png"
+            }
+          ]
         }
       ]
     ],

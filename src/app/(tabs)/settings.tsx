@@ -36,6 +36,8 @@ import {
   getImportErrorMessage,
 } from '../../lib/importLimits';
 import { useBodyWeightStore } from '../../store/bodyWeightStore';
+import { useDailyGoalsStore } from '../../store/dailyGoalsStore';
+import { ACTIVE_KCAL_GOAL_LIMITS, STEPS_GOAL_LIMITS } from '../../lib/dailyGoals';
 import { useExerciseCatalogStore } from '../../store/exerciseCatalogStore';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
@@ -188,6 +190,10 @@ export default function SettingsScreen() {
   const monthlySessionGoal = usePerformanceStore((s) => s.monthlySessionGoal);
   const setWeeklySessionGoal = usePerformanceStore((s) => s.setWeeklySessionGoal);
   const setMonthlySessionGoal = usePerformanceStore((s) => s.setMonthlySessionGoal);
+  const stepsGoal = useDailyGoalsStore((s) => s.stepsGoal);
+  const activeKcalGoal = useDailyGoalsStore((s) => s.activeKcalGoal);
+  const setStepsGoal = useDailyGoalsStore((s) => s.setStepsGoal);
+  const setActiveKcalGoal = useDailyGoalsStore((s) => s.setActiveKcalGoal);
   const notificationsEnabled = usePerformanceStore((s) => s.notificationsEnabled);
   const setNotificationsEnabled = usePerformanceStore((s) => s.setNotificationsEnabled);
   const aiTrainingOptIn = useAiTrainingOptInStore((s) => s.aiTrainingOptIn);
@@ -781,6 +787,56 @@ export default function SettingsScreen() {
               <TouchableOpacity
                 style={styles.stepButton}
                 onPress={() => setMonthlySessionGoal(monthlySessionGoal + 1)}
+                accessibilityLabel={t('performance.increaseGoal')}>
+                <Ionicons name="add" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Objectifs du jour (accueil + widget) : pas et depense active.
+              L'objectif hebdo de seances au-dessus est le troisieme anneau. */}
+          <View style={styles.goalRow} testID="settings-steps-goal">
+            <View style={styles.goalCopy}>
+              <Text style={styles.fieldLabel}>{t('goals.stepsGoal')}</Text>
+              <Text style={styles.goalHint}>{t('goals.stepsUnit')}</Text>
+            </View>
+            <View style={styles.stepper}>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setStepsGoal(stepsGoal - STEPS_GOAL_LIMITS.step)}
+                accessibilityLabel={t('performance.decreaseGoal')}>
+                <Ionicons name="remove" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+              <Text style={styles.stepValue} testID="settings-steps-goal-value">
+                {stepsGoal}
+              </Text>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setStepsGoal(stepsGoal + STEPS_GOAL_LIMITS.step)}
+                accessibilityLabel={t('performance.increaseGoal')}>
+                <Ionicons name="add" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.goalRow} testID="settings-active-kcal-goal">
+            <View style={styles.goalCopy}>
+              <Text style={styles.fieldLabel}>{t('goals.activeKcalGoal')}</Text>
+              <Text style={styles.goalHint}>{t('goals.activeKcalUnit')}</Text>
+            </View>
+            <View style={styles.stepper}>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setActiveKcalGoal(activeKcalGoal - ACTIVE_KCAL_GOAL_LIMITS.step)}
+                accessibilityLabel={t('performance.decreaseGoal')}>
+                <Ionicons name="remove" size={18} color={c.textPrimary} />
+              </TouchableOpacity>
+              <Text style={styles.stepValue} testID="settings-active-kcal-goal-value">
+                {activeKcalGoal}
+              </Text>
+              <TouchableOpacity
+                style={styles.stepButton}
+                onPress={() => setActiveKcalGoal(activeKcalGoal + ACTIVE_KCAL_GOAL_LIMITS.step)}
                 accessibilityLabel={t('performance.increaseGoal')}>
                 <Ionicons name="add" size={18} color={c.textPrimary} />
               </TouchableOpacity>

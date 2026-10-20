@@ -1,6 +1,6 @@
 {
   "name": "sport-tracker",
-  "main": "expo-router/entry",
+  "main": "index.js",
   "version": "1.0.0",
   "dependencies": {
     "@expo-google-fonts/archivo": "^0.4.2",
@@ -36,6 +36,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
+    "react-native-android-widget": "0.23.0",
     "react-native-gesture-handler": "~2.31.1",
     "react-native-gifted-charts": "^1.4.77",
     "react-native-health-connect": "^3.5.3",

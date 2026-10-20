@@ -17,6 +17,8 @@
 | `src/lib/openFoodFacts.ts` | recherche produit par code-barres | non |
 | `src/lib/foodValidation.ts` | validation d'un aliment importé | non |
 | `src/lib/restTimerNotifications.ts` | notifications du minuteur de repos | non |
+| `src/lib/dailyGoals.ts` | progression vers les objectifs du jour (pas, séances, dépense), partagée accueil + widget | non |
+| `src/lib/widgets/dailyGoalsWidgetSnapshot.ts` | instantané app → widget Android (AsyncStorage, expiration au jour local) | non |
 
 Tous sont **testables sans interface** : c'est la cible pour toute nouvelle
 capacité (règle 4 d'`AGENTS.md`).
@@ -114,6 +116,7 @@ modifier durablement `android/`, qui est gitignoré et régénéré.
 |---|---|
 | `withHealthConnect.js` | délégué de permissions + point d'entrée Android 14+ |
 | `withCleanDomBundle.js` | vide `www.bundle` avant chaque bundling |
+| `react-native-android-widget` (tiers, `app.json`) | récepteur du widget `DailyGoals`, polices copiées dans `assets/fonts` natifs |
 
 **Modèle à suivre** : commentaire d'en-tête expliquant le *pourquoi*, marqueur
 unique testé avant injection (idempotence), erreur explicite si l'ancre est
@@ -373,6 +376,36 @@ redemander trop tôt. À appeler **après** un moment positif, une fois l'écran
 suivant affiché (`REVIEW_PROMPT_DELAY_MS`), jamais depuis un bouton « Noter » :
 Google ne dit pas si la fenêtre s'est affichée. Réutilisable pour tout autre
 moment positif (objectif atteint, badge) : même appel, autre déclencheur.
+
+---
+
+## Objectifs du jour et widget Android (1.39)
+
+**Règle pure** `lib/dailyGoals` (`buildDailyGoalsSnapshot`) : trois anneaux
+(pas/jour, séances/semaine, kcal actives/jour) → `{ value, goal, ratio ≤ 1,
+reached }` ou `unavailable` quand la donnée manque. Jamais de 0 à la place
+d'une inconnue. Cibles pas et dépense dans `store/dailyGoalsStore` (bornées par
+`STEPS_GOAL_LIMITS` / `ACTIVE_KCAL_GOAL_LIMITS`) ; l'objectif hebdo de séances
+reste dans `performanceStore`. La dépense ne compte vers l'objectif qu'en mode
+`measured` ou `estimated` (`resolveDailyEnergyExpenditure`), jamais en repli
+`habitual` : une constante du profil n'est pas une progression.
+
+**Pont app → widget** `lib/widgets/dailyGoalsWidget` : l'accueil écrit
+l'instantané (valeurs, cibles, libellés déjà traduits, jour local) puis
+`requestWidgetUpdate`. Le gestionnaire headless enregistré dans `index.js`
+relit l'instantané à chaque rafraîchissement (30 min) et, si Health Connect
+répond, remet les pas à jour. Un instantané d'un autre jour perd ses pas et sa
+dépense (`expireDailyGoalsWidgetSnapshot`). Modèle réutilisable pour tout
+futur widget : **calcul pur partagé + instantané sérialisé + gestionnaire qui
+ne dépend d'aucun store** (les stores zustand ne sont pas hydratés en headless).
+
+**Bibliothèque retenue** `react-native-android-widget` 0.23.0 (MIT, config
+plugin Expo, peer `expo ≥ 54`) : `expo-widgets` officiel est iOS seulement ;
+un `AppWidgetProvider` Kotlin maison aurait exigé un plugin natif complet pour
+un rendu que la bibliothèque fait déjà (RemoteViews depuis un arbre déclaratif,
+SVG via AndroidSVG). Limite connue : le widget est une image, ses polices
+sont celles copiées par le plugin (`fonts` dans `app.json`), et son texte ne
+suit pas la langue tant que l'app n'a pas écrit un instantané.
 
 ---
 

@@ -1,17 +1,21 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DailyGoalRings } from '../../components/home/DailyGoalRings';
 import { WeightTrend } from '../../components/progress/WeightTrend';
 import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
+import { buildDailyGoalsSnapshot } from '../../lib/dailyGoals';
 import { estimateActiveCaloriesFromSteps, resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
-import { getBodyweightForDate } from '../../lib/performanceEngine';
+import { calculateConsistencyMetrics, getBodyweightForDate } from '../../lib/performanceEngine';
+import { publishDailyGoalsWidget } from '../../lib/widgets/dailyGoalsWidget';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 import { useBodyWeightStore } from '../../store/bodyWeightStore';
+import { useDailyGoalsStore } from '../../store/dailyGoalsStore';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../store/performanceStore';
@@ -79,6 +83,10 @@ export default function HomeScreen() {
   const age = usePerformanceStore((s) => s.age);
   const heightCm = usePerformanceStore((s) => s.heightCm);
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
+  const weeklySessionGoal = usePerformanceStore((s) => s.weeklySessionGoal);
+  const monthlySessionGoal = usePerformanceStore((s) => s.monthlySessionGoal);
+  const stepsGoal = useDailyGoalsStore((s) => s.stepsGoal);
+  const activeKcalGoal = useDailyGoalsStore((s) => s.activeKcalGoal);
   const weightEntries = useBodyWeightStore((s) => s.entries);
   const goals = useNutritionGoalsStore((s) => s.goals);
   const entriesState = useFoodDiaryStore((s) => s.entries);
@@ -116,6 +124,38 @@ export default function HomeScreen() {
   const burned = expenditure.activityKcal;
   const progress = goal > 0 ? Math.min(1, consumed / goal) : 0;
   const remaining = burned !== null ? goal - consumed + burned : null;
+
+  // Objectifs du jour. La depense ne compte vers l'objectif que si elle vient
+  // de donnees du jour (mesure Health Connect, ou pas + seances) : le repli
+  // « habituel » du profil est une constante, pas une progression.
+  const expenditureMode = expenditure.breakdown.mode;
+  const goalActiveKcal =
+    expenditureMode === 'measured' || expenditureMode === 'estimated' ? burned : null;
+  const sessionsThisWeek = useMemo(
+    () => calculateConsistencyMetrics(sessions, weeklySessionGoal, monthlySessionGoal).thisWeek,
+    [sessions, weeklySessionGoal, monthlySessionGoal]
+  );
+  const dailyGoals = useMemo(
+    () =>
+      buildDailyGoalsSnapshot(
+        { steps: healthSteps, activeKcal: goalActiveKcal, sessionsThisWeek },
+        { stepsGoal, activeKcalGoal, weeklySessionGoal }
+      ),
+    [healthSteps, goalActiveKcal, sessionsThisWeek, stepsGoal, activeKcalGoal, weeklySessionGoal]
+  );
+  const goalLabels = useMemo(
+    () => ({
+      title: t('goals.title'),
+      steps: t('goals.steps'),
+      sessions: t('goals.sessionsWeek'),
+      activeKcal: t('goals.activeKcal'),
+    }),
+    [t]
+  );
+  // Le widget Android affiche le meme instantane que l'accueil.
+  useEffect(() => {
+    void publishDailyGoalsWidget({ snapshot: dailyGoals, labels: goalLabels, locale });
+  }, [dailyGoals, goalLabels, locale]);
 
   const now = new Date();
   const dateLabel = formatHeaderDate(now, locale);
@@ -177,6 +217,17 @@ export default function HomeScreen() {
             </View>
           </View>
         </View>
+
+        {/* Objectifs du jour : trois anneaux */}
+        <DailyGoalRings
+          snapshot={dailyGoals}
+          activeKcalUnavailableReason={expenditure.basalKcal === null ? 'profile' : 'data'}
+          formatInteger={(value) => formatInteger(value, locale)}
+          onPressSteps={() => router.push('/(tabs)/progress?tab=steps' as never)}
+          onPressSessions={() => router.push('/(tabs)/progress?tab=sessions' as never)}
+          onPressActiveKcal={() => router.push('/(tabs)/progress?tab=energy' as never)}
+          onPressAdjust={() => router.push('/(tabs)/settings' as never)}
+        />
 
         {/* Poids actuel */}
         <View style={styles.weightBand}>
