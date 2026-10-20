@@ -386,7 +386,9 @@ moment positif (objectif atteint, badge) : même appel, autre déclencheur.
 reached }` ou `unavailable` quand la donnée manque. Jamais de 0 à la place
 d'une inconnue. Cibles pas et dépense dans `store/dailyGoalsStore` (bornées par
 `STEPS_GOAL_LIMITS` / `ACTIVE_KCAL_GOAL_LIMITS`) ; l'objectif hebdo de séances
-reste dans `performanceStore`. La dépense ne compte vers l'objectif qu'en mode
+reste dans `performanceStore`. Les deux cibles font partie de la sauvegarde de
+profil (`lib/profileBackup`, champ `dailyGoals`, bornées à l'import ; absentes
+d'une sauvegarde ancienne → valeurs courantes). La dépense ne compte vers l'objectif qu'en mode
 `measured` ou `estimated` (`resolveDailyEnergyExpenditure`), jamais en repli
 `habitual` : une constante du profil n'est pas une progression.
 

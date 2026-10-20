@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useBodyWeightStore } from '../../store/bodyWeightStore';
+import { useDailyGoalsStore } from '../../store/dailyGoalsStore';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useFoodStore } from '../../store/foodStore';
 import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
@@ -29,6 +30,7 @@ beforeEach(async () => {
     },
   });
   useBodyWeightStore.setState({ entries: [] });
+  useDailyGoalsStore.setState({ stepsGoal: 8000, activeKcalGoal: 400 });
   usePerformanceStore.setState({
     sex: 'unspecified',
     age: undefined,
@@ -279,5 +281,50 @@ describe('profileBackup', () => {
     expect(backup3.data.performanceProfile.firstName!.length).toBeLessThanOrEqual(60);
     expect(backup3.data.performanceProfile.lastName).toHaveLength(60);
     expect(backup3.data.performanceProfile.lastName!.length).toBeLessThanOrEqual(60);
+  });
+
+  describe('objectifs du jour (1.39)', () => {
+    it('aller-retour : les objectifs pas et dépense reviennent tels quels', () => {
+      useDailyGoalsStore.setState({ stepsGoal: 10500, activeKcalGoal: 650 });
+      const text = buildProfileBackup();
+      expect(JSON.parse(text).data.dailyGoals).toEqual({ stepsGoal: 10500, activeKcalGoal: 650 });
+
+      useDailyGoalsStore.setState({ stepsGoal: 8000, activeKcalGoal: 400 });
+      const parsed = parseProfileBackup(text);
+      expect(typeof parsed).not.toBe('string');
+      if (typeof parsed === 'string') return;
+      restoreProfileBackup(parsed);
+
+      expect(useDailyGoalsStore.getState().stepsGoal).toBe(10500);
+      expect(useDailyGoalsStore.getState().activeKcalGoal).toBe(650);
+    });
+
+    it('une sauvegarde antérieure à 1.39 (sans dailyGoals) garde les objectifs courants', () => {
+      useDailyGoalsStore.setState({ stepsGoal: 9000, activeKcalGoal: 450 });
+      const backup = JSON.parse(buildProfileBackup());
+      delete backup.data.dailyGoals;
+
+      const parsed = parseProfileBackup(JSON.stringify(backup));
+      expect(typeof parsed).not.toBe('string');
+      if (typeof parsed === 'string') return;
+      restoreProfileBackup(parsed);
+
+      expect(useDailyGoalsStore.getState().stepsGoal).toBe(9000);
+      expect(useDailyGoalsStore.getState().activeKcalGoal).toBe(450);
+    });
+
+    it('des objectifs hostiles ou hors bornes ne passent jamais tels quels', () => {
+      const backup = JSON.parse(buildProfileBackup());
+      backup.data.dailyGoals = { stepsGoal: 'dix mille', activeKcalGoal: 999999 };
+
+      const parsed = parseProfileBackup(JSON.stringify(backup));
+      expect(typeof parsed).not.toBe('string');
+      if (typeof parsed === 'string') return;
+      restoreProfileBackup(parsed);
+
+      // Chaîne -> valeur courante ; hors bornes -> ramené à la borne.
+      expect(useDailyGoalsStore.getState().stepsGoal).toBe(8000);
+      expect(useDailyGoalsStore.getState().activeKcalGoal).toBe(3000);
+    });
   });
 });

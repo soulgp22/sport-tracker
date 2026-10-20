@@ -524,10 +524,12 @@ depuis le Play Store.
 | `lib/__tests__/dailyGoalsWidget.test.tsx` | Android : instantané écrit puis `requestWidgetUpdate` ; iOS : rien ; échec natif avalé ; gestionnaire : état vide sans instantané, anneaux tels quels, pas rafraîchis depuis Health Connect sans toucher aux autres anneaux, clics et autres widgets ignorés ; `ringSvg` piste seule à 0, arc borné |
 | `widgets/__tests__/DailyGoalsWidget.directive.test.ts` | **régression** : `"use no memo"` reste en première ligne du fichier widget (sans elle, widget vide sur le launcher — voir `known_bugs.md`) |
 | `widgets/__tests__/DailyGoalsWidget.tree.test.tsx` | **régression** : arbre construit par le vrai `buildWidgetTree` de la bibliothèque (3 anneaux, textes, tirets sans donnée, état vide) — rouge avec un fragment `<>` dans le widget |
+| `lib/__tests__/profileBackup.test.ts` (+3) | objectifs pas/dépense : aller-retour sauvegarde → restauration ; sauvegarde antérieure à 1.39 sans `dailyGoals` → valeurs courantes conservées ; chaîne ou hors bornes → valeur courante ou borne, jamais la valeur reçue |
 | `app/(tabs)/__tests__/index.test.tsx` (+5) | sans Health Connect ni profil : « Connecter » / « Profil », séances 0 / 3 ; pas 6 240 face à 8 000 et 2 séances de la semaine (dimanche exclu) ; **la dépense « habituelle » du profil ne compte pas** ; anneaux et « Régler » → bons écrans ; même instantané publié vers le widget |
 
 Sabotages vérifiés le 2026-10-20, chacun rougit : expiration retirée (1),
 dépense habituelle comptée (1), ratio non borné (1), pas Health Connect
-ignorés dans le gestionnaire (1), fragment `<>` réintroduit dans l'anneau (2). Le rendu du widget (image RemoteViews,
+ignorés dans le gestionnaire (1), fragment `<>` réintroduit dans l'anneau (2),
+restauration des objectifs retirée (1), borne retirée à l'import (1). Le rendu du widget (image RemoteViews,
 polices copiées par le plugin) ne se voit que sur appareil : voir la
 vérification à l'écran ci-dessous.
