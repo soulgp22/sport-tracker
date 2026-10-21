@@ -104,9 +104,9 @@
               "label": "Objectifs du jour",
               "description": "Pas, séances de la semaine et dépense active du jour.",
               "minWidth": "320dp",
-              "minHeight": "110dp",
+              "minHeight": "60dp",
               "targetCellWidth": 4,
-              "targetCellHeight": 2,
+              "targetCellHeight": 1,
               "resizeMode": "horizontal",
               "updatePeriodMillis": 1800000,
               "previewImage": "./assets/widget-preview/daily-goals.png"

@@ -401,6 +401,9 @@ dépense (`expireDailyGoalsWidgetSnapshot`). Modèle réutilisable pour tout
 futur widget : **calcul pur partagé + instantané sérialisé + gestionnaire qui
 ne dépend d'aucun store** (les stores zustand ne sont pas hydratés en headless).
 
+**Format du widget** : 4×1, fond transparent, sans titre ni nom d'app ; texte
+blanc avec ombre sombre pour rester lisible sur tout fond d'écran.
+
 **Bibliothèque retenue** `react-native-android-widget` 0.23.0 (MIT, config
 plugin Expo, peer `expo ≥ 54`) : `expo-widgets` officiel est iOS seulement ;
 un `AppWidgetProvider` Kotlin maison aurait exigé un plugin natif complet pour

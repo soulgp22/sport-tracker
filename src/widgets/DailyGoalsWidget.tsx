@@ -12,13 +12,20 @@
  * Widget Android « Objectifs du jour » : trois anneaux (pas, seances de la
  * semaine, depense active), rendus par react-native-android-widget.
  *
+ * Format 4×1, fond transparent, sans titre ni nom d'app (demande d'Islam le
+ * 2026-10-21) : seuls les anneaux et leurs libelles se posent sur le fond
+ * d'ecran. Le texte est blanc avec une ombre sombre, lisible sur un fond clair
+ * comme sur un fond sombre, a la maniere des widgets d'horloge Android.
+ *
  * Ce composant est un arbre de primitives widget (FlexWidget, SvgWidget,
  * TextWidget) : il ne connait ni les hooks, ni les stores, ni le theme de
  * l'app. Tout ce qu'il affiche vient de l'instantane ecrit par l'accueil
  * (lib/widgets/dailyGoalsWidgetSnapshot), deja traduit et deja calcule.
+ * Ni fragment `<>` ni hook : la bibliotheque appelle chaque type d'element
+ * comme une fonction (voir known_bugs.md).
  *
- * Les couleurs reprennent la palette `lst` (theme/palettes.ts) en dur : le
- * widget tourne hors de l'arbre React et ne peut pas lire `useColors`.
+ * Les couleurs d'anneaux reprennent la palette `lst` (theme/palettes.ts) en
+ * dur : le widget tourne hors de l'arbre React et ne peut pas lire `useColors`.
  */
 import { FlexWidget, OverlapWidget, SvgWidget, TextWidget } from 'react-native-android-widget';
 
@@ -26,13 +33,15 @@ import type { DailyGoalsSnapshot, GoalRingState } from '../lib/dailyGoals';
 import type { DailyGoalsWidgetLabels } from '../lib/widgets/dailyGoalsWidgetSnapshot';
 
 const COLORS = {
-  surface: '#ffffff',
-  surfaceAlt: '#f2f4f7',
-  textPrimary: '#16233b',
-  textMuted: '#8a94a3',
-  primary: '#16233b',
-  secondary: '#1f5fe0',
-  tertiary: '#047857',
+  /** Texte sur fond d'ecran inconnu : blanc + ombre sombre. */
+  text: '#ffffff',
+  textSoft: '#e6e9ef',
+  shadow: '#0e1727',
+  /** Piste de l'anneau : blanc translucide, visible sur clair comme sur sombre. */
+  track: 'rgba(255, 255, 255, 0.38)',
+  primary: '#4f7bff',
+  secondary: '#3b82f6',
+  tertiary: '#10b981',
 } as const;
 
 /** Polices copiees dans les assets natifs par le config plugin (app.json). */
@@ -40,10 +49,16 @@ const FONT_DISPLAY = 'OstrichSans-Heavy';
 const FONT_SANS = 'Archivo_400Regular';
 const FONT_SANS_BOLD = 'Archivo_700Bold';
 
-const RING_SIZE = 92;
-const RING_STROKE = 7;
+const RING_SIZE = 58;
+const RING_STROKE = 6;
 const RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+const TEXT_SHADOW = {
+  textShadowColor: COLORS.shadow,
+  textShadowRadius: 3,
+  textShadowOffset: { width: 0, height: 1 },
+} as const;
 
 function formatInteger(value: number, locale: string): string {
   try {
@@ -53,7 +68,7 @@ function formatInteger(value: number, locale: string): string {
   }
 }
 
-/** Anneau SVG : piste grise + arc de progression, meme geometrie que l'accueil. */
+/** Anneau SVG : piste translucide + arc de progression, meme geometrie que l'accueil. */
 export function ringSvg(ratio: number, color: string): string {
   const bounded = Math.max(0, Math.min(1, ratio));
   const offset = RING_CIRCUMFERENCE * (1 - bounded);
@@ -64,7 +79,7 @@ export function ringSvg(ratio: number, color: string): string {
       : '';
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" width="${RING_SIZE}" height="${RING_SIZE}" viewBox="0 0 ${RING_SIZE} ${RING_SIZE}">` +
-    `<circle cx="${center}" cy="${center}" r="${RING_RADIUS}" fill="none" stroke="${COLORS.surfaceAlt}" stroke-width="${RING_STROKE}"/>` +
+    `<circle cx="${center}" cy="${center}" r="${RING_RADIUS}" fill="none" stroke="${COLORS.track}" stroke-width="${RING_STROKE}"/>` +
     arc +
     '</svg>'
   );
@@ -94,28 +109,22 @@ function Ring({ state, label, color, locale }: RingProps) {
             justifyContent: 'center',
           }}>
           {state.kind === 'progress' ? (
-            // Pas de fragment `<>` : la bibliotheque appelle chaque type
-            // d'element comme une fonction, Symbol(react.fragment) n'en est pas une.
             <FlexWidget style={{ flexDirection: 'column', alignItems: 'center' }}>
               <TextWidget
                 text={formatInteger(state.value, locale)}
                 maxLines={1}
-                style={{
-                  fontFamily: FONT_DISPLAY,
-                  fontSize: 20,
-                  color: reached ? COLORS.tertiary : COLORS.textPrimary,
-                }}
+                style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: COLORS.text, ...TEXT_SHADOW }}
               />
               <TextWidget
                 text={`/ ${formatInteger(state.goal, locale)}`}
                 maxLines={1}
-                style={{ fontFamily: FONT_SANS, fontSize: 9, color: COLORS.textMuted }}
+                style={{ fontFamily: FONT_SANS, fontSize: 7, color: COLORS.textSoft, ...TEXT_SHADOW }}
               />
             </FlexWidget>
           ) : (
             <TextWidget
               text="—"
-              style={{ fontFamily: FONT_SANS_BOLD, fontSize: 18, color: COLORS.textMuted }}
+              style={{ fontFamily: FONT_SANS_BOLD, fontSize: 14, color: COLORS.textSoft, ...TEXT_SHADOW }}
             />
           )}
         </FlexWidget>
@@ -125,10 +134,11 @@ function Ring({ state, label, color, locale }: RingProps) {
         maxLines={1}
         style={{
           fontFamily: FONT_SANS,
-          fontSize: 9,
+          fontSize: 8,
           letterSpacing: 0.08,
-          color: COLORS.textMuted,
-          marginTop: 6,
+          color: COLORS.textSoft,
+          marginTop: 3,
+          ...TEXT_SHADOW,
         }}
       />
     </FlexWidget>
@@ -148,38 +158,14 @@ export function DailyGoalsWidget({ snapshot, labels, locale }: DailyGoalsWidgetP
       style={{
         width: 'match_parent',
         height: 'match_parent',
-        flexDirection: 'column',
-        backgroundColor: COLORS.surface,
-        borderRadius: 20,
-        paddingHorizontal: 14,
-        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        paddingHorizontal: 8,
       }}>
-      <FlexWidget
-        style={{ width: 'match_parent', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TextWidget
-          text={labels.title.toUpperCase()}
-          maxLines={1}
-          style={{ fontFamily: FONT_SANS, fontSize: 9, letterSpacing: 0.1, color: COLORS.textMuted }}
-        />
-        <TextWidget
-          text="LIFE SPORT TRACKER"
-          maxLines={1}
-          style={{ fontFamily: FONT_SANS_BOLD, fontSize: 9, letterSpacing: 0.1, color: COLORS.secondary }}
-        />
-      </FlexWidget>
-      <FlexWidget
-        style={{
-          width: 'match_parent',
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: 4,
-        }}>
-        <Ring state={snapshot.steps} label={labels.steps} color={COLORS.secondary} locale={locale} />
-        <Ring state={snapshot.sessions} label={labels.sessions} color={COLORS.primary} locale={locale} />
-        <Ring state={snapshot.activeKcal} label={labels.activeKcal} color={COLORS.tertiary} locale={locale} />
-      </FlexWidget>
+      <Ring state={snapshot.steps} label={labels.steps} color={COLORS.secondary} locale={locale} />
+      <Ring state={snapshot.sessions} label={labels.sessions} color={COLORS.primary} locale={locale} />
+      <Ring state={snapshot.activeKcal} label={labels.activeKcal} color={COLORS.tertiary} locale={locale} />
     </FlexWidget>
   );
 }
@@ -194,13 +180,10 @@ export function DailyGoalsWidgetEmpty() {
         height: 'match_parent',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: COLORS.surface,
-        borderRadius: 20,
-        padding: 14,
       }}>
       <TextWidget
         text="LIFE SPORT TRACKER"
-        style={{ fontFamily: FONT_SANS_BOLD, fontSize: 11, letterSpacing: 0.1, color: COLORS.secondary }}
+        style={{ fontFamily: FONT_SANS_BOLD, fontSize: 11, letterSpacing: 0.1, color: COLORS.text, ...TEXT_SHADOW }}
       />
     </FlexWidget>
   );

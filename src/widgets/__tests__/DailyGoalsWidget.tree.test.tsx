@@ -58,7 +58,8 @@ describe('DailyGoalsWidget — arbre natif', () => {
     expect(all).toContain('/ 3');
     expect(all).toContain('2');
     expect(all).toContain('PAS');
-    expect(all).toContain('OBJECTIFS DU JOUR');
+    // Ni titre ni nom d'app : le widget 4×1 transparent ne porte que les anneaux.
+    expect(all.some((t) => /OBJECTIFS|LIFE SPORT/.test(t))).toBe(false);
     expect(all.some((t) => /^6.240$/.test(t))).toBe(true);
   });
 
