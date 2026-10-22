@@ -1339,3 +1339,26 @@ bibliothèque **hors React** (widgets, rendu vers image, arbre natif) porte
 le **vrai** `buildWidgetTree` de la bibliothèque (JS pur), ce qui attrape le
 fragment ; le compilateur, lui, ne tourne pas sous Jest, d'où le test de
 directive.
+
+## Widget illisible sur Samsung : tailles fixes en dp dans une cellule deux fois plus haute
+
+**Symptôme** (2026-10-22, 1.39.1 en test interne, capture d'Islam) : le widget
+4×1 occupait presque deux rangs de la grille One UI, avec trois anneaux
+minuscules au centre et des chiffres illisibles. Sur l'émulateur Pixel 8, le
+même widget paraissait correct.
+
+**Cause racine.** Les anneaux étaient dessinés à **58 dp fixes** et la cellule
+d'un launcher n'a pas de hauteur standard : One UI rend un « 4×1 » bien plus
+haut que le Pixel Launcher. Et un chiffre placé *à l'intérieur* d'un anneau n'a
+jamais que ~15 dp, quelle que soit la cellule.
+
+**Correctif.** Tout se calcule depuis `WidgetInfo.width/height` que la
+bibliothèque fournit (`lib/widgets/dailyGoalsLayout`) ; deux dispositions
+(bandeau, carte) choisies par la forme de la cellule ; le chiffre sort de
+l'anneau. Tests : `lib/__tests__/dailyGoalsLayout.test.ts`,
+`widgets/__tests__/DailyGoalsWidget.tree.test.tsx`.
+
+**À retenir** : un widget Android ne se valide pas sur un seul launcher. Avant
+de livrer, le poser sur l'émulateur **et** sur le téléphone d'Islam (Samsung),
+et ne jamais coder une dimension en dp sans la dériver de la cellule.
+

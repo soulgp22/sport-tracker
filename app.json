@@ -102,14 +102,26 @@
             {
               "name": "DailyGoals",
               "label": "Objectifs du jour",
-              "description": "Pas, séances de la semaine et dépense active du jour.",
-              "minWidth": "320dp",
-              "minHeight": "60dp",
+              "description": "Pas, séances de la semaine et dépense active, sur une ligne.",
+              "minWidth": "250dp",
+              "minHeight": "40dp",
               "targetCellWidth": 4,
               "targetCellHeight": 1,
-              "resizeMode": "horizontal",
+              "resizeMode": "horizontal|vertical",
               "updatePeriodMillis": 1800000,
               "previewImage": "./assets/widget-preview/daily-goals.png"
+            },
+            {
+              "name": "DailyGoalsCard",
+              "label": "Objectifs du jour · carte",
+              "description": "Grand anneau des pas, séances et dépense en barres.",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000,
+              "previewImage": "./assets/widget-preview/daily-goals-card.png"
             }
           ]
         }

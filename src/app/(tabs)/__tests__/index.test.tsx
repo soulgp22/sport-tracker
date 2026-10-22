@@ -412,6 +412,7 @@ describe('HomeScreen', () => {
       const stored = JSON.parse((await AsyncStorage.getItem(DAILY_GOALS_WIDGET_SNAPSHOT_KEY)) ?? 'null');
       expect(stored.snapshot.steps).toMatchObject({ kind: 'progress', value: 6240, goal: 8000 });
       expect(stored.labels.title).toBe('Objectifs du jour');
+      expect(stored.labels).toMatchObject({ steps: 'Pas', sessions: 'Séances', activeKcal: 'kcal' });
       expect(requestWidgetUpdate).toHaveBeenCalledWith(expect.objectContaining({ widgetName: 'DailyGoals' }));
       Platform.OS = platform;
     });

@@ -147,8 +147,9 @@ export default function HomeScreen() {
     () => ({
       title: t('goals.title'),
       steps: t('goals.steps'),
-      sessions: t('goals.sessionsWeek'),
-      activeKcal: t('goals.activeKcal'),
+      // Libelles courts : le widget n'a pas la place de « Seances · sem. ».
+      sessions: t('goals.sessionsShort'),
+      activeKcal: t('goals.kcalShort'),
     }),
     [t]
   );

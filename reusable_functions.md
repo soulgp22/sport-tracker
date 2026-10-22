@@ -401,8 +401,14 @@ dépense (`expireDailyGoalsWidgetSnapshot`). Modèle réutilisable pour tout
 futur widget : **calcul pur partagé + instantané sérialisé + gestionnaire qui
 ne dépend d'aucun store** (les stores zustand ne sont pas hydratés en headless).
 
-**Format du widget** : 4×1, fond transparent, sans titre ni nom d'app ; texte
-blanc avec ombre sombre pour rester lisible sur tout fond d'écran.
+**Format du widget** : deux entrées dans le sélecteur, un seul rendu
+(`widgets/DailyGoalsWidget`) choisi par la taille RÉELLE de la cellule
+(`lib/widgets/dailyGoalsLayout`, `WidgetInfo.width/height`) : bandeau 4×1
+(mini-anneau + grand chiffre par objectif) ou carte 2×2 (grand anneau des pas,
+deux barres). Fond bleu nuit à 65 %, ni titre ni nom d'app. Un widget
+redimensionné change de disposition tout seul. **Jamais de taille fixe en dp
+dans un widget** : le launcher Samsung rend une cellule deux fois plus haute
+que Pixel (voir `known_bugs.md`).
 
 **Bibliothèque retenue** `react-native-android-widget` 0.23.0 (MIT, config
 plugin Expo, peer `expo ≥ 54`) : `expo-widgets` officiel est iOS seulement ;

@@ -56,6 +56,9 @@ describe('publishDailyGoalsWidget', () => {
     expect(requestWidgetUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ widgetName: DAILY_GOALS_WIDGET_NAME })
     );
+    // Les deux entrees du selecteur (bandeau et carte) sont redessinees.
+    expect(requestWidgetUpdate).toHaveBeenCalledWith(expect.objectContaining({ widgetName: 'DailyGoalsCard' }));
+    expect(requestWidgetUpdate).toHaveBeenCalledTimes(2);
   });
 
   it('hors Android, ne touche a rien', async () => {
@@ -98,6 +101,22 @@ describe('dailyGoalsWidgetTaskHandler', () => {
     expect(rendered.type).toBe(DailyGoalsWidget);
     expect(rendered.props.snapshot).toEqual(SNAPSHOT);
     expect(rendered.props.labels).toEqual(LABELS);
+    // La taille reelle de la cellule est transmise au rendu.
+    expect(rendered.props).toMatchObject({ width: 320, height: 120 });
+  });
+
+  it('la carte (DailyGoalsCard) passe par le meme gestionnaire', async () => {
+    await writeDailyGoalsWidgetSnapshot({ snapshot: SNAPSHOT, labels: LABELS, locale: 'fr-FR' });
+    const props = handlerProps('WIDGET_RESIZED');
+    props.widgetInfo.widgetName = 'DailyGoalsCard';
+    props.widgetInfo.width = 160;
+    props.widgetInfo.height = 160;
+
+    await dailyGoalsWidgetTaskHandler(props);
+
+    const rendered = (props.renderWidget as jest.Mock).mock.calls[0][0];
+    expect(rendered.type).toBe(DailyGoalsWidget);
+    expect(rendered.props).toMatchObject({ width: 160, height: 160 });
   });
 
   it('rafraichit les pas depuis Health Connect quand il repond', async () => {
@@ -130,8 +149,9 @@ describe('dailyGoalsWidgetTaskHandler', () => {
 
 describe('ringSvg', () => {
   it('dessine la piste seule a 0 et un arc borne a 1', () => {
-    expect((ringSvg(0, '#1f5fe0').match(/<circle/g) ?? []).length).toBe(1);
-    expect((ringSvg(0.5, '#1f5fe0').match(/<circle/g) ?? []).length).toBe(2);
-    expect(ringSvg(5, '#1f5fe0')).toContain('stroke-dashoffset="0"');
+    expect((ringSvg(0, '#1f5fe0', 58, 6).match(/<circle/g) ?? []).length).toBe(1);
+    expect((ringSvg(0.5, '#1f5fe0', 58, 6).match(/<circle/g) ?? []).length).toBe(2);
+    expect(ringSvg(5, '#1f5fe0', 58, 6)).toContain('stroke-dashoffset="0"');
+    expect(ringSvg(0.5, '#1f5fe0', 100, 8)).toContain('width="100"');
   });
 });
