@@ -255,3 +255,284 @@ delais.
 **Toujours utiliser `npm test`**, pas `npx jest` directement. Un echec obtenu
 avec la mauvaise commande fait perdre du temps a chercher une regression qui
 n'existe pas.
+## Retour arriere : `src/app/(tabs)/__tests__/backBehavior.test.tsx`
+
+Deux niveaux, parce que la valeur seule ne prouve rien et le comportement seul
+ne prouve pas qu'il est branche :
+
+1. **Cablage** — `TabLayout` est rendu avec `<Tabs>` mocke ; le test verifie que
+   la prop `backBehavior` vaut bien `history`.
+2. **Comportement** — le VRAI `TabRouter` d'expo-router est instancie avec la
+   vraie liste des 11 onglets ; cinq parcours reels sont rejoues puis un
+   `GO_BACK` est applique. Chaque cas assert deux choses : `history` ramene au
+   menu precedent, ET le defaut de la bibliotheque (`undefined`) ramenait bien a
+   `index` — c'est l'oracle qui documente la cause.
+
+Deux gardes completent : l'accueil reste la destination quand il EST le menu
+precedent, et depuis l'accueil initial le retour laisse sortir de l'application
+(pas de piege).
+
+Sabotage verifie le 2026-08-27 : en retirant `backBehavior="history"` de
+`src/app/(tabs)/_layout.tsx`, le test de cablage rougit
+(`Expected: "history" / Received: undefined`) ; apres restauration, 8/8 au vert.
+
+Verifie aussi sur l'emulateur (APK release 1.23.0, `SportTracker_Pixel8`) :
+Profil -> Reglages -> retour = Profil (position de defilement conservee), puis
+retour = Nutrition, puis retour = Accueil. `adb logcat -b crash -d` vide.
+
+## Poids Health Connect : `healthWeightMerge` + `healthConnect` + HomeScreen
+
+Trois niveaux, chacun avec son sabotage verifie le 2026-08-27 :
+
+1. **Regle pure** — `src/lib/__tests__/healthWeightMerge.test.ts` couvre les six
+   cas de `resolveHealthWeightMerge` : ajout, saisie manuelle plus recente
+   preservee, remplacement d'une pesee plus ancienne (id conserve), idempotence,
+   relevé ancien versé à l'historique sans voler la premiere place, et entree
+   heritee sans champ `source` traitee comme une saisie.
+   *Sabotage* : `sameDay.date >= sample.time` inverse en `<` -> 5 tests rouges.
+
+2. **Contrat des permissions** — `src/lib/__tests__/healthConnect.test.ts`
+   verifie que `hasHealthPermissions()` reste **true** quand le poids est
+   refuse. C'est la regression qui compte : le poids dans le groupe requis
+   ferait perdre l'affichage des pas a tous les utilisateurs deja autorises.
+   *Sabotage* : `Weight` deplace dans `REQUIRED_PERMISSIONS` -> 5 tests rouges,
+   dont trois qui n'ont rien a voir avec le poids — preuve que le defaut se
+   propage.
+
+3. **Cablage** — `src/app/(tabs)/__tests__/index.test.tsx` verifie que l'ecran
+   d'accueil verse bien le releve dans `bodyWeightStore` avec
+   `source: 'healthConnect'`, et qu'avec la permission refusee il ne lit meme
+   pas le poids et ne touche pas aux pesees existantes.
+   *Sabotage* : appel a `syncHealthWeight` retire -> 1 test rouge.
+
+**Ce que ces tests NE prouvent PAS** : aucune lecture reelle de Health Connect
+n'a ete faite. L'emulateur `SportTracker_Pixel8` n'a pas l'application Health
+Connect, donc ni la feuille de permission ni un vrai enregistrement de poids
+n'ont ete exerces. Seuls le build, la declaration de la permission dans l'APK
+installe et l'absence de crash au demarrage ont ete verifies sur appareil.
+La chaine complete reste a valider sur un telephone reel avec Health Connect
+et au moins une pesee enregistree.
+
+## Instructions francaises : `src/data/__tests__/instructionsFr.test.ts`
+
+Quatre garanties sur les donnees, pas sur le code :
+
+1. les 873 fiches ont bien des `instructionsFr` ;
+2. aucune occurrence de `banque` / `banques` / `banquette` / `banctte` — les
+   quatre formes, parce que la troisieme est le meme defaut et la quatrieme est
+   ce qu'une correction naive sans `\b` produisait ;
+3. aucune phrase restee en anglais (marqueurs sans ambiguite : « this will be
+   your », « starting position », « kneel in front »…) ;
+4. aucun adjectif feminin apres « banc » (`banc plate`, `banc inclinée`…) : le
+   genre change en corrigeant, les accords doivent suivre.
+
+Sabotage verifie le 2026-08-29 : en remettant « une banquette plate » sur
+`offline-180` et la phrase anglaise sur `offline-419`, deux tests rougissent ;
+apres restauration, 7/7 au vert et 516 tests sur 69 suites.
+
+**Ce que ce test aurait attrape** : un defaut present dans les donnees depuis
+des mois, invisible pour les 509 tests existants — aucun ne lisait le contenu
+des instructions.
+
+
+## Quota photo : règle pure + garde d'écran
+
+Deux niveaux, deux sabotages vérifiés le 2026-09-16 :
+
+1. **La règle** — `src/lib/__tests__/mealPhotoQuota.test.ts` : limite à 2, décompte,
+   blocage au 2e repas, remise à zéro le lendemain, état corrompu (négatif ou
+   aberrant), et date **locale** et non UTC.
+   *Sabotages* : limite portée à 3 → 5 tests rouges ; suppression du test de date
+   dans `resolveQuota` → le test de remise à zéro rougit seul.
+
+2. **Le garde** — `src/app/(tabs)/nutrition/__tests__/photoQuota.test.tsx` : l'écran
+   laisse passer à 1 repas, bloque à 2 en annonçant le compte payant, rouvre
+   l'accès le lendemain, et surtout **ne sollicite pas `canUseMealPhoto()`** quand
+   le quota est atteint — sinon la caméra s'ouvrirait avant le blocage.
+   *Sabotage* : `if (quota.reached)` remplacé par `if (false)` → 1 test rouge.
+
+**Non vérifié à l'écran** : l'écran « limite atteinte » n'a pas été photographié
+sur l'émulateur. Amener le compteur à 2 exigerait deux analyses réelles (serveur
++ caméra), et l'APK release n'est pas débogable, donc le compteur AsyncStorage
+n'est pas amorçable par `adb`. Le test de composant couvre le rendu et le
+contenu de cet écran.
+
+
+## Dépense d'une séance (C01)
+
+`src/lib/__tests__/sessionCalories.test.ts` (10 tests) et
+`src/app/(tabs)/history/__tests__/sessionDetailCalories.test.tsx` (3 tests).
+
+Le test clé n'est pas mathématique mais empirique : **une séance typique d'une
+heure doit rester dans 200–400 kcal**, la plage mesurée par la littérature. Une
+formule élégante qui sort de cette plage est fausse.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- dépense **brute** au lieu de nette → « retire le métabolisme de repos » ;
+- suppression du plafond de durée → « plafonne la durée d'une séance oubliée » ;
+- la charge n'influence plus le MET → 2 tests (lourde > légère, bornes du MET) ;
+- **poids actuel** au lieu du poids à la date de la séance → test de câblage.
+
+Piège rencontré en écrivant les tests : une fixture à **une seule série** sur
+60 min déclenchait le plafond (1 × 4 min), et le test attendait 210 kcal pour en
+recevoir 15. Le code était juste, la fixture ignorait sa propre règle.
+
+
+## Historique dépense et pas (A01 / A02)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/energyBreakdown.test.ts` (7) | les deux modes exclusifs, séances « dont », pas de devinette pour un jour passé |
+| `lib/__tests__/energyHistory.test.ts` (11) | jour local aux deux bords, poids à la date, invariant historique = bilan du jour, agrégats mois/année, début d'historique |
+| `lib/__tests__/healthConnect.test.ts` (+4) | agrégation par jour, zéro traité comme absence, découpage `DAYS`, dégradation sans module |
+| `app/(tabs)/history/__tests__/energyHistoryScreen.test.tsx` (7) | onglets, lignes, états vides, rappel de profondeur |
+
+**Rétrocompatibilité** : les 33 tests existants de `energyBalance` passent sans
+modification — sans séance, le calcul est strictement l'ancien.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- clé de jour UTC au lieu de locale → 1 test ;
+- l'historique devine une activité (`allowHabitualEstimate: true`) → 2 tests ;
+- double comptage : séances ajoutées à l'activité mesurée → 2 tests.
+
+Vérifié sur l'émulateur : homme, 80 kg, 180 cm, 32 ans → « Corps 1 770 »,
+exactement Mifflin-St Jeor (800 + 1 125 − 160 + 5). « Activité inconnue sur 1 j »
+affiché à raison (ni pas, ni séance, ni Health Connect sur l'émulateur).
+
+**Non vérifié à l'écran** : les lignes avec pas et calories mesurées réelles —
+l'émulateur n'a pas Health Connect. Couvert par les tests de composant.
+
+
+## Harmonisation Séance et Programmes (B01)
+
+`app/(tabs)/__tests__/sessionProgramsHeader.test.tsx` (7) : les deux piles
+masquent leur en-tête natif ; les deux écrans dessinent `ScreenHeader` en Oswald ;
+pas de titre « Séance en cours » en double ; les grandes actions de Programmes
+gardent leur destination et leur police Oswald.
+
+Sabotages vérifiés le 2026-09-22, chacun rougit :
+- en-tête natif réactivé (`headerShown: true`) → 1 test ;
+- titre de `ScreenHeader` en Archivo → 2 tests ;
+- « Séance en cours » répété sous l'icône → 1 test ;
+- grandes actions en Archivo → 1 test.
+
+Vérifié sur l'émulateur (APK release) : Séance vide, avec programme déplié et
+jour choisi, séance en cours ; Programmes vide et avec un programme ; logcat
+crash vide.
+
+
+## Abonnement et quota serveur (F01)
+
+| Fichier | Couvre |
+|---|---|
+| `server/lst-quota/test_lst_quota.py` (16, `python -m unittest`) | jour local, droit RevenueCat (grâce, sans fin), cache et `refresh`, panne RevenueCat, idempotence, 402 au 3e repas, anciennes versions admises puis coupées, rétention 30 jours |
+| `lib/__tests__/mealPhotoQuota.test.ts` (+6) | paliers 2/100, fusion serveur/téléphone (maximum des compteurs, palier, autre jour) |
+| `lib/__tests__/mealQuotaApi.test.ts` (7) | signe du décalage, en-têtes, requêtes, lecture des réponses, identifiants d'analyse, identifiant d'appareil |
+| `lib/billing/__tests__/billing.test.ts` (11) | économie de l'annuel calculée, présélection, traduction RevenueCat, annulation vs erreur, pas de succès sans droit |
+| `store/__tests__/mealPhotoQuotaStore.test.ts` (4) | déclarations hors ligne conservées puis renvoyées dans l'ordre, `refresh` après achat |
+| `components/subscription/__tests__/Paywall.test.tsx` (11) | contexte, gain 2→100, annuel présélectionné, prix répété, erreurs, conditions, abonné, succès |
+| `components/nutrition/__tests__/MealPhotoReviewQuota.test.tsx` (3) | 402 sans alerte d'erreur, état rangé, en-têtes envoyés |
+| `nutrition/__tests__/photoQuota.test.tsx` (7) | offre au 2e repas gratuit, verrou serveur après réinstallation, abonné au-delà de 2, limite à 100 sans vente |
+| `nutrition/__tests__/addPhotoQuota.test.tsx` (2) | **régression** : le bouton photo d'« Ajouter un repas » respecte la limite |
+
+Sabotages vérifiés le 2026-09-22, chacun rougit : bouton photo sans garde ;
+402 traité comme une panne ; fusion au minimum ; économie arrondie vers le
+haut ; pas de `refresh` après l'achat ; succès sans droit actif ; déclaration
+retirée avant confirmation du serveur ; serveur `>` au lieu de `>=` ; jour UTC ;
+`consume` non idempotent.
+
+**Non vérifiable sans configuration d'Islam** : un achat réel (compte
+RevenueCat, profil marchand, produits Play).
+
+
+## Écran Stats (fusion Progression + Historique)
+
+| Fichier | Couvre |
+|---|---|
+| `components/ui/__tests__/SegmentedTabs.test.tsx` | variante par défaut ; variante défilante : l'onglet actif est **centré**, borné au défilement possible, quel que soit l'ordre des mesures |
+| `components/history/__tests__/SessionHistoryList.test.tsx` | regroupement par jour, séance libre, lien vers le détail, état vide |
+| `progress/__tests__/index.test.tsx` | **régression** : changement de `tab` sur un écran déjà monté ; `setParams` à l'appui ; Séances ; `tab` inconnu ; en-tête Stats |
+| `progress/__tests__/statsActivity.test.tsx` | vues Dépense et Pas (tests déplacés de l'ancien écran Historique) |
+| `history/__tests__/historyRedirect.test.tsx` | `/history` redirige vers `?tab=sessions` |
+| `__tests__/index.test.tsx` (+4) | **régression** : les pas mènent aux pas, le poids au poids ; sans pas, chevron collé au poids |
+
+Sabotages vérifiés le 2026-09-26, chacun rougit : `useState` initialisé par le
+paramètre ; un seul bouton pour la bande ; onglet calé à gauche au lieu
+d'être centré ; suppression de `scrollTo` ; chevron sorti du groupe du poids.
+
+## Serveur d'analyse injoignable (1.32)
+
+`components/nutrition/__tests__/MealPhotoReview.test.tsx` (+3) : caméra
+affichée pendant que la sonde `/health` est en attente ; sonde rejetée ou
+HTTP 503 → « Analyse indisponible », jamais le message d'échec d'analyse.
+Sabotages vérifiés le 2026-09-26 : écran d'attente remis, anciennes clés
+d'erreur remises ; chacun rougit.
+
+## Quota photo par analyse réussie (1.35)
+
+| Fichier | Couvre |
+|---|---|
+| `components/nutrition/__tests__/MealPhotoReviewQuotaCount.test.tsx` | **régression** : 2 analyses sans enregistrer, la 3e refusée sans appel serveur ; échec (aucun aliment, HTTP 500) sans décompte ; pas de double décompte à l'ajout au journal ; abonné à 100/100 |
+| `app/__tests__/mealPhotoQuotaSession.test.tsx` | **régression** : le résultat de la dernière analyse autorisée reste affiché ; l'offre apparaît à la tentative suivante |
+
+Sabotages vérifiés le 2026-10-15, chacun rougit : garde retirée (2 tests),
+ancien décompte à l'enregistrement (3), double décompte (1), décompte des
+analyses ratées (1), garde d'entrée réactive de l'écran (2), signal
+`onQuotaExceeded` ignoré (1).
+
+## Historique Health Connect (1.36)
+
+`lib/__tests__/healthConnect.test.ts` (+2) : **régression**, les pas restent
+quand les calories sont refusées (rouge avec l'ancien `Promise.all`) ; `null`
+quand les trois lectures sont refusées. Le correctif natif (patch de la
+bibliothèque) se vérifie sur appareil réel : Stats → Pas, puis Dépense.
+
+## Demande d'avis Google Play (1.37)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/reviewPrompt.test.ts` | règle : rien avant 3 séances, demande à 3, pas de redemande avant 120 jours, date illisible non bloquante ; enveloppe : demande mémorisée, fenêtre indisponible ou échec Google sans mémorisation ni exception, stockage non lu → rien |
+| `app/(tabs)/session/__tests__/active.test.tsx` (+2) | fin de séance : appel avec le nombre de séances, **après** 1,5 s (rien à 1 499 ms) ; rien si on continue la séance |
+
+Sabotages vérifiés le 2026-10-18, chacun rougit : seuil à 2 (2 tests), délai de
+120 jours retiré (2), mémorisation retirée (2), garde d'hydratation retirée
+(1), appel immédiat pendant la navigation (1), appel retiré (1). L'affichage
+réel ne se teste que sur une version installée depuis le Play Store (piste de
+test interne) : Google n'affiche rien pour un APK installé à la main.
+
+## Essai gratuit Play (1.38)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/billing/__tests__/billing.test.ts` (+4) | essai lu sur l'option **achetée** (`defaultOption`), semaine convertie en 7 jours, durée en mois sans conversion, aucun essai sur le plan de base ; **prix récurrent du plan de base, jamais « 0 € »** même si le produit porte le prix de la phase gratuite |
+| `components/subscription/__tests__/Paywall.test.tsx` (+3) | sans essai, rien ne parle d'essai ; avec essai : durée sur la carte annuelle, bouton « Essayer gratuitement », « 7 jours gratuits, puis 79,99 € / an », mention de résiliation ; l'essai suit l'offre sélectionnée (mensuel = abonnement normal) |
+
+Sabotages vérifiés le 2026-10-18, chacun rougit : prix lu sur le produit (0 €),
+semaine non convertie, essai lu sur le plan de base, bouton toujours
+« S'abonner », mention légale retirée, essai de l'annuel affiché sur le
+mensuel. L'affichage réel ne se voit qu'avec l'offre `essai-7j` **active** et
+un compte Google jamais abonné à `lst_premium`, sur une version installée
+depuis le Play Store.
+
+## Objectifs du jour et widget Android (1.39)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/dailyGoals.test.ts` | ratio borné à 1, `reached`, donnée absente → `unavailable` (jamais 0), zéro pas = progression à 0, arrondi, négatif refusé, objectif à zéro sans division ; `clampGoal` bornes et valeurs invalides |
+| `store/__tests__/dailyGoalsStore.test.ts` | setters bornés ; `merge` restaure les deux champs ; stockage absent, corrompu ou hors bornes → défaut |
+| `lib/__tests__/dailyGoalsWidgetSnapshot.test.ts` | aller-retour AsyncStorage le même jour ; **le lendemain, pas et dépense redeviennent inconnus, pas les séances** ; JSON corrompu ou incomplet refusé |
+| `lib/__tests__/dailyGoalsWidget.test.tsx` | Android : instantané écrit puis `requestWidgetUpdate` ; iOS : rien ; échec natif avalé ; gestionnaire : état vide sans instantané, anneaux tels quels, pas rafraîchis depuis Health Connect sans toucher aux autres anneaux, clics et autres widgets ignorés ; `ringSvg` piste seule à 0, arc borné |
+| `widgets/__tests__/DailyGoalsWidget.directive.test.ts` | **régression** : `"use no memo"` reste en première ligne du fichier widget (sans elle, widget vide sur le launcher — voir `known_bugs.md`) |
+| `lib/__tests__/dailyGoalsLayout.test.ts` | choix bandeau / carte selon la forme de la cellule (4×1, 2×2, 4×2, taille inconnue) ; métriques bornées (hauteur du bandeau, anneau de la carte, barre utile) |
+| `widgets/__tests__/DailyGoalsWidget.tree.test.tsx` | **régression** : arbre construit par le vrai `buildWidgetTree` de la bibliothèque — bandeau (3 mini-anneaux, chiffres, libellé + objectif, ni titre ni marque, fond `#a60e1727` = 65 %), carte (1 anneau, `2/3`, `410/500`, barres remplies au prorata), bascule de disposition au redimensionnement, tirets sans donnée, état vide — rouge avec un fragment `<>`, une disposition fixe, un fond opaque ou une barre fixe |
+| `lib/__tests__/profileBackup.test.ts` (+3) | objectifs pas/dépense : aller-retour sauvegarde → restauration ; sauvegarde antérieure à 1.39 sans `dailyGoals` → valeurs courantes conservées ; chaîne ou hors bornes → valeur courante ou borne, jamais la valeur reçue |
+| `app/(tabs)/__tests__/index.test.tsx` (+5) | sans Health Connect ni profil : « Connecter » / « Profil », séances 0 / 3 ; pas 6 240 face à 8 000 et 2 séances de la semaine (dimanche exclu) ; **la dépense « habituelle » du profil ne compte pas** ; anneaux et « Régler » → bons écrans ; même instantané publié vers le widget |
+
+Sabotages vérifiés le 2026-10-20, chacun rougit : expiration retirée (1),
+dépense habituelle comptée (1), ratio non borné (1), pas Health Connect
+ignorés dans le gestionnaire (1), fragment `<>` réintroduit dans l'anneau (2),
+restauration des objectifs retirée (1), borne retirée à l'import (1) ;
+le 2026-10-22 : disposition fixe (3), fond opaque (1), barre fixe (1), carte
+non redessinée par l'accueil (1). Le rendu du widget (image RemoteViews,
+polices copiées par le plugin) ne se voit que sur appareil : voir la
+vérification à l'écran ci-dessous.

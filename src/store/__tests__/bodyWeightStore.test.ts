@@ -34,4 +34,79 @@ describe('bodyWeightStore', () => {
 
     expect(useBodyWeightStore.getState().entries).toEqual([]);
   });
+
+  it('marque les saisies manuelles comme telles', () => {
+    const entry = useBodyWeightStore.getState().addEntry(82.5, '2026-07-09T08:00:00.000Z');
+
+    expect(entry.source).toBe('manual');
+  });
+});
+
+describe('bodyWeightStore — synchronisation Health Connect', () => {
+  it('cree une entree marquee healthConnect', () => {
+    const changed = useBodyWeightStore
+      .getState()
+      .syncHealthWeight({ weightKg: 78.4, time: '2026-07-09T07:00:00.000Z' });
+
+    expect(changed).toBe(true);
+    const [entry] = useBodyWeightStore.getState().entries;
+    expect(entry).toMatchObject({
+      weight: 78.4,
+      date: '2026-07-09T07:00:00.000Z',
+      source: 'healthConnect',
+    });
+  });
+
+  it('n ecrase pas une saisie manuelle plus recente du meme jour', () => {
+    const manual = useBodyWeightStore
+      .getState()
+      .addEntry(82.5, '2026-07-09T20:00:00.000Z');
+
+    const changed = useBodyWeightStore
+      .getState()
+      .syncHealthWeight({ weightKg: 78.4, time: '2026-07-09T07:00:00.000Z' });
+
+    expect(changed).toBe(false);
+    expect(useBodyWeightStore.getState().entries).toEqual([manual]);
+  });
+
+  it('remplace une pesee plus ancienne du meme jour en gardant son id', () => {
+    const manual = useBodyWeightStore
+      .getState()
+      .addEntry(82.5, '2026-07-09T07:00:00.000Z');
+
+    useBodyWeightStore
+      .getState()
+      .syncHealthWeight({ weightKg: 78.4, time: '2026-07-09T20:00:00.000Z' });
+
+    const entries = useBodyWeightStore.getState().entries;
+    expect(entries).toHaveLength(1);
+    expect(entries[0].id).toBe(manual.id);
+    expect(entries[0].weight).toBe(78.4);
+    expect(entries[0].source).toBe('healthConnect');
+  });
+
+  it('ne reecrit rien quand le meme releve revient (retour sur l ecran)', () => {
+    const sample = { weightKg: 78.4, time: '2026-07-09T07:00:00.000Z' };
+    useBodyWeightStore.getState().syncHealthWeight(sample);
+    const before = useBodyWeightStore.getState().entries;
+
+    const changed = useBodyWeightStore.getState().syncHealthWeight(sample);
+
+    expect(changed).toBe(false);
+    expect(useBodyWeightStore.getState().entries).toBe(before);
+  });
+
+  it('laisse la saisie la plus recente gouverner l affichage', () => {
+    // Poids Health Connect vieux de trois semaines, pesee saisie hier :
+    // les deux entrent dans l'historique, la plus recente reste la derniere.
+    useBodyWeightStore.getState().addEntry(79, '2026-07-09T20:00:00.000Z');
+    useBodyWeightStore
+      .getState()
+      .syncHealthWeight({ weightKg: 82, time: '2026-06-18T09:00:00.000Z' });
+
+    const entries = useBodyWeightStore.getState().entries;
+    expect(entries).toHaveLength(2);
+    expect(entries.at(-1)).toMatchObject({ weight: 79, source: 'manual' });
+  });
 });

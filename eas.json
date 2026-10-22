@@ -30,6 +30,18 @@
         "serviceAccountKeyPath": "./pc-api-key.json",
         "track": "internal"
       }
+    },
+    "closed": {
+      "android": {
+        "serviceAccountKeyPath": "./pc-api-key.json",
+        "track": "alpha"
+      }
+    },
+    "prod": {
+      "android": {
+        "serviceAccountKeyPath": "./pc-api-key.json",
+        "track": "production"
+      }
     }
   }
 }

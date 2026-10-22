@@ -70,7 +70,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={navigationTheme}>
-        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+          <Stack.Screen name="meal-photo" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+        </Stack>
         <RestTimerBanner />
         <AppDialog />
         <StatusBar style={mode === 'light' ? 'dark' : 'light'} />

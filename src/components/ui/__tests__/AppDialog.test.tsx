@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 
 import { AppDialog, appAlert } from '../AppDialog';
@@ -10,6 +10,54 @@ function generateLongMessage(lines: number): string {
 }
 
 describe('AppDialog', () => {
+  it('calls options.onDismiss when dismissed by tapping the backdrop', async () => {
+    const onDismiss = jest.fn();
+    render(<AppDialog />);
+
+    act(() => {
+      appAlert('Titre', 'Message', [{ text: 'OK' }], { onDismiss });
+    });
+
+    fireEvent.press(screen.getByTestId('app-dialog-backdrop'));
+
+    await waitFor(() => expect(onDismiss).toHaveBeenCalledTimes(1));
+  });
+
+  it('does not call options.onDismiss when a button is pressed', async () => {
+    const onDismiss = jest.fn();
+    const onPress = jest.fn();
+    render(<AppDialog />);
+
+    act(() => {
+      appAlert('Titre', 'Message', [{ text: 'Confirmer', onPress }], { onDismiss });
+    });
+
+    fireEvent.press(screen.getByText('Confirmer'));
+
+    await waitFor(() => expect(onPress).toHaveBeenCalledTimes(1));
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
+  it('does not close when cancelable is false', async () => {
+    const onDismiss = jest.fn();
+    render(<AppDialog />);
+
+    act(() => {
+      appAlert('Titre', 'Message', [{ text: 'OK' }], { cancelable: false, onDismiss });
+    });
+
+    fireEvent.press(screen.getByTestId('app-dialog-backdrop'));
+
+    // The dialog must still be visible regardless of how long we wait.
+    await waitFor(() => expect(screen.getByText('Titre')).toBeTruthy());
+    expect(onDismiss).not.toHaveBeenCalled();
+
+    // Clean up: close it explicitly via the OK button so the module store is
+    // left empty for the next test.
+    fireEvent.press(screen.getByText('OK'));
+    await waitFor(() => expect(screen.queryByText('Titre')).toBeNull());
+  });
+
   it('keeps a dialog opened by an action callback visible', async () => {
     render(<AppDialog />);
 

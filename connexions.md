@@ -42,7 +42,16 @@ EXPO_PUBLIC_MEAL_SERVER_API_KEY=…
 
 ---
 
-## Serveur repas (VPS)
+## Serveur de l'app sur le ThinkCentre (depuis la 1.32)
+
+Mêmes services que le VPS, sur le ThinkCentre d'Islam (Windows), exposés par
+**Tailscale Funnel** : `https://thinkcentre-srv.tail18230b.ts.net`.
+Installation, tâches planifiées, vérification et limites :
+[`server/thinkcentre/README.md`](server/thinkcentre/README.md). Les accès
+d'administration ne sont pas consignés ici (dépôt public). Ne jamais toucher
+`C:\CIR` ni les tâches `GPORais-*` de cette machine.
+
+## Serveur repas (VPS) — versions ≤ 1.31
 
 Hébergé chez Hetzner, exposé en HTTPS via un domaine DuckDNS, reverse proxy Caddy
 avec certificat Let's Encrypt.
@@ -76,6 +85,52 @@ le routeur repas, qui répondrait 404.
 Commandes utiles : `journalctl -u meal-server -f`,
 `systemctl restart meal-router`, `systemctl status lst-catalog`.
 
+### Service `lst-quota` (quota photo, abonnement)
+
+| | |
+|---|---|
+| Code | `/opt/lst-quota/lst_quota.py` (copie de `server/lst-quota/`) |
+| Port | 127.0.0.1:8354 |
+| Configuration | `/etc/lst-quota.env` (chmod 600) — modèle `server/lst-quota/lst-quota.env.example` |
+| Base | `/opt/lst-quota/data/quota.db` (SQLite, rétention 30 jours) |
+| Caddy | `handle /v1/quota*` + `forward_auth` sur `/v1/chat/completions*` — voir `Caddyfile.snippet` |
+
+Déploiement et retour arrière : `server/lst-quota/README.md`.
+
+**Clés RevenueCat — deux, à ne pas confondre :**
+
+| Clé | Où | Nature |
+|---|---|---|
+| SDK Android `goog_…` | `.env` de l'app : `EXPO_PUBLIC_REVENUECAT_ANDROID_KEY` | publique, inlinée dans l'APK |
+| Secrète `sk_…` | `/etc/lst-quota.env` sur le VPS | **secrète**, jamais dans l'app ni le dépôt |
+| Test Store `test_…` | `.env` local, pour l'émulateur | **interdite en release** : RevenueCat le proscrit |
+
+**Configuration de l'abonnement (2026-10-15)** — à garder alignée sur le code
+(`src/lib/billing/revenueCat.ts`) :
+
+| Où | Élément | Valeur |
+|---|---|---|
+| Play Console | abonnement | `lst_premium` |
+| Play Console | offre de base mensuelle | `mensuel` (P1M, 9,99 € TTC dans les 33 pays en euros) |
+| Play Console | offre de base annuelle | `annuel-1an` (P1Y, 79,99 € TTC) — `annuel` est **désactivée** (créée en P1M par erreur) |
+| RevenueCat | projet | Life Sport Tracker, app Play `com.sportracker.app` |
+| RevenueCat | droit d'accès | **`premium`** (l'app et `lst-quota` cherchent ce nom ; `life_sport_tracker_pro`, créé par défaut, n'est pas utilisé) |
+| RevenueCat | offre courante | `default` : `$rc_monthly` → `lst_premium:mensuel`, `$rc_annual` → `lst_premium:annuel-1an` (+ produits Test Store pour l'émulateur) |
+| Play Console | offre d'essai (sur `annuel-1an`) | `essai-7j` : 7 jours gratuits (P7D ×1), puis le prix de l'annuel ; nouveaux clients de `lst_premium` seulement ; tag `essai-7j`. Créée le 2026-10-18, **activée le 2026-10-18 à la demande d'Islam**, avant toute production avec paiement (la production est en 1.33, sans achat) : la comparaison avec / sans essai n'a donc pas de mois de référence sans essai. |
+
+L'offre d'essai ne demande **aucun réglage RevenueCat** : `purchasePackage`
+achète l'option par défaut que RevenueCat choisit parmi les offres Google
+auxquelles l'utilisateur a droit (essai le plus long d'abord), et l'écran
+d'abonnement n'annonce l'essai que si cette option en contient un (≥ 1.38).
+Pendant l'essai, le droit `premium` est actif : `lst-quota` accorde les 100
+analyses. Activer, désactiver ou relire : `scratchpad/play-trial-offer.mjs`
+(`status`, `activate`, `deactivate`) ou Play Console → Monétiser → Abonnements
+→ `lst_premium` → `annuel-1an` → `essai-7j`.
+
+Les prix Play se saisissent **hors taxe** : Google ajoute la TVA de chaque
+pays (9,99 saisi = 11,99 € payé en France). Script de correction et de
+relecture par l'API : voir `known_bugs.md`.
+
 ### Vérifier que le serveur est vivant, depuis l'extérieur
 
 ```bash
@@ -106,6 +161,16 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
+- **Production :** 1.39.2 (versionCode 58) le 2026-10-22, promue depuis la piste
+  interne par `python scripts/play-promote.py 58 <notes.json>` (API Play, aucun
+  re-téléversement, notes en 4 langues) ; examen Google en cours. Précédente en
+  production : 1.38.0 (vc 55) le 2026-10-18.
+- **Dernière soumission :** 1.39.2 (versionCode 58), piste interne, 2026-10-22
+  (widgets bandeau 4×1 et carte 2×2 dimensionnés sur la cellule, fond à 65 %).
+  Précédentes : 1.39.1 (vc 57) le 2026-10-21, 1.39.0 (vc 56) le 2026-10-20.
+  Téléversement de 177 Mo : 3 min 35 s puis ~45 min selon le débit du jour
+  (~70 Ko/s) ; la barre d'`eas submit` reste à 0 % jusqu'à la fin, ce n'est
+  pas un blocage.
 
 **Deux clés de signature coexistent — ne pas les confondre :**
 
@@ -143,3 +208,17 @@ Builder l'AAB avec `-PuseEasSigning=true`. Un AAB signé avec l'autre clé est
 
 Health Connect **est** présent sur l'émulateur (intégré via APEX en Android 15) :
 `adb shell am start -a android.health.connect.action.HEALTH_HOME_SETTINGS`.
+
+---
+
+## Abonnement (F01)
+
+- **RevenueCat** : projet à créer par Islam (compte, app Android
+  `com.sportracker.app`, droit `premium`, offre par défaut avec les paquets
+  mensuel et annuel). RevenueCat a besoin d'un **compte de service Google** avec
+  les droits financiers pour valider les achats.
+- **Google Play Console** : profil de paiement (marchand) Rais&Co, puis
+  abonnement `premium` avec deux formules de base : `monthly` (9,99 €, P1M) et
+  `annual` (79,99 €, P1Y). Google convertit le prix pour les autres pays.
+- **Pages légales** : `/privacy` et `/terms` servies par Caddy depuis
+  `/opt/meal-training/www/`, générées depuis `docs/play-store/`.

@@ -9,10 +9,11 @@ import { useProgramStore } from '../../../store/programStore';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
 import { Button } from '../../../components/ui/Button';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { ScreenHeader } from '../../../components/ui/ScreenHeader';
 import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import type { ThemeColors } from '../../../theme/palettes';
-import { radius, spacing } from '../../../theme/tokens';
+import { cardShadow, radius, spacing } from '../../../theme/tokens';
 import { useTranslation } from '../../../i18n/useTranslation';
 import type { Program, ProgramDay } from '../../../types';
 
@@ -31,10 +32,12 @@ export default function SessionScreen() {
   // If there is already an active session, show resume button
   if (active) {
     return (
-      <SafeAreaView style={styles.safe} edges={['bottom']}>
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        {/* « Séance en cours » monte dans l'en-tête : le répéter sous l'icône
+            ferait deux titres identiques l'un sur l'autre. */}
+        <ScreenHeader kicker={t('nav.session')} title={t('session.resumeTitle')} />
         <View style={styles.resumeContainer}>
           <Ionicons name="play-circle" size={64} color={c.primary} />
-          <Text style={styles.resumeTitle}>{t('session.resumeTitle')}</Text>
           <Text style={styles.resumeSub}>{active.programName} — {active.dayName}</Text>
           <Button title={t('session.resume')} onPress={() => router.push('/(tabs)/session/active')} style={styles.resumeBtn} />
         </View>
@@ -49,22 +52,29 @@ export default function SessionScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['bottom']}>
+    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      <ScreenHeader kicker={t('nav.session')} title={t('home.startSession')} />
+      {/* Deux raccourcis de navigation : même rangée à cases que les
+          sous-actions de Nutrition (« Scanner un code-barres | Ajouter un
+          repas »), libellés Oswald en capitales. L'action principale de
+          l'écran reste le choix d'un programme, dessous. */}
       <View style={styles.actionsRow}>
-        {/* Même couple de variantes et même taille que la rangée de l'écran
-            Programmes (primaire + secondaire, sans `compact`), pour que les
-            deux menus se ressemblent. Voir programs/index.tsx. */}
-        <Button
-          title={t('session.managePrograms')}
+        <TouchableOpacity
+          style={[styles.subAction, styles.subActionDivider]}
           onPress={() => router.push('/(tabs)/programs')}
-          style={styles.actionBtn}
-        />
-        <Button
-          title={t('nav.exercises')}
-          variant="secondary"
+          activeOpacity={0.78}
+          accessibilityRole="button"
+          accessibilityLabel={t('session.managePrograms')}>
+          <Text style={styles.subActionLabel}>{t('session.managePrograms')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.subAction}
           onPress={() => router.push('/(tabs)/exercises')}
-          style={styles.actionBtn}
-        />
+          activeOpacity={0.78}
+          accessibilityRole="button"
+          accessibilityLabel={t('nav.exercises')}>
+          <Text style={styles.subActionLabel}>{t('nav.exercises')}</Text>
+        </TouchableOpacity>
       </View>
 
       {programs.length === 0 ? (
@@ -130,21 +140,21 @@ export default function SessionScreen() {
 const makeStyles = (c: ThemeColors) => StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.bg },
   list: { paddingBottom: 100 },
+  // Même carte que ProgramCard (écran Programmes) : un programme a la même
+  // apparence dans les deux menus.
   programRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: spacing.sm,
     backgroundColor: c.surface,
-    marginHorizontal: 16,
-    marginTop: 8,
-    borderRadius: radius.md,
-    padding: 14,
-    shadowColor: c.overlay,
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.xs,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    ...cardShadow(c),
   },
   selected: { borderWidth: 2, borderColor: c.primary },
-  programName: { flex: 1, fontSize: 16, fontFamily: fonts.sansSemi, color: c.textPrimary },
+  programName: { flex: 1, fontSize: 16, lineHeight: 20, fontFamily: fonts.sansBold, color: c.textPrimary },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -157,12 +167,37 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   },
   daySelected: { backgroundColor: c.accentSoft },
   dayName: { flex: 1, fontSize: 15, color: c.textPrimary, fontFamily: fonts.sansSemi },
-  dayMeta: { fontSize: 13, color: c.textMuted },
+  // Sans fontFamily, Android retombe sur la police système (Roboto,
+  // SamsungOne…) : le nombre d'exercices s'affichait dans une autre police.
+  dayMeta: { fontSize: 13, fontFamily: fonts.sans, color: c.textMuted },
   footer: { padding: 16, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: c.border },
-  actionsRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.sm },
-  actionBtn: { flex: 1 },
+  actionsRow: {
+    flexDirection: 'row',
+    marginHorizontal: spacing.md,
+    marginTop: spacing.md,
+    marginBottom: spacing.xs,
+    borderWidth: 1,
+    borderColor: c.border,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+  },
+  subAction: {
+    flex: 1,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    justifyContent: 'center',
+  },
+  subActionDivider: { borderRightWidth: 1, borderRightColor: c.border },
+  subActionLabel: {
+    fontFamily: fonts.serifBold,
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: 0.96,
+    textTransform: 'uppercase',
+    color: c.textPrimary,
+  },
   resumeContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 },
-  resumeTitle: { fontSize: 22, fontFamily: fonts.sansBold, color: c.textPrimary },
-  resumeSub: { fontSize: 15, color: c.textSecondary },
+  resumeSub: { fontSize: 15, fontFamily: fonts.sans, color: c.textSecondary },
   resumeBtn: { width: '100%', marginTop: 8 },
 });

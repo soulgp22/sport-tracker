@@ -38,10 +38,17 @@ export function buildHealthRequest(): { url: string } {
  * Construit la requête d'analyse (format OpenAI chat/completions, image en
  * data URL base64 — attendu par llama-server multimodal).
  */
-export function buildAnalysisRequest(prompt: string, jpegBase64: string, language = 'fr'): MealServerRequest {
+export function buildAnalysisRequest(
+  prompt: string,
+  jpegBase64: string,
+  language = 'fr',
+  /** En-tetes du quota serveur (lib/mealQuotaApi) : appareil, fuseau, analyse. */
+  extraHeaders: Record<string, string> = {}
+): MealServerRequest {
   return {
     url: `${MEAL_SERVER_URL}${COMPLETIONS_PATH}`,
     headers: {
+      ...extraHeaders,
       'Content-Type': 'application/json',
       Authorization: `Bearer ${MEAL_SERVER_API_KEY}`,
     },

@@ -38,9 +38,18 @@ import {
   extractCompletionText,
 } from '../../lib/mealPhotoApi';
 import { createMealPhotoExitFlow, safeInterrupt } from '../../lib/mealPhotoExit';
+import {
+  QUOTA_EXCEEDED_STATUS,
+  createAnalysisId,
+  parseQuotaStatus,
+  quotaHeaders,
+} from '../../lib/mealQuotaApi';
+import { currentQuotaIdentity } from '../../lib/mealQuotaClient';
 import { logMealPhotoTraining, type ModelItem } from '../../lib/mealPhotoTrainingLog';
 import { calculateNutritionForQuantity } from '../../lib/nutritionCalc';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
+import { useMealPhotoQuotaStore } from '../../store/mealPhotoQuotaStore';
+import { useMealPhotoQuota } from '../../hooks/useMealPhotoQuota';
 import { useFoodStore } from '../../store/foodStore';
 import { useLanguageStore } from '../../store/languageStore';
 import type { Food, MealType } from '../../types';
@@ -67,6 +76,11 @@ interface MealPhotoReviewProps {
   onClose: () => void;
   /** Appelé après enregistrement effectif des entrées. */
   onAdded: () => void;
+  /**
+   * Le serveur a refusé l'analyse : limite journalière atteinte (HTTP 402).
+   * Le quota du store est déjà à jour quand ce rappel arrive.
+   */
+  onQuotaExceeded?: () => void;
 }
 
 let nextItemId = 1;
@@ -139,7 +153,13 @@ function IndeterminateBar({ trackColor, fillColor }: { trackColor: string; fillC
  * L'IA ne calcule jamais les macros : elle propose des aliments + grammes,
  * la base locale calcule, l'utilisateur corrige et valide.
  */
-export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoReviewProps) {
+export function MealPhotoReview({
+  mealType,
+  date,
+  onClose,
+  onAdded,
+  onQuotaExceeded,
+}: MealPhotoReviewProps) {
   const c = useColors();
   const { t } = useTranslation();
   const styles = useMemo(() => makeStyles(c), [c]);
@@ -151,6 +171,11 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const searchFoods = useFoodStore((s) => s.searchFoods);
   const addCustomFood = useFoodStore((s) => s.addCustomFood);
   const addFoodEntry = useFoodDiaryStore((s) => s.addFoodEntry);
+  const recordSuccessfulAnalysis = useMealPhotoQuotaStore((s) => s.recordSuccessfulAnalysis);
+  // Garde du quota AVANT chaque analyse (y compris apres « Reessayer ») : les
+  // ecrans d'entree ne verifient qu'a l'ouverture.
+  const quota = useMealPhotoQuota();
+  const applyServerStatus = useMealPhotoQuotaStore((s) => s.applyServerStatus);
   const language = useLanguageStore((s) => s.language);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -203,6 +228,9 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   const [isAdding, setIsAdding] = useState(false);
   // Photo JPEG (512 px) envoyée au serveur d'entraînement avec les corrections.
   const analysisPhotoB64Ref = useRef<string | null>(null);
+  // Clé d'idempotence du quota serveur : la même pour l'analyse et pour sa
+  // déclaration une fois réussie (lib/mealQuotaApi).
+  const analysisIdRef = useRef<string | null>(null);
 
   // Ne JAMAIS démonter pendant une requête en cours : le flux « demande de
   // retour → interrupt (abort) → attente → fermeture » est factorisé et
@@ -262,17 +290,21 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
 
   const requestClose = () => exitFlow.requestClose(isGenerating);
 
-  // Serveur injoignable : alerte + retour. Seul le message générique est montré
-  // à l'utilisateur ; le détail technique (réseau, mauvaise IP…) est conservé
-  // pour le diagnostic via console.warn, jamais affiché en production.
+  // Serveur injoignable (sonde /health) : alerte dédiée + retour. Il ne s'agit
+  // pas d'un échec d'analyse (aucune photo n'a été envoyée). Le détail
+  // technique (réseau, mauvaise IP…) est conservé pour le diagnostic via
+  // console.warn, jamais affiché en production.
   useEffect(() => {
     if (!engineError) return;
     const detail =
       engineError instanceof Error ? engineError.message : String(engineError);
     console.warn(detail);
-    appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
-      { text: 'OK', onPress: onClose },
-    ]);
+    appAlert(
+      mt(t, 'mealPhoto.serverUnavailableTitle'),
+      mt(t, 'mealPhoto.serverUnavailableMessage'),
+      [{ text: 'OK', onPress: onClose }],
+      { onDismiss: onClose }
+    );
   }, [engineError, onClose, t]);
 
   const analyze = async (uri: string) => {
@@ -299,13 +331,26 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       const jpegBase64 = saved.base64;
       if (!jpegBase64) throw new Error('Compression de la photo impossible');
       analysisPhotoB64Ref.current = jpegBase64;
-      const request = buildAnalysisRequest(buildPrompt(), jpegBase64, language);
+      const analysisId = createAnalysisId();
+      analysisIdRef.current = analysisId;
+      const request = buildAnalysisRequest(buildPrompt(), jpegBase64, language, {
+        ...quotaHeaders(currentQuotaIdentity()),
+        'X-Analysis-Id': analysisId,
+      });
       const response = await fetch(request.url, {
         method: 'POST',
         headers: request.headers,
         body: request.body,
         signal: controller.signal,
       });
+      // Limite atteinte cote serveur : ce n'est pas une panne, pas d'alerte
+      // d'erreur. Le store recoit l'etat du serveur, l'appelant affiche l'offre.
+      if (response.status === QUOTA_EXCEEDED_STATUS) {
+        const status = parseQuotaStatus(await response.json().catch(() => null));
+        if (status) applyServerStatus(status);
+        onQuotaExceeded?.();
+        return;
+      }
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = extractCompletionText(await response.json());
       if (text === null) throw new Error('Réponse du serveur inattendue');
@@ -315,9 +360,14 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
         appAlert(mt(t, 'mealPhoto.emptyTitle'), mt(t, 'mealPhoto.emptyMessage'), [
           { text: mt(t, 'mealPhoto.retry'), onPress: resetFlow },
           { text: mt(t, 'mealPhoto.manualEntry'), style: 'cancel', onPress: onClose },
-        ]);
+        ], { onDismiss: resetFlow });
         return;
       }
+
+      // Analyse réussie (au moins un aliment) : elle compte dans le quota,
+      // qu'elle soit enregistrée au journal ou non. Les échecs ci-dessus
+      // (aucun aliment, erreur, 402) ne consomment rien.
+      recordSuccessfulAnalysis(analysisId);
 
       const foods = getAllFoods();
       const reviewItems = recognized.map((item) => {
@@ -358,7 +408,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       if (exitFlow.isPending()) return;
       appAlert(mt(t, 'mealPhoto.errorTitle'), mt(t, 'mealPhoto.errorMessage'), [
         { text: 'OK', onPress: onClose },
-      ]);
+      ], { onDismiss: onClose });
     } finally {
       clearTimeout(timer);
       abortRef.current = null;
@@ -384,10 +434,30 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     setItems(null);
   }
 
+  // Garde du quota au moment où la photo est choisie (prise ou importée) : une
+  // photo refusée n'est jamais envoyée, et l'écran ne passe pas par l'analyse.
+  // Couvre aussi « Réessayer », qui ramène ici après un résultat.
+  const acceptPhoto = (uri: string) => {
+    if (!quota.reached) {
+      setPhotoUri(uri);
+      return;
+    }
+    if (quota.tier === 'free' && onQuotaExceeded) {
+      onQuotaExceeded();
+      return;
+    }
+    appAlert(
+      mt(t, 'mealPhoto.quotaTitle'),
+      mt(t, 'mealPhoto.quotaMessage', { limit: quota.limit }),
+      [{ text: 'OK', onPress: onClose }],
+      { onDismiss: onClose }
+    );
+  };
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.7 });
     const uri = result.canceled ? null : result.assets[0]?.uri;
-    if (uri) setPhotoUri(uri);
+    if (uri) acceptPhoto(uri);
   };
 
   const capturePhoto = async () => {
@@ -395,7 +465,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
     if (!camera) return;
     try {
       const photo = await camera.takePictureAsync({ quality: 0.7 });
-      if (photo?.uri) setPhotoUri(photo.uri);
+      if (photo?.uri) acceptPhoto(photo.uri);
     } catch {
       appAlert(mt(t, 'mealPhoto.title'), mt(t, 'mealPhoto.captureFailed'));
     }
@@ -565,13 +635,11 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
   }, [items]);
 
   const showAnalyzing = isGenerating || closePending || (photoUri !== null && !items);
-  const screen: 'loading' | 'capture' | 'analyzing' | 'result' = showAnalyzing
+  const screen: 'capture' | 'analyzing' | 'result' = showAnalyzing
     ? 'analyzing'
     : items
       ? 'result'
-      : !isReady
-        ? 'loading'
-        : 'capture';
+      : 'capture';
 
   // Demande la permission caméra à l'entrée de l'écran de capture (et non au
   // montage du composant), sur le même modèle que BarcodeScannerModal.
@@ -591,18 +659,7 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
       <SafeAreaView
         style={[styles.safe, screen === 'capture' && styles.safeCapture]}
         edges={['top', 'bottom']}>
-        {screen === 'loading' ? (
-          <View style={styles.centerScreen}>
-            <ActivityIndicator color={c.primary} />
-            <Text style={styles.loadingText}>{mt(t, 'mealPhoto.modelLoading')}</Text>
-            {/* Sans bouton d'abandon, cet écran est un cul-de-sac quand le serveur
-                est injoignable. captureCancel est conçu pour le fond sombre de la
-                caméra : on réutilise son habillage en assombrissant la couleur. */}
-            <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7} style={{ marginTop: 20 }}>
-              <Text style={[styles.captureCancel, { color: c.textPrimary }]}>{t('common.cancel')}</Text>
-            </TouchableOpacity>
-          </View>
-        ) : screen === 'capture' ? (
+        {screen === 'capture' ? (
           <View style={styles.captureScreen}>
             <View style={styles.captureHeader}>
               <TouchableOpacity onPress={requestClose} hitSlop={8} activeOpacity={0.7}>
@@ -674,6 +731,19 @@ export function MealPhotoReview({ mealType, date, onClose, onAdded }: MealPhotoR
             <Text style={styles.analyzingSubtitle}>
               {mt(t, closePending ? 'mealPhoto.closing' : 'mealPhoto.analyzingSubtitle')}
             </Text>
+            {!closePending && (
+              <TouchableOpacity
+                onPress={requestClose}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                testID="meal-analyzing-cancel"
+                style={{ marginTop: 24 }}>
+                <Text style={[styles.captureCancel, { color: c.textPrimary }]}>
+                  {t('common.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
           <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -979,7 +1049,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     color: c.bg,
   },
 
-  // Écrans centrés (chargement du moteur / analyse)
+  // Écran centré (analyse)
   centerScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
   kicker: {
     fontFamily: fonts.serifBold,
@@ -1006,13 +1076,6 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
     marginTop: 16,
     color: c.textSecondary,
     textAlign: 'center',
-  },
-  loadingText: {
-    fontFamily: fonts.sans,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 12,
-    color: c.textSecondary,
   },
   // Résultat
   resultHeader: {

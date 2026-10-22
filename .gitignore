@@ -52,3 +52,7 @@ example
 # Clé de compte de service Google Play (eas submit) — JAMAIS committer
 pc-api-key.json
 keys/
+
+# Python
+__pycache__/
+*.pyc

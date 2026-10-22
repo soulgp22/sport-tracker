@@ -8,12 +8,18 @@ import type {
   WeightEntry,
 } from '../types';
 import { useBodyWeightStore } from '../store/bodyWeightStore';
+import { useDailyGoalsStore } from '../store/dailyGoalsStore';
 import { useFoodDiaryStore } from '../store/foodDiaryStore';
 import { useFoodStore } from '../store/foodStore';
 import { useNutritionGoalsStore } from '../store/nutritionGoalsStore';
 import { useProgramStore } from '../store/programStore';
 import { useSessionStore } from '../store/sessionStore';
 import { normalizeName, usePerformanceStore } from '../store/performanceStore';
+import {
+  ACTIVE_KCAL_GOAL_LIMITS,
+  STEPS_GOAL_LIMITS,
+  clampGoal,
+} from './dailyGoals';
 import { assertImportTextSize } from './importLimits';
 import type { PerformanceProfile, UnlockedBadge } from '../types/performance';
 
@@ -28,6 +34,12 @@ export interface ProfileBackupData {
   nutritionGoals: NutritionGoals;
   bodyWeightEntries: WeightEntry[];
   performanceProfile: PerformanceProfile & { unlockedBadges: UnlockedBadge[] };
+  /**
+   * Objectifs du jour (pas, depense active). Absent des sauvegardes
+   * anterieures a 1.39 : la restauration garde alors les valeurs courantes,
+   * comme pour les objectifs de seances.
+   */
+  dailyGoals: { stepsGoal: number; activeKcalGoal: number };
 }
 
 export interface ProfileBackup {
@@ -130,6 +142,10 @@ export function buildProfileBackup(): string {
         firstName: usePerformanceStore.getState().firstName,
         lastName: usePerformanceStore.getState().lastName,
         unlockedBadges: usePerformanceStore.getState().unlockedBadges,
+      },
+      dailyGoals: {
+        stepsGoal: useDailyGoalsStore.getState().stepsGoal,
+        activeKcalGoal: useDailyGoalsStore.getState().activeKcalGoal,
       },
     },
   };
@@ -250,6 +266,18 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
         unlockedBadges: [],
       };
 
+  // Valeur hors bornes ou absente -> valeur courante, jamais un chiffre invente.
+  const currentDailyGoals = useDailyGoalsStore.getState();
+  const savedDailyGoals = isRecord(data.dailyGoals) ? data.dailyGoals : {};
+  const dailyGoals = {
+    stepsGoal: clampGoal(savedDailyGoals.stepsGoal, STEPS_GOAL_LIMITS, currentDailyGoals.stepsGoal),
+    activeKcalGoal: clampGoal(
+      savedDailyGoals.activeKcalGoal,
+      ACTIVE_KCAL_GOAL_LIMITS,
+      currentDailyGoals.activeKcalGoal
+    ),
+  };
+
   return {
     version: PROFILE_BACKUP_VERSION,
     exportedAt: parsed.exportedAt,
@@ -262,6 +290,7 @@ export function parseProfileBackup(text: string): ProfileBackup | string {
       nutritionGoals: data.nutritionGoals,
       bodyWeightEntries: bodyWeightEntries as WeightEntry[],
       performanceProfile,
+      dailyGoals,
     },
   };
 }
@@ -277,4 +306,5 @@ export function restoreProfileBackup(backup: ProfileBackup): void {
   useNutritionGoalsStore.setState({ goals: backup.data.nutritionGoals });
   useBodyWeightStore.setState({ entries: backup.data.bodyWeightEntries });
   usePerformanceStore.setState(backup.data.performanceProfile);
+  useDailyGoalsStore.setState(backup.data.dailyGoals);
 }

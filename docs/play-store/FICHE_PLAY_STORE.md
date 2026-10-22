@@ -1,6 +1,8 @@
 # Fiche Play Store — Life Sport Tracker
 
-> Tous les textes prêts à copier-coller dans la Play Console.
+> **Textes à jour (2026-10-18, app 1.37.0, 4 langues, axe analyse photo + Premium) : [FICHE_TEXTES.md](FICHE_TEXTES.md).**
+> Captures : `screenshots/fr/` (01 = analyse photo, en tête). Les descriptions ci-dessous datent de la v1.2
+> (app 100 % hors ligne, sans nutrition) et sont obsolètes.
 
 ## Titre de l'application (30 car. max)
 
@@ -80,7 +82,7 @@ argument de confiance fort sur la fiche.
 | Icône haute résolution | 512×512 PNG | À exporter depuis `assets/images/` |
 | Bannière (feature graphic) | 1024×500 PNG/JPG | **À créer** |
 | Captures d'écran téléphone (2 min, 8 max) | 1080×1920 min | **À capturer** : accueil, séance en cours, minuteur, animation 3D, programme |
-| Politique de confidentialité (URL) | Hébergée en ligne | Voir `POLITIQUE_CONFIDENTIALITE.md` — à héberger (GitHub Pages gratuit) |
+| Politique de confidentialité (URL) | Hébergée en ligne | `POLITIQUE_CONFIDENTIALITE.md` est **publiable tel quel** (réécrit le 2026-08-27) — reste à héberger : GitHub Pages n'est pas activé sur le dépôt |
 
 ## Checklist publication
 
@@ -90,7 +92,49 @@ argument de confiance fort sur la fiche.
 - [ ] 2 à 8 captures d'écran uploadées
 - [ ] Description courte + longue collées
 - [ ] URL politique de confidentialité renseignée
-- [ ] Data Safety rempli (aucune donnée collectée)
+- [ ] Data Safety rempli — **l'ancienne réponse « aucune donnée collectée » est FAUSSE**, voir ci-dessous
+- [ ] Déclaration « Applis de santé » remplie (obligatoire : l'app lit Health Connect)
 - [ ] Questionnaire IARC rempli
 - [ ] Prix : gratuit, pays : monde (ou sélection)
 - [ ] Envoi en révision (piste : test interne → production)
+
+
+---
+
+## Points de conformité à ne pas rater (constats du 2026-08-27)
+
+### Data Safety : « aucune donnée collectée » est faux
+
+Au sens de Google, « collecté » signifie **transmis hors de l'appareil**. Or :
+
+| Donnée | Sort de l'appareil ? | Détail |
+|---|---|---|
+| Photo de repas | **oui** | envoyée au serveur, relayée à Gemini, **non conservée** — cocher « traitement éphémère » |
+| Numéro de code-barres | **oui** | proxy `/v1/products/` vers Open Food Facts |
+| Nom d'un aliment inconnu | **oui** | Gemini + cache partagé |
+| Corrections d'estimation (texte) | **oui, si opt-in** | désactivé par défaut, jamais d'image |
+| Données Health Connect (pas, calories) | **non** | lues et utilisées uniquement sur l'appareil |
+| Séances, journal, poids, préférences | **non** | stockage local |
+| **Identifiant d'appareil** (ANDROID_ID propre à l'app) | **oui** (F01) | envoyé avec chaque analyse photo et déclaration de repas, pour le quota ; aussi identifiant client chez RevenueCat. Catégorie « Identifiants de l'appareil ou autres », finalité « Fonctionnalités de l'appli » (+ « Prévention de la fraude »). Conservé 30 jours côté serveur |
+| **Historique des achats** (abonnement) | **oui** (F01) | via RevenueCat, **sous-traitant** agissant pour Rais&Co : au sens de Google ce n'est pas un « partage ». Finalité « Fonctionnalités de l'appli » |
+| Moyen de paiement | **non** | saisi dans Google Play, jamais vu par l'app ni par RevenueCat |
+
+Le mapping exact vers les catégories Google reste à faire dans le formulaire :
+les libellés de Play évoluent, mieux vaut les lire au moment de remplir que se
+fier à cette table pour le nom des cases. Ce qui est certain, c'est que la
+réponse « aucune donnée collectée » ne tient plus.
+
+### Permissions déclarées mais inutilisées
+
+`RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW` (superposition d'écran)
+sont dans le manifeste généré alors qu'aucune ligne du code applicatif ne les
+utilise — elles viennent de dépendances. Déclarer le micro sans s'en servir est
+un motif de question chez Play et oblige la politique de confidentialité à s'en
+expliquer. **À retirer du manifeste** (`app.json` → `android.blockedPermissions`,
+puis rebuild et vérification avec `adb shell dumpsys package`).
+
+### Journalisation du serveur
+
+La section 3.6 de la politique est rédigée au conditionnel : le `Caddyfile` du
+VPS n'a pas été lu. La formulation reste vraie que le serveur journalise ou non.
+À resserrer si la configuration est vérifiée un jour.

@@ -6,7 +6,7 @@ import { useColors } from '../../../theme/useColors';
 import { fonts } from '../../../theme/fonts';
 import { useTranslation } from '../../../i18n/useTranslation';
 
-function BackToHomeButton() {
+function BackButton() {
   const c = useColors();
   const router = useRouter();
 
@@ -45,7 +45,7 @@ export default function ExercisesLayout() {
         options={{
           headerShown: false,
           title: t('nav.exercises'),
-          headerLeft: () => <BackToHomeButton />,
+          headerLeft: () => <BackButton />,
         }}
       />
     </Stack>

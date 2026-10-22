@@ -8,7 +8,8 @@ import { useBodyWeightStore } from '../../../../store/bodyWeightStore';
 import { useLanguageStore } from '../../../../store/languageStore';
 import { usePerformanceStore } from '../../../../store/performanceStore';
 import { useSessionStore } from '../../../../store/sessionStore';
-import type { ActiveSession } from '../../../../types';
+import { maybeRequestStoreReview } from '../../../../lib/storeReview';
+import type { ActiveSession, Session } from '../../../../types';
 
 const mockPush = jest.fn();
 const mockReplace = jest.fn();
@@ -47,6 +48,11 @@ jest.mock('expo-image', () => {
 
 jest.mock('../../../../components/ui/AppDialog', () => ({
   appAlert: jest.fn(),
+}));
+
+jest.mock('../../../../lib/storeReview', () => ({
+  ...jest.requireActual('../../../../lib/storeReview'),
+  maybeRequestStoreReview: jest.fn(() => Promise.resolve(false)),
 }));
 
 // Le détail d'exercice importe exerciseModels (require() sur des .glb) et le
@@ -108,7 +114,28 @@ function resetStores() {
   });
 }
 
+function makePastSession(id: string): Session {
+  return {
+    id,
+    date: '2025-12-20T10:00:00.000Z',
+    durationSeconds: 1800,
+    exercises: [],
+  };
+}
+
+function confirmFinish() {
+  fireEvent.press(screen.getByText('Terminer'));
+  const buttons = (appAlert as unknown as jest.Mock).mock.calls[0][2] as {
+    style?: string;
+    onPress?: () => void;
+  }[];
+  act(() => {
+    buttons.find((button) => button.style === 'destructive')?.onPress?.();
+  });
+}
+
 beforeEach(() => {
+  (maybeRequestStoreReview as jest.Mock).mockClear();
   mockPush.mockClear();
   mockReplace.mockClear();
   mockSetOptions.mockClear();
@@ -117,7 +144,7 @@ beforeEach(() => {
 });
 
 describe('ActiveSessionScreen — fin de séance', () => {
-  it('remplace vers history et ne redirige jamais vers session', () => {
+  it('remplace vers l’écran Stats (onglet Séances) et ne redirige jamais vers session', () => {
     useActiveSessionStore.setState({ active: makeActiveSession() });
 
     render(<ActiveSessionScreen />);
@@ -138,7 +165,49 @@ describe('ActiveSessionScreen — fin de séance', () => {
       confirm?.onPress?.();
     });
 
-    expect(mockReplace).toHaveBeenCalledWith('/(tabs)/history');
+    expect(mockReplace).toHaveBeenCalledWith('/(tabs)/progress?tab=sessions');
     expect(mockReplace).not.toHaveBeenCalledWith('/(tabs)/session');
+  });
+});
+
+describe('ActiveSessionScreen — demande d’avis Google Play', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('propose l’avis après l’affichage de Stats, avec le nombre de séances terminées', () => {
+    jest.useFakeTimers();
+    useSessionStore.setState({ sessions: [makePastSession('old-1'), makePastSession('old-2')] });
+    useActiveSessionStore.setState({ active: makeActiveSession() });
+
+    render(<ActiveSessionScreen />);
+    confirmFinish();
+
+    expect(mockReplace).toHaveBeenCalledWith('/(tabs)/progress?tab=sessions');
+    // Jamais pendant la navigation : la demande attend que Stats soit affiché.
+    act(() => {
+      jest.advanceTimersByTime(1499);
+    });
+    expect(maybeRequestStoreReview).not.toHaveBeenCalled();
+
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+
+    expect(maybeRequestStoreReview).toHaveBeenCalledTimes(1);
+    expect(maybeRequestStoreReview).toHaveBeenCalledWith(3);
+  });
+
+  it('ne demande rien quand on continue la séance', () => {
+    jest.useFakeTimers();
+    useActiveSessionStore.setState({ active: makeActiveSession() });
+
+    render(<ActiveSessionScreen />);
+    fireEvent.press(screen.getByText('Terminer'));
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    expect(maybeRequestStoreReview).not.toHaveBeenCalled();
   });
 });

@@ -26,6 +26,8 @@ export const ACTIVITY_SOURCE_LABEL_KEYS = {
   healthConnectActive: 'nutrition.balance.activityHealthConnectActive',
   healthConnectDerived: 'nutrition.balance.activityHealthConnectDerived',
   steps: 'nutrition.balance.activitySteps',
+  stepsAndSessions: 'nutrition.balance.activityStepsAndSessions',
+  sessions: 'nutrition.balance.activitySessions',
   habitualEstimate: 'nutrition.balance.activityHabitualEstimate',
   unknown: 'nutrition.balance.sourceUnavailable',
 } as const;
@@ -54,10 +56,43 @@ export function estimateActiveCaloriesFromSteps(
   };
 }
 
+/**
+ * Mode de calcul de l'activite d'une journee. Les modes s'excluent, pour ne
+ * jamais compter deux fois la meme energie :
+ * - `measured` : Health Connect fournit l'activite (montre, telephone). Elle
+ *   inclut deja la marche et les seances : celles-ci sont affichees « dont »,
+ *   sans etre ajoutees ;
+ * - `estimated` : aucune mesure, l'activite est la SOMME des pas et des
+ *   seances, chacune estimee par l'app ;
+ * - `habitual` : ni mesure ni donnee, repli sur le niveau d'activite du profil ;
+ * - `unknown` : rien d'exploitable.
+ */
+export type ExpenditureMode = 'measured' | 'estimated' | 'habitual' | 'unknown';
+
+export interface ExpenditureBreakdown {
+  mode: ExpenditureMode;
+  /** Metabolisme de base (Mifflin-St Jeor) : la « depense du corps ». */
+  bodyKcal: number | null;
+  /**
+   * Calories liees aux pas, estimees. Calculees des que les pas sont connus
+   * (vue « pas »), mais comptees dans le total en mode `estimated` SEULEMENT.
+   */
+  stepsKcal: number | null;
+  /** Depense nette des seances du jour (voir lib/sessionCalories). */
+  sessionsKcal: number;
+  /** true si les seances font partie du total (mode `estimated`). */
+  sessionsIncluded: boolean;
+  /** Activite mesuree par Health Connect (mode `measured`). */
+  measuredKcal: number | null;
+  /** Estimation d'apres le niveau d'activite du profil (mode `habitual`). */
+  habitualKcal: number | null;
+}
+
 export interface DailyEnergyExpenditure {
   basalKcal: number | null;
   activityKcal: number | null;
   totalKcal: number | null;
+  breakdown: ExpenditureBreakdown;
   basalSource: BasalSource;
   activitySource: ActivitySource;
   basalSourceLabelKey: (typeof BASAL_SOURCE_LABEL_KEYS)[BasalSource];
@@ -74,9 +109,18 @@ export interface DailyEnergyExpenditure {
  * Activity source, in priority order:
  * 1. healthCalories.active > 0          → healthConnectActive (measured)
  * 2. healthCalories.total > 0 & BMR     → healthConnectDerived (total - BMR)
- * 3. healthSteps > 0                    → steps (estimated from steps)
- * 4. BMR known, no HC data              → habitualEstimate (BMR × (factor - 1))
+ * 3. steps > 0 and/or sessions > 0      → steps / stepsAndSessions / sessions
+ *                                         (estimated : SUM of steps and sessions)
+ * 4. BMR known, no data, habitual allowed → habitualEstimate (BMR × (factor - 1))
  * 5. otherwise                          → unknown (null)
+ *
+ * Measured sources (1, 2) already include walking and workouts : session
+ * calories are reported in the breakdown but NOT added, otherwise the same
+ * energy would be counted twice.
+ *
+ * `allowHabitualEstimate` defaults to true (today's balance). History passes
+ * false : a past day without any data must stay « unknown », not receive a
+ * guessed activity that would look like a measurement.
  *
  * totalKcal = basalKcal + activityKcal, null when basalKcal is null.
  * Never returns a total without a known basal metabolism.
@@ -85,10 +129,15 @@ export function resolveDailyEnergyExpenditure({
   healthCalories,
   healthSteps,
   profile,
+  sessionKcal = 0,
+  allowHabitualEstimate = true,
 }: {
   healthCalories: { active: number; total: number } | null;
   healthSteps: number | null;
   profile: EnergyProfile;
+  /** Depense nette des seances du jour, deja estimee (lib/sessionCalories). */
+  sessionKcal?: number;
+  allowHabitualEstimate?: boolean;
 }): DailyEnergyExpenditure {
   const bmr = calculateBmr(profile);
   const weightKg = profile.weightKg;
@@ -99,29 +148,48 @@ export function resolveDailyEnergyExpenditure({
   let activityKcal: number | null = null;
   let activitySource: ActivitySource = 'unknown';
   let usedDefaultWeight = false;
+  let mode: ExpenditureMode = 'unknown';
+  let measuredKcal: number | null = null;
+  let habitualKcal: number | null = null;
+
+  const sessionsKcal =
+    Number.isFinite(sessionKcal) && sessionKcal > 0 ? Math.round(sessionKcal) : 0;
+  // Calculees des que les pas sont connus : la vue « pas » les affiche quel
+  // que soit le mode, meme quand elles ne comptent pas dans le total.
+  const stepsEstimate =
+    healthSteps !== null && healthSteps > 0
+      ? estimateActiveCaloriesFromSteps(healthSteps, weightKg)
+      : null;
 
   // 1. Active calories from Health Connect (measured)
   if (healthCalories && healthCalories.active > 0) {
     activityKcal = healthCalories.active;
     activitySource = 'healthConnectActive';
+    mode = 'measured';
+    measuredKcal = activityKcal;
   }
   // 2. Derive from total calories (total - BMR), BMR required
   else if (healthCalories && healthCalories.total > 0 && bmr !== null) {
     activityKcal = Math.max(0, healthCalories.total - bmr);
     activitySource = 'healthConnectDerived';
+    mode = 'measured';
+    measuredKcal = activityKcal;
   }
-  // 3. Estimate from steps
-  else if (healthSteps !== null && healthSteps > 0) {
-    const estimate = estimateActiveCaloriesFromSteps(healthSteps, weightKg);
-    activityKcal = estimate.activeCaloriesKcal;
-    activitySource = 'steps';
-    usedDefaultWeight = estimate.usedDefaultWeight;
+  // 3. Estimate : steps and workouts are ADDED, no measurement covers them
+  else if (stepsEstimate || sessionsKcal > 0) {
+    activityKcal = (stepsEstimate?.activeCaloriesKcal ?? 0) + sessionsKcal;
+    activitySource =
+      stepsEstimate && sessionsKcal > 0 ? 'stepsAndSessions' : stepsEstimate ? 'steps' : 'sessions';
+    mode = 'estimated';
+    usedDefaultWeight = stepsEstimate?.usedDefaultWeight ?? false;
   }
   // 4. Habitual estimate from activity level
-  else if (bmr !== null) {
+  else if (bmr !== null && allowHabitualEstimate) {
     const factor = ACTIVITY_FACTORS[profile.activityLevel];
     activityKcal = Math.round(bmr * (factor - 1));
     activitySource = 'habitualEstimate';
+    mode = 'habitual';
+    habitualKcal = activityKcal;
   }
   // 5. Unknown — no usable data
   else {
@@ -133,6 +201,8 @@ export function resolveDailyEnergyExpenditure({
 
   const activityIsEstimated =
     activitySource === 'steps' ||
+    activitySource === 'stepsAndSessions' ||
+    activitySource === 'sessions' ||
     activitySource === 'habitualEstimate' ||
     activitySource === 'unknown';
 
@@ -140,6 +210,15 @@ export function resolveDailyEnergyExpenditure({
     basalKcal,
     activityKcal,
     totalKcal,
+    breakdown: {
+      mode,
+      bodyKcal: basalKcal,
+      stepsKcal: stepsEstimate?.activeCaloriesKcal ?? null,
+      sessionsKcal,
+      sessionsIncluded: mode === 'estimated',
+      measuredKcal,
+      habitualKcal,
+    },
     basalSource,
     activitySource,
     basalSourceLabelKey: BASAL_SOURCE_LABEL_KEYS[basalSource],

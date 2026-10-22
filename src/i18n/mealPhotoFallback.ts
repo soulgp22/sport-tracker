@@ -20,10 +20,8 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.permissionCta': 'Autoriser',
   'mealPhoto.captureFailed': "La photo n'a pas pu être prise. Réessaie.",
   'mealPhoto.cameraUnavailable': 'Appareil photo indisponible',
-  'mealPhoto.downloading': 'Téléchargement du modèle IA… {{percent}} %',
   'mealPhoto.downloadWarning':
     "Environ 4,5 Go : connexion wifi recommandée. Garde l'app ouverte pendant le téléchargement.",
-  'mealPhoto.modelLoading': 'Chargement du modèle IA…',
   'mealPhoto.analyzing': 'Analyse de la photo… (10 à 30 s)',
   'mealPhoto.closing': "Arrêt de l'analyse en cours…",
   'mealPhoto.warningBanner': "Estimation à vérifier — l'IA se trompe sur les quantités.",
@@ -38,6 +36,9 @@ export const MEAL_PHOTO_TEXTS_FR: Record<string, string> = {
   'mealPhoto.retry': 'Réessayer',
   'mealPhoto.errorTitle': 'Analyse impossible',
   'mealPhoto.errorMessage': "Le modèle n'a pas pu analyser la photo. Réessaie plus tard.",
+  'mealPhoto.serverUnavailableTitle': 'Analyse indisponible',
+  'mealPhoto.serverUnavailableMessage':
+    "Le serveur d'analyse ne répond pas pour le moment. Réessaie dans quelques minutes.",
   'mealPhoto.downloadInterrupted':
     "Le téléchargement du modèle a été interrompu. Rouvre cet écran et garde l'app au premier plan jusqu'à la fin.",
   'mealPhoto.totalTitle': 'Total estimé',

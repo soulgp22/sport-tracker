@@ -1,17 +1,21 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DailyGoalRings } from '../../components/home/DailyGoalRings';
 import { WeightTrend } from '../../components/progress/WeightTrend';
 import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
+import { buildDailyGoalsSnapshot } from '../../lib/dailyGoals';
 import { estimateActiveCaloriesFromSteps, resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
-import { getBodyweightForDate } from '../../lib/performanceEngine';
+import { calculateConsistencyMetrics, getBodyweightForDate } from '../../lib/performanceEngine';
+import { publishDailyGoalsWidget } from '../../lib/widgets/dailyGoalsWidget';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
 import { useBodyWeightStore } from '../../store/bodyWeightStore';
+import { useDailyGoalsStore } from '../../store/dailyGoalsStore';
 import { useFoodDiaryStore } from '../../store/foodDiaryStore';
 import { useNutritionGoalsStore } from '../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../store/performanceStore';
@@ -21,7 +25,7 @@ import type { ThemeColors } from '../../theme/palettes';
 import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
 import { useHealthToday } from '../../hooks/useHealthToday';
-
+import { useTodaySessionKcal } from '../../hooks/useEnergyHistory';
 
 /** Durée de montée des compteurs de l'accueil, en millisecondes. */
 const ANIMATION_DURATION_MS = 900;
@@ -79,6 +83,10 @@ export default function HomeScreen() {
   const age = usePerformanceStore((s) => s.age);
   const heightCm = usePerformanceStore((s) => s.heightCm);
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
+  const weeklySessionGoal = usePerformanceStore((s) => s.weeklySessionGoal);
+  const monthlySessionGoal = usePerformanceStore((s) => s.monthlySessionGoal);
+  const stepsGoal = useDailyGoalsStore((s) => s.stepsGoal);
+  const activeKcalGoal = useDailyGoalsStore((s) => s.activeKcalGoal);
   const weightEntries = useBodyWeightStore((s) => s.entries);
   const goals = useNutritionGoalsStore((s) => s.goals);
   const entriesState = useFoodDiaryStore((s) => s.entries);
@@ -101,10 +109,14 @@ export default function HomeScreen() {
       ? estimateActiveCaloriesFromSteps(steps, weightKg).activeCaloriesKcal
       : null;
 
+  // Le bilan du jour compte aussi les seances : meme fonction et memes
+  // entrees que l'historique, donc le meme chiffre aux deux endroits.
+  const todaySessionKcal = useTodaySessionKcal();
   const expenditure = resolveDailyEnergyExpenditure({
     healthCalories: null,
     healthSteps,
     profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
+    sessionKcal: todaySessionKcal,
   });
 
   const consumed = totals.calories;
@@ -112,6 +124,39 @@ export default function HomeScreen() {
   const burned = expenditure.activityKcal;
   const progress = goal > 0 ? Math.min(1, consumed / goal) : 0;
   const remaining = burned !== null ? goal - consumed + burned : null;
+
+  // Objectifs du jour. La depense ne compte vers l'objectif que si elle vient
+  // de donnees du jour (mesure Health Connect, ou pas + seances) : le repli
+  // « habituel » du profil est une constante, pas une progression.
+  const expenditureMode = expenditure.breakdown.mode;
+  const goalActiveKcal =
+    expenditureMode === 'measured' || expenditureMode === 'estimated' ? burned : null;
+  const sessionsThisWeek = useMemo(
+    () => calculateConsistencyMetrics(sessions, weeklySessionGoal, monthlySessionGoal).thisWeek,
+    [sessions, weeklySessionGoal, monthlySessionGoal]
+  );
+  const dailyGoals = useMemo(
+    () =>
+      buildDailyGoalsSnapshot(
+        { steps: healthSteps, activeKcal: goalActiveKcal, sessionsThisWeek },
+        { stepsGoal, activeKcalGoal, weeklySessionGoal }
+      ),
+    [healthSteps, goalActiveKcal, sessionsThisWeek, stepsGoal, activeKcalGoal, weeklySessionGoal]
+  );
+  const goalLabels = useMemo(
+    () => ({
+      title: t('goals.title'),
+      steps: t('goals.steps'),
+      // Libelles courts : le widget n'a pas la place de « Seances · sem. ».
+      sessions: t('goals.sessionsShort'),
+      activeKcal: t('goals.kcalShort'),
+    }),
+    [t]
+  );
+  // Le widget Android affiche le meme instantane que l'accueil.
+  useEffect(() => {
+    void publishDailyGoalsWidget({ snapshot: dailyGoals, labels: goalLabels, locale });
+  }, [dailyGoals, goalLabels, locale]);
 
   const now = new Date();
   const dateLabel = formatHeaderDate(now, locale);
@@ -174,56 +219,84 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Objectifs du jour : trois anneaux */}
+        <DailyGoalRings
+          snapshot={dailyGoals}
+          activeKcalUnavailableReason={expenditure.basalKcal === null ? 'profile' : 'data'}
+          formatInteger={(value) => formatInteger(value, locale)}
+          onPressSteps={() => router.push('/(tabs)/progress?tab=steps' as never)}
+          onPressSessions={() => router.push('/(tabs)/progress?tab=sessions' as never)}
+          onPressActiveKcal={() => router.push('/(tabs)/progress?tab=energy' as never)}
+          onPressAdjust={() => router.push('/(tabs)/settings' as never)}
+        />
+
         {/* Poids actuel */}
-        <TouchableOpacity
-          style={styles.weightBand}
-          onPress={() => router.push('/(tabs)/progress?tab=bodyWeight' as never)}
-          activeOpacity={0.78}
-          accessibilityRole="button"
-          accessibilityLabel={t('progress.currentWeight')}>
-          <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
-          <View style={styles.weightBandGroup}>
-            <WeightTrend entries={weightEntries} />
-            {weightKg === undefined ? (
-              <Text style={styles.weightBandValue} testID="home-weight-value">—</Text>
-            ) : (
-              <AnimatedNumber
-                value={weightKg}
-                duration={ANIMATION_DURATION_MS}
-                format={(v) => String(Math.round(v * 10) / 10)}
-                style={styles.weightBandValue}
-                testID="home-weight-value">
-                <Text style={styles.weightBandUnit}> kg</Text>
-              </AnimatedNumber>
-            )}
-            {steps !== null ? (
-              <>
-                {/* Filet vertical : sans lui, « 78 kg 8000 pas 240 kcal » se lit
-                    comme une seule suite de chiffres. */}
-                <View style={styles.weightBandDivider} />
+        <View style={styles.weightBand}>
+          <TouchableOpacity
+            style={styles.weightBandMain}
+            onPress={() => router.push('/(tabs)/progress?tab=bodyWeight' as never)}
+            activeOpacity={0.78}
+            accessibilityRole="button"
+            accessibilityLabel={t('progress.currentWeight')}
+            testID="home-weight-band">
+            <Text style={styles.weightBandLabel}>{t('progress.currentWeight')}</Text>
+            <View style={styles.weightBandGroup} testID="home-weight-group">
+              <WeightTrend entries={weightEntries} />
+              {weightKg === undefined ? (
+                <Text style={styles.weightBandValue} testID="home-weight-value">—</Text>
+              ) : (
                 <AnimatedNumber
-                  value={steps}
+                  value={weightKg}
+                  duration={ANIMATION_DURATION_MS}
+                  format={(v) => String(Math.round(v * 10) / 10)}
+                  style={styles.weightBandValue}
+                  testID="home-weight-value">
+                  <Text style={styles.weightBandUnit}> kg</Text>
+                </AnimatedNumber>
+              )}
+              {steps === null ? (
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={c.textMuted}
+                  testID="home-weight-chevron"
+                />
+              ) : null}
+            </View>
+          </TouchableOpacity>
+          {steps !== null ? (
+            <TouchableOpacity
+              style={[styles.weightBandGroup, { marginLeft: spacing.xs }]}
+              onPress={() => router.push('/(tabs)/progress?tab=steps' as never)}
+              activeOpacity={0.78}
+              accessibilityRole="button"
+              accessibilityLabel={t('history.tab.steps')}
+              testID="home-steps-band">
+              {/* Filet vertical : sans lui, « 78 kg 8000 pas 240 kcal » se lit
+                  comme une seule suite de chiffres. */}
+              <View style={styles.weightBandDivider} />
+              <AnimatedNumber
+                value={steps}
+                duration={ANIMATION_DURATION_MS}
+                format={(v) => String(Math.round(v))}
+                style={styles.weightBandMetaValue}
+                testID="home-steps-value">
+                <Text style={styles.weightBandMetaUnit}> {t('home.steps')}</Text>
+              </AnimatedNumber>
+              {stepsCalories !== null ? (
+                <AnimatedNumber
+                  value={stepsCalories}
                   duration={ANIMATION_DURATION_MS}
                   format={(v) => String(Math.round(v))}
                   style={styles.weightBandMetaValue}
-                  testID="home-steps-value">
-                  <Text style={styles.weightBandMetaUnit}> {t('home.steps')}</Text>
+                  testID="home-steps-calories-value">
+                  <Text style={styles.weightBandMetaUnit}> kcal</Text>
                 </AnimatedNumber>
-                {stepsCalories !== null ? (
-                  <AnimatedNumber
-                    value={stepsCalories}
-                    duration={ANIMATION_DURATION_MS}
-                    format={(v) => String(Math.round(v))}
-                    style={styles.weightBandMetaValue}
-                    testID="home-steps-calories-value">
-                    <Text style={styles.weightBandMetaUnit}> kcal</Text>
-                  </AnimatedNumber>
-                ) : null}
-              </>
-            ) : null}
-            <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
-          </View>
-        </TouchableOpacity>
+              ) : null}
+              <Ionicons name="chevron-forward" size={16} color={c.textMuted} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
 
         {/* 3. Action principale */}
         <View style={styles.actionWrap}>
@@ -248,18 +321,18 @@ export default function HomeScreen() {
         {/* 4. Deux raccourcis */}
         <View style={styles.shortcuts}>
           <TouchableOpacity
-            style={[styles.shortcut, styles.shortcutDivider]}
-            onPress={() => router.push('/(tabs)/nutrition/photo' as never)}
-            activeOpacity={0.78}
+            style={[styles.shortcut, styles.shortcutPhoto]}
+            onPress={() => router.push('/meal-photo' as never)}
+            activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={t('home.analyzeMeal')}>
             <Text style={styles.shortcutTitle}>{t('home.analyzeMeal')}</Text>
             <Text style={styles.shortcutSubtitle}>{t('home.analyzeMealSubtitle')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.shortcut}
+            style={[styles.shortcut, styles.shortcutCalories]}
             onPress={() => router.push('/(tabs)/nutrition' as never)}
-            activeOpacity={0.78}
+            activeOpacity={0.86}
             accessibilityRole="button"
             accessibilityLabel={t('home.calorieTracking')}>
             <Text style={styles.shortcutTitle}>{t('home.calorieTracking')}</Text>
@@ -272,7 +345,7 @@ export default function HomeScreen() {
           <View style={styles.activityHeader}>
             <Text style={styles.activityTitle}>{t('home.lastActivity')}</Text>
             <TouchableOpacity
-              onPress={() => router.push('/(tabs)/history' as never)}
+              onPress={() => router.push('/(tabs)/progress?tab=sessions' as never)}
               activeOpacity={0.7}
               accessibilityRole="button"
               accessibilityLabel={t('nav.history')}>
@@ -401,6 +474,12 @@ const makeStyles = (c: ThemeColors) =>
       borderBottomColor: c.border,
       minHeight: 48,
     },
+    weightBandMain: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
+    },
     weightBandLabel: {
       fontFamily: fonts.sans,
       fontSize: 11,
@@ -473,32 +552,44 @@ const makeStyles = (c: ThemeColors) =>
       opacity: 0.85,
     },
 
+    // Les deux raccourcis etaient de simples zones de texte separees par un
+    // filet : rien n'indiquait qu'on pouvait appuyer dessus, alors que
+    // « Analyser un plat » est la fonctionnalite differenciante de l'app. Ils
+    // reprennent desormais la forme du bouton d'action principal (meme rayon,
+    // meme rythme interne), en gardant le filet haut/bas qui structure la page.
     shortcuts: {
       flexDirection: 'row',
+      gap: 12,
+      padding: 20,
       borderTopWidth: 2,
       borderBottomWidth: 2,
       borderColor: c.border,
     },
     shortcut: {
       flex: 1,
-      minHeight: 88,
-      paddingHorizontal: 20,
-      paddingVertical: 18,
+      minHeight: 96,
+      paddingHorizontal: 18,
+      paddingVertical: 16,
       justifyContent: 'center',
+      gap: 6,
+      borderRadius: radius.lg,
     },
-    shortcutDivider: { borderRightWidth: 1, borderRightColor: c.border },
+    // Vert : c'est la couleur que la section Nutrition emploie deja pour ce
+    // meme geste (bouton « Analyser un plat » de l'ecran Nutrition).
+    shortcutPhoto: { backgroundColor: c.tertiary },
+    shortcutCalories: { backgroundColor: c.primary },
     shortcutTitle: {
       fontFamily: fonts.serifBold,
-      fontSize: 16,
-      lineHeight: 20,
-      color: c.textPrimary,
+      fontSize: 18,
+      lineHeight: 22,
+      color: c.primaryText,
     },
     shortcutSubtitle: {
       fontFamily: fonts.sans,
       fontSize: 12,
       lineHeight: 16,
-      marginTop: 4,
-      color: c.textSecondary,
+      color: c.primaryText,
+      opacity: 0.85,
     },
 
     activitySection: { flex: 1 },

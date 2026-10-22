@@ -1,5 +1,6 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, within } from '@testing-library/react-native';
+import { Platform } from 'react-native';
 
 import HomeScreen from '../index';
 import { useActiveSessionStore } from '../../../store/activeSessionStore';
@@ -9,19 +10,27 @@ import { useLanguageStore } from '../../../store/languageStore';
 import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
 import { useSessionStore } from '../../../store/sessionStore';
+import { useDailyGoalsStore } from '../../../store/dailyGoalsStore';
+import { DAILY_GOALS_WIDGET_SNAPSHOT_KEY } from '../../../lib/widgets/dailyGoalsWidgetSnapshot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { requestWidgetUpdate } from 'react-native-android-widget';
 import { estimateActiveCaloriesFromSteps } from '../../../lib/energyBalance';
 import {
   hasHealthPermissions,
+  hasWeightPermission,
   isHealthConnectAvailable,
   readCaloriesBurnedToday,
+  readLatestWeight,
   readStepsToday,
 } from '../../../lib/healthConnect';
+
+const mockPush = jest.fn();
 
 jest.mock('expo-router', () => {
   const React = jest.requireActual<any>('react');
   return {
     useRouter: () => ({
-      push: jest.fn(),
+      push: mockPush,
       replace: jest.fn(),
       back: jest.fn(),
       canGoBack: jest.fn(),
@@ -37,6 +46,10 @@ jest.mock('../../../lib/healthConnect', () => ({
   hasHealthPermissions: jest.fn(),
   readCaloriesBurnedToday: jest.fn(),
   readStepsToday: jest.fn(),
+  // Permission optionnelle : par defaut refusee, l'ecran doit fonctionner
+  // exactement pareil sans elle.
+  hasWeightPermission: jest.fn().mockResolvedValue(false),
+  readLatestWeight: jest.fn().mockResolvedValue(null),
 }));
 
 jest.mock('react-native-safe-area-context', () => {
@@ -69,10 +82,13 @@ function resetStores() {
 
 beforeEach(() => {
   jest.useFakeTimers({ now: NOW });
+  mockPush.mockClear();
   (isHealthConnectAvailable as jest.Mock).mockResolvedValue(false);
   (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
   (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
   (readStepsToday as jest.Mock).mockResolvedValue(null);
+  (hasWeightPermission as jest.Mock).mockReset().mockResolvedValue(false);
+  (readLatestWeight as jest.Mock).mockReset().mockResolvedValue(null);
   resetStores();
 });
 
@@ -203,6 +219,97 @@ describe('HomeScreen', () => {
     expect(screen.getByText(`${expectedCalories} kcal`)).toBeTruthy();
   });
 
+  it("appui sur la bande poids → ouvre la vue « Poids » des stats", () => {
+    render(<HomeScreen />);
+
+    fireEvent.press(screen.getByTestId('home-weight-band'));
+
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=bodyWeight');
+  });
+
+  it("le bouton « Analyser un plat » pousse l’écran d’analyse photo à la racine", () => {
+    render(<HomeScreen />);
+
+    fireEvent.press(screen.getByLabelText('Analyser un plat'));
+
+    expect(mockPush).toHaveBeenCalledWith('/meal-photo');
+  });
+
+  it("appui sur les pas → ouvre la vue « Pas » des stats", async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(8000);
+
+    useBodyWeightStore.setState({
+      entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 }],
+    });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    fireEvent.press(screen.getByTestId('home-steps-band'));
+
+    expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=steps');
+  });
+
+  it("sans pas, la bande « Pas » n'existe pas", () => {
+    render(<HomeScreen />);
+
+    expect(screen.queryByTestId('home-steps-band')).toBeNull();
+  });
+
+  it("sans pas, le chevron est un descendant du groupe du poids", () => {
+    render(<HomeScreen />);
+
+    const weightGroup = screen.getByTestId('home-weight-group');
+    expect(within(weightGroup).getByTestId('home-weight-chevron')).toBeTruthy();
+  });
+
+  it('verse le poids Health Connect dans l’historique des pesées', async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(null);
+    (hasWeightPermission as jest.Mock).mockResolvedValue(true);
+    (readLatestWeight as jest.Mock).mockResolvedValue({
+      weightKg: 78.4,
+      time: '2026-08-27T07:12:00.000Z',
+    });
+
+    useBodyWeightStore.setState({ entries: [] });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    expect(useBodyWeightStore.getState().entries).toHaveLength(1);
+    expect(useBodyWeightStore.getState().entries[0]).toMatchObject({
+      weight: 78.4,
+      source: 'healthConnect',
+    });
+  });
+
+  it('ne touche pas aux pesées quand la permission poids est refusée', async () => {
+    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+    (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+    (readStepsToday as jest.Mock).mockResolvedValue(8000);
+    (hasWeightPermission as jest.Mock).mockResolvedValue(false);
+
+    const manual = { id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 81.7 };
+    useBodyWeightStore.setState({ entries: [manual] });
+
+    render(<HomeScreen />);
+    await act(async () => {});
+
+    expect(readLatestWeight).not.toHaveBeenCalled();
+    expect(useBodyWeightStore.getState().entries).toEqual([manual]);
+  });
+
   it("sans donnée de pas, n'affiche aucun « 0 » ni valeur trompeuse à la place des pas et calories", async () => {
     (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
     (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
@@ -220,5 +327,94 @@ describe('HomeScreen', () => {
     expect(screen.queryByText('0 kcal')).toBeNull();
     expect(screen.queryByTestId('home-steps-value')).toBeNull();
     expect(screen.queryByTestId('home-steps-calories-value')).toBeNull();
+  });
+
+  describe('objectifs du jour', () => {
+    it('sans Health Connect ni profil, les anneaux pas et dépense invitent au lieu d’afficher 0', () => {
+      render(<HomeScreen />);
+
+      expect(screen.getByText('Objectifs du jour')).toBeTruthy();
+      expect(screen.getByTestId('home-goal-steps-unavailable').props.children).toBe('Connecter');
+      expect(screen.getByTestId('home-goal-active-kcal-unavailable').props.children).toBe('Profil');
+      // Zéro séance est une vraie valeur : l’anneau existe et affiche 0 / 3.
+      expect(screen.getByTestId('home-goal-sessions-value').props.children).toBe('0');
+      expect(screen.getByText('/ 3')).toBeTruthy();
+      expect(screen.queryByTestId('home-goal-steps-value')).toBeNull();
+    });
+
+    it('affiche les pas du jour face à l’objectif et compte les séances de la semaine', async () => {
+      (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+      (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+      (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+      (readStepsToday as jest.Mock).mockResolvedValue(6240);
+      useDailyGoalsStore.setState({ stepsGoal: 8000, activeKcalGoal: 500 });
+      usePerformanceStore.setState({ weeklySessionGoal: 3 });
+      // NOW est le vendredi 14 août 2026 : lundi 10 et mercredi 12 sont dans la semaine,
+      // le dimanche 9 n’y est pas.
+      useSessionStore.setState({
+        sessions: [
+          { id: 's-1', date: '2026-08-12T18:00:00.000Z', durationSeconds: 1, exercises: [] },
+          { id: 's-2', date: '2026-08-10T18:00:00.000Z', durationSeconds: 1, exercises: [] },
+          { id: 's-3', date: '2026-08-09T18:00:00.000Z', durationSeconds: 1, exercises: [] },
+        ],
+      });
+
+      render(<HomeScreen />);
+      await act(async () => {});
+
+      expect(screen.getByTestId('home-goal-steps-value').props.children).toMatch(/^6.240$/);
+      expect(screen.getByTestId('home-goal-sessions-value').props.children).toBe('2');
+      expect(screen.getByText('/ 3')).toBeTruthy();
+    });
+
+    it('la dépense « habituelle » du profil ne compte pas comme progression', async () => {
+      // Profil complet mais ni pas ni séance : la dépense d’activité est un
+      // repli constant tiré du niveau d’activité, pas une donnée du jour.
+      usePerformanceStore.setState({ sex: 'male', age: 30, heightCm: 180, activityLevel: 'moderate' });
+      useBodyWeightStore.setState({
+        entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 80 }],
+      });
+
+      render(<HomeScreen />);
+      await act(async () => {});
+
+      // Le profil est complet : c’est la donnée qui manque, pas le profil.
+      expect(screen.getByTestId('home-goal-active-kcal-unavailable').props.children).toBe('Connecter');
+      expect(screen.queryByTestId('home-goal-active-kcal-value')).toBeNull();
+    });
+
+    it('les anneaux et « Régler » mènent aux bons écrans', () => {
+      render(<HomeScreen />);
+
+      fireEvent.press(screen.getByTestId('home-goal-steps'));
+      expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/progress?tab=steps');
+      fireEvent.press(screen.getByTestId('home-goal-sessions'));
+      expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/progress?tab=sessions');
+      fireEvent.press(screen.getByTestId('home-goal-active-kcal'));
+      expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/progress?tab=energy');
+      fireEvent.press(screen.getByTestId('home-daily-goals-adjust'));
+      expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/settings');
+    });
+
+    it('publie le même instantané vers le widget Android', async () => {
+      // jest-expo simule iOS par défaut ; le widget n’existe que sur Android.
+      const platform = Platform.OS;
+      Platform.OS = 'android';
+      (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+      (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+      (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+      (readStepsToday as jest.Mock).mockResolvedValue(6240);
+      useDailyGoalsStore.setState({ stepsGoal: 8000, activeKcalGoal: 500 });
+
+      render(<HomeScreen />);
+      await act(async () => {});
+
+      const stored = JSON.parse((await AsyncStorage.getItem(DAILY_GOALS_WIDGET_SNAPSHOT_KEY)) ?? 'null');
+      expect(stored.snapshot.steps).toMatchObject({ kind: 'progress', value: 6240, goal: 8000 });
+      expect(stored.labels.title).toBe('Objectifs du jour');
+      expect(stored.labels).toMatchObject({ steps: 'Pas', sessions: 'Séances', activeKcal: 'kcal' });
+      expect(requestWidgetUpdate).toHaveBeenCalledWith(expect.objectContaining({ widgetName: 'DailyGoals' }));
+      Platform.OS = platform;
+    });
   });
 });

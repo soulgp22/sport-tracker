@@ -184,6 +184,11 @@ juillet** parce que le checkout ne récupérait pas Git LFS, et personne ne l'a 
 - [ ] les URLs média distantes répondent **200** avec un type MIME correct, sur la
       branche `main` (pas seulement en local) ;
 - [ ] l'APK/AAB s'installe sur un appareil vierge et **démarre** ;
+- [ ] **Data Safety à jour AVANT la soumission** si la version ajoute une donnée
+      qui sort de l'appareil (identifiant, SDK tiers, nouvel appel réseau) :
+      Google le détecte et rejette la version (1.30.0, voir `known_bugs.md`) ;
+- [ ] `node scripts/check-release-env.mjs` sort en 0 : pas de clé RevenueCat
+      Test Store (`test_…`) ni de configuration serveur vide dans le build ;
 - [ ] taille du bundle sous surveillance (alerte si +10 % d'un coup) ;
 - [ ] `versionCode` incrémenté, `versionName` cohérent.
 
@@ -225,6 +230,12 @@ Aucune publication si une case reste vide.
 
 **Manuel (une fois par version)**
 - [ ] installation par-dessus la version précédente : **aucune perte de données**
+- [ ] **parcours d'abandon de l'analyse photo** (manqués en 1.32, voir
+  `known_bugs.md`) : ouvrir puis « Annuler », puis aller ailleurs (pas,
+  Stats, onglet Nutrition) → la caméra ne doit jamais revenir ; annuler
+  PENDANT l'analyse ; photo sans aucun plat → message et sortie ; serveur
+  coupé → alerte et sortie. Un parcours heureux réussi ne prouve rien sur
+  ces chemins-là.
 - [ ] mode avion : chaque écran dégrade proprement
 - [ ] une langue autre que le français, de bout en bout
 - [ ] thème clair **et** sombre

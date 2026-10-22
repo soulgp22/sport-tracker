@@ -1,0 +1,25 @@
+# A inserer dans le bloc lifesporttracker.duckdns.org du Caddyfile, AVANT le
+# `reverse_proxy 127.0.0.1:8352` final (comme les blocs de lst-catalog).
+
+    # Etat et declaration du quota.
+    handle /v1/quota* {
+        reverse_proxy 127.0.0.1:8354
+    }
+
+    # Chaque analyse photo passe d'abord par le quota : 2xx = on transmet au
+    # routeur, sinon la reponse du quota (402, 400, 426) revient au client.
+    # forward_auth recopie les en-tetes de la requete (Authorization,
+    # X-Device-Id, X-Utc-Offset) vers /internal/quota/check.
+    handle /v1/chat/completions* {
+        forward_auth 127.0.0.1:8354 {
+            uri /internal/quota/check
+        }
+        reverse_proxy 127.0.0.1:8352
+    }
+
+    # Pages legales servies a cote de la politique de confidentialite.
+    handle /terms* {
+        root * /opt/meal-training/www
+        rewrite /terms /terms.html
+        file_server
+    }

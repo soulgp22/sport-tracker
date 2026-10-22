@@ -1,37 +1,10 @@
-import { useMemo } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { Link, Stack, useRouter } from 'expo-router';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Stack } from 'expo-router';
 
 import { useColors } from '../../../theme/useColors';
-import type { ThemeColors } from '../../../theme/palettes';
 import { fonts } from '../../../theme/fonts';
-import { useTranslation } from '../../../i18n/useTranslation';
-
-function BackToHomeButton() {
-  const c = useColors();
-  const router = useRouter();
-
-  const handlePress = () => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-
-    router.replace('/(tabs)' as never);
-  };
-
-  return (
-    <TouchableOpacity onPress={handlePress} hitSlop={8} activeOpacity={0.7}>
-      <Ionicons name="arrow-back" size={24} color={c.textPrimary} />
-    </TouchableOpacity>
-  );
-}
 
 export default function NutritionLayout() {
   const c = useColors();
-  const { t } = useTranslation();
-  const styles = useMemo(() => makeStyles(c), [c]);
   return (
     <Stack
       screenOptions={{
@@ -45,19 +18,11 @@ export default function NutritionLayout() {
       }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="add" options={{ headerShown: false }} />
-      <Stack.Screen name="photo" options={{ headerShown: false }} />
       <Stack.Screen name="diary" options={{ headerShown: false }} />
       <Stack.Screen name="goals" options={{ headerShown: false }} />
       <Stack.Screen name="history" options={{ headerShown: false }} />
+      <Stack.Screen name="premium" options={{ headerShown: false }} />
     </Stack>
   );
 }
 
-const makeStyles = (c: ThemeColors) => StyleSheet.create({
-  settingsButton: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

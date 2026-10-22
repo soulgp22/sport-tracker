@@ -821,3 +821,544 @@ auraient reintroduit le probleme par une porte differente.
 **A retenir** — « le bon comportement gagne » et « la mauvaise donnee n'existe
 plus » sont deux garanties differentes. La premiere depend d'une regle qu'un
 futur changement peut casser ; la seconde est definitive.
+
+## Le retour arriere ramenait a l'accueil au lieu du menu precedent
+
+Signale par Islam le 2026-08-27 : « les retours arriere ne reviennent pas a
+chaque fois au menu precedent mais a l'accueil parfois ».
+
+**Cause racine** — Programmes, Exercices, Aliments, Historique, Communaute et
+Reglages ne sont PAS des ecrans empiles : ce sont des ONGLETS masques
+(`href: null` dans `src/app/(tabs)/_layout.tsx`). Passer de Nutrition a Aliments
+est donc un changement d'onglet, pas un `push`. Or le `backBehavior` par defaut
+du `TabRouter` de React Navigation vaut `firstRoute` : tout retour arriere
+depuis un onglet non-premier renvoie sur le PREMIER onglet declare — l'accueil.
+
+Le defaut ne dependait donc pas de l'ecran mais du type de saut :
+- saut a l'interieur d'un onglet (`nutrition` -> `nutrition/add`) : retour correct ;
+- saut d'un onglet a un autre (`nutrition` -> `foods`) : retour a l'accueil.
+
+D'ou le « parfois » : c'est exactement la frontiere entre les deux.
+
+**Correctif** — une seule ligne : `backBehavior="history"` sur `<Tabs>`. Le
+routeur rejoue alors la pile de visites ; l'accueil n'est atteint que s'il etait
+reellement l'ecran precedent.
+
+Parcours mesures avant/apres (vrai `TabRouter`, vraie liste d'onglets) :
+
+| Parcours | avant (`firstRoute`) | apres (`history`) |
+|---|---|---|
+| Nutrition -> Aliments | accueil | Nutrition |
+| Programmes -> Communaute | accueil | Programmes |
+| Progression -> Historique | accueil | Progression |
+| Seance -> Exercices | accueil | Seance |
+| Profil -> Reglages | accueil | Profil |
+| Accueil -> Nutrition | accueil | accueil (correct : il EST le precedent) |
+
+**Consequence de nommage** — le composant `BackToHomeButton` present dans cinq
+`_layout.tsx` ne ramenait plus a l'accueil : renomme `BackButton`, et la cle i18n
+`common.backHome` (« Retour a l'accueil ») devient `common.back` (« Retour ») dans
+les 4 langues. Un nom qui ment sur le comportement est un piege pour la prochaine
+lecture.
+
+**A retenir** — quand une section est un onglet masque plutot qu'un ecran empile,
+le retour arriere n'obeit plus au stack mais au `TabRouter`. Le defaut n'etait
+dans aucun ecran : il etait dans le contrat du navigateur parent.
+
+
+## READ_WEIGHT bloque TOUTE publication, y compris le track interne
+
+Le 2026-08-27, l'ajout de `android.permission.health.READ_WEIGHT` a fait echouer
+`eas submit` avec :
+
+> Google Api Error: Invalid request - You must let us know whether your app
+> includes any health features.
+
+**Cause racine** — les permissions pas / calories passaient sans probleme, mais
+une **mesure corporelle** fait basculer l'application dans la categorie
+« applications de sante » cote Google Play. Tant que la **Declaration relative
+aux applications de sante** n'est pas remplie dans *Contenu de l'application*,
+Play refuse tout televersement — pas seulement la production : le track interne
+aussi. Cinq tentatives automatiques, cinq refus, aucun binaire publie.
+
+**Ce qui a ete fait** — retrait de la permission aux TROIS endroits, pas deux :
+
+1. `app.json` ;
+2. `android/app/src/main/AndroidManifest.xml` (genere et gitignore : Gradle lit
+   celui-la, `app.json` seul ne suffit pas — meme piege que le `versionCode`) ;
+3. `OPTIONAL_PERMISSIONS` dans `src/lib/healthConnect.ts`.
+
+Le point 3 n'est pas cosmetique : **demander une permission absente du manifeste
+peut faire rejeter la feuille Health Connect entiere**, donc faire perdre les
+pas et les calories qui fonctionnaient. Retirer du manifeste sans retirer de la
+demande aurait transforme un blocage de publication en regression fonctionnelle.
+
+**Piege de logique introduit par le retrait** — `[].every(...)` vaut `true`.
+Sans garde explicite, `hasWeightPermission()` aurait repondu « autorise » alors
+que la permission n'est meme pas declaree, et l'app aurait tente une lecture
+vouee a l'echec a chaque affichage. Le garde `OPTIONAL_PERMISSIONS.length === 0`
+est teste, et son retrait fait rougir deux tests.
+
+**A retenir** — une permission Android ne se retire pas d'un fichier mais d'une
+chaine : manifeste genere, configuration Expo, et code qui la demande. En oublier
+un maillon donne soit un binaire refuse, soit une regression silencieuse.
+
+
+## « banque plate » : un defaut lexical invisible pour toute la suite de tests
+
+Les 873 fiches d'exercices ont ete traduites automatiquement. Le francais
+produit est globalement fluide — ce qui a masque un defaut systematique pendant
+des mois : **« banque » pour *bench***, 204 occurrences sur 109 exercices,
+visible des l'ouverture de n'importe quelle fiche.
+
+Aucun test ne regardait le contenu de `instructionsFr`. Le prestataire de test
+ferme ne l'a pas signale non plus (voir le rapport du 2026-08-29).
+
+**Pourquoi PAS une retraduction.** Repasser 873 fiches dans un modele aurait
+coute cher, pris des heures, et risque de degrader du texte deja correct — pour
+un probleme purement lexical. Des regles deterministes sont plus sures,
+verifiables et rejouables : `scripts/fix-instructions-fr.mjs`.
+
+**Trois pieges rencontres en ecrivant la correction :**
+
+1. **Faux positifs.** « rangee » (a row of cones) et « boucle » (the loop of a
+   band) ont ete verifies contre l'anglais : ce sont des traductions CORRECTES.
+   Les « corriger » aurait introduit des fautes. Un audit qui ne verifie pas ses
+   propres signalements fabrique des regressions.
+2. **Frontieres de mot.** Un premier jet remplacait `/banque/` sans `\b` : le
+   motif mordait a l'interieur de « banquette » et produisait « banctte » —
+   9 occurrences d'un mot inexistant. Le garde-fou ne le voyait pas puisqu'il ne
+   cherchait que « banque ». Il surveille desormais les trois formes.
+3. **Le genre change.** `la banque` -> `le banc` fait passer le nom au masculin :
+   tous les accords suivants doivent suivre (`banque plate` -> `banc plat`,
+   `banque inclinee reglee` -> `banc incline regle`, `equipee` -> `equipe`).
+   Un balayage des accords feminins restants a montre 5 cas — tous CORRECTS,
+   car ils s'accordaient avec un autre nom (main, jambes, barre, prise).
+
+Un exercice avait par ailleurs une phrase entiere restee en anglais
+(`offline-419`), et un accord faux (« un seul poignee »).
+
+**A retenir** — un texte fluide n'est pas un texte juste. Une traduction
+automatique se relit sur son VOCABULAIRE metier, pas sur sa syntaxe, et la
+verification doit porter sur les donnees, pas seulement sur le code.
+
+
+## Deux permissions declarees sans jamais servir
+
+`RECORD_AUDIO` (microphone) et `SYSTEM_ALERT_WINDOW` (superposition d'ecran)
+figuraient dans le manifeste genere alors qu'aucune ligne du code applicatif ne
+les utilise. Declarer le micro sans s'en servir est un motif de signalement chez
+Play, et obligeait la politique de confidentialite a s'en expliquer.
+
+**Origine, tracee :**
+- `SYSTEM_ALERT_WINDOW` vient du manifeste **debug** de React Native
+  (`node_modules/react-native/ReactAndroid/src/debug/AndroidManifest.xml`), pour
+  l'overlay de developpement. Elle n'avait rien a faire dans un build release.
+- `RECORD_AUDIO` n'est declaree par AUCUNE dependance : c'est un residu d'une
+  ancienne configuration d'`expo-camera`. Le plugin porte pourtant deja
+  `recordAudioAndroid: false` — un `prebuild` neuf ne l'aurait pas ajoutee.
+
+**Pourquoi elles survivaient** : `android/` est genere UNE FOIS puis gitignore.
+Corriger la configuration Expo ne nettoie pas un manifeste deja ecrit. C'est le
+meme piege que le `versionCode` et que `READ_WEIGHT`.
+
+**Correctif aux deux endroits :**
+1. `android.blockedPermissions` dans `app.json` — durable, Expo injecte
+   `tools:node="remove"` a chaque futur prebuild ;
+2. suppression des deux lignes du manifeste genere — sans quoi le build courant
+   les aurait conservees.
+
+Verifie sur appareil apres desinstallation et reinstallation propre :
+`adb shell dumpsys package com.sportracker.app` ne mentionne plus ni
+`RECORD_AUDIO` ni `SYSTEM_ALERT_WINDOW`.
+
+**A retenir** — corriger la configuration Expo ne suffit jamais tant que
+`android/` existe deja. Toute permission se verifie sur l'APK INSTALLE, pas dans
+`app.json`.
+
+
+## Une date UTC range mal une activité, aux DEUX bords de la journée
+
+Piège identifié en écrivant l'historique (A01/A02), et d'abord mal compris.
+
+`new Date().toISOString().slice(0, 10)` renvoie la date **UTC**, pas la date de
+l'utilisateur. Mon premier test affirmait qu'une séance à 23 h 30 « basculerait
+au lendemain à l'est de Greenwich ». C'est **faux** : à l'est, l'heure locale est
+en avance sur l'UTC, donc 23 h 30 à Paris = 21 h 30 UTC, même jour. Le test
+n'aurait rien attrapé en France.
+
+Le vrai comportement :
+- à l'**est** (France) : une séance juste **après minuit** glisse au jour UTC
+  **précédent** ;
+- à l'**ouest** (Amériques) : une séance **tardive** glisse au jour UTC
+  **suivant**.
+
+**Correctif** : `lib/dateKeys` (`localDayKey`, `startOfLocalDay`…) pour tout le
+code nouveau. Le test couvre les deux bords, ce qui le rend utile dans tout
+fuseau non UTC. En fuseau UTC strict, aucun cas ne peut le faire échouer —
+limite documentée.
+
+**Non corrigé, hors portée** : plusieurs écrans existants (accueil, photo,
+journal alimentaire) calculent encore « aujourd'hui » avec
+`toISOString().slice(0, 10)`. Entre minuit et 2 h du matin en France, ils
+considèrent qu'on est encore la veille. À traiter séparément.
+
+**À retenir** — un test de fuseau horaire doit être raisonné sur le signe du
+décalage, pas sur l'intuition « tard le soir = lendemain ».
+
+
+## Un écran « d'une autre app » : en-tête natif et texte sans police
+
+Signalé par Islam (B01, 2026-09-22) sur Séance et Programmes. Deux causes
+distinctes, qui se voient ensemble.
+
+1. **L'en-tête natif de la pile** (`headerShown: true`) affiche le titre en
+   Archivo, alors que les écrans principaux dessinent leur propre en-tête
+   éditorial en Oswald. Même contenu, deux typographies.
+2. **Un `<Text>` sans `fontFamily` retombe sur la police SYSTÈME** d'Android
+   (Roboto, SamsungOne sur Samsung), pas sur Archivo : il n'y a pas de police
+   par défaut dans l'app. C'était « 4 jours · 28 exercices » dans ProgramCard
+   et le nombre d'exercices des jours dans Séance.
+
+**Correctif** : `ScreenHeader` + `headerShown: false` ; `fontFamily` explicite
+sur les textes concernés.
+
+**Non corrigé, hors portée** : Communauté et Aliments gardent l'en-tête natif ;
+d'autres `<Text>` sans `fontFamily` existent sans doute ailleurs.
+
+**À retenir** — tout style de texte porte une `fontFamily` ; un nouvel écran
+principal part de `ScreenHeader`, pas de l'en-tête de la pile.
+
+
+## La limite gratuite de l'analyse photo se contournait par « Ajouter un repas »
+
+Trouvé en préparant l'abonnement (F01, 2026-09-22), jamais signalé.
+
+La limite de 2 repas par jour n'était vérifiée que par l'écran
+`nutrition/photo`, dont le commentaire affirmait qu'il était « le seul point
+d'entrée vers l'analyse ». C'était faux : l'écran **Ajouter un repas** a son
+propre bouton appareil photo, qui ouvrait `MealPhotoReview` directement. Le
+compteur était incrémenté, mais jamais consulté sur ce chemin.
+
+**Cause racine** : un garde placé sur un écran, pas sur la capacité. Une
+seconde entrée suffit à le contourner, et un commentaire qui affirme
+l'unicité empêche de la chercher.
+
+**Correctif** : un seul calcul (`hooks/useMealPhotoQuota`) utilisé par les deux
+entrées, et surtout un verrou **serveur** (`lst-quota`, HTTP 402 sur l'analyse
+elle-même) : quelle que soit l'entrée, l'analyse est refusée.
+
+**Test** : `nutrition/__tests__/addPhotoQuota.test.tsx`, vérifié par sabotage.
+
+**À retenir** — une règle d'accès se vérifie là où la ressource est consommée
+(ici le serveur), pas sur un écran parmi d'autres. Chercher toutes les
+entrées avec `grep` avant d'écrire « seul point d'entrée ».
+
+## La politique de confidentialité en ligne n'était pas celle du dépôt
+
+Constaté le 2026-09-22 : `/privacy` sur le VPS sert un `privacy.html` du
+2 août, antérieur à la réécriture du 27 août (Rais&Co, Hetzner Allemagne). Le
+dépôt était à jour, la page publiée par Google Play non.
+
+**À retenir** — un document publié hors du dépôt ne suit pas le dépôt. Toute
+modification de `docs/play-store/*.md` publié en ligne s'accompagne de sa
+régénération sur le VPS (voir `server/lst-quota/README.md` et `connexions.md`).
+
+## 1.30.0 rejetée : Data Safety non mise à jour avant l'envoi
+
+2026-09-23. Google a refusé la version 47 : « Invalid Data safety form —
+Device Or Other IDs ». L'app envoie désormais l'ANDROID_ID au serveur de quota
+(et comme identifiant client à RevenueCat) ; le formulaire ne le déclarait pas.
+Google le détecte automatiquement dans le trafic de l'app.
+
+**Cause racine** : la build a été soumise AVANT la mise à jour du formulaire,
+alors que le nouveau flux de données était connu et documenté
+(`FICHE_PLAY_STORE.md`). La déclaration était traitée comme une tâche
+d'Islam « à faire ensuite ».
+
+**À retenir** — tout nouveau flux de données sortant de l'appareil (identifiant,
+SDK tiers, nouvel appel réseau) bloque la soumission tant que le formulaire
+Data Safety n'est pas à jour. Point ajouté au portail `docs/tests-avant-prod.md`.
+
+## La politique disait « jamais la photo » alors que l'option d'entraînement l'envoie
+
+Constaté le 2026-09-23 en remplissant la Data Safety. `mealPhotoTrainingLog`
+envoie la **photo + les corrections** au serveur quand l'option « améliorer le
+modèle » est activée ; la politique (3.5) affirmait l'inverse. Corrigé dans le
+texte (3.1 et 3.5). La Data Safety déclare donc les **Photos** comme
+collectées, non éphémères, facultatives.
+
+**À retenir** — relire le code qui envoie avant d'écrire une phrase de
+politique ; un commentaire ou une intention (« seul le texte ») ne fait pas foi.
+
+## Un appui sur les pas de l'accueil ouvrait le poids
+
+Signalé par Islam le 2026-09-26. La bande « POIDS ACTUEL 93 kg | 116 pas
+5 kcal » de l'accueil était **un seul** bouton, qui poussait toujours
+`progress?tab=bodyWeight`. Les pas vivaient dans un autre écran (Historique),
+atteignable seulement par un lien d'en-tête.
+
+**Cause racine** : quand les pas ont été ajoutés à la bande (A02), on les a mis
+dans le bouton existant sans lui donner une seconde destination.
+
+**Correctif** : deux zones appuyables (`home-weight-band` → poids,
+`home-steps-band` → pas), et Historique fusionné dans l'écran **Stats**.
+
+**Test** : `__tests__/index.test.tsx`, vérifié par sabotage (un seul bouton →
+rouge).
+
+**À retenir** : une valeur affichée qui a sa propre page doit mener à cette
+page. Ajouter une valeur dans un bouton existant, c'est lui donner la
+destination de ce bouton.
+
+## Le paramètre `tab` n'était lu qu'au premier montage
+
+Trouvé le 2026-09-26 en préparant le lien vers les pas. `progress/index.tsx`
+copiait `params.tab` dans `useState(() => …)`. Les onglets restent montés :
+une fois l'écran ouvert, `router.push('/(tabs)/progress?tab=steps')` changeait
+l'URL, **pas** la vue.
+
+**Correctif** : la vue est dérivée du paramètre à chaque rendu, et un appui
+sur un onglet appelle `router.setParams({ tab })`.
+
+**Test** : `progress/__tests__/index.test.tsx`, « RÉGRESSION » : `rerender`
+avec un autre `tab` ; rougit avec l'ancien `useState`.
+
+**À retenir** : ne jamais initialiser un état avec un paramètre de navigation
+dans un écran d'onglet. Il ne sera relu que si l'écran est détruit, ce qui
+n'arrive presque jamais.
+
+## « Chargement du modèle IA… » sans fin : le serveur était éteint
+
+Signalé par Islam le 2026-09-26 (capture de l'analyse photo bloquée). **Ce
+n'était pas un bug de l'app** : le VPS Hetzner ne répondait plus (ni ping, ni
+SSH, ni HTTPS), alors que le reste d'internet répondait. La sonde `/health`
+expire après 5 s, puis l'app affiche une alerte d'erreur.
+
+**Mais l'app le cachait** : la caméra n'apparaissait qu'après une sonde
+réussie, sous un texte « Chargement du modèle IA… » hérité du modèle embarqué,
+puis l'échec affichait « Le modèle n'a pas pu analyser la photo » alors
+qu'aucune photo n'était partie. Pour l'utilisateur : « la caméra ne marche pas ».
+
+**Correctif (1.32)** : caméra ouverte tout de suite, sonde en arrière-plan,
+alerte dédiée « Analyse indisponible – le serveur ne répond pas ».
+**Test** : `MealPhotoReview.test.tsx`, deux régressions vérifiées par sabotage.
+
+**À retenir** : devant « l'analyse ne marche plus », tester d'abord le serveur
+depuis le PC (`curl …/health`, `ssh`) avant de lire le code. Et un message
+d'erreur doit nommer la vraie cause : une panne réseau n'est pas un échec
+d'analyse.
+
+## La caméra « fantôme » : l'écran photo survivait à « Annuler »
+
+Signalé par Islam le 2026-09-27 (1.31/1.32) : « Analyser un plat » → « Annuler »
+→ un appui sur les pas rouvrait la caméra, sans moyen d'en sortir.
+
+**Cause racine** : l'écran hôte était `/(tabs)/nutrition/photo`, dans la pile
+de l'ONGLET Nutrition. Poussé depuis l'accueil, `router.back()` changeait
+d'onglet sans retirer `photo` de cette pile : l'écran restait monté en
+arrière-plan, avec sa `Modal` toujours `visible`, et captait le retour et les
+alertes (une « Analyse indisponible » s'affichait sur l'accueil).
+
+**Correctif** : l'écran vit à la racine (`src/app/meal-photo.tsx`) ;
+`back()` le dépile et le démonte.
+
+**Test** : `src/app/__tests__/mealPhotoNavigation.test.tsx` (renderRouter,
+arborescence réduite) ; rougit avec l'ancienne structure. Sa première version
+cherchait un nom de route qui n'existait pas dans l'ancienne structure et
+passait au vert sur le bug : vérifié par sabotage avant d'être accepté.
+
+**À retenir** : un écran plein écran (caméra, modale) ne se range pas dans la
+pile d'un onglet s'il peut être ouvert depuis un autre onglet.
+
+## Fermer une alerte sans bouton n'appelait jamais `onDismiss` (release)
+
+Trouvé le 2026-09-27 en reproduisant « bloqué sur Lecture de l'assiette… » :
+après « Aucun aliment reconnu », fermer l'alerte par le fond, la croix ou le
+retour Android laissait l'écran d'analyse sans issue.
+
+**Cause racine** : le **React Compiler** (activé dans `app.json`) suppose que
+les variables de module ne changent pas pendant un rendu. Dans `AppDialog`,
+`const dismissedDialog = currentDialog; currentDialog = null;` a été compilé
+en lecture directe de la variable de module, déjà remise à `null` dans le
+`setTimeout`. Bundle minifié :
+`b=null,T(),setTimeout(()=>{…t||b?.options?.onDismiss?.()…})`. **Invisible en
+Jest** (pas de compilateur ni de minification) : 650 tests verts.
+
+**Correctif** : logique de fermeture sortie du composant, dans une fonction de
+module qui capture `onDismiss` avant la remise à zéro ; `onDismiss` ajouté aux
+trois alertes de l'analyse photo.
+
+**Preuve** : traces sur l'APK release, puis extrait du bundle minifié
+(`npx expo export:embed --dev false --minify true`).
+
+**À retenir** : avec le React Compiler, ne jamais muter un état de module
+depuis le corps d'un composant. Un défaut qui dépend de la compilation se
+vérifie sur l'APK release ou le bundle minifié, pas en Jest.
+
+## `/health` en 2,2 s sur le ThinkCentre
+
+Trouvé le 2026-09-27 : le routeur sonde le modèle v9 (non migré) avant de
+répondre ; sous Windows, un port fermé met ~2 s à refuser la connexion (Linux :
+immédiat). Avec un réseau mobile lent, la sonde de l'app (5 s) échouait et
+affichait « Analyse indisponible ». Délai de la sonde v9 ramené à 0,5 s
+(`server/thinkcentre/README.md`).
+
+**À retenir** : mesurer par le chemin PUBLIC (relais Funnel), pas depuis le
+PC, qui passe par le réseau Tailscale privé.
+
+## Abonnement Play : offre « annuelle » facturée chaque mois, prix majorés de la TVA
+
+Trouvé le 2026-10-15 en relisant l'abonnement par l'API Play avant de brancher
+RevenueCat (aucun achat possible jusque-là : l'app n'avait pas la clé).
+
+- L'offre de base `annuel` avait une période **P1M** : un abonné aurait payé
+  94,99 € **chaque mois**. Google n'autorise pas à changer la période d'une
+  offre active : nouvelle offre `annuel-1an` (P1Y), ancienne désactivée.
+- Les prix affichés étaient 11,99 € / 94,99 € au lieu de 9,99 € / 79,99 € :
+  le prix saisi dans la Play Console est **hors taxe**, Google ajoute la TVA
+  locale. Corrigé en fixant 9,99 / 79,99 € TTC dans les pays en euros, les
+  autres pays suivant la conversion officielle (`pricing:convertRegionPrices`
+  sur une base HT de 8,33 / 66,66 €).
+- Piège d'API : `subscriptions.patch` exige le `regionsVersion` renvoyé par
+  `convertRegionPrices` (2026/01) ; avec 2022/02, refus « Expected USD but got
+  ARS » (requête atomique : rien n'est écrit).
+
+**À retenir** : relire un produit payant par l'API (période, prix par pays)
+avant d'activer la vente ; la console n'affiche pas clairement la période
+d'une offre déjà créée.
+
+## Analyses photo illimitées tant qu'on n'enregistrait pas le repas
+
+Signalé par Islam le 2026-10-15 (1.34 en test interne) : on pouvait relancer
+l'analyse (« Réessayer », « Annuler ») autant de fois que voulu ; seul
+« Ajouter à ma journée » décomptait le quota. Chaque analyse est un appel
+Gemini payé.
+
+**Cause racine** : la règle choisie en septembre comptait les **repas
+enregistrés** (pour ne pas punir une photo ratée). Elle laissait la dépense
+réelle (l'analyse) hors du compteur. Et aucune garde ne s'appliquait entre deux
+analyses : seuls les écrans d'entrée vérifiaient le quota, à l'ouverture.
+
+**Correctif (1.35)** : chaque analyse **réussie** compte (au moins un aliment
+reconnu) ; une analyse ratée ne compte pas. Garde au moment où la photo est
+choisie, donc aussi après « Réessayer ». L'écran photo ne remplace plus le
+résultat de la dernière analyse autorisée par l'offre : celle-ci apparaît à la
+tentative suivante.
+
+**Tests** : `MealPhotoReviewQuotaCount.test.tsx` (5) et
+`mealPhotoQuotaSession.test.tsx` (2), vérifiés par 7 sabotages.
+
+**À retenir** : un quota doit compter ce qui coûte (ici l'appel au modèle), pas
+une action facultative de l'utilisateur qui vient après.
+
+## Historique des pas vide alors que l'accueil affichait les pas
+
+Signalé par Islam le 2026-10-18 (1.35) ; visible dès la capture du 26/09
+(accueil « 116 pas », historique « Aucun pas enregistré »).
+
+**Cause racine** : `react-native-health-connect` 3.5.3 convertit la plage de
+temps en heure locale pour le regroupement par période des **pas**, mais pas
+pour les **calories** (actives et totales). Health Connect refuse un
+regroupement par période sur une plage en instants. Nos trois lectures
+partaient dans un `Promise.all` : le refus des calories faisait échouer le
+tout, et `safeCall` renvoyait `null`. L'accueil, lui, lit les pas du jour avec
+`readRecords`, qui accepte les instants : d'où l'écart.
+
+**Correctif** :
+1. `readDailyHealthHistory` : `Promise.allSettled`, une source refusée
+   n'efface plus les autres.
+2. `patches/react-native-health-connect+3.5.3.patch` (appliqué par
+   `patch-package` au `postinstall`) : reprise du correctif amont de la
+   **4.1.3** (`getTimeRangeFilterLocal` pour les calories). Montée en 4.x
+   écartée pour l'instant : la v4 devient un module Expo (intégration native
+   différente), trop de risque pour 2 lignes.
+
+**Test** : `healthConnect.test.ts`, « garde les pas quand la lecture des
+calories est refusée », rouge avant le correctif.
+
+**À retenir** : ne jamais regrouper des lectures indépendantes dans un
+`Promise.all` qu'un `catch` global transforme en « pas de données » ; et un
+écart entre deux écrans qui lisent la même donnée se cherche dans la
+différence entre les deux appels.
+
+## Conditions d'abonnement restées sur l'ancienne règle du quota
+
+Constaté le 2026-10-18 en ajoutant l'essai gratuit. La 1.35 compte chaque
+analyse réussie, mais les conditions publiées (`/terms`) disaient encore
+« une photo relancée ou abandonnée ne compte pas », et la politique de
+confidentialité parlait de « repas enregistrés ».
+
+**Cause** : la règle métier a changé dans le code, les tests et `api.md`, mais
+les textes juridiques de `docs/play-store/` ne sont reliés à aucun test.
+
+**Correctif** : `CONDITIONS_ABONNEMENT.md` (section 2) et
+`POLITIQUE_CONFIDENTIALITE.md` (section 3.6) réécrits, pages à régénérer avec
+`scripts/build-legal-pages.mjs` et à republier sur le VPS.
+
+**À retenir** : toute modification d'une règle visible par l'utilisateur
+(quota, prix, essai, données envoyées) se relit dans `CONDITIONS_ABONNEMENT.md`,
+`POLITIQUE_CONFIDENTIALITE.md` et `FICHE_TEXTES.md` avant le commit.
+
+## Widget Android vide : le React Compiler injecte des hooks dans le composant
+
+**Symptôme** (2026-10-20, 1.39.0 en préparation) : le widget « Objectifs du
+jour » se pose sur le launcher mais reste un rectangle vide. Aucun crash,
+rien dans `logcat -b crash`. Dans le logcat normal :
+
+```
+ReactNativeJS: Widget Error: Invalid Hook Call detected in DailyGoalsWidget.
+  2. The React Compiler (React 19) is transforming this component, but this
+     library requires raw functions.
+```
+
+**Cause racine.** `experiments.reactCompiler: true` (app.json) réécrit chaque
+composant avec un cache mémoïsé fondé sur des hooks. `react-native-android-widget`
+ne rend pas ces composants dans React : il les **appelle comme des fonctions
+brutes** pour construire l'arbre natif (`buildWidgetTree`). Le premier hook
+injecté lève. Même famille que le dialogue cassé en release par le compilateur
+(voir « React Compiler et état de module » plus haut) : le compilateur change
+le contrat d'exécution d'une fonction qui n'est pas une vraie fonction
+composant React.
+
+**Correctif.** `"use no memo";` en **première ligne** de
+`src/widgets/DailyGoalsWidget.tsx` (avant les imports), qui exclut tout le
+fichier du compilateur. Test de régression :
+`src/widgets/__tests__/DailyGoalsWidget.directive.test.ts`.
+
+**Deuxième cause, même mécanisme** (vue juste après) : un fragment `<>…</>`
+dans l'anneau. Le constructeur fait `jsxTree.type(props)` tant que le type
+n'est pas une primitive widget ; `Symbol(react.fragment)` n'est pas une
+fonction → `TypeError`, widget vide, sans crash. Remplacé par un `FlexWidget`.
+
+**À retenir** : tout fichier dont les composants sont consommés par une
+bibliothèque **hors React** (widgets, rendu vers image, arbre natif) porte
+`"use no memo"` et n'utilise **ni fragment ni hook**. Le mock Jest par défaut
+(composants qui rendent `null`) ne voit rien de tout cela : le test
+`src/widgets/__tests__/DailyGoalsWidget.tree.test.tsx` construit l'arbre avec
+le **vrai** `buildWidgetTree` de la bibliothèque (JS pur), ce qui attrape le
+fragment ; le compilateur, lui, ne tourne pas sous Jest, d'où le test de
+directive.
+
+## Widget illisible sur Samsung : tailles fixes en dp dans une cellule deux fois plus haute
+
+**Symptôme** (2026-10-22, 1.39.1 en test interne, capture d'Islam) : le widget
+4×1 occupait presque deux rangs de la grille One UI, avec trois anneaux
+minuscules au centre et des chiffres illisibles. Sur l'émulateur Pixel 8, le
+même widget paraissait correct.
+
+**Cause racine.** Les anneaux étaient dessinés à **58 dp fixes** et la cellule
+d'un launcher n'a pas de hauteur standard : One UI rend un « 4×1 » bien plus
+haut que le Pixel Launcher. Et un chiffre placé *à l'intérieur* d'un anneau n'a
+jamais que ~15 dp, quelle que soit la cellule.
+
+**Correctif.** Tout se calcule depuis `WidgetInfo.width/height` que la
+bibliothèque fournit (`lib/widgets/dailyGoalsLayout`) ; deux dispositions
+(bandeau, carte) choisies par la forme de la cellule ; le chiffre sort de
+l'anneau. Tests : `lib/__tests__/dailyGoalsLayout.test.ts`,
+`widgets/__tests__/DailyGoalsWidget.tree.test.tsx`.
+
+**À retenir** : un widget Android ne se valide pas sur un seul launcher. Avant
+de livrer, le poser sur l'émulateur **et** sur le téléphone d'Islam (Samsung),
+et ne jamais coder une dimension en dp sans la dériver de la cellule.
+
