@@ -161,8 +161,9 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
-- **Dernière soumission :** 1.39.1 (versionCode 57), piste interne, 2026-10-21
-  (widget 4×1 transparent). La 1.39.0 (vc 56) la précédait du 2026-10-20.
+- **Dernière soumission :** 1.39.2 (versionCode 58), piste interne, 2026-10-22
+  (widgets bandeau 4×1 et carte 2×2 dimensionnés sur la cellule, fond à 65 %).
+  Précédentes : 1.39.1 (vc 57) le 2026-10-21, 1.39.0 (vc 56) le 2026-10-20.
   Téléversement de 177 Mo : 3 min 35 s puis ~45 min selon le débit du jour
   (~70 Ko/s) ; la barre d'`eas submit` reste à 0 % jusqu'à la fin, ce n'est
   pas un blocage.
