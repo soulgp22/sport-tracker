@@ -420,6 +420,16 @@ suit pas la langue tant que l'app n'a pas écrit un instantané.
 
 ---
 
+## Promotion Play sans re-téléversement
+
+`scripts/play-promote.py <versionCode> <notes.json> [piste] [statut]` : promeut
+un bundle déjà sur la piste interne vers `production` (ou `alpha`/`beta`) par
+l'API Play, en référençant le bundle existant — zéro octet renvoyé, contre 45 à
+60 min pour un `eas submit`. Refuse un versionCode absent des bundles. Clé :
+`pc-api-key.json` (gitignoré). Lancer avec `python`, pas `python -I`.
+
+---
+
 ## Outillage de vérification
 
 ```bash

@@ -161,6 +161,10 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
+- **Production :** 1.39.2 (versionCode 58) le 2026-10-22, promue depuis la piste
+  interne par `python scripts/play-promote.py 58 <notes.json>` (API Play, aucun
+  re-téléversement, notes en 4 langues) ; examen Google en cours. Précédente en
+  production : 1.38.0 (vc 55) le 2026-10-18.
 - **Dernière soumission :** 1.39.2 (versionCode 58), piste interne, 2026-10-22
   (widgets bandeau 4×1 et carte 2×2 dimensionnés sur la cellule, fond à 65 %).
   Précédentes : 1.39.1 (vc 57) le 2026-10-21, 1.39.0 (vc 56) le 2026-10-20.
