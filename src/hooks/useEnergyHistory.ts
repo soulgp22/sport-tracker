@@ -95,5 +95,7 @@ export function useEnergyHistory() {
     });
   }, [sessions, weightEntries, health, sex, heightCm, ageYears, activityLevel]);
 
-  return { daily, healthStatus };
+  // `loadHealth` est expose pour relire l'historique juste apres une connexion
+  // Health Connect accordee depuis l'ecran Stats, sans attendre un refocus.
+  return { daily, healthStatus, loadHealth };
 }

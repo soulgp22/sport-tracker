@@ -5,6 +5,7 @@ import {
   STEPS_GOAL_LIMITS,
   buildDailyGoalsSnapshot,
   clampGoal,
+  resolveGoalRingTap,
 } from '../dailyGoals';
 
 const TARGETS = { stepsGoal: 8000, activeKcalGoal: 500, weeklySessionGoal: 3 };
@@ -83,5 +84,30 @@ describe('clampGoal', () => {
     expect(clampGoal(undefined, STEPS_GOAL_LIMITS, DEFAULT_STEPS_GOAL)).toBe(DEFAULT_STEPS_GOAL);
     expect(clampGoal('8000', STEPS_GOAL_LIMITS, DEFAULT_STEPS_GOAL)).toBe(DEFAULT_STEPS_GOAL);
     expect(clampGoal(Number.NaN, STEPS_GOAL_LIMITS, DEFAULT_STEPS_GOAL)).toBe(DEFAULT_STEPS_GOAL);
+  });
+});
+
+describe('resolveGoalRingTap', () => {
+  const progress = { kind: 'progress', value: 0, goal: 8000, ratio: 0, reached: false } as const;
+  const unavailable = { kind: 'unavailable', goal: 8000 } as const;
+
+  it('une progression, meme a zero, ouvre son historique', () => {
+    expect(resolveGoalRingTap('steps', progress, 'data')).toBe('history');
+    expect(resolveGoalRingTap('sessions', progress, 'data')).toBe('history');
+    expect(resolveGoalRingTap('activeKcal', progress, 'profile')).toBe('history');
+  });
+
+  it('« Connecter » sur les pas lance la connexion Health Connect, pas un historique vide', () => {
+    expect(resolveGoalRingTap('steps', unavailable, 'data')).toBe('connectHealth');
+    expect(resolveGoalRingTap('steps', unavailable, 'profile')).toBe('connectHealth');
+  });
+
+  it("la depense suit son libelle : « Profil » mene au profil, « Connecter » a la connexion", () => {
+    expect(resolveGoalRingTap('activeKcal', unavailable, 'profile')).toBe('completeProfile');
+    expect(resolveGoalRingTap('activeKcal', unavailable, 'data')).toBe('connectHealth');
+  });
+
+  it("des seances indisponibles (cas theorique) restent sur l'historique", () => {
+    expect(resolveGoalRingTap('sessions', unavailable, 'data')).toBe('history');
   });
 });

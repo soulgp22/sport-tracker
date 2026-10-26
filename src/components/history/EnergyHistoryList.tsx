@@ -22,6 +22,9 @@ interface EnergyHistoryListProps {
   metric: HistoryMetric;
   daily: DailyHistoryEntry[];
   healthStatus: HealthHistoryStatus;
+  /** Lance la demande de permission Health Connect (Stats > Pas sans permission). */
+  onConnect?: () => unknown;
+  connecting?: boolean;
 }
 
 /** Libelle d'un compartiment : « lun. 22 sept. », « septembre 2026 », « 2026 ». */
@@ -45,7 +48,7 @@ function bucketLabel(key: string, granularity: HistoryGranularity, locale: strin
  * calories associees (A02). Toute la logique vit dans `lib/energyHistory` ;
  * ce composant ne fait que la presenter.
  */
-export function EnergyHistoryList({ metric, daily, healthStatus }: EnergyHistoryListProps) {
+export function EnergyHistoryList({ metric, daily, healthStatus, onConnect, connecting }: EnergyHistoryListProps) {
   const c = useColors();
   const styles = useMemo(() => makeStyles(c), [c]);
   const { t, locale } = useTranslation();
@@ -92,8 +95,8 @@ export function EnergyHistoryList({ metric, daily, healthStatus }: EnergyHistory
           icon="footsteps-outline"
           title={t('history.steps.emptyTitle')}
           subtitle={t('history.steps.emptySubtitle')}
-          actionLabel={t('history.steps.connectCta')}
-          onAction={() => router.push('/(tabs)/nutrition' as never)}
+          actionLabel={healthStatus === 'granted' ? undefined : t('history.steps.connectCta')}
+          onAction={healthStatus === 'granted' || connecting ? undefined : () => void onConnect?.()}
         />
       </View>
     );

@@ -19,17 +19,20 @@ import {
   hasHealthPermissions,
   isHealthConnectAvailable,
   readDailyHealthHistory,
+  requestHealthPermissionsWithStatus,
 } from '../../../../lib/healthConnect';
 import { localDayKey } from '../../../../lib/dateKeys';
 
 const mockParams: { tab?: string } = {};
 const mockSetParams = jest.fn();
 
+const mockPush = jest.fn();
+
 jest.mock('expo-router', () => {
   const ReactLocal = jest.requireActual<typeof React>('react');
   return {
     useRouter: () => ({
-      push: jest.fn(),
+      push: mockPush,
       replace: jest.fn(),
       back: jest.fn(),
       canGoBack: () => true,
@@ -53,6 +56,10 @@ jest.mock('../../../../lib/healthConnect', () => ({
   isHealthConnectAvailable: jest.fn(),
   hasHealthPermissions: jest.fn(),
   readDailyHealthHistory: jest.fn(),
+  // Connexion lancee sur place depuis Stats > Pas (2026-10-26).
+  requestHealthPermissionsWithStatus: jest.fn(() => Promise.resolve({ status: 'available', granted: false, instantDenial: false })),
+  openHealthConnectPlayStore: jest.fn(() => Promise.resolve()),
+  openHealthConnectPermissionsForApp: jest.fn(() => Promise.resolve(true)),
 }));
 
 const TODAY = localDayKey(new Date());
@@ -129,12 +136,29 @@ describe('Stats — vue Pas', () => {
     expect(screen.getByText(/30 jours précédant ta première autorisation/)).toBeTruthy();
   });
 
-  it('propose de connecter Health Connect quand aucun pas n’existe', async () => {
+  it('permission accordee mais aucun pas : etat vide sans bouton de connexion', async () => {
     completeProfile();
     (readDailyHealthHistory as jest.Mock).mockResolvedValue(new Map());
     await openTab('steps');
 
     expect(screen.getByText('Aucun pas enregistré')).toBeTruthy();
-    expect(screen.getByText('Aller à Nutrition')).toBeTruthy();
+    expect(screen.queryByText('Connecter Health Connect')).toBeNull();
+    expect(screen.queryByText('Aller à Nutrition')).toBeNull();
+  });
+
+  it('sans permission : propose la connexion Health Connect sur place et la lance', async () => {
+    completeProfile();
+    (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
+    await openTab('steps');
+
+    expect(screen.getByText('Aucun pas enregistré')).toBeTruthy();
+    const button = screen.getByText('Connecter Health Connect');
+    await act(async () => {
+      fireEvent.press(button);
+    });
+
+    expect(requestHealthPermissionsWithStatus).toHaveBeenCalledTimes(1);
+    // Plus de detour par l'ecran Nutrition.
+    expect(mockPush).not.toHaveBeenCalledWith('/(tabs)/nutrition');
   });
 });

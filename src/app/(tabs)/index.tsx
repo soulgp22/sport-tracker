@@ -7,7 +7,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DailyGoalRings } from '../../components/home/DailyGoalRings';
 import { WeightTrend } from '../../components/progress/WeightTrend';
 import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
-import { buildDailyGoalsSnapshot } from '../../lib/dailyGoals';
+import {
+  buildDailyGoalsSnapshot,
+  resolveGoalRingTap,
+  type GoalRingKind,
+} from '../../lib/dailyGoals';
 import { estimateActiveCaloriesFromSteps, resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
 import { calculateConsistencyMetrics, getBodyweightForDate } from '../../lib/performanceEngine';
@@ -24,6 +28,7 @@ import { fonts } from '../../theme/fonts';
 import type { ThemeColors } from '../../theme/palettes';
 import { radius, spacing } from '../../theme/tokens';
 import { useColors } from '../../theme/useColors';
+import { useHealthConnectFlow } from '../../hooks/useHealthConnectFlow';
 import { useHealthToday } from '../../hooks/useHealthToday';
 import { useTodaySessionKcal } from '../../hooks/useEnergyHistory';
 
@@ -99,7 +104,9 @@ export default function HomeScreen() {
       entriesState.filter((entry) => entry.date.slice(0, 10) === key)
     );
   }, [entriesState]);
-  const { healthData } = useHealthToday();
+  const { healthData, loadHealthToday } = useHealthToday();
+  // Un anneau « Connecter » lance la demande Health Connect, puis relit le jour.
+  const { connect: connectHealth } = useHealthConnectFlow(loadHealthToday);
   const healthSteps = healthData.status === 'granted' ? healthData.steps : null;
 
   const weightKg = getBodyweightForDate(weightEntries, new Date().toISOString());
@@ -128,9 +135,17 @@ export default function HomeScreen() {
   // Objectifs du jour. La depense ne compte vers l'objectif que si elle vient
   // de donnees du jour (mesure Health Connect, ou pas + seances) : le repli
   // « habituel » du profil est une constante, pas une progression.
+  // Health Connect connecte mais rien d'enregistre aujourd'hui (0 pas, aucune
+  // seance) : la depense active vaut 0, pas « inconnue » — l'anneau ne doit
+  // pas redire « Connecter » a quelqu'un qui vient de connecter.
   const expenditureMode = expenditure.breakdown.mode;
+  const healthGranted = healthData.status === 'granted';
   const goalActiveKcal =
-    expenditureMode === 'measured' || expenditureMode === 'estimated' ? burned : null;
+    expenditureMode === 'measured' || expenditureMode === 'estimated'
+      ? burned
+      : healthGranted && expenditure.basalKcal !== null
+        ? 0
+        : null;
   const sessionsThisWeek = useMemo(
     () => calculateConsistencyMetrics(sessions, weeklySessionGoal, monthlySessionGoal).thisWeek,
     [sessions, weeklySessionGoal, monthlySessionGoal]
@@ -153,6 +168,22 @@ export default function HomeScreen() {
     }),
     [t]
   );
+  const activeKcalUnavailableReason = expenditure.basalKcal === null ? 'profile' : 'data';
+  const HISTORY_TABS: Record<GoalRingKind, string> = {
+    steps: '/(tabs)/progress?tab=steps',
+    sessions: '/(tabs)/progress?tab=sessions',
+    activeKcal: '/(tabs)/progress?tab=energy',
+  };
+  const onPressRing = (ring: GoalRingKind) => {
+    const action = resolveGoalRingTap(ring, dailyGoals[ring], activeKcalUnavailableReason);
+    if (action === 'connectHealth') {
+      void connectHealth();
+    } else if (action === 'completeProfile') {
+      router.push('/(tabs)/profile' as never);
+    } else {
+      router.push(HISTORY_TABS[ring] as never);
+    }
+  };
   // Le widget Android affiche le meme instantane que l'accueil.
   useEffect(() => {
     void publishDailyGoalsWidget({ snapshot: dailyGoals, labels: goalLabels, locale });
@@ -222,11 +253,11 @@ export default function HomeScreen() {
         {/* Objectifs du jour : trois anneaux */}
         <DailyGoalRings
           snapshot={dailyGoals}
-          activeKcalUnavailableReason={expenditure.basalKcal === null ? 'profile' : 'data'}
+          activeKcalUnavailableReason={activeKcalUnavailableReason}
           formatInteger={(value) => formatInteger(value, locale)}
-          onPressSteps={() => router.push('/(tabs)/progress?tab=steps' as never)}
-          onPressSessions={() => router.push('/(tabs)/progress?tab=sessions' as never)}
-          onPressActiveKcal={() => router.push('/(tabs)/progress?tab=energy' as never)}
+          onPressSteps={() => onPressRing('steps')}
+          onPressSessions={() => onPressRing('sessions')}
+          onPressActiveKcal={() => onPressRing('activeKcal')}
           onPressAdjust={() => router.push('/(tabs)/settings' as never)}
         />
 

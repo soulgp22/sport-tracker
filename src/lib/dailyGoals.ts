@@ -80,3 +80,40 @@ export function clampGoal(
   if (typeof value !== 'number' || !Number.isFinite(value)) return fallback;
   return Math.min(limits.maximum, Math.max(limits.minimum, Math.round(value)));
 }
+
+/** Les trois anneaux de l'accueil. */
+export type GoalRingKind = 'steps' | 'sessions' | 'activeKcal';
+
+/** Pourquoi la depense est inconnue : profil incomplet, ou aucune donnee du jour. */
+export type ActiveKcalUnavailableReason = 'profile' | 'data';
+
+/**
+ * Ce que fait un appui sur un anneau :
+ * - `history`        : ouvrir l'onglet Stats correspondant ;
+ * - `connectHealth`  : lancer la demande de permission Health Connect ;
+ * - `completeProfile`: ouvrir le profil pour le completer.
+ */
+export type GoalRingTapAction = 'history' | 'connectHealth' | 'completeProfile';
+
+/**
+ * Regle d'aiguillage d'un appui sur un anneau de l'accueil.
+ *
+ * Un anneau qui affiche « Connecter » doit lancer la connexion, pas ouvrir un
+ * historique vide (retour d'Islam, 2026-10-26). Un anneau qui affiche
+ * « Profil » doit mener au profil. Un anneau avec une progression ouvre son
+ * historique.
+ */
+export function resolveGoalRingTap(
+  ring: GoalRingKind,
+  state: GoalRingState,
+  activeKcalUnavailableReason: ActiveKcalUnavailableReason
+): GoalRingTapAction {
+  // Une progression, meme a zero, a un historique a montrer.
+  if (state.kind === 'progress') return 'history';
+  // La reponse colle au libelle affiche : « Connecter » lance la connexion,
+  // « Profil » mene au profil.
+  if (ring === 'activeKcal' && activeKcalUnavailableReason === 'profile') return 'completeProfile';
+  // Pas sans donnee = Health Connect absent ; seances indisponibles (ne devrait
+  // pas arriver) : l'historique reste la reponse la moins trompeuse.
+  return ring === 'sessions' ? 'history' : 'connectHealth';
+}

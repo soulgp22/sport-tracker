@@ -22,6 +22,7 @@ import {
   readCaloriesBurnedToday,
   readLatestWeight,
   readStepsToday,
+  requestHealthPermissionsWithStatus,
 } from '../../../lib/healthConnect';
 
 const mockPush = jest.fn();
@@ -43,6 +44,10 @@ jest.mock('expo-router', () => {
 
 jest.mock('../../../lib/healthConnect', () => ({
   isHealthConnectAvailable: jest.fn(),
+  // Parcours de connexion lance depuis un anneau « Connecter » de l'accueil.
+  requestHealthPermissionsWithStatus: jest.fn(() => Promise.resolve({ status: 'available', granted: true })),
+  openHealthConnectPlayStore: jest.fn(() => Promise.resolve()),
+  openHealthConnectPermissionsForApp: jest.fn(() => Promise.resolve(true)),
   hasHealthPermissions: jest.fn(),
   readCaloriesBurnedToday: jest.fn(),
   readStepsToday: jest.fn(),
@@ -88,6 +93,7 @@ beforeEach(() => {
   (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
   (readStepsToday as jest.Mock).mockResolvedValue(null);
   (hasWeightPermission as jest.Mock).mockReset().mockResolvedValue(false);
+  (requestHealthPermissionsWithStatus as jest.Mock).mockClear();
   (readLatestWeight as jest.Mock).mockReset().mockResolvedValue(null);
   resetStores();
 });
@@ -383,8 +389,18 @@ describe('HomeScreen', () => {
       expect(screen.queryByTestId('home-goal-active-kcal-value')).toBeNull();
     });
 
-    it('les anneaux et « Régler » mènent aux bons écrans', () => {
+    it('avec des donnees, les anneaux et « Régler » mènent aux bons écrans', async () => {
+      (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+      (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+      (readCaloriesBurnedToday as jest.Mock).mockResolvedValue({ active: 300, total: null });
+      (readStepsToday as jest.Mock).mockResolvedValue(6240);
+      usePerformanceStore.setState({ sex: 'male', age: 30, heightCm: 180 });
+      useBodyWeightStore.setState({
+        entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 80 }],
+      });
+
       render(<HomeScreen />);
+      await act(async () => {});
 
       fireEvent.press(screen.getByTestId('home-goal-steps'));
       expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/progress?tab=steps');
@@ -394,6 +410,74 @@ describe('HomeScreen', () => {
       expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/progress?tab=energy');
       fireEvent.press(screen.getByTestId('home-daily-goals-adjust'));
       expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/settings');
+      expect(requestHealthPermissionsWithStatus).not.toHaveBeenCalled();
+    });
+
+    it('un anneau « Connecter » lance la demande Health Connect puis relit le jour', async () => {
+      // Sans permission au depart ; accordee au premier appui.
+      (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+      (hasHealthPermissions as jest.Mock).mockResolvedValueOnce(false).mockResolvedValue(true);
+      (readStepsToday as jest.Mock).mockResolvedValue(6240);
+      (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+
+      render(<HomeScreen />);
+      await act(async () => {});
+      expect(screen.getByTestId('home-goal-steps-unavailable')).toBeTruthy();
+
+      await act(async () => {
+        fireEvent.press(screen.getByTestId('home-goal-steps'));
+      });
+
+      expect(requestHealthPermissionsWithStatus).toHaveBeenCalledTimes(1);
+      // Aucun detour par un historique vide.
+      expect(mockPush).not.toHaveBeenCalledWith('/(tabs)/progress?tab=steps');
+      // Le jour est relu : les pas remplacent « Connecter ».
+      expect(screen.getByTestId('home-goal-steps-value').props.children).toMatch(/^6.240$/);
+    });
+
+    it("l'anneau dépense « Connecter » (profil complet, aucune donnee) lance aussi la connexion", async () => {
+      usePerformanceStore.setState({ sex: 'male', age: 30, heightCm: 180, activityLevel: 'moderate' });
+      useBodyWeightStore.setState({
+        entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 80 }],
+      });
+
+      render(<HomeScreen />);
+      await act(async () => {});
+      expect(screen.getByTestId('home-goal-active-kcal-unavailable').props.children).toBe('Connecter');
+
+      await act(async () => {
+        fireEvent.press(screen.getByTestId('home-goal-active-kcal'));
+      });
+
+      expect(requestHealthPermissionsWithStatus).toHaveBeenCalledTimes(1);
+    });
+
+    it('Health Connect connecte sans activite encore : la depense vaut 0, pas « Connecter »', async () => {
+      (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
+      (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
+      (readStepsToday as jest.Mock).mockResolvedValue(0);
+      (readCaloriesBurnedToday as jest.Mock).mockResolvedValue(null);
+      usePerformanceStore.setState({ sex: 'male', age: 30, heightCm: 180, activityLevel: 'moderate' });
+      useBodyWeightStore.setState({
+        entries: [{ id: 'w-1', date: '2026-08-14T12:00:00.000Z', weight: 80 }],
+      });
+
+      render(<HomeScreen />);
+      await act(async () => {});
+
+      expect(screen.getByTestId('home-goal-steps-value').props.children).toBe('0');
+      expect(screen.getByTestId('home-goal-active-kcal-value').props.children).toBe('0');
+      expect(screen.queryByTestId('home-goal-active-kcal-unavailable')).toBeNull();
+    });
+
+    it("l'anneau dépense « Profil » mene au profil, sans demande Health Connect", () => {
+      render(<HomeScreen />);
+      expect(screen.getByTestId('home-goal-active-kcal-unavailable').props.children).toBe('Profil');
+
+      fireEvent.press(screen.getByTestId('home-goal-active-kcal'));
+
+      expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/profile');
+      expect(requestHealthPermissionsWithStatus).not.toHaveBeenCalled();
     });
 
     it('publie le même instantané vers le widget Android', async () => {
