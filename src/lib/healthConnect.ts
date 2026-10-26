@@ -9,6 +9,8 @@
 
 import type { HealthWeightSample } from './healthWeightMerge';
 import type { DailyHealthData } from './energyHistory';
+import { Linking } from 'react-native';
+
 import { endOfLocalDay, localDayKey, startOfLocalDay } from './dateKeys';
 
 export type { HealthWeightSample };
@@ -431,4 +433,19 @@ export async function readDailyHealthHistory(
 
     return byDay;
   });
+}
+
+const HC_PACKAGE = 'com.google.android.apps.healthdata';
+
+/** Ouvre la fiche Play Store de Health Connect (intent market://, repli navigateur). */
+export async function openHealthConnectPlayStore(): Promise<void> {
+  try {
+    await Linking.openURL(`market://details?id=${HC_PACKAGE}`);
+  } catch {
+    try {
+      await Linking.openURL(`https://play.google.com/store/apps/details?id=${HC_PACKAGE}`);
+    } catch {
+      // Aucun store ni navigateur disponible : rien de plus a faire.
+    }
+  }
 }

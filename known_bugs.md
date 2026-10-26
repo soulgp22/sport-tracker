@@ -1362,3 +1362,28 @@ l'anneau. Tests : `lib/__tests__/dailyGoalsLayout.test.ts`,
 de livrer, le poser sur l'émulateur **et** sur le téléphone d'Islam (Samsung),
 et ne jamais coder une dimension en dp sans la dériver de la cellule.
 
+## Le bouton « Connecter » Health Connect était introuvable
+
+**Symptôme** (2026-10-26, retour d'Islam sur la 1.39.2) : l'accueil affiche
+« Connecter » dans les anneaux pas et dépense, mais l'appui ouvre Stats, qui
+n'a aucun bouton de connexion. Le seul bouton vivait sous le bilan de l'écran
+Nutrition, et l'état vide de Stats > Pas renvoyait… vers Nutrition.
+
+**Cause racine.** Le parcours de connexion (`handleConnectHealth`) était
+enfermé dans l'écran Nutrition avec ses dialogues ; les autres écrans ne
+pouvaient que naviguer vers lui. Un libellé qui promet une action doit la
+déclencher.
+
+**Correctif.** Parcours extrait dans `hooks/useHealthConnectFlow` (même
+dialogues : Play Store, refus, refus instantané, erreur), consommé par
+Nutrition, l'accueil et Stats. L'aiguillage d'un appui sur un anneau est une
+règle pure (`resolveGoalRingTap` dans `lib/dailyGoals`) : « Connecter » lance
+la demande, « Profil » ouvre le profil, une progression ouvre l'historique.
+Tests : `lib/__tests__/dailyGoals.test.ts`,
+`hooks/__tests__/useHealthConnectFlow.test.tsx`,
+`components/history/__tests__/EnergyHistoryList.test.tsx`, accueil et Stats.
+
+**À retenir** : un libellé d'action (« Connecter », « Compléter ») se teste par
+ce qu'il déclenche, pas par sa présence. Et une capacité appelée depuis deux
+écrans sort de l'écran qui l'a vue naître.
+

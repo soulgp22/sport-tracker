@@ -1,11 +1,10 @@
 import { useCallback, useMemo, useReducer, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MacroBar } from '../../../components/nutrition/MacroBar';
-import { appAlert } from '../../../components/ui/AppDialog';
 import { Button } from '../../../components/ui/Button';
 import { useColors } from '../../../theme/useColors';
 import { QuickCaloriesModal } from './QuickCaloriesModal';
@@ -23,10 +22,7 @@ import {
   resolveDailyEnergyBalance,
   resolveDailyEnergyExpenditure,
 } from '../../../lib/energyBalance';
-import {
-  openHealthConnectPermissionsForApp,
-  requestHealthPermissionsWithStatus,
-} from '../../../lib/healthConnect';
+import { useHealthConnectFlow } from '../../../hooks/useHealthConnectFlow';
 import { useHealthToday } from '../../../hooks/useHealthToday';
 import { getBodyweightForDate } from '../../../lib/performanceEngine';
 import { healthConnectT as hct } from '../../../i18n/healthConnectFallback';
@@ -41,21 +37,6 @@ import { useNutritionGoalsStore } from '../../../store/nutritionGoalsStore';
 import { usePerformanceStore } from '../../../store/performanceStore';
 import type { MealType } from '../../../types';
 import { useTodaySessionKcal } from '../../../hooks/useEnergyHistory';
-
-const HC_PACKAGE = 'com.google.android.apps.healthdata';
-
-/** Ouvre la fiche Play Store de Health Connect (intent market://, repli navigateur). */
-async function openHealthConnectPlayStore() {
-  try {
-    await Linking.openURL(`market://details?id=${HC_PACKAGE}`);
-  } catch {
-    try {
-      await Linking.openURL(`https://play.google.com/store/apps/details?id=${HC_PACKAGE}`);
-    } catch {
-      // Aucun store ni navigateur disponible : rien de plus à faire.
-    }
-  }
-}
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -86,7 +67,6 @@ export default function NutritionScreen() {
   const activityLevel = usePerformanceStore((s) => s.activityLevel);
   const weightEntries = useBodyWeightStore((s) => s.entries);
   const { healthData, loadHealthToday: loadHealthBurn } = useHealthToday();
-  const [connecting, setConnecting] = useState(false);
   const [quickAddVisible, setQuickAddVisible] = useState(false);
 
   useFocusEffect(
@@ -95,53 +75,7 @@ export default function NutritionScreen() {
     }, [forceTick])
   );
 
-  const handleConnectHealth = async () => {
-    setConnecting(true);
-    try {
-      const result = await requestHealthPermissionsWithStatus();
-      if (result.granted) {
-        await loadHealthBurn();
-        return;
-      }
-      // Plus jamais d'échec silencieux : chaque cas a son message.
-      if (result.status === 'not-installed' || result.status === 'needs-update') {
-        const isUpdate = result.status === 'needs-update';
-        appAlert(
-          hct(t, isUpdate ? 'nutrition.healthConnect.updateTitle' : 'nutrition.healthConnect.installTitle'),
-          hct(t, isUpdate ? 'nutrition.healthConnect.updateMessage' : 'nutrition.healthConnect.installMessage'),
-          [
-            { text: hct(t, 'nutrition.healthConnect.later'), style: 'cancel' },
-            {
-              text: hct(t, 'nutrition.healthConnect.openPlayStore'),
-              onPress: () => void openHealthConnectPlayStore(),
-            },
-          ]
-        );
-        return;
-      }
-      if (result.error) {
-        appAlert(hct(t, 'nutrition.healthConnect.errorTitle'), result.error);
-        return;
-      }
-      // SDK disponible mais permissions refusées : guider vers les réglages HC.
-      // Refus instantané sans feuille = appli sideloadée bloquée par HC.
-      appAlert(
-        hct(t, 'nutrition.healthConnect.deniedTitle'),
-        result.instantDenial
-          ? hct(t, 'nutrition.healthConnect.sideloadedMessage')
-          : `${hct(t, 'nutrition.healthConnect.deniedMessage')}\n\n(détail : statut=${result.status})`,
-        [
-          { text: hct(t, 'nutrition.healthConnect.later'), style: 'cancel' },
-          {
-            text: hct(t, 'nutrition.healthConnect.openSettings'),
-            onPress: () => void openHealthConnectPermissionsForApp(),
-          },
-        ]
-      );
-    } finally {
-      setConnecting(false);
-    }
-  };
+  const { connect: handleConnectHealth, connecting } = useHealthConnectFlow(loadHealthBurn);
 
   const today = todayKey();
   const entries = useMemo(

@@ -536,3 +536,18 @@ le 2026-10-22 : disposition fixe (3), fond opaque (1), barre fixe (1), carte
 non redessinée par l'accueil (1). Le rendu du widget (image RemoteViews,
 polices copiées par le plugin) ne se voit que sur appareil : voir la
 vérification à l'écran ci-dessous.
+
+## Connexion Health Connect depuis l'accueil et Stats (1.39.3)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/dailyGoals.test.ts` (+4) | `resolveGoalRingTap` : progression → historique ; pas « Connecter » → connexion ; dépense « Profil » → profil, « Connecter » → connexion ; séances indisponibles → historique |
+| `hooks/__tests__/useHealthConnectFlow.test.tsx` | accordée → `onGranted`, aucun dialogue ; non installé → Play Store ; refus → page de permissions de l'app ; refus instantané → message « hors Play Store » ; erreur SDK → message brut |
+| `components/history/__tests__/EnergyHistoryList.test.tsx` | Stats > Pas sans permission : bouton « Connecter Health Connect » qui appelle `onConnect`, aucun détour par Nutrition ; pas de bouton pendant la connexion ni une fois accordée |
+| `app/(tabs)/__tests__/index.test.tsx` (+3, 1 réécrit) | anneau « Connecter » (pas, dépense) → `requestHealthPermissionsWithStatus`, puis le jour relu remplace « Connecter » ; « Profil » → profil sans demande ; avec données → historiques |
+| `app/(tabs)/progress/__tests__/statsActivity.test.tsx` (1 réécrit, +1) | permission accordée sans pas → aucun bouton ; sans permission → bouton qui lance la demande |
+
+Sabotages vérifiés le 2026-10-26, chacun rougit : règle « toujours historique »
+(3), « Profil » ignoré (1), `onGranted` oublié (1), retour vers Nutrition (2).
+Vérifié sur l'émulateur : l'appui sur l'anneau ouvre la feuille Health Connect.
+

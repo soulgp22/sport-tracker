@@ -420,6 +420,17 @@ suit pas la langue tant que l'app n'a pas écrit un instantané.
 
 ---
 
+## Connexion Health Connect (hook partagé)
+
+`hooks/useHealthConnectFlow(onGranted)` → `{ connect, connecting }` : la
+demande de permission et ses quatre issues dialoguées (Play Store si absent ou
+périmé, page de permissions de l'app si refus, message « hors Play Store » si
+refus instantané, erreur SDK brute). L'appelant ne fournit que « quoi relire si
+accordé ». Consommé par Nutrition, l'accueil (anneaux « Connecter ») et Stats >
+Pas. `lib/healthConnect.openHealthConnectPlayStore` l'accompagne.
+
+---
+
 ## Promotion Play sans re-téléversement
 
 `scripts/play-promote.py <versionCode> <notes.json> [piste] [statut]` : promeut
