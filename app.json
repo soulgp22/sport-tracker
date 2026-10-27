@@ -2,7 +2,7 @@
   "expo": {
     "name": "Life Sport Tracker",
     "slug": "sport-tracker",
-    "version": "1.39.3",
+    "version": "1.39.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sport-tracker",
@@ -22,7 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "versionCode": 59,
+      "versionCode": 60,
       "permissions": [
         "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
         "android.permission.health.READ_TOTAL_CALORIES_BURNED",
