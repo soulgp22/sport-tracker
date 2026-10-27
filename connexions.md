@@ -161,10 +161,14 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
-- **Production :** 1.39.2 (versionCode 58) le 2026-10-22, promue depuis la piste
-  interne par `python scripts/play-promote.py 58 <notes.json>` (API Play, aucun
-  re-téléversement, notes en 4 langues) ; examen Google en cours. Précédente en
-  production : 1.38.0 (vc 55) le 2026-10-18.
+- **Production :** 1.39.3 (versionCode 59) le 2026-10-27 (connexion Health
+  Connect depuis l'accueil et Stats), promue par `scripts/play-promote.py`.
+  Précédentes : 1.39.2 (vc 58) le 2026-10-22, 1.38.0 (vc 55) le 2026-10-18.
+- **Téléversement :** `eas submit` a cassé en fin d'envoi (`ECONNRESET` après
+  40 min, comme le 2026-10-18). Utiliser désormais
+  `python scripts/play-upload.py <aab> internal completed <notes.json>` :
+  envoi par morceaux de 8 Mio par l'API Play, reprise au dernier octet reçu,
+  46 min à ~60 Ko/s pour 177 Mo. Puis `play-promote.py` vers `production`.
 - **Dernière soumission :** 1.39.2 (versionCode 58), piste interne, 2026-10-22
   (widgets bandeau 4×1 et carte 2×2 dimensionnés sur la cellule, fond à 65 %).
   Précédentes : 1.39.1 (vc 57) le 2026-10-21, 1.39.0 (vc 56) le 2026-10-20.
