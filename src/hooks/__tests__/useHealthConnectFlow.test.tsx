@@ -4,6 +4,7 @@ import { appAlert } from '../../components/ui/AppDialog';
 import {
   openHealthConnectPermissionsForApp,
   openHealthConnectPlayStore,
+  requestBackgroundReadPermission,
   requestHealthPermissionsWithStatus,
 } from '../../lib/healthConnect';
 import { useHealthConnectFlow } from '../useHealthConnectFlow';
@@ -13,6 +14,7 @@ jest.mock('../../lib/healthConnect', () => ({
   requestHealthPermissionsWithStatus: jest.fn(),
   openHealthConnectPermissionsForApp: jest.fn(() => Promise.resolve(true)),
   openHealthConnectPlayStore: jest.fn(() => Promise.resolve()),
+  requestBackgroundReadPermission: jest.fn(() => Promise.resolve(true)),
 }));
 
 const request = requestHealthPermissionsWithStatus as jest.Mock;
@@ -23,6 +25,7 @@ beforeEach(() => {
   alert.mockReset();
   (openHealthConnectPermissionsForApp as jest.Mock).mockClear();
   (openHealthConnectPlayStore as jest.Mock).mockClear();
+  (requestBackgroundReadPermission as jest.Mock).mockClear();
 });
 
 describe('useHealthConnectFlow', () => {
@@ -37,6 +40,8 @@ describe('useHealthConnectFlow', () => {
     });
 
     expect(outcome).toBe(true);
+    // Seconde feuille : lecture en arriere-plan pour le widget, AVANT la relecture.
+    expect(requestBackgroundReadPermission).toHaveBeenCalledTimes(1);
     expect(onGranted).toHaveBeenCalledTimes(1);
     expect(alert).not.toHaveBeenCalled();
     expect(result.current.connecting).toBe(false);
@@ -52,6 +57,7 @@ describe('useHealthConnectFlow', () => {
     });
 
     expect(onGranted).not.toHaveBeenCalled();
+    expect(requestBackgroundReadPermission).not.toHaveBeenCalled();
     expect(alert).toHaveBeenCalledTimes(1);
     const [title, , buttons] = alert.mock.calls[0];
     expect(title).toMatch(/pas installé/);

@@ -3,20 +3,29 @@ import { Platform } from 'react-native';
 import { requestWidgetUpdate, type WidgetTaskHandlerProps } from 'react-native-android-widget';
 
 import { buildDailyGoalsSnapshot } from '../dailyGoals';
-import { hasHealthPermissions, isHealthConnectAvailable, readStepsToday } from '../healthConnect';
+import { readStepsTodayInBackground } from '../healthConnect';
+import { weekStartKey } from '../performanceEngine';
 import {
   DAILY_GOALS_WIDGET_NAME,
   dailyGoalsWidgetTaskHandler,
   publishDailyGoalsWidget,
+  readWidgetLastRefresh,
 } from '../widgets/dailyGoalsWidget';
 import { DAILY_GOALS_WIDGET_SNAPSHOT_KEY, writeDailyGoalsWidgetSnapshot } from '../widgets/dailyGoalsWidgetSnapshot';
 import { DailyGoalsWidget, DailyGoalsWidgetEmpty, ringSvg } from '../../widgets/DailyGoalsWidget';
 
 jest.mock('../healthConnect', () => ({
-  isHealthConnectAvailable: jest.fn(),
-  hasHealthPermissions: jest.fn(),
-  readStepsToday: jest.fn(),
+  readStepsTodayInBackground: jest.fn(),
 }));
+
+const readBackground = readStepsTodayInBackground as jest.Mock;
+const INPUTS = {
+  targets: { stepsGoal: 8000, activeKcalGoal: 500, weeklySessionGoal: 3 },
+  sessionsThisWeek: 2,
+  weekKey: weekStartKey(new Date()),
+  sessionKcalToday: 0,
+  profile: { sex: 'male' as const, weightKg: 80, heightCm: 180, ageYears: 30, activityLevel: 'moderate' as const },
+};
 
 const LABELS = { title: 'Objectifs du jour', steps: 'Pas', sessions: 'Séances · sem.', activeKcal: 'kcal actives' };
 const SNAPSHOT = buildDailyGoalsSnapshot(
@@ -41,9 +50,8 @@ function handlerProps(widgetAction: WidgetTaskHandlerProps['widgetAction']): Wid
 beforeEach(async () => {
   await AsyncStorage.clear();
   (requestWidgetUpdate as jest.Mock).mockClear();
-  (isHealthConnectAvailable as jest.Mock).mockResolvedValue(false);
-  (hasHealthPermissions as jest.Mock).mockResolvedValue(false);
-  (readStepsToday as jest.Mock).mockResolvedValue(null);
+  // Par defaut : Health Connect refuse la lecture hors premier plan.
+  readBackground.mockReset().mockResolvedValue({ ok: false, reason: 'SecurityException: background read' });
 });
 
 describe('publishDailyGoalsWidget', () => {
@@ -119,20 +127,34 @@ describe('dailyGoalsWidgetTaskHandler', () => {
     expect(rendered.props).toMatchObject({ width: 160, height: 160 });
   });
 
-  it('rafraichit les pas depuis Health Connect quand il repond', async () => {
-    await writeDailyGoalsWidgetSnapshot({ snapshot: SNAPSHOT, labels: LABELS, locale: 'fr-FR' });
-    (isHealthConnectAvailable as jest.Mock).mockResolvedValue(true);
-    (hasHealthPermissions as jest.Mock).mockResolvedValue(true);
-    (readStepsToday as jest.Mock).mockResolvedValue(9000);
+  it('app fermee : relit les pas en arriere-plan et recalcule pas ET depense', async () => {
+    await writeDailyGoalsWidgetSnapshot({ snapshot: SNAPSHOT, labels: LABELS, locale: 'fr-FR', inputs: INPUTS });
+    readBackground.mockResolvedValue({ ok: true, steps: 9000 });
     const props = handlerProps('WIDGET_UPDATE');
 
     await dailyGoalsWidgetTaskHandler(props);
 
     const rendered = (props.renderWidget as jest.Mock).mock.calls[0][0];
     expect(rendered.props.snapshot.steps).toMatchObject({ value: 9000, goal: 8000, ratio: 1, reached: true });
-    // Les autres anneaux ne bougent pas : seul Health Connect a ete relu.
-    expect(rendered.props.snapshot.activeKcal).toEqual(SNAPSHOT.activeKcal);
-    expect(rendered.props.snapshot.sessions).toEqual(SNAPSHOT.sessions);
+    // La depense suit les nouveaux pas : elle n'est plus figee a l'instantane de l'app.
+    expect(rendered.props.snapshot.activeKcal.kind).toBe('progress');
+    expect(rendered.props.snapshot.activeKcal.value).not.toBe(410);
+    expect(rendered.props.snapshot.sessions).toMatchObject({ value: 2, goal: 3 });
+    expect(await readWidgetLastRefresh()).toMatchObject({ ok: true, steps: 9000 });
+  });
+
+  it('lecture refusee en arriere-plan : instantane conserve, et la raison est tracee', async () => {
+    await writeDailyGoalsWidgetSnapshot({ snapshot: SNAPSHOT, labels: LABELS, locale: 'fr-FR', inputs: INPUTS });
+    const props = handlerProps('WIDGET_UPDATE');
+
+    await dailyGoalsWidgetTaskHandler(props);
+
+    const rendered = (props.renderWidget as jest.Mock).mock.calls[0][0];
+    expect(rendered.props.snapshot.steps).toEqual(SNAPSHOT.steps);
+    expect(await readWidgetLastRefresh()).toMatchObject({
+      ok: false,
+      reason: 'SecurityException: background read',
+    });
   });
 
   it('ignore les clics et les widgets d’un autre nom', async () => {

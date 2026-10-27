@@ -19,6 +19,7 @@ import { File as ExpoFile, Paths } from 'expo-file-system';
 import { useRouter } from 'expo-router';
 
 import { Button } from '../../components/ui/Button';
+import { HealthConnectSettings } from '../../components/settings/HealthConnectSettings';
 import { appAlert } from '../../components/ui/AppDialog';
 import { TextInput } from '../../components/ui/TextInput';
 import { useColors } from '../../theme/useColors';
@@ -857,6 +858,9 @@ export default function SettingsScreen() {
             </View>
           </TouchableOpacity>
         </View>
+
+        {/* Health Connect : statut, connexion, arriere-plan (widget), reinitialisation. */}
+        <HealthConnectSettings />
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.aiProgram')}</Text>

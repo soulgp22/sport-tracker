@@ -1387,3 +1387,45 @@ Tests : `lib/__tests__/dailyGoals.test.ts`,
 ce qu'il déclenche, pas par sa présence. Et une capacité appelée depuis deux
 écrans sort de l'écran qui l'a vue naître.
 
+## Widget figé tant qu'on n'ouvre pas l'app : lecture Health Connect refusée en arrière-plan
+
+**Symptôme** (2026-10-27, retour d'Islam sur la 1.39.3) : le widget ne se met
+à jour qu'à l'ouverture de l'app.
+
+**Cause racine, prouvée sur l'émulateur** (processus tué par `kill -9`, puis
+`APPWIDGET_UPDATE` envoyé en root) : le gestionnaire headless tournait bien,
+mais Android 14+ refuse toute lecture Health Connect d'une app hors premier
+plan sans `PERMISSION_READ_HEALTH_DATA_IN_BACKGROUND`. L'erreur était avalée
+par `safeCall` (journal en `__DEV__` seulement), donc invisible. Et même avec
+une lecture réussie, seule la case « pas » était rafraîchie : la dépense et le
+compteur de séances restaient figés à l'instantané de l'app.
+
+**Correctif.**
+- Permission d'arrière-plan déclarée (`app.json`) et demandée dans une feuille
+  SÉPARÉE après la connexion (`requestBackgroundReadPermission`) : son refus
+  ne casse jamais la lecture des pas et calories.
+- `readStepsTodayInBackground` ne masque plus l'erreur ; chaque
+  rafraîchissement laisse une trace (`readWidgetLastRefresh`) affichée dans
+  Paramètres.
+- L'accueil dépose les ENTRÉES du calcul (cibles, séances de la semaine, kcal
+  des séances du jour, profil) ; le widget recalcule les trois anneaux seul
+  (`lib/widgets/dailyGoalsWidgetRefresh`), avec la même règle que l'accueil
+  (`goalActiveKcalFrom`), en remettant les séances à zéro au changement de
+  semaine et les kcal de séance au changement de jour.
+
+**Vérifié** : sans la permission, Paramètres affiche « lecture refusée par
+Health Connect » ; après « Autoriser la mise à jour en arrière-plan », le même
+test app tuée donne « Widget mis à jour le … ».
+
+**Pièges d'outillage rencontrés** :
+- `am force-stop` met l'app à l'état *stopped* : le système ne lui livre plus
+  aucune diffusion, widget compris. Pour simuler un vrai arrière-plan :
+  `adb root` puis `adb shell kill -9 <pid>`.
+- `APPWIDGET_UPDATE` est une diffusion protégée : `am broadcast` la refuse
+  depuis le shell normal (« Permission Denial »), elle passe en root.
+- `revokeAllPermissions` n'est appliqué par Android 14+ qu'au redémarrage de
+  l'app : l'écran le dit à l'utilisateur.
+
+**À retenir** : toute lecture Health Connect faite depuis un widget, une tâche
+de fond ou une notification exige la permission d'arrière-plan. Et une erreur
+de lecture ne doit jamais être avalée sans trace consultable en release.

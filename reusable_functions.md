@@ -431,6 +431,18 @@ Pas. `lib/healthConnect.openHealthConnectPlayStore` l'accompagne.
 
 ---
 
+## Health Connect hors premier plan
+
+`lib/healthConnect` : `requestBackgroundReadPermission()` (feuille séparée,
+ne lève jamais), `readStepsTodayInBackground()` (renvoie la raison de l'échec
+au lieu de l'avaler), `getHealthConnectDiagnostics()` (statut SDK + chaque
+autorisation, dont l'arrière-plan), `revokeHealthPermissions()` (signale le
+redémarrage requis sur Android 14+). Écran : `hooks/useHealthConnectSettings`
++ `components/settings/HealthConnectSettings`. Recalcul du widget :
+`lib/widgets/dailyGoalsWidgetRefresh` (pur).
+
+---
+
 ## Promotion Play sans re-téléversement
 
 `scripts/play-upload.py <aab> [piste] [statut] [notes.json]` : téléversement

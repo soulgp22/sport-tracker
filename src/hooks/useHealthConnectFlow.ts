@@ -6,6 +6,7 @@ import { useTranslation } from '../i18n/useTranslation';
 import {
   openHealthConnectPermissionsForApp,
   openHealthConnectPlayStore,
+  requestBackgroundReadPermission,
   requestHealthPermissionsWithStatus,
 } from '../lib/healthConnect';
 
@@ -15,7 +16,8 @@ import {
  * Stats > Pas sans dupliquer ses messages.
  *
  * Jamais d'echec silencieux : chaque issue a son dialogue.
- * - accorde           → `onGranted` (l'appelant recharge ses donnees) ;
+ * - accorde           → demande de lecture en arriere-plan (widget), puis
+ *   `onGranted` (l'appelant recharge ses donnees) ;
  * - non installe / a jour → proposer le Play Store ;
  * - erreur SDK        → message brut ;
  * - refuse            → ouvrir la page de permissions de l'app dans Health
@@ -31,6 +33,10 @@ export function useHealthConnectFlow(onGranted?: () => void | Promise<void>) {
     try {
       const result = await requestHealthPermissionsWithStatus();
       if (result.granted) {
+        // Seconde feuille, separee : la lecture en arriere-plan qui permet au
+        // widget de se mettre a jour app fermee. Un refus ne change rien a la
+        // connexion des pas et des calories.
+        await requestBackgroundReadPermission();
         await onGranted?.();
         return true;
       }

@@ -9,12 +9,17 @@ import { WeightTrend } from '../../components/progress/WeightTrend';
 import { AnimatedNumber } from '../../components/ui/AnimatedNumber';
 import {
   buildDailyGoalsSnapshot,
+  goalActiveKcalFrom,
   resolveGoalRingTap,
   type GoalRingKind,
 } from '../../lib/dailyGoals';
 import { estimateActiveCaloriesFromSteps, resolveDailyEnergyExpenditure } from '../../lib/energyBalance';
 import { calculateDailyTotals } from '../../lib/nutritionCalc';
-import { calculateConsistencyMetrics, getBodyweightForDate } from '../../lib/performanceEngine';
+import {
+  calculateConsistencyMetrics,
+  getBodyweightForDate,
+  weekStartKey,
+} from '../../lib/performanceEngine';
 import { publishDailyGoalsWidget } from '../../lib/widgets/dailyGoalsWidget';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useActiveSessionStore } from '../../store/activeSessionStore';
@@ -135,17 +140,9 @@ export default function HomeScreen() {
   // Objectifs du jour. La depense ne compte vers l'objectif que si elle vient
   // de donnees du jour (mesure Health Connect, ou pas + seances) : le repli
   // « habituel » du profil est une constante, pas une progression.
-  // Health Connect connecte mais rien d'enregistre aujourd'hui (0 pas, aucune
-  // seance) : la depense active vaut 0, pas « inconnue » — l'anneau ne doit
-  // pas redire « Connecter » a quelqu'un qui vient de connecter.
-  const expenditureMode = expenditure.breakdown.mode;
+  // Regle partagee avec le widget (lib/dailyGoals) : meme chiffre aux deux endroits.
   const healthGranted = healthData.status === 'granted';
-  const goalActiveKcal =
-    expenditureMode === 'measured' || expenditureMode === 'estimated'
-      ? burned
-      : healthGranted && expenditure.basalKcal !== null
-        ? 0
-        : null;
+  const goalActiveKcal = goalActiveKcalFrom(expenditure, healthGranted);
   const sessionsThisWeek = useMemo(
     () => calculateConsistencyMetrics(sessions, weeklySessionGoal, monthlySessionGoal).thisWeek,
     [sessions, weeklySessionGoal, monthlySessionGoal]
@@ -185,9 +182,36 @@ export default function HomeScreen() {
     }
   };
   // Le widget Android affiche le meme instantane que l'accueil.
+  // Les entrees du recalcul permettent au widget de se mettre a jour seul,
+  // app fermee, avec les pas frais de Health Connect.
   useEffect(() => {
-    void publishDailyGoalsWidget({ snapshot: dailyGoals, labels: goalLabels, locale });
-  }, [dailyGoals, goalLabels, locale]);
+    void publishDailyGoalsWidget({
+      snapshot: dailyGoals,
+      labels: goalLabels,
+      locale,
+      inputs: {
+        targets: { stepsGoal, activeKcalGoal, weeklySessionGoal },
+        sessionsThisWeek,
+        weekKey: weekStartKey(new Date()),
+        sessionKcalToday: todaySessionKcal,
+        profile: { sex, weightKg, heightCm, ageYears: age, activityLevel },
+      },
+    });
+  }, [
+    dailyGoals,
+    goalLabels,
+    locale,
+    stepsGoal,
+    activeKcalGoal,
+    weeklySessionGoal,
+    sessionsThisWeek,
+    todaySessionKcal,
+    sex,
+    weightKg,
+    heightCm,
+    age,
+    activityLevel,
+  ]);
 
   const now = new Date();
   const dateLabel = formatHeaderDate(now, locale);

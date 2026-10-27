@@ -176,6 +176,15 @@ absente ou fausse — pas que le service est tombé.
   (~70 Ko/s) ; la barre d'`eas submit` reste à 0 % jusqu'à la fin, ce n'est
   pas un blocage.
 
+**Permissions Health Connect déclarées** (manifeste) : `READ_STEPS`,
+`READ_ACTIVE_CALORIES_BURNED`, `READ_TOTAL_CALORIES_BURNED` et, depuis
+1.39.4, `READ_HEALTH_DATA_IN_BACKGROUND` (widget app fermée). **À déclarer
+par Islam dans la Play Console avant la soumission de la 1.39.4** :
+Contenu de l'appli → Autorisations Health Connect (justification : « mise à jour
+du widget des objectifs du jour sans ouvrir l'application »). Google peut
+refuser l'envoi tant que la déclaration ne couvre pas la nouvelle permission,
+comme pour `READ_WEIGHT` le 2026-08-27.
+
 **Deux clés de signature coexistent — ne pas les confondre :**
 
 | Clé | Usage | Vérification |

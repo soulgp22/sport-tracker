@@ -10,6 +10,8 @@
  * un anneau `unavailable`, jamais un 0 ni une estimation deguisee en mesure.
  */
 
+import type { DailyEnergyExpenditure } from './energyBalance';
+
 export const DEFAULT_STEPS_GOAL = 8000;
 export const DEFAULT_ACTIVE_KCAL_GOAL = 400;
 
@@ -116,4 +118,22 @@ export function resolveGoalRingTap(
   // Pas sans donnee = Health Connect absent ; seances indisponibles (ne devrait
   // pas arriver) : l'historique reste la reponse la moins trompeuse.
   return ring === 'sessions' ? 'history' : 'connectHealth';
+}
+
+/**
+ * Depense active qui compte vers l'objectif, a partir de la depense du jour.
+ * Partagee par l'accueil et le widget (meme chiffre aux deux endroits) :
+ * - mesure Health Connect ou estimation pas + seances : l'activite du jour ;
+ * - Health Connect connecte, profil complet, mais rien encore aujourd'hui : 0,
+ *   pas « inconnue » (l'anneau ne redit pas « Connecter ») ;
+ * - sinon (repli « habituel » du profil, constante) : null, jamais une
+ *   progression inventee.
+ */
+export function goalActiveKcalFrom(
+  expenditure: Pick<DailyEnergyExpenditure, 'activityKcal' | 'basalKcal' | 'breakdown'>,
+  healthGranted: boolean
+): number | null {
+  const mode = expenditure.breakdown.mode;
+  if (mode === 'measured' || mode === 'estimated') return expenditure.activityKcal;
+  return healthGranted && expenditure.basalKcal !== null ? 0 : null;
 }

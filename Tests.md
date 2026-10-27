@@ -551,3 +551,20 @@ Sabotages vérifiés le 2026-10-26, chacun rougit : règle « toujours historiqu
 (3), « Profil » ignoré (1), `onGranted` oublié (1), retour vers Nutrition (2).
 Vérifié sur l'émulateur : l'appui sur l'anneau ouvre la feuille Health Connect.
 
+## Widget en arrière-plan et Health Connect dans Paramètres (1.39.4)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/dailyGoalsWidgetRefresh.test.ts` | recalcul app fermée : pas frais → pas ET dépense recalculés (même règle que l'accueil) ; lendemain → kcal des séances d'hier retirées ; nouvelle semaine → séances à 0 ; lecture impossible même jour → instantané conservé ; lendemain → pas et dépense inconnus ; ancien instantané sans entrées → seuls les pas |
+| `lib/__tests__/dailyGoals.test.ts` (+3) | `goalActiveKcalFrom` : mesure / estimation, connecté sans activité = 0, repli habituel ou profil incomplet = null |
+| `lib/__tests__/dailyGoalsWidgetSnapshot.test.ts` (+3) | entrées valides conservées, profil partiel accepté, entrées illisibles ignorées sans perdre l'instantané |
+| `lib/__tests__/dailyGoalsWidget.test.tsx` (1 réécrit, +1) | gestionnaire : lecture d'arrière-plan réussie → anneaux recalculés et trace `ok` ; refus → instantané conservé et raison tracée |
+| `hooks/__tests__/useHealthConnectFlow.test.tsx` | la connexion accordée ouvre ensuite la feuille d'arrière-plan ; jamais en cas d'échec |
+| `components/settings/__tests__/HealthConnectSettings.test.tsx` | statut par état (chargement, connecté, non connecté, non installé, à mettre à jour, indisponible) ; connecter puis relire ; 4 autorisations et trace du widget ; bouton arrière-plan et guidage si refus ; réinitialiser avec confirmation et consigne de redémarrage ; échec natif montré ; Play Store si absent |
+
+Sabotages vérifiés le 2026-10-27, chacun rougit : gestionnaire sans relecture
+(1), dépense figée (2), semaine non remise à zéro (1), séances d'hier comptées
+(1), pas de feuille d'arrière-plan (1), réinitialisation sans confirmation (2),
+statut toujours « connecté » (2). Vérifié sur l'émulateur (APK release) : app
+tuée, refus puis succès du rafraîchissement ; réinitialisation, redémarrage,
+reconnexion par les deux feuilles.

@@ -48,6 +48,7 @@ jest.mock('../../../lib/healthConnect', () => ({
   requestHealthPermissionsWithStatus: jest.fn(() => Promise.resolve({ status: 'available', granted: true })),
   openHealthConnectPlayStore: jest.fn(() => Promise.resolve()),
   openHealthConnectPermissionsForApp: jest.fn(() => Promise.resolve(true)),
+  requestBackgroundReadPermission: jest.fn(() => Promise.resolve(true)),
   hasHealthPermissions: jest.fn(),
   readCaloriesBurnedToday: jest.fn(),
   readStepsToday: jest.fn(),
