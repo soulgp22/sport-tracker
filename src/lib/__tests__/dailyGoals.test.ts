@@ -5,6 +5,7 @@ import {
   STEPS_GOAL_LIMITS,
   buildDailyGoalsSnapshot,
   clampGoal,
+  goalActiveKcalFrom,
   resolveGoalRingTap,
 } from '../dailyGoals';
 
@@ -109,5 +110,24 @@ describe('resolveGoalRingTap', () => {
 
   it("des seances indisponibles (cas theorique) restent sur l'historique", () => {
     expect(resolveGoalRingTap('sessions', unavailable, 'data')).toBe('history');
+  });
+});
+
+describe('goalActiveKcalFrom (regle partagee accueil + widget)', () => {
+  const exp = (mode: 'measured' | 'estimated' | 'habitual' | 'unknown', activityKcal: number | null, basalKcal: number | null) =>
+    ({ activityKcal, basalKcal, breakdown: { mode } }) as never;
+
+  it('mesure ou estimation du jour : l’activite compte', () => {
+    expect(goalActiveKcalFrom(exp('measured', 320, 1700), true)).toBe(320);
+    expect(goalActiveKcalFrom(exp('estimated', 210, 1700), false)).toBe(210);
+  });
+
+  it('connecte, profil complet, rien encore : 0 et non « inconnue »', () => {
+    expect(goalActiveKcalFrom(exp('habitual', 600, 1700), true)).toBe(0);
+  });
+
+  it('repli « habituel » sans Health Connect, ou profil incomplet : null', () => {
+    expect(goalActiveKcalFrom(exp('habitual', 600, 1700), false)).toBeNull();
+    expect(goalActiveKcalFrom(exp('unknown', null, null), true)).toBeNull();
   });
 });

@@ -60,6 +60,7 @@ jest.mock('../../../../lib/healthConnect', () => ({
   requestHealthPermissionsWithStatus: jest.fn(() => Promise.resolve({ status: 'available', granted: false, instantDenial: false })),
   openHealthConnectPlayStore: jest.fn(() => Promise.resolve()),
   openHealthConnectPermissionsForApp: jest.fn(() => Promise.resolve(true)),
+  requestBackgroundReadPermission: jest.fn(() => Promise.resolve(true)),
 }));
 
 const TODAY = localDayKey(new Date());

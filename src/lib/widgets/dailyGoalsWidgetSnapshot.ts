@@ -14,7 +14,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { localDayKey } from '../dateKeys';
-import type { DailyGoalsSnapshot } from '../dailyGoals';
+import type { DailyGoalTargets, DailyGoalsSnapshot } from '../dailyGoals';
+import type { EnergyProfile } from '../energyBalance';
 
 export const DAILY_GOALS_WIDGET_SNAPSHOT_KEY = 'daily-goals-widget-snapshot-v1';
 
@@ -25,12 +26,58 @@ export interface DailyGoalsWidgetLabels {
   activeKcal: string;
 }
 
+/**
+ * Ce qu'il faut au widget pour RECALCULER les anneaux seul, en arriere-plan,
+ * avec les pas frais de Health Connect (2026-10-27). Absent des instantanes
+ * ecrits avant 1.39.4 : le widget retombe alors sur l'ancien comportement.
+ */
+export interface DailyGoalsWidgetInputs {
+  targets: DailyGoalTargets;
+  /** Seances terminees dans la semaine `weekKey` (lundi, voir weekStartKey). */
+  sessionsThisWeek: number;
+  weekKey: string;
+  /** Depense nette des seances du jour `dayKey`. */
+  sessionKcalToday: number;
+  profile: EnergyProfile;
+}
+
 export interface DailyGoalsWidgetSnapshot {
   version: 1;
   dayKey: string;
   locale: string;
   labels: DailyGoalsWidgetLabels;
   snapshot: DailyGoalsSnapshot;
+  inputs?: DailyGoalsWidgetInputs;
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function isOptionalNumber(value: unknown): boolean {
+  return value === undefined || value === null || isFiniteNumber(value);
+}
+
+function isInputs(value: unknown): value is DailyGoalsWidgetInputs {
+  if (!value || typeof value !== 'object') return false;
+  const v = value as Record<string, unknown>;
+  const targets = v.targets as Record<string, unknown> | undefined;
+  const profile = v.profile as Record<string, unknown> | undefined;
+  return (
+    !!targets &&
+    isFiniteNumber(targets.stepsGoal) &&
+    isFiniteNumber(targets.activeKcalGoal) &&
+    isFiniteNumber(targets.weeklySessionGoal) &&
+    isFiniteNumber(v.sessionsThisWeek) &&
+    typeof v.weekKey === 'string' &&
+    isFiniteNumber(v.sessionKcalToday) &&
+    !!profile &&
+    typeof profile.sex === 'string' &&
+    typeof profile.activityLevel === 'string' &&
+    isOptionalNumber(profile.weightKg) &&
+    isOptionalNumber(profile.heightCm) &&
+    isOptionalNumber(profile.ageYears)
+  );
 }
 
 function isRing(value: unknown): boolean {
@@ -66,7 +113,13 @@ export function parseDailyGoalsWidgetSnapshot(raw: string | null): DailyGoalsWid
     if (!snapshot || !isRing(snapshot.steps) || !isRing(snapshot.sessions) || !isRing(snapshot.activeKcal)) {
       return null;
     }
-    return parsed as unknown as DailyGoalsWidgetSnapshot;
+    // Des entrees illisibles ne cassent pas l'instantane : on les ignore.
+    const stored = parsed as unknown as DailyGoalsWidgetSnapshot;
+    if (parsed.inputs !== undefined && !isInputs(parsed.inputs)) {
+      const { inputs: _ignored, ...rest } = stored;
+      return rest;
+    }
+    return stored;
   } catch {
     return null;
   }
@@ -99,6 +152,11 @@ export async function writeDailyGoalsWidgetSnapshot(
 ): Promise<void> {
   const payload: DailyGoalsWidgetSnapshot = { version: 1, dayKey: localDayKey(now), ...value };
   await AsyncStorage.setItem(DAILY_GOALS_WIDGET_SNAPSHOT_KEY, JSON.stringify(payload));
+}
+
+/** Instantane brut, NON expire : le rafraichissement d'arriere-plan a besoin du jour d'origine. */
+export async function readRawDailyGoalsWidgetSnapshot(): Promise<DailyGoalsWidgetSnapshot | null> {
+  return parseDailyGoalsWidgetSnapshot(await AsyncStorage.getItem(DAILY_GOALS_WIDGET_SNAPSHOT_KEY));
 }
 
 export async function readDailyGoalsWidgetSnapshot(

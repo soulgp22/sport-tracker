@@ -9,14 +9,16 @@
 
 import type { HealthWeightSample } from './healthWeightMerge';
 import type { DailyHealthData } from './energyHistory';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 import { endOfLocalDay, localDayKey, startOfLocalDay } from './dateKeys';
 
 export type { HealthWeightSample };
 
 type HealthConnectModule = typeof import('react-native-health-connect');
-type HealthPermission = import('react-native-health-connect').Permission;
+type HealthPermission =
+  | import('react-native-health-connect').Permission
+  | import('react-native-health-connect').BackgroundAccessPermission;
 
 const REQUIRED_PERMISSIONS: HealthPermission[] = [
   { accessType: 'read', recordType: 'ActiveCaloriesBurned' },
@@ -57,6 +59,32 @@ const REQUIRED_PERMISSIONS: HealthPermission[] = [
  * Tout le reste de la chaine de lecture est deja en place et testee.
  */
 const OPTIONAL_PERMISSIONS: HealthPermission[] = [];
+
+/**
+ * Lecture en arriere-plan (Android 14+ : PERMISSION_READ_HEALTH_DATA_IN_BACKGROUND).
+ *
+ * Sans elle, Health Connect refuse toute lecture quand l'app n'est pas au
+ * premier plan : le widget, rafraichi par le launcher toutes les 30 min dans
+ * une tache JS headless, ne voyait jamais les nouveaux pas (retour d'Islam,
+ * 2026-10-27 : « il ne se met a jour que si j'ouvre l'appli »).
+ *
+ * Demandee dans une feuille SEPAREE, apres les permissions requises : si
+ * l'appareil ne la propose pas, la connexion des pas et des calories ne doit
+ * pas en souffrir. Son absence ne fait jamais basculer en « non connecte ».
+ * Declaree dans `app.json` (une permission absente du manifeste peut faire
+ * rejeter la feuille par Health Connect).
+ */
+const BACKGROUND_PERMISSION: HealthPermission = {
+  accessType: 'read',
+  recordType: 'BackgroundAccessPermission',
+};
+
+function hasPermission(granted: HealthPermission[] | null, wanted: HealthPermission): boolean {
+  return (granted ?? []).some(
+    (permission) =>
+      permission.accessType === wanted.accessType && permission.recordType === wanted.recordType
+  );
+}
 
 /**
  * Fenetre de recherche du dernier poids connu, en jours.
@@ -447,5 +475,97 @@ export async function openHealthConnectPlayStore(): Promise<void> {
     } catch {
       // Aucun store ni navigateur disponible : rien de plus a faire.
     }
+  }
+}
+
+/** Etat de la connexion, tel que l'ecran Parametres l'affiche. */
+export interface HealthConnectDiagnostics {
+  status: HealthConnectStatus;
+  /** Toutes les permissions requises (pas + calories) sont accordees. */
+  connected: boolean;
+  steps: boolean;
+  activeCalories: boolean;
+  totalCalories: boolean;
+  /** Lecture en arriere-plan : necessaire au rafraichissement du widget. */
+  background: boolean;
+}
+
+const NO_PERMISSION = {
+  connected: false,
+  steps: false,
+  activeCalories: false,
+  totalCalories: false,
+  background: false,
+} as const;
+
+export async function getHealthConnectDiagnostics(): Promise<HealthConnectDiagnostics> {
+  const status = await getHealthConnectStatus();
+  if (status !== 'available') return { status, ...NO_PERMISSION };
+  const granted = await safeCall('getGrantedPermissions', async (hc) => {
+    await ensureInitialized(hc);
+    return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
+  });
+  return {
+    status,
+    connected: hasAllReadPermissions(granted),
+    steps: hasPermission(granted, { accessType: 'read', recordType: 'Steps' }),
+    activeCalories: hasPermission(granted, { accessType: 'read', recordType: 'ActiveCaloriesBurned' }),
+    totalCalories: hasPermission(granted, { accessType: 'read', recordType: 'TotalCaloriesBurned' }),
+    background: hasPermission(granted, BACKGROUND_PERMISSION),
+  };
+}
+
+/**
+ * Demande la lecture en arriere-plan (feuille separee). Ne leve jamais :
+ * renvoie true si elle est accordee a l'issue de la demande.
+ */
+export async function requestBackgroundReadPermission(): Promise<boolean> {
+  const granted = await safeCall('requestBackgroundReadPermission', async (hc) => {
+    await ensureInitialized(hc);
+    return hc.requestPermission([BACKGROUND_PERMISSION]) as Promise<HealthPermission[]>;
+  });
+  return hasPermission(granted, BACKGROUND_PERMISSION);
+}
+
+export type RevokeHealthResult =
+  | { ok: true; requiresRestart: boolean }
+  | { ok: false; error: string };
+
+/**
+ * Retire toutes les permissions accordees a l'app (bouton « Reinitialiser »).
+ * Sur Android 14+, Health Connect n'applique le retrait qu'au prochain
+ * redemarrage de l'app : `requiresRestart` le signale a l'ecran.
+ */
+export async function revokeHealthPermissions(): Promise<RevokeHealthResult> {
+  const hc = loadModule();
+  if (!hc) return { ok: false, error: 'Health Connect indisponible' };
+  try {
+    await ensureInitialized(hc);
+    await hc.revokeAllPermissions();
+    // Le client sera reinitialise a la prochaine demande.
+    initializationPromise = null;
+    return { ok: true, requiresRestart: Platform.OS === 'android' && Number(Platform.Version) >= 34 };
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) };
+  }
+}
+
+export type BackgroundStepsRead = { ok: true; steps: number } | { ok: false; reason: string };
+
+/**
+ * Pas du jour lus depuis la tache headless du widget. Contrairement a
+ * `readStepsToday`, l'erreur n'est PAS avalee : c'est elle qui dit pourquoi le
+ * widget ne se met pas a jour (permission d'arriere-plan absente, HC absent).
+ */
+export async function readStepsTodayInBackground(): Promise<BackgroundStepsRead> {
+  const hc = loadModule();
+  if (!hc) return { ok: false, reason: 'module' };
+  try {
+    if ((await getHealthConnectStatus()) !== 'available') return { ok: false, reason: 'unavailable' };
+    await ensureInitialized(hc);
+    const result = await hc.readRecords('Steps', todayTimeRange());
+    return { ok: true, steps: result.records.reduce((sum, record) => sum + record.count, 0) };
+  } catch (error) {
+    return { ok: false, reason: error instanceof Error ? error.message : String(error) };
   }
 }

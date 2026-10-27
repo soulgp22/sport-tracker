@@ -71,3 +71,32 @@ describe('instantane du widget objectifs', () => {
     expect(parseDailyGoalsWidgetSnapshot(JSON.stringify(sample('2026-10-20')))).toEqual(sample('2026-10-20'));
   });
 });
+
+describe('entrees du recalcul en arriere-plan', () => {
+  const inputs = {
+    targets: { stepsGoal: 8000, activeKcalGoal: 500, weeklySessionGoal: 3 },
+    sessionsThisWeek: 2,
+    weekKey: '2026-10-26',
+    sessionKcalToday: 120,
+    profile: { sex: 'male', weightKg: 80, heightCm: 180, ageYears: 30, activityLevel: 'moderate' },
+  };
+
+  it('des entrees valides sont conservees', () => {
+    const parsed = parseDailyGoalsWidgetSnapshot(JSON.stringify({ ...sample('2026-10-20'), inputs }));
+    expect(parsed?.inputs).toEqual(inputs);
+  });
+
+  it('un profil incomplet (poids absent) reste valide', () => {
+    const partial = { ...inputs, profile: { sex: 'unspecified', activityLevel: 'sedentary' } };
+    const parsed = parseDailyGoalsWidgetSnapshot(JSON.stringify({ ...sample('2026-10-20'), inputs: partial }));
+    expect(parsed?.inputs).toEqual(partial);
+  });
+
+  it('des entrees illisibles sont ignorees sans perdre l’instantane', () => {
+    const broken = { ...inputs, sessionsThisWeek: 'deux' };
+    const parsed = parseDailyGoalsWidgetSnapshot(JSON.stringify({ ...sample('2026-10-20'), inputs: broken }));
+    expect(parsed).not.toBeNull();
+    expect(parsed?.inputs).toBeUndefined();
+    expect(parsed?.snapshot).toEqual(sample('2026-10-20').snapshot);
+  });
+});

@@ -240,7 +240,8 @@ export function analyzeExercisePerformance({
   };
 }
 
-function weekStartKey(value: string | Date) {
+/** Lundi (UTC) de la semaine, cle AAAA-MM-JJ : meme semaine que calculateConsistencyMetrics. */
+export function weekStartKey(value: string | Date) {
   const date = typeof value === 'string' ? new Date(value) : new Date(value);
   const utcDay = date.getUTCDay();
   const offset = utcDay === 0 ? -6 : 1 - utcDay;
