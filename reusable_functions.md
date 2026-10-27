@@ -433,6 +433,11 @@ Pas. `lib/healthConnect.openHealthConnectPlayStore` l'accompagne.
 
 ## Promotion Play sans re-téléversement
 
+`scripts/play-upload.py <aab> [piste] [statut] [notes.json]` : téléversement
+**reprenable** par l'API Play (morceaux de 8 Mio, jusqu'à 40 reprises au
+dernier octet reçu). Remplace `eas submit`, qui envoie l'archive d'un bloc et
+casse en `ECONNRESET` sur la connexion du bureau.
+
 `scripts/play-promote.py <versionCode> <notes.json> [piste] [statut]` : promeut
 un bundle déjà sur la piste interne vers `production` (ou `alpha`/`beta`) par
 l'API Play, en référençant le bundle existant — zéro octet renvoyé, contre 45 à
