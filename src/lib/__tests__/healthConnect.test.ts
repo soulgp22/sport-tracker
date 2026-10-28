@@ -446,6 +446,61 @@ describe('healthConnect — poids (permission optionnelle)', () => {
   });
 });
 
+describe('healthConnect — lecture en arriere-plan non declaree (1.39.4, vc 61)', () => {
+  afterEach(() => {
+    jest.resetModules();
+    jest.dontMock('react-native-health-connect');
+  });
+
+  /**
+   * Regression : READ_HEALTH_DATA_IN_BACKGROUND a ete retiree du manifeste
+   * apres deux refus de Google Play. La demander quand meme pourrait faire
+   * rejeter la feuille Health Connect ; l'afficher comme « refusee » serait
+   * un etat que l'utilisateur ne peut pas corriger.
+   */
+  it('ne demande jamais la permission et ne la rapporte pas', async () => {
+    const requestPermission = jest.fn().mockResolvedValue([
+      { accessType: 'read', recordType: 'BackgroundAccessPermission' },
+    ]);
+    jest.doMock('react-native-health-connect', () => ({
+      SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
+      getSdkStatus: jest.fn().mockResolvedValue(3),
+      initialize: jest.fn().mockResolvedValue(true),
+      requestPermission,
+      getGrantedPermissions: jest.fn().mockResolvedValue([
+        ...ALL_GRANTED,
+        { accessType: 'read', recordType: 'BackgroundAccessPermission' },
+      ]),
+    }));
+    const service = loadService();
+
+    expect(service.BACKGROUND_READ_DECLARED).toBe(false);
+    await expect(service.requestBackgroundReadPermission()).resolves.toBe(false);
+    expect(requestPermission).not.toHaveBeenCalled();
+
+    const diagnostics = await service.getHealthConnectDiagnostics();
+    expect(diagnostics).toMatchObject({ connected: true, background: false, backgroundSupported: false });
+  });
+
+  it('la feuille de connexion ne contient que les trois permissions declarees', async () => {
+    const requestPermission = jest.fn().mockResolvedValue([]);
+    jest.doMock('react-native-health-connect', () => ({
+      SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
+      getSdkStatus: jest.fn().mockResolvedValue(3),
+      initialize: jest.fn().mockResolvedValue(true),
+      requestPermission,
+    }));
+    const service = loadService();
+
+    await service.requestHealthPermissionsWithStatus();
+
+    expect(requestPermission.mock.calls[0][0]).not.toContainEqual({
+      accessType: 'read',
+      recordType: 'BackgroundAccessPermission',
+    });
+  });
+});
+
 describe('healthConnect — historique quotidien (A01/A02)', () => {
   afterEach(() => {
     jest.resetModules();

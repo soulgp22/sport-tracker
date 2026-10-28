@@ -568,3 +568,14 @@ Sabotages vérifiés le 2026-10-27, chacun rougit : gestionnaire sans relecture
 statut toujours « connecté » (2). Vérifié sur l'émulateur (APK release) : app
 tuée, refus puis succès du rafraîchissement ; réinitialisation, redémarrage,
 reconnexion par les deux feuilles.
+
+## Permission d'arrière-plan retirée (1.39.4, vc 61)
+
+| Fichier | Couvre |
+|---|---|
+| `lib/__tests__/healthConnect.test.ts` (+2) | drapeau `BACKGROUND_READ_DECLARED` faux : `requestBackgroundReadPermission` ne touche pas le module natif et renvoie false ; diagnostics `background: false, backgroundSupported: false` même si HC la rapporte ; la feuille de connexion ne la contient pas |
+| `components/settings/__tests__/HealthConnectSettings.test.tsx` (+1) | arrière-plan non déclaré : 3 autorisations, ni ligne arrière-plan, ni bouton, ni état du widget ; Réinitialiser reste |
+
+Sabotages vérifiés le 2026-10-28, chacun rougit : garde du drapeau retirée dans
+`requestBackgroundReadPermission` (1), état du widget affiché sans garde (1),
+`backgroundSupported` forcé à vrai dans Paramètres (1), texte d'aide arrière-plan toujours affiché (1).

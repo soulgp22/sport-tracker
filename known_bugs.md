@@ -1429,3 +1429,40 @@ test app tuée donne « Widget mis à jour le … ».
 **À retenir** : toute lecture Health Connect faite depuis un widget, une tâche
 de fond ou une notification exige la permission d'arrière-plan. Et une erreur
 de lecture ne doit jamais être avalée sans trace consultable en release.
+
+## READ_HEALTH_DATA_IN_BACKGROUND : le cercle « déclaration ↔ bundle » de Google Play
+
+**Symptôme** (2026-10-27 et 2026-10-28) : deux envois de la 1.39.4 (vc 60) par
+`scripts/play-upload.py` téléversent les 178 Mo puis échouent au commit :
+
+> 403 — You must let us know whether your app includes any health features.
+
+**Cause racine, constatée dans la Play Console.** La fiche *Contenu de
+l'application → Applis de santé* ne liste QUE les permissions des bundles déjà
+reçus par Google (ici `READ_STEPS`, `READ_ACTIVE_CALORIES_BURNED`,
+`READ_TOTAL_CALORIES_BURNED`). Une nouvelle permission de santé ne peut donc
+pas y être déclarée avant qu'un bundle la portant soit enregistré, et l'API
+refuse d'enregistrer ce bundle tant qu'elle n'est pas déclarée. Un commit
+d'édition VIDE passe : le blocage vient du bundle, pas du compte. Le bundle
+refusé n'est pas conservé (bibliothèque toujours à 59), d'où 45 min perdues à
+chaque essai.
+
+**Ce qui a été fait (1.39.4, vc 61)** : retrait aux TROIS endroits, comme
+`READ_WEIGHT` en août — `app.json`, `android/app/src/main/AndroidManifest.xml`
+(généré, gitignoré) et le code. Dans le code, un drapeau
+`BACKGROUND_READ_DECLARED = false` (`lib/healthConnect`) : la permission n'est
+plus jamais demandée (une permission absente du manifeste peut faire rejeter
+la feuille Health Connect entière), plus rapportée par les diagnostics, et
+Paramètres masque sa ligne, son bouton et l'état du rafraîchissement du widget.
+Conséquence assumée : le widget ne se met à jour qu'à l'ouverture de l'app.
+
+**Pour la réactiver** : passer le drapeau à true, remettre la ligne dans
+`app.json` et le manifeste, puis **importer l'AAB depuis la Play Console**
+(release brouillon ENREGISTRÉE, vérifier que le versionCode apparaît dans
+« Tous les app bundles »), compléter l'étape 2 de la fiche santé, et
+seulement ensuite publier.
+
+**À retenir** : toute nouvelle permission `android.permission.health.*` passe
+d'abord par un import manuel dans la Console. L'API ne sait pas sortir de ce
+cercle. Vérifier par l'API (`bundles.list`) qu'un import « réussi » a bien
+laissé le versionCode dans la bibliothèque avant de déclarer quoi que ce soit.
