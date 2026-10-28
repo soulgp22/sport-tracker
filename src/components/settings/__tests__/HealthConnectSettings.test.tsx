@@ -42,6 +42,7 @@ const CONNECTED = {
   activeCalories: true,
   totalCalories: true,
   background: true,
+  backgroundSupported: true,
 };
 const DISCONNECTED = { ...CONNECTED, connected: false, steps: false, activeCalories: false, totalCalories: false, background: false };
 
@@ -143,6 +144,26 @@ describe('HealthConnectSettings', () => {
     });
 
     expect(alert).toHaveBeenLastCalledWith('Réinitialisation impossible', 'client not available');
+  });
+
+  /**
+   * Regression 1.39.4 (vc 61) : la permission d'arriere-plan a ete retiree du
+   * manifeste (refus Google Play). L'ecran ne doit plus la montrer ni la
+   * proposer : un bouton qui la demanderait toucherait une permission non
+   * declaree, et la ligne « Refuse » serait un etat que l'utilisateur ne peut
+   * pas corriger.
+   */
+  it('arriere-plan non declare dans ce build : ni ligne, ni bouton, ni etat du widget', async () => {
+    diagnostics.mockResolvedValue({ ...CONNECTED, background: false, backgroundSupported: false });
+    (readWidgetLastRefresh as jest.Mock).mockResolvedValue({ at: '2026-10-27T13:05:00.000Z', ok: false, reason: 'x' });
+    await renderSettings();
+
+    expect(screen.getByTestId('settings-health-status').props.children).toBe('Connecté');
+    expect(screen.getAllByText('Autorisé')).toHaveLength(3);
+    expect(screen.queryByTestId('settings-health-perm-background')).toBeNull();
+    expect(screen.queryByText('Autoriser la mise à jour en arrière-plan')).toBeNull();
+    expect(screen.queryByTestId('settings-health-last-refresh')).toBeNull();
+    expect(screen.getByText('Réinitialiser la connexion')).toBeTruthy();
   });
 
   it('Health Connect absent : propose le Play Store, aucune action de connexion', async () => {

@@ -71,9 +71,26 @@ const OPTIONAL_PERMISSIONS: HealthPermission[] = [];
  * Demandee dans une feuille SEPAREE, apres les permissions requises : si
  * l'appareil ne la propose pas, la connexion des pas et des calories ne doit
  * pas en souffrir. Son absence ne fait jamais basculer en « non connecte ».
- * Declaree dans `app.json` (une permission absente du manifeste peut faire
- * rejeter la feuille par Health Connect).
+ *
+ * RETIREE du manifeste le 2026-10-28 (1.39.4, versionCode 61) : Google Play a
+ * refuse deux fois le bundle 60 (« You must let us know whether your app
+ * includes any health features ») et la declaration « Applis de sante » ne
+ * peut pas couvrir une permission qu'aucun bundle recu ne porte encore. Meme
+ * piege que READ_WEIGHT en aout (voir known_bugs.md).
+ *
+ * Tant que `BACKGROUND_READ_DECLARED` vaut false, elle n'est JAMAIS demandee :
+ * demander une permission absente du manifeste peut faire rejeter la feuille
+ * Health Connect entiere. Pour la reactiver, dans le meme commit :
+ *   1. passer `BACKGROUND_READ_DECLARED` a true ;
+ *   2. remettre `android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND`
+ *      dans `app.json` ;
+ *   3. remettre la meme ligne dans `android/app/src/main/AndroidManifest.xml`
+ *      (genere et gitignore) ;
+ * puis importer le bundle DEPUIS la Play Console et completer la declaration
+ * « Applis de sante » avant tout envoi par l'API.
  */
+export const BACKGROUND_READ_DECLARED = false;
+
 const BACKGROUND_PERMISSION: HealthPermission = {
   accessType: 'read',
   recordType: 'BackgroundAccessPermission',
@@ -488,6 +505,8 @@ export interface HealthConnectDiagnostics {
   totalCalories: boolean;
   /** Lecture en arriere-plan : necessaire au rafraichissement du widget. */
   background: boolean;
+  /** La permission d'arriere-plan est declaree dans ce build (sinon : ni affichee ni demandee). */
+  backgroundSupported: boolean;
 }
 
 const NO_PERMISSION = {
@@ -500,7 +519,7 @@ const NO_PERMISSION = {
 
 export async function getHealthConnectDiagnostics(): Promise<HealthConnectDiagnostics> {
   const status = await getHealthConnectStatus();
-  if (status !== 'available') return { status, ...NO_PERMISSION };
+  if (status !== 'available') return { status, ...NO_PERMISSION, backgroundSupported: BACKGROUND_READ_DECLARED };
   const granted = await safeCall('getGrantedPermissions', async (hc) => {
     await ensureInitialized(hc);
     return hc.getGrantedPermissions() as Promise<HealthPermission[]>;
@@ -511,15 +530,20 @@ export async function getHealthConnectDiagnostics(): Promise<HealthConnectDiagno
     steps: hasPermission(granted, { accessType: 'read', recordType: 'Steps' }),
     activeCalories: hasPermission(granted, { accessType: 'read', recordType: 'ActiveCaloriesBurned' }),
     totalCalories: hasPermission(granted, { accessType: 'read', recordType: 'TotalCaloriesBurned' }),
-    background: hasPermission(granted, BACKGROUND_PERMISSION),
+    background: BACKGROUND_READ_DECLARED && hasPermission(granted, BACKGROUND_PERMISSION),
+    backgroundSupported: BACKGROUND_READ_DECLARED,
   };
 }
 
 /**
  * Demande la lecture en arriere-plan (feuille separee). Ne leve jamais :
- * renvoie true si elle est accordee a l'issue de la demande.
+ * renvoie true si elle est accordee a l'issue de la demande, false sans rien
+ * demander tant que la permission n'est pas declaree (`BACKGROUND_READ_DECLARED`).
  */
 export async function requestBackgroundReadPermission(): Promise<boolean> {
+  // Permission absente du manifeste : la demander pourrait faire rejeter la
+  // feuille Health Connect. On ne touche pas au module natif.
+  if (!BACKGROUND_READ_DECLARED) return false;
   const granted = await safeCall('requestBackgroundReadPermission', async (hc) => {
     await ensureInitialized(hc);
     return hc.requestPermission([BACKGROUND_PERMISSION]) as Promise<HealthPermission[]>;

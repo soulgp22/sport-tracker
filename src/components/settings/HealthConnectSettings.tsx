@@ -52,13 +52,18 @@ export function HealthConnectSettings() {
   const status = healthStatusKey(diagnostics);
   const available = diagnostics?.status === 'available';
   const connected = status === 'connected';
+  // Permission d'arriere-plan absente de ce build : ni sa ligne, ni son bouton,
+  // ni l'etat du widget (qui ne se rafraichit alors qu'a l'ouverture de l'app).
+  const backgroundSupported = diagnostics?.backgroundSupported === true;
 
   const permissionRows: { key: string; label: string; granted: boolean }[] = diagnostics
     ? [
         { key: 'steps', label: t('settings.health.perm.steps'), granted: diagnostics.steps },
         { key: 'active', label: t('settings.health.perm.activeCalories'), granted: diagnostics.activeCalories },
         { key: 'total', label: t('settings.health.perm.totalCalories'), granted: diagnostics.totalCalories },
-        { key: 'background', label: t('settings.health.perm.background'), granted: diagnostics.background },
+        ...(backgroundSupported
+          ? [{ key: 'background', label: t('settings.health.perm.background'), granted: diagnostics.background }]
+          : []),
       ]
     : [];
 
@@ -90,7 +95,7 @@ export function HealthConnectSettings() {
             ))
           : null}
 
-        {available ? <WidgetRefreshLine lastRefresh={lastRefresh} locale={locale} styles={styles} /> : null}
+        {available && backgroundSupported ? <WidgetRefreshLine lastRefresh={lastRefresh} locale={locale} styles={styles} /> : null}
       </View>
 
       {status === 'notInstalled' || status === 'needsUpdate' ? (
@@ -110,7 +115,7 @@ export function HealthConnectSettings() {
         />
       ) : null}
 
-      {connected && diagnostics && !diagnostics.background ? (
+      {connected && backgroundSupported && diagnostics && !diagnostics.background ? (
         <Button
           title={t('settings.health.allowBackground')}
           variant="secondary"
