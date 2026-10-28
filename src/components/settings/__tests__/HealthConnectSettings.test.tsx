@@ -91,6 +91,7 @@ describe('HealthConnectSettings', () => {
 
     expect(screen.getByTestId('settings-health-status').props.children).toBe('Connecté');
     expect(screen.getByText('Mise à jour du widget en arrière-plan')).toBeTruthy();
+    expect(screen.getByText(/arrière-plan permet au widget/)).toBeTruthy();
     expect(screen.getAllByText('Autorisé')).toHaveLength(4);
     expect(screen.getByTestId('settings-health-last-refresh').props.children).toMatch(/6.240 pas/);
     // Arriere-plan deja accorde : pas de bouton pour le redemander.
@@ -163,6 +164,9 @@ describe('HealthConnectSettings', () => {
     expect(screen.queryByTestId('settings-health-perm-background')).toBeNull();
     expect(screen.queryByText('Autoriser la mise à jour en arrière-plan')).toBeNull();
     expect(screen.queryByTestId('settings-health-last-refresh')).toBeNull();
+    // L'aide ne promet plus une mise a jour du widget app fermee.
+    expect(screen.getByText('Les pas et les calories viennent de Health Connect.')).toBeTruthy();
+    expect(screen.queryByText(/arrière-plan permet au widget/)).toBeNull();
     expect(screen.getByText('Réinitialiser la connexion')).toBeTruthy();
   });
 

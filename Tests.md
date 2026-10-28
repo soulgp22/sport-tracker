@@ -578,4 +578,4 @@ reconnexion par les deux feuilles.
 
 Sabotages vérifiés le 2026-10-28, chacun rougit : garde du drapeau retirée dans
 `requestBackgroundReadPermission` (1), état du widget affiché sans garde (1),
-`backgroundSupported` forcé à vrai dans Paramètres (1).
+`backgroundSupported` forcé à vrai dans Paramètres (1), texte d'aide arrière-plan toujours affiché (1).

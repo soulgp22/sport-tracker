@@ -70,7 +70,11 @@ export function HealthConnectSettings() {
   return (
     <View style={styles.section} testID="settings-health">
       <Text style={styles.sectionTitle}>{t('settings.health.title')}</Text>
-      <Text style={styles.helpText}>{t('settings.health.help')}</Text>
+      <Text style={styles.helpText}>
+        {backgroundSupported
+          ? `${t('settings.health.help')} ${t('settings.health.helpBackground')}`
+          : t('settings.health.help')}
+      </Text>
 
       <View style={styles.card}>
         <View style={styles.statusRow}>
