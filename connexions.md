@@ -161,17 +161,19 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
-- **Production :** 1.39.3 (versionCode 59) le 2026-10-27 (connexion Health
-  Connect depuis l'accueil et Stats), promue par `scripts/play-promote.py`.
-  Précédentes : 1.39.2 (vc 58) le 2026-10-22, 1.38.0 (vc 55) le 2026-10-18.
+- **Production :** 1.39.4 (versionCode 61) le 2026-10-28 (section Health
+  Connect dans Paramètres ; sans lecture en arrière-plan), promue par
+  `scripts/play-promote.py`. Le vc 60 n'a jamais été publié (refus Google,
+  voir `known_bugs.md`). Précédentes : 1.39.3 (vc 59) le 2026-10-27,
+  1.39.2 (vc 58) le 2026-10-22, 1.38.0 (vc 55) le 2026-10-18.
 - **Téléversement :** `eas submit` a cassé en fin d'envoi (`ECONNRESET` après
   40 min, comme le 2026-10-18). Utiliser désormais
   `python scripts/play-upload.py <aab> internal completed <notes.json>` :
   envoi par morceaux de 8 Mio par l'API Play, reprise au dernier octet reçu,
   46 min à ~60 Ko/s pour 177 Mo. Puis `play-promote.py` vers `production`.
-- **Dernière soumission :** 1.39.2 (versionCode 58), piste interne, 2026-10-22
-  (widgets bandeau 4×1 et carte 2×2 dimensionnés sur la cellule, fond à 65 %).
-  Précédentes : 1.39.1 (vc 57) le 2026-10-21, 1.39.0 (vc 56) le 2026-10-20.
+- **Dernière soumission :** 1.39.4 (versionCode 61), piste interne puis
+  production, 2026-10-28 : `play-upload.py` en 28 min (~105 Ko/s pour 178 Mo).
+  Précédentes : 1.39.3 (vc 59) le 2026-10-27, 1.39.2 (vc 58) le 2026-10-22.
   Téléversement de 177 Mo : 3 min 35 s puis ~45 min selon le débit du jour
   (~70 Ko/s) ; la barre d'`eas submit` reste à 0 % jusqu'à la fin, ce n'est
   pas un blocage.
