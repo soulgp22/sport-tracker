@@ -456,6 +456,13 @@ l'API Play, en référençant le bundle existant — zéro octet renvoyé, contr
 60 min pour un `eas submit`. Refuse un versionCode absent des bundles. Clé :
 `pc-api-key.json` (gitignoré). Lancer avec `python`, pas `python -I`.
 
+`scripts/play-listing.py [fiche.md] [--apply] [--backup sortie.json]` : publie
+les descriptions courte et longue des 4 langues depuis
+`docs/play-store/FICHE_TEXTES.md` (sections `## Nom (xx-XX)`, deux blocs de
+code : courte puis longue). Sans `--apply`, essai à blanc qui indique ce qui
+changerait ; refuse un texte trop long (80 / 4 000) ou une langue absente en
+ligne. Ne touche jamais au titre.
+
 ---
 
 ## Outillage de vérification
