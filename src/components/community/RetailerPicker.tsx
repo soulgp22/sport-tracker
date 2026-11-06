@@ -19,6 +19,7 @@ import { radius, spacing } from '../../theme/tokens';
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 import { TextInput } from '../ui/TextInput';
+import { APP_NAME } from '../../config/brand';
 
 interface RetailerPickerProps {
   entries: CommunityFoodDatabaseEntry[];
@@ -126,7 +127,7 @@ export function RetailerPicker({
             <View style={styles.grabber} />
             <View style={styles.sheetHeader}>
               <View style={styles.sheetTitleBlock}>
-                <Text style={styles.sheetEyebrow}>GITHUB · LIFE SPORT TRACKER</Text>
+                <Text style={styles.sheetEyebrow}>GITHUB · {APP_NAME.toUpperCase()}</Text>
                 <Text style={styles.sheetTitle}>{label}</Text>
               </View>
               <TouchableOpacity

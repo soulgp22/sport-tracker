@@ -18,15 +18,15 @@ export const HEALTH_CONNECT_TEXTS_FR: Record<string, string> = {
   'nutrition.balance.field.age': 'ton âge',
   'nutrition.healthConnect.installTitle': 'Health Connect n’est pas installé',
   'nutrition.healthConnect.installMessage':
-    'Cette fonction utilise Health Connect, l’application Google qui centralise tes données de santé. Installe-la depuis le Play Store, rouvre Life Sport Tracker puis touche à nouveau « Connecter ».',
+    'Cette fonction utilise Health Connect, l’application Google qui centralise tes données de santé. Installe-la depuis le Play Store, rouvre Platelift puis touche à nouveau « Connecter ».',
   'nutrition.healthConnect.updateTitle': 'Health Connect doit être mis à jour',
   'nutrition.healthConnect.updateMessage':
-    'Ta version de Health Connect est trop ancienne. Mets-la à jour depuis le Play Store, rouvre Life Sport Tracker puis touche à nouveau « Connecter ».',
+    'Ta version de Health Connect est trop ancienne. Mets-la à jour depuis le Play Store, rouvre Platelift puis touche à nouveau « Connecter ».',
   'nutrition.healthConnect.openPlayStore': 'Ouvrir le Play Store',
   'nutrition.healthConnect.later': 'Plus tard',
   'nutrition.healthConnect.deniedTitle': 'Permissions non accordées',
   'nutrition.healthConnect.deniedMessage':
-    'Health Connect n’a pas autorisé la lecture des calories et des pas. Le bouton ci-dessous ouvre DIRECTEMENT la page de permissions de Life Sport Tracker dans Health Connect : active les interrupteurs (calories, pas) puis reviens ici.',
+    'Health Connect n’a pas autorisé la lecture des calories et des pas. Le bouton ci-dessous ouvre DIRECTEMENT la page de permissions de Platelift dans Health Connect : active les interrupteurs (calories, pas) puis reviens ici.',
   'nutrition.healthConnect.openSettings': 'Ouvrir mes permissions Health Connect',
   'nutrition.healthConnect.errorTitle': 'Connexion à Health Connect impossible',
 };

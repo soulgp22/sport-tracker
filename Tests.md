@@ -579,3 +579,15 @@ reconnexion par les deux feuilles.
 Sabotages vérifiés le 2026-10-28, chacun rougit : garde du drapeau retirée dans
 `requestBackgroundReadPermission` (1), état du widget affiché sans garde (1),
 `backgroundSupported` forcé à vrai dans Paramètres (1), texte d'aide arrière-plan toujours affiché (1).
+
+## Nom Platelift (1.40.0, vc 62)
+
+`src/config/__tests__/brand.test.ts` :
+- `app.json` → `expo.name` vaut `APP_NAME` (`src/config/brand.ts`) et plus
+  aucun champ ne contient « Life Sport Tracker » (texte de la caméra compris) ;
+- aucune traduction des 4 langues ni le repli Health Connect ne garde l'ancien
+  nom ;
+- `community/index.json` ne signe plus aucun programme de l'ancien nom.
+
+Sabotages (2026-11-06) : ancien nom remis dans une traduction anglaise → rouge ;
+dans `expo.name` et dans un auteur de programme → 2 tests rouges.

@@ -38,6 +38,7 @@ import {
   type PillMetrics,
 } from '../lib/widgets/dailyGoalsLayout';
 import type { DailyGoalsWidgetLabels } from '../lib/widgets/dailyGoalsWidgetSnapshot';
+import { APP_NAME } from '../config/brand';
 
 const COLORS = {
   /** Bleu nuit de la palette `lst`, a 65 % : lisible sur tout fond d'ecran. */
@@ -318,7 +319,7 @@ export function DailyGoalsWidgetEmpty() {
           paddingVertical: 12,
         }}>
         <TextWidget
-          text="LIFE SPORT TRACKER"
+          text={APP_NAME.toUpperCase()}
           style={{ fontFamily: FONT_SANS_BOLD, fontSize: 11, letterSpacing: 0.1, color: COLORS.text }}
         />
       </FlexWidget>

@@ -8,11 +8,13 @@ Usage :
   python scripts/play-listing.py [fiche.md] [--apply] [--backup sortie.json] [--key cle.json]
     sans --apply : affiche ce qui changerait, n'envoie rien
     --backup     : enregistre la fiche actuellement en ligne avant toute ecriture
-Le titre n'est jamais modifie : seules shortDescription et fullDescription le sont.
+Le titre n'est envoye que si la section en donne un (bloc de code facultatif
+place avant la description courte, 30 caracteres au plus).
 
 Format attendu du fichier : une section par langue, titree
 `## <Nom> (<code>)` (ex. `## Francais (fr-FR)`), contenant deux blocs de code
-dans cet ordre : description courte, puis description longue.
+dans cet ordre : description courte, puis description longue ; ou trois blocs :
+titre, description courte, description longue.
 """
 import json
 import re
@@ -23,6 +25,7 @@ from googleapiclient.discovery import build
 
 PACKAGE = 'com.sportracker.app'
 SCOPES = ['https://www.googleapis.com/auth/androidpublisher']
+TITLE_MAX = 30
 SHORT_MAX = 80
 FULL_MAX = 4000
 
@@ -31,7 +34,7 @@ FENCE = re.compile(r'^```\s*$')
 
 
 def parse_fiche(path: str) -> dict:
-    """Renvoie {langue: {'short': ..., 'full': ...}} ; leve une erreur si un bloc manque."""
+    """Renvoie {langue: {'title': ... ou None, 'short': ..., 'full': ...}}."""
     sections: dict = {}
     lang = None
     block = None
@@ -51,12 +54,13 @@ def parse_fiche(path: str) -> dict:
             block = []
     result = {}
     for lang, blocks in sections.items():
-        if len(blocks) != 2:
-            raise SystemExit(f'{lang} : {len(blocks)} bloc(s) de code, 2 attendus (courte puis longue)')
-        short, full = blocks
-        if len(short) > SHORT_MAX or len(full) > FULL_MAX:
-            raise SystemExit(f'{lang} : trop long (courte {len(short)}/{SHORT_MAX}, longue {len(full)}/{FULL_MAX})')
-        result[lang] = {'short': short, 'full': full}
+        if len(blocks) not in (2, 3):
+            raise SystemExit(f'{lang} : {len(blocks)} bloc(s) de code, 2 ou 3 attendus ([titre,] courte, longue)')
+        title, short, full = blocks if len(blocks) == 3 else (None, *blocks)
+        if (title is not None and len(title) > TITLE_MAX) or len(short) > SHORT_MAX or len(full) > FULL_MAX:
+            raise SystemExit(f'{lang} : trop long (titre {len(title or "")}/{TITLE_MAX}, '
+                             f'courte {len(short)}/{SHORT_MAX}, longue {len(full)}/{FULL_MAX})')
+        result[lang] = {'title': title, 'short': short, 'full': full}
     if not result:
         raise SystemExit('aucune section de langue trouvee')
     return result
@@ -89,13 +93,17 @@ def main() -> None:
         current = online[lang]
         same_short = current.get('shortDescription') == texts['short']
         same_full = current.get('fullDescription') == texts['full']
-        print(f"{lang}  titre « {current.get('title')} »  courte {len(texts['short'])} car."
+        title = texts['title'] or current.get('title')
+        print(f"{lang}  titre « {current.get('title')} »"
+              f"{'' if title == current.get('title') else f' -> « {title} »'}"
+              f"  courte {len(texts['short'])} car."
               f"{' (identique)' if same_short else ''}  longue {len(texts['full'])} car."
               f"{' (identique)' if same_full else ''}")
         if apply:
-            edits.listings().patch(editId=edit_id, packageName=PACKAGE, language=lang,
-                                   body={'shortDescription': texts['short'],
-                                         'fullDescription': texts['full']}).execute()
+            body = {'shortDescription': texts['short'], 'fullDescription': texts['full']}
+            if texts['title']:
+                body['title'] = texts['title']
+            edits.listings().patch(editId=edit_id, packageName=PACKAGE, language=lang, body=body).execute()
 
     if not apply:
         edits.delete(editId=edit_id, packageName=PACKAGE).execute()

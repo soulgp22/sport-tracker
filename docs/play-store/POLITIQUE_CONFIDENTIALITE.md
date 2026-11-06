@@ -1,10 +1,10 @@
-# Politique de confidentialité — Life Sport Tracker
+# Politique de confidentialité — Platelift
 
 *Dernière mise à jour : 18 octobre 2026*
 
 ## Résumé
 
-Life Sport Tracker fonctionne **sans compte** et stocke l'essentiel de vos
+Platelift (anciennement Life Sport Tracker) fonctionne **sans compte** et stocke l'essentiel de vos
 données **sur votre appareil**. Quelques fonctionnalités font exception et
 nécessitent une connexion à un serveur : l'**analyse photo d'un repas** (et sa
 limite quotidienne), le **scan d'un code-barres**, le **téléchargement de
@@ -197,7 +197,7 @@ date de mise à jour.
 
 ## 9. Responsable de traitement et contact
 
-Responsable de traitement : **Rais&Co**, éditeur de Life Sport Tracker.
+Responsable de traitement : **Rais&Co**, éditeur de Platelift.
 
 Pour toute question ou demande relative à vos données :
 **seirais@outlook.fr**

@@ -56,7 +56,7 @@ manifest.exercisePacks = [
     id: 'exercises-complete-v1',
     name: 'Catalogue complet d’exercices',
     description: `${remoteCatalog.length} exercices supplémentaires avec instructions et animations.`,
-    author: 'Life Sport Tracker',
+    author: 'Platelift',
     level: 'Tous niveaux',
     exercisesCount: remoteCatalog.length,
     file: 'exercises-all.json',

@@ -18,6 +18,7 @@ import { radius, spacing } from '../theme/tokens';
 
 import type { ThemeColors } from '../theme/palettes';
 import { useColors } from '../theme/useColors';
+import { APP_NAME } from '../config/brand';
 
 const copy: Record<LanguageId, Record<string, string>> = {
   fr: { welcome: 'Construisons ton point de départ', intro: 'Quelques réponses suffisent pour adapter tes programmes, tes exercices et tes aliments.', language: 'Ta langue', profile: 'Ton profil', profileFirstName: 'Prénom', profileHelp: 'Optionnel — ces infos servent à estimer ta dépense quotidienne (bilan nutrition).', profileAge: 'Âge', profileHeight: 'Taille (cm)', profileWeight: 'Poids actuel (kg)', next: 'Continuer', back: 'Retour' },
@@ -86,7 +87,7 @@ export default function OnboardingScreen() {
     <View style={styles.top}><View style={styles.progressTrack}><View style={[styles.progress, { width: `${((step + 1) / totalSteps) * 100}%` }]} /></View><Text style={styles.step}>{step + 1}/{totalSteps}</Text></View>
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       {step === 0 ? <View style={styles.heroIcon}><Ionicons name="pulse" size={40} color={c.primaryText} /></View> : null}
-      <Text style={styles.eyebrow}>LIFE SPORT TRACKER</Text>
+      <Text style={styles.eyebrow}>{APP_NAME.toUpperCase()}</Text>
       <Text style={styles.title}>{title}</Text>
       {step === 0 ? <><Text style={styles.subtitle}>{text.intro}</Text><Text style={styles.sectionLabel}>{text.language}</Text><View style={styles.languageRow}>{LANGUAGE_OPTIONS.map((option) => <TouchableOpacity accessibilityRole="button" accessibilityState={{ selected: language === option.id }} key={option.id} style={[styles.language, language === option.id && styles.languageSelected]} onPress={() => setLanguage(option.id)}><Text style={[styles.languageText, language === option.id && styles.languageTextSelected]}>{option.id.toUpperCase()}</Text></TouchableOpacity>)}</View></> : null}
       {step === 1 ? <>

@@ -1,4 +1,4 @@
-# Communauté Life Sport Tracker
+# Communauté Platelift
 
 Le fichier `index.json` référence les contenus téléchargeables depuis l’application.
 

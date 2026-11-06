@@ -265,7 +265,7 @@ const __dirname = dirname(__filename);
 const communityDir = resolve(__dirname, '..', 'community');
 
 console.log('═══════════════════════════════════════════');
-console.log('  Life Sport Tracker – Open Food Facts fetch');
+console.log('  Platelift – Open Food Facts fetch');
 console.log(`  Limit: ${LIMIT_PER_STORE}/store  |  ${DRY_RUN ? 'DRY RUN' : 'WRITE'}`);
 console.log('═══════════════════════════════════════════\n');
 

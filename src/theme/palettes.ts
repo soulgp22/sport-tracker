@@ -1,7 +1,8 @@
 /**
- * Couleurs de l'identité visuelle « Life Sport Tracker ».
+ * Couleurs de l'identité visuelle « Platelift » (ex-« Life Sport Tracker »).
  * Extraites de Life Sport Tracker.dc.html (Claude Design), 2026-08-15.
  */
+import { APP_NAME } from '../config/brand';
 
 export type PaletteId = 'lst';
 export const DEFAULT_PALETTE: PaletteId = 'lst';
@@ -31,7 +32,7 @@ export const PALETTES: Record<
 > = {
   lst: {
     id: 'lst',
-    label: 'Life Sport Tracker',
+    label: APP_NAME,
     mode: 'light',
     colors: {
       bg: '#fbfbfa',

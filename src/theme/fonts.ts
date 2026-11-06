@@ -19,7 +19,7 @@ export const FONT_THEMES: Record<
 > = {
   lst: {
     id: 'lst',
-    label: 'Life Sport Tracker',
+    label: 'Platelift',
     description: 'Identité visuelle unique',
     tokens: {
       serif: 'Oswald_600SemiBold',
