@@ -177,6 +177,10 @@ absente ou fausse — pas que le service est tombé.
   Téléversement de 177 Mo : 3 min 35 s puis ~45 min selon le débit du jour
   (~70 Ko/s) ; la barre d'`eas submit` reste à 0 % jusqu'à la fin, ce n'est
   pas un blocage.
+- **Fiche Play :** descriptions des 4 langues publiées par l'API le 2026-11-05
+  (`scripts/play-listing.py --apply`, même clé). Titres en ligne : `Life Sport
+  Tracker` en fr-FR et en-US, mais `Life Sport Tracke` (tronqué) en de-DE et
+  es-ES, laissés tels quels en attendant le changement de nom.
 
 **Permissions Health Connect déclarées** (manifeste) : `READ_STEPS`,
 `READ_ACTIVE_CALORIES_BURNED`, `READ_TOTAL_CALORIES_BURNED`.

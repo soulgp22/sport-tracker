@@ -40,7 +40,13 @@
 > **Limites Play** : description courte 80 caractères, description longue
 > 4 000 caractères. Les longueurs sont indiquées sous chaque titre.
 >
-> **Titre** : inchangé, `Life Sport Tracker`.
+> **Publication** : par l'API le 2026-11-05 avec `scripts/play-listing.py
+> --apply`, qui lit directement ce fichier (garder le format des sections et
+> des blocs de code).
+>
+> **Titre** : inchangé, `Life Sport Tracker`. En ligne, il est tronqué en
+> `Life Sport Tracke` en allemand et en espagnol ; un changement de nom est
+> envisagé.
 >
 > **Captures** : inchangées (`screenshots/fr/`, analyse photo en première
 > position).
