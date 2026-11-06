@@ -8,7 +8,7 @@
 
 ## 1. Éditeur
 
-Platelift est édité par **Rais&Co**. Contact : **seirais@outlook.fr**.
+Platelift (anciennement Life Sport Tracker) est édité par **Rais&Co**. Contact : **seirais@outlook.fr**.
 
 ## 2. Ce que comprend l'abonnement
 

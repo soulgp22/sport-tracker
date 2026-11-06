@@ -181,6 +181,10 @@ absente ou fausse — pas que le service est tombé.
   (`scripts/play-listing.py --apply`, même clé). Titres en ligne : `Life Sport
   Tracker` en fr-FR et en-US, mais `Life Sport Tracke` (tronqué) en de-DE et
   es-ES, laissés tels quels en attendant le changement de nom.
+- **Nom Platelift (2026-11-06)** : pages `/privacy` et `/terms` régénérées
+  et copiées sur le serveur (sauvegardes `*.bak-avant-platelift` dans
+  `/opt/meal-training/www/`). Titre Play envoyé avec la 1.40.0. Inchangés :
+  paquet `com.sportracker.app`, slug et scheme Expo, domaine du serveur.
 
 **Permissions Health Connect déclarées** (manifeste) : `READ_STEPS`,
 `READ_ACTIVE_CALORIES_BURNED`, `READ_TOTAL_CALORIES_BURNED`.

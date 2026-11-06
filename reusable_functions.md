@@ -461,7 +461,8 @@ les descriptions courte et longue des 4 langues depuis
 `docs/play-store/FICHE_TEXTES.md` (sections `## Nom (xx-XX)`, deux blocs de
 code : courte puis longue). Sans `--apply`, essai à blanc qui indique ce qui
 changerait ; refuse un texte trop long (80 / 4 000) ou une langue absente en
-ligne. Ne touche jamais au titre.
+ligne. Le titre (30 caractères) n'est envoyé que si la section en donne un,
+en bloc de code placé avant la description courte.
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Résumé
 
-Platelift fonctionne **sans compte** et stocke l'essentiel de vos
+Platelift (anciennement Life Sport Tracker) fonctionne **sans compte** et stocke l'essentiel de vos
 données **sur votre appareil**. Quelques fonctionnalités font exception et
 nécessitent une connexion à un serveur : l'**analyse photo d'un repas** (et sa
 limite quotidienne), le **scan d'un code-barres**, le **téléchargement de

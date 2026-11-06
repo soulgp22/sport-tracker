@@ -1,4 +1,4 @@
-# Textes de la fiche Play Store — version du 2026-11-05 (app 1.39.4)
+# Textes de la fiche Play Store — version du 2026-11-06 (app 1.40.0, Platelift)
 
 > À coller dans Play Console → Présence sur le Store → Fiche principale
 > (une traduction par langue). La version précédente (2026-10-18, app 1.37.0,
@@ -44,9 +44,9 @@
 > --apply`, qui lit directement ce fichier (garder le format des sections et
 > des blocs de code).
 >
-> **Titre** : inchangé, `Life Sport Tracker`. En ligne, il est tronqué en
-> `Life Sport Tracke` en allemand et en espagnol ; un changement de nom est
-> envisagé.
+> **Titre** : `Platelift` suivi des deux piliers de l'app dans chaque langue
+> (nom choisi le 2026-11-06 ; ancien titre « Life Sport Tracker », tronqué en
+> « Life Sport Tracke » en allemand et en espagnol).
 >
 > **Captures** : inchangées (`screenshots/fr/`, analyse photo en première
 > position).
@@ -54,6 +54,12 @@
 ---
 
 ## Français (fr-FR)
+
+**Titre** (28 car.)
+
+```
+Platelift : calories & muscu
+```
 
 **Description courte** (77 car.)
 
@@ -120,6 +126,12 @@ Disponible en français, anglais, espagnol et allemand.
 
 ## English (en-US)
 
+**Title** (29 chars)
+
+```
+Platelift: Calories & Gym Log
+```
+
 **Short description** (76 chars)
 
 ```
@@ -185,6 +197,12 @@ Available in English, French, Spanish and German.
 
 ## Español (es-ES)
 
+**Título** (25 car.)
+
+```
+Platelift: calorías y gym
+```
+
 **Descripción breve** (78 car.)
 
 ```
@@ -249,6 +267,12 @@ Disponible en español, inglés, francés y alemán.
 ---
 
 ## Deutsch (de-DE)
+
+**Titel** (30 Zeichen)
+
+```
+Platelift: Kalorien & Training
+```
 
 **Kurzbeschreibung** (79 Zeichen)
 
