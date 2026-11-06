@@ -409,7 +409,7 @@ def main():
                         f'Programme {GOAL_LABEL[goal].lower()} niveau {LEVEL_LABEL[level].lower()}, '
                         f'{len(days)} séances par semaine, {EQUIP_DESCRIPTION[equipment].lower()}.'
                     ),
-                    'author': 'Life Sport Tracker',
+                    'author': 'Platelift',
                     'level': level,
                     'daysCount': len(days),
                     'exercisesCount': exercises_count,

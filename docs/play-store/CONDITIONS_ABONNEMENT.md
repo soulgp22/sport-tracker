@@ -1,4 +1,4 @@
-# Conditions de l'abonnement — Life Sport Tracker Premium
+# Conditions de l'abonnement — Platelift Premium
 
 *Dernière mise à jour : 18 octobre 2026*
 
@@ -8,7 +8,7 @@
 
 ## 1. Éditeur
 
-Life Sport Tracker est édité par **Rais&Co**. Contact : **seirais@outlook.fr**.
+Platelift est édité par **Rais&Co**. Contact : **seirais@outlook.fr**.
 
 ## 2. Ce que comprend l'abonnement
 

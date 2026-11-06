@@ -2,7 +2,7 @@ import { DEFAULT_PALETTE, PALETTES } from '../palettes';
 import { FONT_THEMES } from '../fonts';
 import { radius } from '../tokens';
 
-describe('identité visuelle unique « Life Sport Tracker »', () => {
+describe('identité visuelle unique « Platelift »', () => {
   it('T1 : PALETTES ne contient qu’une palette « lst » aux couleurs exactes', () => {
     const ids = Object.keys(PALETTES);
     expect(ids).toHaveLength(1);

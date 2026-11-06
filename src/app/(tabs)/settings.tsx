@@ -64,6 +64,7 @@ import { requestNotificationPermission } from '../../lib/restTimerNotifications'
 import { combineAiProgramPrompt } from '../../lib/aiProgramPrompt';
 import type { ActivityLevel, ExperienceLevel } from '../../types/performance';
 import { cardShadow, radius, spacing } from '../../theme/tokens';
+import { APP_NAME } from '../../config/brand';
 
 
 const ACTIVITY_OPTIONS: { id: ActivityLevel; labelKey: string }[] = [
@@ -270,7 +271,7 @@ export default function SettingsScreen() {
       try {
         await Sharing.shareAsync(file.uri, {
           mimeType: 'application/json',
-          dialogTitle: `${t('settings.saveProfile')} Life Sport Tracker`,
+          dialogTitle: `${t('settings.saveProfile')} ${APP_NAME}`,
           UTI: 'public.json',
         });
       } finally {
@@ -1005,7 +1006,7 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{t('settings.about')}</Text>
-          <Text style={styles.aboutText}>Life Sport Tracker v{Constants.expoConfig?.version ?? '?'}</Text>
+          <Text style={styles.aboutText}>{APP_NAME} v{Constants.expoConfig?.version ?? '?'}</Text>
           <Text style={styles.aboutSubtext}>
             {t('settings.aboutSubtitle')}
           </Text>

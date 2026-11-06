@@ -49,7 +49,7 @@ for (const { source, output } of PAGES) {
   markdown = markdown.replace(/^> Projet rédigé[\s\S]*?(?:\r?\n){2}/m, '');
   for (const [file, route] of LINKS) markdown = markdown.split(`(${file})`).join(`(${route})`);
 
-  const title = (markdown.match(/^# (.+)$/m) ?? [, 'Life Sport Tracker'])[1];
+  const title = (markdown.match(/^# (.+)$/m) ?? [, 'Platelift'])[1];
   const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>

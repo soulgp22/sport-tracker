@@ -19,6 +19,7 @@ import { radius } from '../../theme/tokens';
 import type { ThemeColors } from '../../theme/palettes';
 import { useColors } from '../../theme/useColors';
 import { useTranslation } from '../../i18n/useTranslation';
+import { APP_NAME } from '../../config/brand';
 
 interface DialogRequest {
   id: number;
@@ -140,7 +141,7 @@ export function AppDialog() {
                 />
               </View>
               <View style={styles.headerCopy}>
-                <Text style={styles.eyebrow}>{isDestructive ? 'CONFIRMATION' : 'LIFE SPORT TRACKER'}</Text>
+                <Text style={styles.eyebrow}>{isDestructive ? 'CONFIRMATION' : APP_NAME.toUpperCase()}</Text>
                 <Text style={styles.title}>{tr(dialog?.title ?? '')}</Text>
               </View>
               <TouchableOpacity style={styles.closeButton} onPress={requestClose} accessibilityRole="button">
