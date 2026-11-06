@@ -161,7 +161,10 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
-- **Production :** 1.39.4 (versionCode 61) le 2026-10-28 (section Health
+- **Production :** 1.40.0 (versionCode 62) le 2026-11-06 : l'app s'appelle
+  Platelift ; `play-upload.py` en 33 min puis `play-promote.py`, titre de la
+  fiche envoyé par `play-listing.py --apply`. Précédente : 1.39.4
+  (versionCode 61) le 2026-10-28 (section Health
   Connect dans Paramètres ; sans lecture en arrière-plan), promue par
   `scripts/play-promote.py`. Le vc 60 n'a jamais été publié (refus Google,
   voir `known_bugs.md`). Précédentes : 1.39.3 (vc 59) le 2026-10-27,
@@ -183,7 +186,7 @@ absente ou fausse — pas que le service est tombé.
   es-ES, laissés tels quels en attendant le changement de nom.
 - **Nom Platelift (2026-11-06)** : pages `/privacy` et `/terms` régénérées
   et copiées sur le serveur (sauvegardes `*.bak-avant-platelift` dans
-  `/opt/meal-training/www/`). Titre Play envoyé avec la 1.40.0. Inchangés :
+  `/opt/meal-training/www/`). Titre Play envoyé avec la 1.40.0 et relu en ligne. Inchangés :
   paquet `com.sportracker.app`, slug et scheme Expo, domaine du serveur.
 
 **Permissions Health Connect déclarées** (manifeste) : `READ_STEPS`,
