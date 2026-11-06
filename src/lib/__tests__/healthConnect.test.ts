@@ -100,31 +100,70 @@ describe('healthConnect', () => {
     });
   });
 
-  it('lit et additionne les pas du jour sur la plage locale utilisee pour les calories', async () => {
+  /**
+   * Regression Samsung (2026-11-06, Galaxy A32 : « Health Connect connecte, pas
+   * de pas »). Les pas du jour se lisent par AGREGAT, comme l'historique :
+   * Health Connect deduplique alors les sources selon la priorite choisie par
+   * l'utilisateur (montre + telephone) et compte la part du jour d'un
+   * enregistrement qui deborde de la plage — Samsung Health ecrit un seul
+   * enregistrement pour la journee, mis a jour au fil de l'eau. La somme des
+   * enregistrements bruts, elle, double les pas vus par deux appareils et
+   * ignore un enregistrement qui n'est pas entierement contenu dans la plage.
+   */
+  function mockStepsSources() {
+    // Deux appareils ont vu les memes 5000 pas : brut = 10000, agregat = 5000.
     const readRecords = jest.fn().mockResolvedValue({
-      records: [{ count: 4200 }, { count: 800 }],
+      records: [{ count: 5000 }, { count: 5000 }],
     });
+    const aggregateRecord = jest.fn().mockResolvedValue({ COUNT_TOTAL: 5000, dataOrigins: [] });
     jest.doMock('react-native-health-connect', () => ({
+      SdkAvailabilityStatus: { SDK_AVAILABLE: 3 },
+      getSdkStatus: jest.fn().mockResolvedValue(3),
       initialize: jest.fn().mockResolvedValue(true),
       readRecords,
+      aggregateRecord,
     }));
-    const service = loadService();
+    return { aggregateRecord };
+  }
 
-    await expect(service.readStepsToday()).resolves.toBe(5000);
-    expect(readRecords).toHaveBeenCalledTimes(1);
-    expect(readRecords).toHaveBeenCalledWith('Steps', {
+  function expectTodayStepsAggregate(aggregateRecord: jest.Mock) {
+    expect(aggregateRecord).toHaveBeenCalledTimes(1);
+    expect(aggregateRecord).toHaveBeenCalledWith({
+      recordType: 'Steps',
       timeRangeFilter: {
         operator: 'between',
         startTime: expect.any(String),
         endTime: expect.any(String),
       },
     });
-    const [, options] = readRecords.mock.calls[0];
-    const start = new Date(options.timeRangeFilter.startTime);
-    expect(start.getHours()).toBe(0);
-    expect(start.getMinutes()).toBe(0);
-    expect(start.getSeconds()).toBe(0);
-    expect(start.getMilliseconds()).toBe(0);
+    const start = new Date(aggregateRecord.mock.calls[0][0].timeRangeFilter.startTime);
+    expect([start.getHours(), start.getMinutes(), start.getSeconds(), start.getMilliseconds()]).toEqual([0, 0, 0, 0]);
+  }
+
+  it('lit les pas du jour par agregat (sources dedupliquees) depuis minuit local', async () => {
+    const { aggregateRecord } = mockStepsSources();
+    const service = loadService();
+
+    await expect(service.readStepsToday()).resolves.toBe(5000);
+    expectTodayStepsAggregate(aggregateRecord);
+  });
+
+  it('le widget lit les pas du jour par le meme agregat', async () => {
+    const { aggregateRecord } = mockStepsSources();
+    const service = loadService();
+
+    await expect(service.readStepsTodayInBackground()).resolves.toEqual({ ok: true, steps: 5000 });
+    expectTodayStepsAggregate(aggregateRecord);
+  });
+
+  it('renvoie 0 pas quand Health Connect n a aucune donnee du jour', async () => {
+    jest.doMock('react-native-health-connect', () => ({
+      initialize: jest.fn().mockResolvedValue(true),
+      aggregateRecord: jest.fn().mockResolvedValue({ dataOrigins: [] }),
+    }));
+    const service = loadService();
+
+    await expect(service.readStepsToday()).resolves.toBe(0);
   });
 
   it('signale indisponible quand le SDK ne rapporte pas SDK_AVAILABLE', async () => {

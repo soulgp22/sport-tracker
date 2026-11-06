@@ -1466,3 +1466,32 @@ seulement ensuite publier.
 d'abord par un import manuel dans la Console. L'API ne sait pas sortir de ce
 cercle. Vérifier par l'API (`bundles.list`) qu'un import « réussi » a bien
 laissé le versionCode dans la bibliothèque avant de déclarer quoi que ce soit.
+
+## Pas absents sur Samsung alors que Health Connect est « connecté »
+
+Signalé le 2026-11-06 : un collègue sur Galaxy A32 a les permissions Health Connect
+accordées (Paramètres « connecté »), mais l'accueil n'affiche aucun pas.
+
+**Cause probable (non reproduite sur l'appareil)** : l'accueil et le widget
+lisaient les pas du jour en additionnant les enregistrements bruts
+(`readRecords('Steps')`, filtre `between` = enregistrements CONTENUS dans
+[minuit, maintenant)). Samsung Health écrit, d'après le forum développeurs
+Samsung, un seul enregistrement par jour mis à jour au fil de l'eau : s'il déborde
+de la plage, la lecture brute l'ignore. La même somme brute comptait aussi deux
+fois les pas vus par une montre ET le téléphone. L'historique, lui, passait déjà
+par l'agrégat — troisième fois qu'un écart vient de deux écrans qui lisent la
+même donnée par deux appels différents.
+
+**Correctif** : `aggregateStepsToday` (`lib/healthConnect`) — `aggregateRecord`
+`COUNT_TOTAL`, partagé par `readStepsToday` et `readStepsTodayInBackground`.
+C'est le total qu'affiche Health Connect : sources dédupliquées selon la priorité
+choisie par l'utilisateur, part du jour d'un enregistrement débordant comptée.
+
+**Hors de portée de l'app** : si aucune source n'écrit de pas (synchronisation
+Samsung Health → Health Connect coupée, « Pas » décoché, optimisation de batterie),
+rien ne s'affichera. Vérifier d'abord Health Connect → Données et accès → Activité
+→ Pas, puis Samsung Health → Paramètres → Gestion des données → Health Connect.
+
+**À retenir** : un total quotidien se lit par agrégat, jamais par somme des
+enregistrements bruts. « Connecté » ne prouve que des permissions, pas qu'une
+source écrit.
