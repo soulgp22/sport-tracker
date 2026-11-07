@@ -431,6 +431,15 @@ Pas. `lib/healthConnect.openHealthConnectPlayStore` l'accompagne.
 
 ---
 
+## Pas du jour (agrégat)
+
+`lib/healthConnect.aggregateStepsToday(hc)` (interne) : `aggregateRecord` Steps
+`COUNT_TOTAL` depuis minuit local, 0 sans donnée. Utilisé par `readStepsToday`
+(accueil) et `readStepsTodayInBackground` (widget). Tout nouveau total quotidien
+se lit ainsi, jamais par somme de `readRecords`.
+
+---
+
 ## Health Connect hors premier plan
 
 `lib/healthConnect` : `requestBackgroundReadPermission()` (feuille séparée,

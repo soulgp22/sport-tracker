@@ -332,12 +332,29 @@ export async function readCaloriesBurnedToday(): Promise<CaloriesBurnedToday | n
   });
 }
 
+/**
+ * Pas du jour par AGREGAT, et non par somme des enregistrements bruts.
+ *
+ * L'agregat est ce que Health Connect affiche lui-meme : il deduplique les
+ * sources selon la priorite choisie par l'utilisateur (montre + telephone ne
+ * comptent pas double) et compte la part du jour d'un enregistrement qui
+ * deborde de la plage. Samsung Health ecrit un seul enregistrement par jour,
+ * mis a jour au fil de l'eau : la lecture brute « between », qui ne garde que
+ * les enregistrements contenus dans [minuit, maintenant), pouvait l'ignorer
+ * (Galaxy A32, 2026-11-06 : connecte, mais aucun pas). L'historique utilisait
+ * deja l'agregat ; l'accueil et le widget lisent maintenant la meme chose.
+ */
+async function aggregateStepsToday(hc: HealthConnectModule): Promise<number> {
+  const result = await hc.aggregateRecord({ recordType: 'Steps', ...todayTimeRange() });
+  // COUNT_TOTAL est absent quand aucune source n'a ecrit de pas aujourd'hui.
+  return result.COUNT_TOTAL ?? 0;
+}
+
 /** Nombre de pas effectues aujourd'hui. null si indisponible. */
 export async function readStepsToday(): Promise<number | null> {
   return safeCall('readStepsToday', async (hc) => {
     await ensureInitialized(hc);
-    const result = await hc.readRecords('Steps', todayTimeRange());
-    return result.records.reduce((sum, record) => sum + record.count, 0);
+    return aggregateStepsToday(hc);
   });
 }
 
@@ -587,8 +604,7 @@ export async function readStepsTodayInBackground(): Promise<BackgroundStepsRead>
   try {
     if ((await getHealthConnectStatus()) !== 'available') return { ok: false, reason: 'unavailable' };
     await ensureInitialized(hc);
-    const result = await hc.readRecords('Steps', todayTimeRange());
-    return { ok: true, steps: result.records.reduce((sum, record) => sum + record.count, 0) };
+    return { ok: true, steps: await aggregateStepsToday(hc) };
   } catch (error) {
     return { ok: false, reason: error instanceof Error ? error.message : String(error) };
   }

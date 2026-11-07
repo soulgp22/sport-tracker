@@ -591,3 +591,14 @@ Sabotages vérifiés le 2026-10-28, chacun rougit : garde du drapeau retirée da
 
 Sabotages (2026-11-06) : ancien nom remis dans une traduction anglaise → rouge ;
 dans `expo.name` et dans un auteur de programme → 2 tests rouges.
+
+## Pas du jour par agrégat (Samsung, 2026-11-06)
+
+`lib/__tests__/healthConnect.test.ts` (+2, 1 remplacé) :
+- `readStepsToday` lit `aggregateRecord` Steps depuis minuit local : deux sources
+  brutes de 5000 pas chacune (montre + téléphone) donnent 5000, pas 10000 ;
+- `readStepsTodayInBackground` (widget) lit le même agrégat ;
+- jour sans donnée (`COUNT_TOTAL` absent) → 0.
+
+Sabotages (2026-11-06) : ancien code (somme brute) → 3 rouges ; repli `?? 0`
+retiré → 1 rouge.
