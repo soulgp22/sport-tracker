@@ -4,39 +4,19 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import {
-  Oswald_500Medium,
-  Oswald_600SemiBold,
-  Oswald_700Bold,
-} from '@expo-google-fonts/oswald';
-import {
-  Archivo_400Regular,
-  Archivo_600SemiBold,
-  Archivo_700Bold,
-  Archivo_800ExtraBold,
-} from '@expo-google-fonts/archivo';
 
 import { configureNotifications } from '../lib/restTimerNotifications';
 import { RestTimerBanner } from '../components/session/RestTimerBanner';
 import { useColors, useThemeMode } from '../theme/useColors';
 import { AppDialog } from '../components/ui/AppDialog';
+import { FONT_FILES } from '../theme/fontFiles';
 
 void SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const c = useColors();
   const mode = useThemeMode();
-  const [fontsLoaded, fontError] = useFonts({
-    Oswald_500Medium,
-    Oswald_600SemiBold,
-    Oswald_700Bold,
-    Archivo_400Regular,
-    Archivo_600SemiBold,
-    Archivo_700Bold,
-    Archivo_800ExtraBold,
-    'OstrichSans-Medium': require('../../assets/fonts/OstrichSans-Medium.otf'),
-    'OstrichSans-Heavy': require('../../assets/fonts/OstrichSans-Heavy.otf'),
-  });
+  const [fontsLoaded, fontError] = useFonts(FONT_FILES);
   const navigationTheme = useMemo(() => {
     const baseTheme = mode === 'dark' ? DarkTheme : DefaultTheme;
     return {

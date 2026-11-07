@@ -1495,3 +1495,29 @@ rien ne s'affichera. Vérifier d'abord Health Connect → Données et accès →
 **À retenir** : un total quotidien se lit par agrégat, jamais par somme des
 enregistrements bruts. « Connecté » ne prouve que des permissions, pas qu'une
 source écrit.
+
+## Carte « 1RM estimé » en forme de pilule (Stats > Niveaux)
+
+Signalé le 2026-11-07 sur la capture Play : la carte héros du 1RM avait les
+bords d'un stade, alors que toutes les cartes voisines ont des coins de 16 px.
+
+**Cause** : `performanceHero` (`PerformanceDashboard`) utilisait `radius.pill`
+(999). Ce jeton n'est fait que pour des éléments de hauteur fixe et petite
+(puces, barres de progression) : sur un bloc de 120 px de haut, il arrondit
+chaque côté en demi-cercle.
+
+**Correctif** : `radius.lg`, comme `rankCard`, `goalCard` et `exerciseSelector`.
+
+**À retenir** : `radius.pill` jamais sur une carte ; une carte prend `radius.lg`.
+
+## Changer de police dans Réglages : à vérifier en release
+
+Le 2026-11-07, retour des palettes et polices au choix. La police active est
+une variable de module lue par les getters de `fonts`. Deux pièges du React
+Compiler (voir « React Compiler » plus haut) : une dépendance de `useMemo` que
+le calcul ne lit pas est retirée, et un appel qui mute un état de module
+pendant le rendu est déplacé. D'où : `activateFont` appelée par le store
+(`setFont` et réhydratation), jamais dans un composant ; et `useColors` recopie
+`fontId` dans l'objet qu'il renvoie, pour que la nouvelle référence force les
+`makeStyles(c)` à relire les jetons. Jest ne compile pas comme la release :
+contrôle à l'écran sur l'APK release.
