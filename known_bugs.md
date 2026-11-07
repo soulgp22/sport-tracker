@@ -1495,3 +1495,21 @@ rien ne s'affichera. Vérifier d'abord Health Connect → Données et accès →
 **À retenir** : un total quotidien se lit par agrégat, jamais par somme des
 enregistrements bruts. « Connecté » ne prouve que des permissions, pas qu'une
 source écrit.
+
+## Fiche Play anglaise avec la bannière française, et visuels à l'ancien nom
+
+Constaté le 2026-11-07 en relisant par l'API les images en ligne : la langue
+`en-US` affichait `premium-v2/fr/playstore-feature-a` (« Muscu. Nutrition. Une
+seule app. ») au lieu de la version anglaise — erreur d'import dans la Console,
+invisible tant qu'on ne compare pas les empreintes SHA-256. Les quatre bannières
+et les cartes d'intro/fin des vidéos promo portaient encore « Life Sport
+Tracker » après le renommage de la 1.40.0 : le test de marque ne lit que le
+texte, pas les pixels.
+
+**Correctif** : `docs/play-store/assets/feature/remplacer-nom.py` efface le nom
+par inpainting et écrit « Platelift » à la même ligne de base ;
+`scripts/play-images.py` envoie `<langue>.png` à la bonne langue et affiche
+l'empreinte en ligne contre la locale.
+
+**À retenir** : un renommage touche aussi les images ; et la seule preuve de ce
+qui est en ligne est l'empreinte renvoyée par l'API, pas la vignette de la Console.
