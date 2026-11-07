@@ -56,3 +56,7 @@ keys/
 # Python
 __pycache__/
 *.pyc
+
+# Montage video promo : clips emulateur et fichiers intermediaires
+docs/play-store/video/clips/
+docs/play-store/video/work/
