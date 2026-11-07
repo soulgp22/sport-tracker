@@ -1,5 +1,11 @@
 """Montage promo Platelift : 9:16 et 16:9 a partir des clips emulateur."""
-# Copie de travail : les clips sources (adb screenrecord sur emulateur) ne sont pas versionnes.
+# Clips sources (non versionnes, dans clips/) : adb screenrecord sur l'emulateur
+# SportTracker_Pixel8 (1080 x 2400), systeme en fr-FR, galerie ne contenant QUE
+# des photos de plats (le selecteur de photos montre toute la galerie).
+#   photo.mp4  : Accueil > Analyser un plat > Importer > photo > resultat > defilement
+#                jusqu'au total > Ajouter a ma journee
+#   seance.mp4 : onglet Seance > Demarrer > Logger une serie > minuteur de repos
+#   stats.mp4  : Stats > onglet Niveaux > defilement jusqu'aux badges
 import subprocess, sys
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -18,16 +24,14 @@ SOFT = (148, 160, 182)
 
 # (clip, debut, fin, etiquette, titre)  -- titre : lignes separees par \n
 SEGMENTS = [
-    ("photo", 5.4, 6.9, "NUTRITION", "Photographie|ton plat"),
-    ("photo", 8.6, 9.4, "NUTRITION", "Photographie|ton plat"),
-    ("photo", 9.5, 12.4, "IA", "Aliments et grammes|détectés"),
-    ("photo", 21.0, 25.2, "CALORIES", "Calories et macros|en quelques secondes"),
-    ("save", 0.5, 1.4, "JOURNAL", "Ajouté à ta journée"),
-    ("save", 2.0, 3.4, "JOURNAL", "Ajouté à ta journée"),
-    ("seance", 2.5, 4.1, "ENTRAÎNEMENT", "Lance ta séance"),
-    ("seance", 4.8, 8.2, "ENTRAÎNEMENT", "Lance ta séance"),
-    ("seance", 13.0, 16.5, "REPOS", "Minuteur intégré"),
-    ("stats", 0.3, 6.6, "PROGRESSION", "1RM, niveau|et badges"),
+    ("photo", 5.0, 7.0, "NUTRITION", "Photographie|ton plat"),
+    ("photo", 7.0, 12.0, "IA", "Aliments et grammes|détectés"),
+    ("photo", 19.0, 25.5, "CALORIES", "Calories et macros|en quelques secondes"),
+    ("photo", 31.2, 34.2, "JOURNAL", "Ajouté à ta journée"),
+    ("seance", 1.8, 4.2, "ENTRAÎNEMENT", "Lance ta séance"),
+    ("seance", 4.2, 8.0, "ENTRAÎNEMENT", "Lance ta séance"),
+    ("seance", 12.0, 16.5, "REPOS", "Minuteur intégré"),
+    ("stats", 1.8, 8.3, "PROGRESSION", "1RM, niveau|et badges"),
 ]
 FPS = 30
 SRC_CROP = (0, 115, 1080, 2160)  # x, y, w, h : retire barre d'etat et barre de navigation
@@ -59,12 +63,16 @@ def text_block(draw, xy, label, title, label_font, title_font, align="left", wid
 def frame_png(fmt, label, title, path):
     """Fond navy + legende, avec un trou arrondi transparent a l'emplacement de l'ecran."""
     if fmt == "v":
-        W, H = 1080, 1920; sw, sh = 740, 1480; sx, sy = (W - sw) // 2, 408
+        # Marge basse de 80 px : les applis verticales posent leurs boutons en bas.
+        W, H = 1080, 1920; sw, sh = 700, 1400; sx, sy = (W - sw) // 2, 440
         img = Image.new("RGBA", (W, H), NAVY + (255,))
         d = ImageDraw.Draw(img)
         text_block(d, (60, 70), label, title, font(ARCHIVO, 34), font(OSWALD, 96), "center", W - 120)
     else:
-        W, H = 1920, 1080; sh = 1000; sw = sh // 2; sx, sy = 1170, 40
+        # Ecran haut de 880 px, centre dans la moitie droite : un lecteur qui
+        # recadre en 2:1 (fiche Play, YouTube plein ecran) coupe ~70 px en haut et
+        # en bas ; a 1000 px de haut le telephone etait tronque.
+        W, H = 1920, 1080; sh = 880; sw = sh // 2; sx, sy = 1440 - sw // 2, (H - sh) // 2
         img = Image.new("RGBA", (W, H), NAVY + (255,))
         d = ImageDraw.Draw(img)
         n = title.count("|") + 1

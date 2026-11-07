@@ -1539,3 +1539,24 @@ pendant le rendu est déplacé. D'où : `activateFont` appelée par le store
 `fontId` dans l'objet qu'il renvoie, pour que la nouvelle référence force les
 `makeStyles(c)` à relire les jetons. Jest ne compile pas comme la release :
 contrôle à l'écran sur l'APK release.
+
+## Vidéo promo : captures de débogage dans la galerie, téléphone coupé
+
+Signalé le 2026-11-07 : dans la vidéo de la fiche Play, le sélecteur de photos
+montrait des captures d'écran de l'app à côté des plats, en anglais, et le
+téléphone était coupé en haut et en bas.
+
+**Causes** : des agents avaient fait `adb shell screencap /sdcard/xxx.png` sur
+l'émulateur (98 fichiers) ; la médiathèque les indexe et le sélecteur de
+photos les affiche. Système de l'émulateur en en-US. En paysage, l'écran
+faisait 1 000 px de haut sur 1 080 : un lecteur qui recadre en 2:1 (fiche Play,
+YouTube plein écran) en coupait le haut et le bas.
+
+**Correctif** : galerie vidée (sauvegarde hors émulateur), système passé en
+fr-FR (`adb root`, `setprop persist.sys.locale fr-FR`, redémarrage de zygote),
+clips réenregistrés ; montage paysage avec un écran de 880 px centré
+verticalement, vertical avec 80 px de marge basse.
+
+**À retenir** : jamais de `screencap` vers `/sdcard` — `adb exec-out screencap -p
+> fichier` écrit sur le PC sans toucher la galerie. Avant un tournage, vérifier
+la médiathèque (`content query --uri content://media/external/images/media`).
