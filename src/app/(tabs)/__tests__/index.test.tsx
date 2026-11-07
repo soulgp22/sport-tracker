@@ -234,6 +234,12 @@ describe('HomeScreen', () => {
     expect(mockPush).toHaveBeenCalledWith('/(tabs)/progress?tab=bodyWeight');
   });
 
+  it('la roue dentée de l’en-tête ouvre les réglages généraux', () => {
+    render(<HomeScreen />);
+    fireEvent.press(screen.getByRole('button', { name: 'Paramètres' }));
+    expect(mockPush).toHaveBeenLastCalledWith('/(tabs)/settings');
+  });
+
   it("le bouton « Analyser un plat » pousse l’écran d’analyse photo à la racine", () => {
     render(<HomeScreen />);
 

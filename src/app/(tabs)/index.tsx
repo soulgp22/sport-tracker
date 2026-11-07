@@ -226,7 +226,19 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View style={styles.headerRow}>
             <Text style={styles.dateKicker}>{dateLabel}</Text>
-            <Text style={styles.weekLabel}>{weekLabel}</Text>
+            <View style={styles.headerEnd}>
+              <Text style={styles.weekLabel}>{weekLabel}</Text>
+              {/* Réglages généraux : même bouton que l'en-tête Nutrition. */}
+              <TouchableOpacity
+                onPress={() => router.push('/(tabs)/settings' as never)}
+                style={styles.headerActionBtn}
+                hitSlop={8}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={t('nav.settings')}>
+                <Ionicons name="settings-outline" size={22} color={c.primary} />
+              </TouchableOpacity>
+            </View>
           </View>
           <Text style={styles.greeting}>{greeting}</Text>
         </View>
@@ -452,7 +464,18 @@ const makeStyles = (c: ThemeColors) =>
     headerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'baseline',
+      alignItems: 'center',
+    },
+    headerEnd: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xxs,
+    },
+    headerActionBtn: {
+      width: 36,
+      height: 36,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     dateKicker: {
       fontFamily: fonts.serifBold,

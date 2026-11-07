@@ -105,3 +105,28 @@ describe('themeStore', () => {
     expect(state.fontId).toBe(DEFAULT_FONT);
   });
 });
+
+describe('changement de police', () => {
+  // Import tardif : `fonts` lit la police active posée par le store.
+  const { fonts } = jest.requireActual('../../theme/fonts') as typeof import('../../theme/fonts');
+
+  afterEach(() => {
+    useThemeStore.getState().setFont(DEFAULT_FONT);
+  });
+
+  it('T4 — setFont change aussitôt les jetons lus par les feuilles de style', () => {
+    useThemeStore.getState().setFont('classique');
+    expect(fonts.serifBold).toBe(FONT_THEMES.classique.tokens.serifBold);
+    expect(fonts.sans).toBe(FONT_THEMES.classique.tokens.sans);
+  });
+
+  it('T5 — une police persistée est active dès la réhydratation, avant tout rendu', async () => {
+    await AsyncStorage.setItem(
+      'theme-store',
+      JSON.stringify({ state: { paletteId: 'nuit', fontId: 'lisible' }, version: 0 })
+    );
+    await useThemeStore.persist.rehydrate();
+    expect(useThemeStore.getState().paletteId).toBe('nuit');
+    expect(fonts.sans).toBe(FONT_THEMES.lisible.tokens.sans);
+  });
+});

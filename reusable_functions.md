@@ -487,6 +487,18 @@ Windows (Bahnschrift).
 
 ---
 
+## Thème : palettes et polices
+
+`src/theme/palettes.ts` (`PALETTES`) et `src/theme/fonts.ts` (`FONT_THEMES`) :
+registres des choix de Réglages > Apparence ; `lst` est le défaut. Ajouter une
+palette = une entrée (mêmes 15 rôles, `mode` clair ou sombre, `labelKey`
+traduite) ; les seuils de contraste sont imposés par `identite.test.ts`.
+Ajouter une police = ses familles dans `src/theme/fontFiles.ts` (`FONT_FILES`,
+chargé par `useFonts` au démarrage) puis une entrée `FONT_THEMES`. Couleurs :
+`useColors()` ; police active : `fonts.*`, posée par `themeStore.setFont`.
+
+---
+
 ## Outillage de vérification
 
 ```bash
