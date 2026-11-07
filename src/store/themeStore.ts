@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { asyncStorageAdapter } from '../storage/storageAdapter';
-import { DEFAULT_FONT, FONT_THEMES, type FontId } from '../theme/fonts';
+import { activateFont, DEFAULT_FONT, FONT_THEMES, type FontId } from '../theme/fonts';
 import { DEFAULT_PALETTE, PALETTES, type PaletteId } from '../theme/palettes';
 
 export type { FontId } from '../theme/fonts';
@@ -20,7 +20,11 @@ export const useThemeStore = create<ThemeState>()(
       paletteId: DEFAULT_PALETTE,
       fontId: DEFAULT_FONT,
       setPalette: (paletteId) => set({ paletteId }),
-      setFont: (fontId) => set({ fontId }),
+      setFont: (fontId) => {
+        // Avant `set` : les composants qui se re-rendent relisent déjà la bonne police.
+        activateFont(fontId);
+        set({ fontId });
+      },
     }),
     {
       name: 'theme-store',
@@ -39,6 +43,7 @@ export const useThemeStore = create<ThemeState>()(
           // route) : undefined, null, nombre, objet, chaîne vide… On ne suppose
           // jamais qu'il est bien formé.
           if (!persisted || typeof persisted !== 'object') {
+            activateFont(DEFAULT_FONT);
             return { ...current, paletteId: DEFAULT_PALETTE, fontId: DEFAULT_FONT };
           }
           const saved = persisted as Record<string, unknown>;
@@ -59,6 +64,7 @@ export const useThemeStore = create<ThemeState>()(
               ? (saved.fontId as FontId)
               : DEFAULT_FONT;
 
+          activateFont(fontId);
           return { ...current, paletteId, fontId };
         } catch {
           // Dernier recours : renvoyer l'état courant inchangé plutôt que de laisser

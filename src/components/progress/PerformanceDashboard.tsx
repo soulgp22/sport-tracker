@@ -258,7 +258,7 @@ const makeStyles = (c: ThemeColors) => StyleSheet.create({
   selectorCopy: { flex: 1, minWidth: 0, gap: 2 },
   selectorLabel: { fontSize: 9, letterSpacing: 1, fontFamily: fonts.sansBold, color: c.textMuted, textTransform: 'uppercase' },
   selectorValue: { fontSize: 15, fontFamily: fonts.sansBold, color: c.textPrimary },
-  performanceHero: { padding: spacing.md, borderRadius: radius.pill, backgroundColor: c.primary },
+  performanceHero: { padding: spacing.md, borderRadius: radius.lg, backgroundColor: c.primary },
   heroHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 },
   heroEyebrow: { fontSize: 10, letterSpacing: 1, fontFamily: fonts.sansBold, color: c.primaryText, opacity: 0.75, textTransform: 'uppercase' },
   heroValue: { marginTop: 2, fontSize: 30, fontFamily: fonts.sansHeavy, color: c.primaryText },

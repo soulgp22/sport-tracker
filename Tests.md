@@ -602,3 +602,26 @@ dans `expo.name` et dans un auteur de programme → 2 tests rouges.
 
 Sabotages (2026-11-06) : ancien code (somme brute) → 3 rouges ; repli `?? 0`
 retiré → 1 rouge.
+
+## Personnalisation : palettes, polices, roue dentée (2026-11-07)
+
+`src/theme/__tests__/identite.test.ts` :
+- `lst` reste la palette par défaut, aux couleurs exactes ;
+- T3 : chaque famille citée par un thème de police est chargée par `FONT_FILES`
+  (sinon police système sans erreur) ;
+- T4 (par palette) : contraste WCAG ≥ 4,5 pour le texte, le texte secondaire
+  sur cartes, `primaryText` sur `primary`, l'accent et `tertiary` ; ≥ 3 pour le
+  texte estompé et ≥ 3,5 pour `danger` (seuils de `lst`) ;
+- T5 : noms de palettes et de polices traduits dans les 4 langues.
+
+`src/store/__tests__/themeStore.test.ts` (+2) : `setFont` change aussitôt les
+jetons de `fonts` ; une police persistée est active dès la réhydratation.
+
+`src/app/(tabs)/__tests__/index.test.tsx` (+1) : la roue dentée de l'en-tête
+de l'accueil ouvre `/(tabs)/settings`.
+
+Sabotages (2026-11-07), chacun → 1 rouge : `activateFont` retirée de `setFont` ;
+retirée de la réhydratation ; `Barlow_800ExtraBold` retirée de `FONT_FILES` ;
+texte secondaire de « Nuit » assombri à `#4a5568` ; roue dentée vers le profil.
+
+Pas de test pour l'arrondi de la carte 1RM (style pur) : vérifié à l'écran.

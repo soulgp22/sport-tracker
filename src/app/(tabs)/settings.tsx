@@ -569,7 +569,7 @@ export default function SettingsScreen() {
               activeOpacity={0.75}
               style={styles.dropdownTrigger}>
               <View style={styles.dropdownSelection}>
-                <Text style={styles.dropdownValue}>{PALETTES[paletteId].label}</Text>
+                <Text style={styles.dropdownValue}>{t(PALETTES[paletteId].labelKey)}</Text>
                 <View style={styles.swatches}>
                   {[
                     PALETTES[paletteId].colors.bg,
@@ -608,7 +608,7 @@ export default function SettingsScreen() {
                       style={[styles.dropdownOption, active ? styles.dropdownOptionActive : null]}>
                       <View style={styles.optionText}>
                         <Text style={[styles.paletteLabel, active ? styles.paletteLabelActive : null]}>
-                          {palette.label}
+                          {t(palette.labelKey)}
                         </Text>
                         <Text style={styles.optionDescription}>
                           {palette.mode === 'dark' ? t('settings.darkMode') : t('settings.lightMode')}
@@ -648,9 +648,9 @@ export default function SettingsScreen() {
                     styles.dropdownValue,
                     { fontFamily: FONT_THEMES[fontId].tokens.serifBold },
                   ]}>
-                  {FONT_THEMES[fontId].label}
+                  {t(FONT_THEMES[fontId].labelKey)}
                 </Text>
-                <Text style={styles.optionDescription}>{FONT_THEMES[fontId].description}</Text>
+                <Text style={styles.optionDescription}>{t(FONT_THEMES[fontId].descriptionKey)}</Text>
               </View>
               <Ionicons
                 name={openAppearanceMenu === 'font' ? 'chevron-up' : 'chevron-down'}
@@ -682,14 +682,14 @@ export default function SettingsScreen() {
                             { fontFamily: fontTheme.tokens.serifBold },
                             active ? styles.paletteLabelActive : null,
                           ]}>
-                          {fontTheme.label}
+                          {t(fontTheme.labelKey)}
                         </Text>
                         <Text
                           style={[
                             styles.optionDescription,
                             { fontFamily: fontTheme.tokens.sans },
                           ]}>
-                          {fontTheme.description}
+                          {t(fontTheme.descriptionKey)}
                         </Text>
                       </View>
                       {active ? <Ionicons name="checkmark-circle" size={20} color={c.primary} /> : null}
