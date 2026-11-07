@@ -161,8 +161,9 @@ absente ou fausse — pas que le service est tombé.
 - **Paquet :** `com.sportracker.app`
 - **Piste utilisée :** `internal` (test interne)
 - **Soumission :** `eas submit --platform android --profile production --path <aab>`
-- **Production :** 1.40.1 (versionCode 63) le 2026-11-07 (envoi 38 min) : pas du jour lus
-  par agrégat Health Connect (Samsung). Précédente : 1.40.0 (versionCode 62)
+- **Production :** 1.41.0 (versionCode 64) le 2026-11-07 (envoi 31 min) : 5 palettes, 4 polices,
+  roue dentée Réglages sur l'accueil, carte 1RM aux coins de carte. Précédente : 1.40.1
+  (versionCode 63) le 2026-11-07 : pas du jour lus par agrégat Health Connect (Samsung). Avant : 1.40.0 (versionCode 62)
   le 2026-11-06 : l'app s'appelle Platelift ; `play-upload.py` en 33 min puis `play-promote.py`, titre de la
   fiche envoyé par `play-listing.py --apply`. Précédente : 1.39.4
   (versionCode 61) le 2026-10-28 (section Health
