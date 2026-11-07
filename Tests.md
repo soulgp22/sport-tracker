@@ -603,6 +603,18 @@ dans `expo.name` et dans un auteur de programme → 2 tests rouges.
 Sabotages (2026-11-06) : ancien code (somme brute) → 3 rouges ; repli `?? 0`
 retiré → 1 rouge.
 
+## Visuels Play à l'ancien nom (2026-11-07)
+
+Pas de test automatique : le nom est dans les pixels. Contrôle reproductible :
+`python scripts/play-images.py` (essai à blanc) doit afficher « (identique) »
+pour les 4 langues, c'est-à-dire que l'empreinte en ligne est celle de
+`docs/play-store/assets/feature/<langue>.png`. Contre-épreuve faite avant
+l'envoi : les empreintes en ligne différaient pour les 4 langues ; un dossier
+dont les fichiers ne portent pas un code de langue de la fiche est refusé.
+Rendu vérifié à l'œil : zone modifiée limitée au nom (différence de pixels
+bornée à x 141–455, y 67–116), haltère et symbole intacts ; vidéos relues aux
+coupures 2,4 s et 28,9 s.
+
 ## Personnalisation : palettes, polices, roue dentée (2026-11-07)
 
 `src/theme/__tests__/identite.test.ts` :

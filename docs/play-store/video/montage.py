@@ -1,4 +1,4 @@
-"""Montage promo Life Sport Tracker : 9:16 et 16:9 a partir des clips emulateur."""
+"""Montage promo Platelift : 9:16 et 16:9 a partir des clips emulateur."""
 # Copie de travail : les clips sources (adb screenrecord sur emulateur) ne sont pas versionnes.
 import subprocess, sys
 from pathlib import Path
@@ -92,11 +92,11 @@ def card_png(fmt, kind, path):
     icon = icon.resize((isz, isz), Image.LANCZOS)
     mask = rounded_mask(isz, isz, isz // 5)
     if kind == "intro":
-        lines = [("Life Sport Tracker", font(OSWALD, 104 if fmt == "v" else 120), WHITE),
+        lines = [("Platelift", font(OSWALD, 104 if fmt == "v" else 120), WHITE),
                  ("Muscu et nutrition, au même endroit", font(ARCHIVO, 44 if fmt == "v" else 48), SOFT)]
     else:
         lines = [("Gratuit sur Google Play", font(OSWALD, 96 if fmt == "v" else 110), WHITE),
-                 ("Life Sport Tracker", font(ARCHIVO, 48), SOFT)]
+                 ("Platelift", font(ARCHIVO, 48), SOFT)]
     hs = [d.textbbox((0, 0), s, font=f)[3] for s, f, _ in lines]
     gap = 34
     total = isz + 70 + sum(hs) + gap * (len(lines) - 1)

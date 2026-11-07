@@ -473,6 +473,18 @@ changerait ; refuse un texte trop long (80 / 4 000) ou une langue absente en
 ligne. Le titre (30 caractères) n'est envoyé que si la section en donne un,
 en bloc de code placé avant la description courte.
 
+`scripts/play-images.py [dossier] [--apply]` : remplace l'image de présentation
+(1024 × 500) de chaque langue par `<dossier>/<langue>.png` (défaut
+`docs/play-store/assets/feature`). Sans `--apply`, compare l'empreinte en ligne
+et la locale ; refuse un format faux ou un fichier sans langue sur la fiche ;
+ne commite que si une image change.
+
+`docs/play-store/assets/feature/remplacer-nom.py <source> <sortie> <style>` :
+remplace un nom écrit en blanc sur une bannière (masque clair et peu saturé,
+inpainting OpenCV, nouvelle police à la hauteur mesurée de l'ancien texte).
+Réutilisable pour un autre renommage ; la police « condensee » est une police
+Windows (Bahnschrift).
+
 ---
 
 ## Thème : palettes et polices
