@@ -1560,3 +1560,27 @@ verticalement, vertical avec 80 px de marge basse.
 **À retenir** : jamais de `screencap` vers `/sdcard` — `adb exec-out screencap -p
 > fichier` écrit sur le PC sans toucher la galerie. Avant un tournage, vérifier
 la médiathèque (`content query --uri content://media/external/images/media`).
+
+## Mise en service du quota : l'arriéré des analyses compté le même jour
+
+Constaté le 2026-11-12, à la mise en service de `lst-quota`, sur l'émulateur :
+bloqué (« Tes 2 analyses gratuites du jour sont utilisées ») avant toute analyse.
+
+**Cause** : l'app garde ses déclarations d'analyse en file d'attente
+(`mealPhotoQuotaStore.pending`, jusqu'à 50) tant que le serveur ne les accepte
+pas. Pendant des semaines, `/v1/quota/consume` répondait 404 : au premier
+lancement après la mise en service, chaque appareil renvoie tout son arriéré,
+et le serveur comptait chaque déclaration le jour de sa réception. 5 analyses
+de septembre à novembre → quota du jour épuisé. Tout utilisateur fidèle aurait
+été bloqué le jour de sa première ouverture.
+
+**Correctif** : `analysis_day` (`lst_quota.py`) lit l'instant d'analyse encodé
+dans l'identifiant (`a-<ms base 36>-<aléa>`, `createAnalysisId`) et compte le
+repas ce jour-là. Instant illisible, avant 2026 ou dans le futur : aujourd'hui.
+Les 5 lignes déjà comptées ont été redatées sur le serveur. Seul l'émulateur
+avait été touché (déploiement corrigé 4 minutes après).
+
+**À retenir** : une file d'attente côté client se vide d'un coup quand le
+serveur revient ; tout compteur « par jour » doit dater l'événement, pas sa
+réception. Tester une mise en service avec un appareil qui a de l'historique,
+pas avec un appareil neuf.

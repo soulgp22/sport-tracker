@@ -637,3 +637,14 @@ retirée de la réhydratation ; `Barlow_800ExtraBold` retirée de `FONT_FILES` ;
 texte secondaire de « Nuit » assombri à `#4a5568` ; roue dentée vers le profil.
 
 Pas de test pour l'arrondi de la carte 1RM (style pur) : vérifié à l'écran.
+
+## Quota serveur : jour de l'analyse (2026-11-12)
+
+`server/lst-quota/test_lst_quota.py` (+2, 18 au total) :
+- un arriéré d'analyses vieilles de 60, 20, 9, 3 et 1 jours, déclaré d'un coup,
+  laisse le compteur du jour à 0 ; une analyse du jour compte 1 ;
+- un instant futur ou antérieur à 2026 compte aujourd'hui.
+
+Sabotage (2026-11-12) : `analysis_day` court-circuité → 1 rouge.
+Contrôle réel : émulateur avec historique, analyse acceptée, serveur à 1 pour
+le jour ; `deploy-from-pc.sh` : 3e analyse refusée (402).
