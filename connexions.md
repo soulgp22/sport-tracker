@@ -87,6 +87,11 @@ Commandes utiles : `journalctl -u meal-server -f`,
 
 ### Service `lst-quota` (quota photo, abonnement)
 
+**Actif depuis le 2026-11-12** (Caddy branché, `forward_auth` sur l'analyse).
+`REVENUECAT_SECRET_KEY` est encore **vide** : tant qu'Islam ne l'a pas ajoutée
+dans `/etc/lst-quota.env` (puis `systemctl restart lst-quota`), les abonnés
+Premium sont limités à 2 analyses par jour comme les gratuits.
+
 | | |
 |---|---|
 | Code | `/opt/lst-quota/lst_quota.py` (copie de `server/lst-quota/`) |

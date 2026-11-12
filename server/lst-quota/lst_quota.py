@@ -90,6 +90,34 @@ def local_day(now_utc, offset_min):
     return (now_utc + timedelta(minutes=offset_min)).strftime("%Y-%m-%d")
 
 
+# Identifiant cree par l'app (lib/mealQuotaApi.createAnalysisId) :
+# "a-<instant en ms, base 36>-<alea>".
+ANALYSIS_TIME_RE = re.compile(r"^a-([0-9a-z]{6,12})-")
+# Hors de [premiere version de l'app, maintenant + 5 min], l'instant encode
+# n'est pas credible : on compte le repas aujourd'hui. Pas de borne relative
+# (« 31 jours ») : la file d'attente remontait jusqu'en septembre.
+EARLIEST_ANALYSIS_S = 1767225600  # 2026-01-01 UTC
+MAX_CLOCK_SKEW_S = 300
+
+
+def analysis_day(analysis_id, now, offset_min):
+    """Jour local de l'ANALYSE, lu dans son identifiant ; None s'il est illisible.
+
+    Pourquoi : l'app garde ses declarations en file d'attente tant que le
+    serveur ne les accepte pas. A la mise en service du quota (2026-11-12),
+    chaque appareil a renvoye d'un coup des semaines d'analyses, toutes
+    comptees le jour de reception : un utilisateur fidele se retrouvait bloque
+    des sa premiere photo. Un repas compte le jour ou il a ete analyse.
+    """
+    match = ANALYSIS_TIME_RE.match(analysis_id)
+    if not match:
+        return None
+    seconds = int(match.group(1), 36) / 1000
+    if not (EARLIEST_ANALYSIS_S <= seconds <= now + MAX_CLOCK_SKEW_S):
+        return None
+    return local_day(datetime.fromtimestamp(seconds, tz=timezone.utc), offset_min)
+
+
 def valid_device_id(value):
     return isinstance(value, str) and bool(DEVICE_ID_RE.match(value))
 
@@ -340,7 +368,9 @@ class Quota:
     def consume(self, device_id, analysis_id, offset_min):
         self.purge_if_due()
         now = self.clock()
-        day = local_day(datetime.fromtimestamp(now, tz=timezone.utc), offset_min)
+        day = analysis_day(analysis_id, now, offset_min) or local_day(
+            datetime.fromtimestamp(now, tz=timezone.utc), offset_min
+        )
         self.store.consume(device_id, analysis_id, day, now)
         return self.status(device_id, offset_min)
 

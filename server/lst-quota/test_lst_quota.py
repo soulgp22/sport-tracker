@@ -26,6 +26,15 @@ def premium_payload(expires="2026-10-22T00:00:00Z", grace=None):
     return {"subscriber": {"entitlements": {"premium": entry}}}
 
 
+def _base36(value):
+    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+    out = ""
+    while value:
+        value, rest = divmod(value, 36)
+        out = digits[rest] + out
+    return out or "0"
+
+
 class Rules(unittest.TestCase):
     def test_jour_local_et_non_utc(self):
         now = datetime.fromtimestamp(NOW, tz=timezone.utc)
@@ -120,6 +129,26 @@ class QuotaLogic(unittest.TestCase):
             entitled = db.execute("SELECT COUNT(*) FROM entitlements WHERE device_id = ?", (DEVICE,)).fetchone()[0]
         self.assertEqual(devices, {"and-autreappareil"})
         self.assertEqual(entitled, 0)
+
+    def test_file_d_attente_comptee_au_jour_de_l_analyse(self):
+        # Mise en service du 2026-11-12 : l'app renvoie d'un coup ses analyses
+        # en attente depuis des semaines. Elles ne doivent pas bloquer aujourd'hui.
+        def analysis_id(seconds_ago, suffix):
+            ms = int((NOW - seconds_ago) * 1000)
+            return f"a-{_base36(ms)}-{suffix}"
+
+        for i, days_ago in enumerate((60, 20, 9, 3, 1)):
+            self.quota.consume(DEVICE, analysis_id(days_ago * 86400, f"old{i}"), 120)
+        self.assertEqual(self.quota.status(DEVICE, 120)["used"], 0)
+
+        status = self.quota.consume(DEVICE, analysis_id(60, "today"), 120)
+        self.assertEqual(status["used"], 1)
+
+    def test_instant_incredible_compte_aujourd_hui(self):
+        # Futur (horloge trafiquee) ou avant 2026 : le repas compte aujourd'hui.
+        self.quota.consume(DEVICE, f"a-{_base36(int((NOW + 86400) * 1000))}-futur", 120)
+        self.quota.consume(DEVICE, f"a-{_base36(1700000000000)}-vieux", 120)
+        self.assertEqual(self.quota.status(DEVICE, 120)["used"], 2)
 
     def test_compteur_par_jour_local(self):
         # 00:30 a Paris : ce repas est du 23, pas du 22.
